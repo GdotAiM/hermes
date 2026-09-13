@@ -5,7 +5,7 @@
 **ATLAS lock:** `evidence/L81eMQhmXmc/H003_BOX_LOCK.md`  
 **Prior packaging:** H003 / H003b (range-extreme sweep) → **RIVAL B** here — not demo primary  
 **Author:** QUANT · **Filed:** 2026-09-13  
-**Peek/run:** **none** · **HOLD** for CASSANDRA packaging (ORION: score H003c next) + shared tape  
+**Peek/run:** **none** · Packaging **SURVIVED**. §3.2 detector = **PARAMETER** (`H003c_REL_DETECTOR_LOCK.md`; `reviews/CASSANDRA_H003c_DETECTOR_PARAMETER_2026-09-13.md`). No red-line identity. No run.  
 **No MERCURY**
 
 ---
@@ -18,6 +18,19 @@ Full HH/LL sweep as treatment = **RIVAL B** (he does not sweep the box edge in t
 Collapsing REL into HH/LL when they coincide still logs both series.
 
 H003b’s Foil A control hygiene is **imported**; treatment object changes → **NEW hyp id** (not silent amend of H003b).
+
+
+---
+
+## 0f. ATLAS REL detector lock (2026-09-13)
+
+`evidence/L81eMQhmXmc/H003c_REL_DETECTOR_LOCK.md`:
+
+- §3.2 fractal + τ_eq=2.0 = **PARAMETER, not lecture-locked**. Do not write "matches the red line."
+- 1-tick spot-check = **FAIL / blocked** until demo-session 1m tape exists; then pass only if |L_rel − L_red| ≤ 0.25.
+- Rival selection: **human mid-box pair** (student-obvious); co-report.
+- Rival τ ∈ {4, 8} pts (visual REL band); 1.0/2.0 = tight maps.
+- **Ban:** narrating SURVIVES as confirming his exact red-line rule.
 
 ---
 
@@ -42,23 +55,34 @@ Same as H003b: MNQ prefer · 1m · America/New_York · ex Sundays · non-event p
 \(W=[07:00,09:00)\) ET (PARAMETER; co-report inclusive).  
 \(H_{79}, L_{79}\) = HH/LL in \(W\). Exclude if \(R_{79}<2\) pts.
 
-### 3.2 REL / REH (sweep object) — mechanical
+### 3.2 REL / REH (sweep object) — **PARAMETER detector** (not lecture-locked)
 
-Inside \(W\), fractal swing:  
+**ATLAS:** `H003c_REL_DETECTOR_LOCK.md` — red line is a **visual pair of swing lows**, not a stated 1-bar fractal + 2.0-pt rule.  
+Do **not** claim this detector “matches the red line.” Label every numeric rule below **PARAMETER / QUANT choice**.
+
+Inside \(W\), fractal swing (**PARAMETER** — ATLAS-unspecified):  
 - Swing low at i: `low[i]<low[i-1]` and `low[i]<low[i+1]` (completed).  
 - Swing high: mirror.
 
-**Equal tolerance** \(\tau_{eq} = 2.0\) MNQ pts (**PARAMETER**; sensitivity 1.0 / 2.0 / 4.0 post-OOS descriptive).
+**Equal tolerance (primary map):** \(\tau_{eq} = 2.0\) MNQ/NQ pts — **PARAMETER**, not Observed.  
+**Rival τ (mandatory co-report):** \(\tau_{eq} \in \{4.0, 8.0\}\) (visual REL band). Tight rivals 1.0 descriptive only after OOS.  
+If tape shows \(\tau_{eq}=2.0\) misses the lecture pair → retune **pre-peek** (ORION ack) or NEW id.
 
 **REL cluster:** any pair of distinct swing lows with \(|\ell_a-\ell_b|≤\tau_{eq}\).  
-**REL level** \(L_{rel}\) = mean(\(\ell_a,\ell_b\)) rounded to **0.25** (same tick rule as H001b).  
-If multiple pairs: choose the pair with **lowest** mean (most sell-side); if tie, earliest second swing.
+**\(L_{rel}\) construction (PARAMETER):** mean(\(\ell_a,\ell_b\)) rounded to 0.25.  
+Rival construction (descriptive): line at the **higher** of the two lows (resting liquidity — ATLAS note).
 
-**REH cluster / \(H_{reh}\):** mirror (highest mean pair of swing highs within \(\tau_{eq}\)).
+**Multiple pairs — primary selection (PARAMETER):** pair whose mean is **closest to mid-range** \((H_{79}+L_{79})/2\).  
+**Rival selection (mandatory co-report):** **human mid-box pair** — the two swing lows a student would annotate as “relatively equal” (ATLAS 00:09:20); not lowest-mean. Cannot flip SURVIVES alone.  
+Lowest-mean pair = additional descriptive rival only.
 
-**No REL and no REH in \(W\):** day has no H003c treatment (coverage). Demo does **not** require REH to exist — REL-only days are valid treatment candidates.
+**REH:** mirror (unchecked on demo — no REH drawn). Same PARAMETER labels.
 
-If \(L_{rel}\) within 0.25 of \(L_{79}\) (or REH≈\(H_{79}\)): maps **coincide** — still emit both treatment flags (primary REL path + rival B path) for divergence diagnostics.
+**No REL and no REH in \(W\):** no H003c treatment (coverage).
+
+If \(L_{rel}\) within 0.25 of \(L_{79}\) (or REH≈\(H_{79}\)): maps coincide — still dual-log.
+
+**1-tick demo spot-check:** **OPEN / FAIL until stream C** covers the exact demo session. Then compute \(L_{rel}\) and require \(|L_{rel}-L_{red}|≤0.25\). Visual axis read is approximate only (~21,020 on ATLAS lock frame — not a pass).
 
 ### 3.3 Primary treatment (DEMO / ATLAS PRIMARY)
 
@@ -110,7 +134,7 @@ No-sweep \(P(\text{both extremes})\) **banned**. Sweep-day random-side sanity **
 
 **FAILS** if OOS \(N_{treat}≥80\): Δ≤0 or CI includes ≤0 (primary REL/REH→range map + Foil A).  
 
-**SURVIVES (REL/REH → opposite range extreme)** only if:
+**SURVIVES (PARAMETER REL/REH detector → opposite range extreme)** only if:
 
 1. Δ>0, CI>0, walk-forward median Δ>0  
 2. **SELECTION-DEPENDENT gate:** recompute Δ with control universe = days touching ≥1 of \(\{H_{79},L_{79}\}\) by \(T^*\) (same Foil A). If only full-eligible-universe Δ works → **SELECTION-DEPENDENT** — do not claim lecture SURVIVES.
@@ -132,7 +156,10 @@ IS/OOS 60/40; walk-forward step 20.
 - [x] Foil A @09:30 all range days  
 - [x] Horizon 12:00; range tertiles  
 - [x] Tick-round REL/REH levels to 0.25  
-- [x] Cite `H003_BOX_LOCK.md`  
+- [x] Cite `H003_BOX_LOCK.md`
+- [x] SELECTION-DEPENDENT in §5
+- [~] Spot-check \(L_{rel}\) vs demo red — visual done; computed **PENDING tape** (`SPOTCHECK_H003c_LREL_VS_DEMO_2026-09-13.md`)
+- [x] Multi-REL selection = closest to mid-range (not lowest-mean)  
 - [x] NEW id (not silent H003b amend)  
 - [x] No MERCURY / no lunch import  
 
@@ -140,9 +167,10 @@ IS/OOS 60/40; walk-forward step 20.
 
 ## 7. RUN blockers
 
-1. CASSANDRA packaging review of H003c  
-2. Shared stream C + coverage  
-3. Optional: refine \(\tau_{eq}\) with ATLAS if demo needs tighter equal tolerance  
+1. ~~CASSANDRA packaging~~ — **SURVIVED**  
+2. Computed \(L_{rel}\) vs demo red — visual reads are **calibration only** (~21,020 ATLAS / ~29,020 earlier misread); **numeric PENDING stream C**; pass proximity still ≠ Observed identity  
+3. Shared stream C + coverage projection  
+4. No MERCURY  
 
 ---
 

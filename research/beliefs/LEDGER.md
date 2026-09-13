@@ -38,3 +38,9 @@
 | 2026-09-13 | INV-002 H003c packaging SURVIVED (REL→HH/LL lecture map); H003b rival-only; RUN HOLD for REL detector + tape | Active | CASSANDRA_H003c_REDTEAM | |
 | 2026-09-13 | H003c REL detector (1-bar fractal τ=2) is PARAMETER not lecture-locked; 1-tick red-line match FAIL until demo-session tape | Active | H003c_REL_DETECTOR_LOCK | |
 | 2026-09-13 | Wave 2 H008–H010 opened on free keyless Yahoo NQ=F tape (1wk/1d/1h); Wave 1 still needs stream C 1m; rank H009→H010→H008 | Active | FREE_YF_NQ | |
+| 2026-09-13 | Wave 2 ATLAS: H009 nearer PWH/PMH vs PWL/PML DOL; H010 session+HTF stack; H008 thin (profile naming only, no 4-state list) | Provisional Hold | ATLAS_INV002_WAVE2_INDEX | |
+| 2026-09-13 | Kaggle NQ 1m ingested (2022-12-26→2025-12-11, 1.05M bars, ET, 0 dups/OHLC fails); CONTINUOUS-KAGGLE; no 2026 lecture dates | Active | KAGGLE_NQ_1M_2022_2025 | Awaiting DATA formal gate |
+| 2026-09-13 | H009b pilot INCONCLUSIVE: N_OOS=22<80; OOS P̂≈0.73 vs foil≈0.36 Δ≈0.36 CI[0.05,0.64]; positive but underpowered; CONTINUOUS-YF Mon-open PARAMETER | Active | H009b_PILOT_RESULTS | No SURVIVES |
+| 2026-09-13 | H001b exploratory CONTINUOUS-KAGGLE: OOS P̂(hit CE by 10:00)≈0.556 CI[0.49,0.62] VERIFY COMPLETE (descriptive); 0.70 foil not supported; CE-specialness FAILS Δ≈−0.07 | Active | H001b_EXPLORATORY_RESULTS | Awaiting CASSANDRA |
+| 2026-09-13 | CASSANDRA confirms H001b: VERIFY COMPLETE ~55.6% OOS; 0.70 not confirmed; CE-specialness FAILS; OOS truncated Dec 11 2025 (Excel flag) | Active | CASSANDRA_H001b_RESULTS_REDTEAM | |
+| 2026-09-13 | H003c exploratory FAILS on CONTINUOUS-KAGGLE: OOS Δ≈−0.15 vs Foil A; PARAMETER REL detector; Wave 1 exploratory pair closed (H001b verify~56% + specialness FAIL; H003c FAIL) | Active | H003c_EXPLORATORY_RESULTS | |

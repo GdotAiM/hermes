@@ -6,7 +6,7 @@
 **CASSANDRA:** `reviews/CASSANDRA_H001_REDTEAM_2026-09-13.md` → HOLD; H001 not decision-ready  
 **Author:** QUANT · **Filed:** 2026-09-13  
 **Revision class:** Pre-reg revision — **no results peeked**  
-**Run status:** **HOLD** — CASSANDRA packaging **SURVIVED** (`reviews/CASSANDRA_H001b_REDTEAM_2026-09-13.md`); tick-rounding R1 locked. Still no run without stream C + Pref/Popen META + coverage
+**Run status:** **CLEAR TO RUN (exploratory)** on `CONTINUOUS-KAGGLE-NQ1M` after DATA formal gate 2026-09-13 — Pref/Popen locked in `evidence/tape/KAGGLE_NQ_1M_2022_2025/PREF_POPEN_POLICY.md` + `DATA_GATE_KAGGLE_NQ_1M_2026-09-13.md`. Stream C MNQ Mar 2026 still missing for lecture-aligned claims. Coverage projection still required before SURVIVES.
 
 ---
 
