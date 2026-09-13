@@ -14,6 +14,7 @@ Financial-intelligence research ledger for a multi-agent paper-trading research 
 | `summaries/` | Intelligence summaries |
 | `ROSTER.md` | Agent roster and pipeline |
 | `docs/WORKFLOW_BLUEPRINT.md` | Portable multi-agent + GitHub collaboration blueprint |
+| `docs/CLAUDE_CODE_STARTER.md` | One-page starter prompt for Claude Code / external agents |
 
 ## Active investigations
 

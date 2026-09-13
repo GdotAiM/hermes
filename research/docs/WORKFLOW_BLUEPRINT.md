@@ -264,6 +264,8 @@ ORION synthesis products: `summaries/2026-09-13_WAVE1_EXPLORATORY_BOARD.md`, `*_
 
 ## 7. Onboarding a new agent (Claude Code / Cloud / local)
 
+**One-pager:** [`docs/CLAUDE_CODE_STARTER.md`](CLAUDE_CODE_STARTER.md) (copy-paste prompt + role cheat-sheet).
+
 Paste this into the new agent’s system or first message:
 
 ```text
