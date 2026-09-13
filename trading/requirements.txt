@@ -1,0 +1,8 @@
+# MINT optional dependencies — do not force-install in CI/agents by default.
+# Paper stub uses stdlib only.
+#
+# Official Alpaca Python SDK (optional, for human paper smoke tests):
+#   pip install alpaca-py
+#
+# Light pin example (uncomment if you need a lockfile locally):
+# alpaca-py>=0.33.0,<1.0.0
