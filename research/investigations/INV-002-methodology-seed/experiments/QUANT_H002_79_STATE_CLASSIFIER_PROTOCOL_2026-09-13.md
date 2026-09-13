@@ -4,8 +4,9 @@
 **Parents (Passed Observed only):** C-METH-003, C-METH-004, C-METH-005  
 **ORION rank:** #4 in draft order (classifier; precursor not panacea)  
 **Author:** QUANT · **Filed:** 2026-09-13  
-**Run status:** **HOLD** — shared tape  
-**Dependency:** Classifier defs here are shared with H001 conditionals / H003 range.
+**Run status:** **AUDIT DRAFT ONLY — DO NOT RUN**  
+**Superseded for decision-readiness by:** `QUANT_H002b_79_STATE_CLASSIFIER_PROTOCOL_2026-09-13.md` (CASSANDRA HOLD → H002b).  
+**Dependency note (historical):** classifier shared with H001/H003 — see H002b leakage ban.
 
 ---
 

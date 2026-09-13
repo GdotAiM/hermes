@@ -54,3 +54,6 @@ Parts 1–3 and `dmHSwlmS9iY`. Second wave after DATA gates 001–015.
 
 ## QUANT / RISK / MERCURY
 QUANT HOLD until DATA Pass. NASDAQ 1m RTH + ETH for 7–9. MERCURY PASS / WAIT. No live trade.
+
+## Wave 2
+See `ATLAS_INV002_WAVE2_INDEX.md` — C-METH-020–034 (`dmHSwlmS9iY`), Hold/ASR.

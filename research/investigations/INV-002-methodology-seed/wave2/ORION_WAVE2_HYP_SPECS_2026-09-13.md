@@ -24,3 +24,6 @@ H009 → H010 → H008
 ## Non-goals
 - Do not claim MNQ 1m ICT session results from this tape
 - Do not run Wave 1 hyps on FREE_YF
+
+## ATLAS update (2026-09-13)
+H008 has **thin** Observed parent (C-METH-030 weekly profile naming only). Do not pretend expansion/reversal/consolidation/compression was spoken. Prefer H009/H010; H008 = PARAMETER weekly-profile study or defer.

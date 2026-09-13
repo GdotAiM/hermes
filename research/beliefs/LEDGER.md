@@ -44,3 +44,15 @@
 | 2026-09-13 | H001b exploratory CONTINUOUS-KAGGLE: OOS P̂(hit CE by 10:00)≈0.556 CI[0.49,0.62] VERIFY COMPLETE (descriptive); 0.70 foil not supported; CE-specialness FAILS Δ≈−0.07 | Active | H001b_EXPLORATORY_RESULTS | Awaiting CASSANDRA |
 | 2026-09-13 | CASSANDRA confirms H001b: VERIFY COMPLETE ~55.6% OOS; 0.70 not confirmed; CE-specialness FAILS; OOS truncated Dec 11 2025 (Excel flag) | Active | CASSANDRA_H001b_RESULTS_REDTEAM | |
 | 2026-09-13 | H003c exploratory FAILS on CONTINUOUS-KAGGLE: OOS Δ≈−0.15 vs Foil A; PARAMETER REL detector; Wave 1 exploratory pair closed (H001b verify~56% + specialness FAIL; H003c FAIL) | Active | H003c_EXPLORATORY_RESULTS | |
+| 2026-09-13 | H009b Kaggle daily-agg powered: OOS N=38<80 INCONCLUSIVE; OOS P̂≈0.74 foil≈0.21 Δ≈0.53 CI[0.37,0.68]; tape too short for OOS≥80 unique-first (only 82 unique total) | Active | H009b_KAGGLE_DAILY_AGG_RESULTS | |
+| 2026-09-13 | CASSANDRA: do not amend H009b N≥80 post-peek; H009c only as NEW hyp on unseen weeks | Active | CASSANDRA_H009b_KAGGLE_RESULTS_REDTEAM | |
+| 2026-09-13 | ORION board lock: H009b INCONCLUSIVE parked; work-with-what-we-have → next = H004 on Kaggle 1m | Active | 2026-09-13_H009b_BOARD_LOCK | No MERCURY; no SURVIVES |
+| 2026-09-13 | H004 DID NOT SURVIVE packaging; H004b required (control/VI/metric/tape locks) before Kaggle exploratory | Active | CASSANDRA_H004_REDTEAM | No MERCURY |
+| 2026-09-13 | H004b packaging SURVIVED; R1 amend (classic FVG birth only) then ORION exploratory RUN auth on CONTINUOUS-KAGGLE | Active | CASSANDRA_H004b_REDTEAM | No MERCURY |
+| 2026-09-13 | H004b exploratory FAILS on CONTINUOUS-KAGGLE: first-10:00 FVG vs later control OOS Δ≈0.005 CI crosses 0; WF median 0; RTH sens negative; N_pairs OOS=205 | Provisional | H004b_EXPLORATORY_RESULTS | Awaiting CASSANDRA; no MERCURY |
+| 2026-09-13 | CASSANDRA agrees H004b FAILS; ORION board lock | Active | CASSANDRA_H004b_RESULTS_REDTEAM + H004b_BOARD_LOCK | No MERCURY; no near-miss prose |
+| 2026-09-13 | Wave 1 next = H002 packaging on CONTINUOUS-KAGGLE (last unrun Wave 1 hyp on existing tape) | Active | H004b_BOARD_LOCK | |
+| 2026-09-13 | H002 DID NOT SURVIVE packaging; H002b required (score/baseline/horizon/tape/threshold locks) | Active | CASSANDRA_H002_REDTEAM | No MERCURY |
+| 2026-09-13 | H002b packaging SURVIVED; ORION exploratory RUN authorized on CONTINUOUS-KAGGLE | Active | CASSANDRA_H002b_REDTEAM | No MERCURY; not panacea |
+| 2026-09-13 | H002b board FAILS: hard-majority log-loss SURVIVES rejected as artifact; soft-prior lift≈0; CASSANDRA CRITICAL | Active | CASSANDRA_H002b_RESULTS_REDTEAM + H002b_BOARD_LOCK | No MERCURY |
+| 2026-09-13 | Wave 1 exploratory chapter CLOSED on CONTINUOUS-KAGGLE: H001b verify+specialness FAIL; H002b FAIL; H003c FAIL; H004b FAIL; H009b INCONCLUSIVE parked | Active | WAVE1_EXPLORATORY_BOARD | |

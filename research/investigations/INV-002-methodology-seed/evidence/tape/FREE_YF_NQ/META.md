@@ -17,3 +17,7 @@
 
 ## Gate
 DATA may PASS WITH CONDITIONS for Wave 2 HTF/weekly pilots only. QUANT RUN on H008–H010 allowed only after protocols + CASSANDRA packaging, and only on this stream’s resolution.
+
+## DATA gate
+**PASS WITH CONDITIONS** — see `DATA_GATE_FREE_YF_2026-09-13.md`
+Wave 2 HTF only. Not for Wave 1 / stream C / 1m.

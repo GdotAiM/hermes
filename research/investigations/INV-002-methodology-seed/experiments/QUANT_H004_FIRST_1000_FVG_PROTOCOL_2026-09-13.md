@@ -4,8 +4,9 @@
 **Parents (Passed Observed only):** C-METH-010, C-METH-011  
 **ORION rank:** #3 in draft order  
 **Author:** QUANT · **Filed:** 2026-09-13  
-**Run status:** **HOLD** — shared tape  
-**Note:** CASSANDRA to set final control (later same-day FVG vs random RTH FVG) before RUN.
+**Run status:** **AUDIT DRAFT ONLY — DO NOT RUN**  
+**Superseded for decision-readiness by:** `QUANT_H004b_FIRST_1000_FVG_PROTOCOL_2026-09-13.md` (CASSANDRA HOLD → H004b).  
+**Note:** retained for audit trail only.
 
 ---
 
