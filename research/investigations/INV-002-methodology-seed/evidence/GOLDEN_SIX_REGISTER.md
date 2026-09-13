@@ -18,7 +18,7 @@
 - ASR = Hold until video spot-check for Passed Observed
 - Shared tape: `evidence/tape/WAVE1_SHARED_TAPE_REQUIREMENTS.md` (coordinates with INV-001 stream C)
 
-## INCONSISTENT — CORPUS.md working titles vs YouTube (2026-09-13)
+## INCONSISTENT — CORPUS.md working titles vs YouTube (2026-09-13) — **CLEARED** (ORION amended CORPUS to YouTube titles)
 | video_id | CORPUS.md working title | Official YouTube title |
 |----------|-------------------------|------------------------|
 | `L81eMQhmXmc` | Part 5 — Back Testing Properly | How New Students Should Start Part 4 \ Pillars Of Daily Log Entries |

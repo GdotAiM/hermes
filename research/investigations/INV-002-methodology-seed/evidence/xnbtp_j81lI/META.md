@@ -1,14 +1,9 @@
-# How New Students Should Start Part 5 \ Back Testing Properly
+# META — xnbtp_j81lI
 
-- video_id: `xnbtp_j81lI`
-- url: https://www.youtube.com/watch?v=xnbtp_j81lI
-- upload_date: 20260909
-- duration: 2816 s
-- channel: The Inner Circle Trader
-- channel_id: `UCtjxa77NqamhVC8atV85Rog`
-- access: **partial**
-- primary: **yes** (INV-002 golden methodology corpus)
-- investigation: INV-002-methodology-seed
-- dual_playlist_2026: **yes** — Also on INV-001 2026 playlist PLVgHx4Z63paaja3GW0dYSr6y_V2Sttx4-
-- taxonomy: **not primary** (map only)
-- captions: YouTube auto EN VTT present
+**Title:** How New Students Should Start Part 5 \ Back Testing Properly
+**Channel:** The Inner Circle Trader
+**Duration:** 46:56
+**Upload:** 2026-09-09
+**URL:** https://youtu.be/xnbtp_j81lI
+**INV-002 role:** TRUE Part 5 — backtest method (CORPUS.md had this ID as Part 4 — swapped)
+**Caption kind:** ASR (automatic English). No official manual subtitles.

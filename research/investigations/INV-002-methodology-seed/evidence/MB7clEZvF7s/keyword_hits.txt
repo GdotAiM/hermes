@@ -1,0 +1,149 @@
+00:01:21 each week, each month, everything is the same continuous pattern. It's a regimen.
+00:05:58 Opening price for August annotated here.
+00:06:13 lowest low, July's opening price, I'm sorry, closing price, opening price for July, and the high for July.
+00:07:00 low.
+00:07:07 information. Notice I have nothing else on this chart. I have no reference points to fair value gaps, order blocks,
+00:07:15 breakers. I don't have anything like first presented fair value gaps, new week opening gaps, new day opening gaps.
+00:08:50 months inside a calendar year. Okay? And right now if you look at it, if we
+00:09:25 So, we're going to demand that the weekly in the daily chart gives us more
+00:09:42 When we're below 50% of it, we're in a discount.
+00:09:55 going to use that type of logic to frame your trade. Very simple, isn't it? Now,
+00:10:24 And if you look real close, you'll see that the previous week high and the previous
+00:10:32 week low is there. See that? I keep it on this because I want to see with the
+00:10:45 the the weekly highs, the monthly highs, they're in blue.
+00:10:51 Okay. The opening prices, I want them in black and I want them in a dashed line.
+00:10:57 Dashed line. Dash line. Previous week's high and low. You're only keeping one reference of that. That's not something
+00:11:04 you got to do too much of. Okay? So, it's just what was last week's highest
+00:11:08 high and what was last week's lowest low between Monday and Friday. Okay? Now,
+00:11:25 Monday, uh some platforms omit Sundays.
+00:11:33 I I want to see what the weekly range was the previous week. So you're only
+00:11:38 tracking what? monthly highs, lows, open high and lows for each month, and previous week's high, previous week's
+00:11:51 you're supposed to be spending on these monthly and and weekly charts. Okay, th
+00:12:00 to previous weeks high and low?
+00:12:13 weekly chart.
+00:12:20 Here's previous week.
+00:12:23 Here's previous week's low and high respectively.
+00:12:50 Usually, we see lower prices. It doesn't mean that they can't twist this thing
+00:13:13 going in towards the end of the year trading up into the first week of
+00:13:35 Write down your key levels by measuring previous week's range. What levels are they? Your gradient levels and your
+00:13:52 Yeah. I want to take the uh the fib off, not the previous week high low. All
+00:14:03 So you get the key informations in regards to premium to discount relative to previous weeks high and low, relative
+00:14:21 you're looking for in reference to the real dealing range relative to time key time frames monthly, weekly, and
+00:14:50 We're halfway point. You don't need to have all this detail, but if you're
+00:15:46 day-by-day procedure. Once you have the monthly highs and lows, open, high, low, and close in the previous week's high
+00:16:22 gap right there. Not going to annotate the chart here, but you you can do these
+00:16:51 entering a seasonal tendency where in the last week or so of August, it can be
+00:18:27 week's two. You'll hear it. You'll hear me say this is the sell side. We're
+00:18:38 for you over a week. Now if you look at that volume of balance
+00:19:19 We have a wick here from Monday and then we have all of this on the
+00:19:39 travel rather rather quickly and easily through that range. Then on Monday, we opened we traded down through it once
+00:20:03 reviewed what we've done today, Tuesday, Monday in deference to this information. Then I'll finish what
+00:20:50 need heat map. You don't need liquidity maps. You don't need all these other
+00:21:21 view of that daily fair value gap that I shaded in blue, remember it's inside of
+00:23:50 graded, remember if it's going to sell off during the season tenant that I told
+00:23:55 you last week, last week we're going to be entering into that.
+00:26:16 happens to agree with the logic that I've come up with grading a very
+00:26:45 that fair value gap on the daily chart.
+00:26:50 Trades down into the middle. This dashed line here or dotted line. That's half of
+00:27:00 range. This whole big green gray area here and the low of that blue box. This
+00:27:08 going to likely go to last week. Got real close to it and then shied away and
+00:28:09 the objective I told you we would hit for non-farm payroll week. Be done
+00:28:28 By that time, 11:00 a.m. Eastern time, Wednesdays of non-farm payroll weeks.
+00:29:17 give you a greater degree of clarity and a methodology to follow where you're not
+00:29:50 things. You're going to take the higher time frame and transpose them down to
+00:30:33 our way down into Tuesday's I'm sorry, Wednesday's trading, taking out previous week's low. You see that? So, that's how
+00:30:41 we traded there. Very important information. We have a small little inefficiency between Wednesday's high and Monday's low. So,
+00:31:31 relates to new week opening gaps and new day opening gaps. So we're going to go
+00:31:37 over to new equiping gap matrix.
+00:32:14 stuff still works. And here you go. So, what are we looking for for new week
+00:32:19 opening gaps? Okay, which is the opening price at 6 p.m. Eastern time on Sunday,
+00:32:33 previous Friday.
+00:32:36 Now, if there's a holiday that prevents us from trading on Friday, you'll just
+00:32:40 simply use Thursday. Okay? So, Sunday's always the beginning of a new week. It
+00:32:51 have at least five of the past five weeks new week opening gaps. And if you
+00:33:15 have no additional information. It's just these specific areas where there's a weekly gap and we
+00:33:27 want to keep a rotating fiveweek display of it. Okay. Now, it doesn't take long to create this. Put some music
+00:34:50 Mon clicked on Monday. So it's Sunday the 30th. I'm sorry. I apologize. I told
+00:34:55 you before last week when I was talking about this, it's a little wonky. I'm
+00:34:58 used to seeing my calendar have uh Sunday, not beginning with Monday, but I
+00:35:09 previous Sunday of the present week because it's now September the 2nd, 2026. So, Sunday prior to that is the
+00:35:33 little area like that. And you want to find Friday. See that? 4:59 p.m.
+00:35:40 You're anchoring to the close on Friday at 4:59 p.m. That's the last print. And
+00:35:46 then you're going to take it to Monday or I'm sorry, Sunday's opening price.
+00:35:56 So, you're doing that. Anchor to the close on Friday, 4:59 p.m. Drag it up to Sunday 6 p.m.
+00:36:06 opening price. And then you just simply annotate it by the the date NWG for new week opening gap. August 08
+00:36:29 Just make sure that you're labeling as a new week opening gap and keep your
+00:36:35 And I have new day I'm sorry I have uh first percent of fair gaps on here as
+00:37:07 There's the business. Friday the 21st at 4:59 p.m. It's a down close candle. So,
+00:37:16 So we draw it from the low of Friday close up to the open on Sunday. Same
+00:37:48 know what I'm looking for. I manage my data with my journals, not so much on
+00:37:56 logic, what I'm thinking. I honestly work off of piece of paper 99% of the
+00:38:01 time. So, but you would go through say for instance like this this week in week
+00:38:08 n week opening gap. See how I'm hovering over top of the middle of it? It
+00:38:33 down to rename. And you can say you can say in log August 08
+00:40:08 this I just want to get in and buy the fair value gap and sell the you the
+00:40:31 New equipment gaps right now. So, what do we what do we see price doing? What's
+00:40:51 Monday first presented fair.
+00:40:55 Tuesday's first percent value gap today or Wednesday's first presented fair value gap.
+00:41:04 Yeah, it's inside the chart with new week opening gaps. Now, if you want to
+00:41:10 be a purist and you don't want to have present first presented fair value gaps
+00:41:15 on the chart that has end logs, that's fine. Create a separate little layout up
+00:41:21 here. Just do new week opening gap matrix and then do a end dog ng new day
+00:41:27 opening gap. Now what's a new day opening gap?
+00:41:31 New day opening gap is the difference between where we stopped trading at for instance look at uh this one here
+00:41:52 I'm talking about new Dave and gap I said new Dave first presented fair gap.
+00:41:57 I apologize. I'm not going to be editing this out. This is going to be a one one
+00:42:00 one and done video. I'm tired. So instead of uh having first presented fair value gaps on your inog okay chart
+00:42:09 you can simply uh create a separate chart for first presented fair value gaps and just change change the title to
+00:42:15 first presented fair value gaps matrix.
+00:43:08 um first percent gap what we're looking for when that occurs is we're simply
+00:43:23 through all this, there is no fair value gap that forms until this one right
+00:43:50 we're using the NOG matrix. I just so happen to put my first fair value gaps
+00:43:56 on this with NOGS. So the first percent value gap, you can also use the first
+00:44:04 percent value gap that causes displacement.
+00:44:33 We're in between two significant first% fair value gaps.
+00:45:00 Wednesday for non-farm payroll week.
+00:47:09 up here. Uh the other bit of business is you want to be logging. These are all
+00:47:13 things that you're logging in and how you're tracking your charts. This is not
+00:47:16 back testing, by the way. Back testing is seeing what you see with these
+00:47:25 Now we want to look at regular trading hours opening range gap matrix. Okay. So
+00:47:36 regular trading hours opening range gap matrix. Now right away this looks like what is this? What is what am I supposed
+00:47:59 opening range gaps. Same thing you'll have with first presented fair value gaps or
+00:48:05 um end dogs, new day opening gaps or even maybe new week opening gaps. If
+00:48:22 we had a huge enormous opening range gap here on Tuesday's trading. That's the
+00:49:26 opening range gaps, regular trading hours, opening range gaps are where we stop trading.
+00:49:46 This candlestick is the last one on Monday at 4:14 p.m. That's the final
+00:49:58 That just so happens to be Wednesday's regular trading hours, opening range gap high. What makes it that? Because we
+00:50:07 open all the way down here Wednesday morning at 9:30 Eastern time right there.
+00:50:20 Okay. So that opening price at 9:30 Eastern time while looking at the chart
+00:50:26 through regular trading hours RTH that gives you the full regular trading hours opening
+00:50:37 range gap for Tuesday's trading of this week or September 1st 2026.
+00:50:46 Now, if we take a look at that range, Tuesday's range is split in half here
+00:50:53 for the record trading hours gap. That's that's this is equilibrium of that gap
+00:50:58 or as we call it because it's a gap or inefficiency. It's consequent encouragement. I don't care if you don't
+00:51:15 opened down here, meandered around, went up into last Wednesday's regular trading hours, opening range gap,
+00:51:35 instance, say we want to grade Wednesday, August 26, regular trading hours, opening range gap, real easy. go
+00:51:41 into your regular trading hours opening range gap matrix chart overlay where nothing else is on the chart and then
+00:51:51 trading hours opening range gap. So we want to go to the calendar little thing down here. We want to go to
+00:51:59 August 26 is the gap. So August 26 and we want to go to
+00:52:47 very first tick, opening price at 9:30.
+00:52:50 Drop it. Now we graded that. So now we can go back to price action where we're
+00:53:13 Look at that. And then we get to consequent corion of Tuesday's regular trading hours, opening range gap. If
+00:53:28 on the daily chart. Remember all of this freef fall that took place overnight. It looks like it just gapped
+00:53:42 that. But any retracement only went right up to half the gap for regular
+00:53:46 trading hours. Opening range gap for Tuesday, September 1st here. Look at that. Beautiful. Look at the bodies.
+00:54:49 Tuesday, September 1st, 2026 regular trading hours, open range gap.
+00:55:09 September 2nd regular trading hours open range gap overlaps with Tuesday's and it creates this little different color. See
+00:56:50 That being the monthly, weekly, daily, macro perspective with keys of open, high, low, and close on those time
+00:56:57 frames. Then you have the new week opening gap matrix and its gradient levels. And once you do these gradients,
+00:57:05 again, just be mindful that you want to take them off for journaling. Okay, the
+00:57:10 purpose is when you're journaling once you annotate a level like this and say
+00:57:25 get the context this is Wednesday's August 26 trading hours opening range gap Wednesday September 2nd reg opening
+00:57:34 range gap by having that we can now have a reference point and we can see where
+00:58:04 block right there was supported by a shadow which was two regular trading average opening range gaps bleeding over
+00:59:10 close candles here consecutively. That's all one order block changing state of delivery is that opening price there.
+00:59:27 of Wednesday's regular trading hours, open range gap. Everything I just showed you tonight, everything I showed you
+00:59:37 Whether you're a swing trader on a daily time frame, weekly time frame, monthly
+01:00:40 low, close on the monthly, weekly, and daily, and previous week's range. I can
+01:00:53 punching down below previous week's low right there during the macro time at 7
+01:00:59 a.m. 6:50 a.m. 7:10 a.m. Interesting how that converges, isn't it?

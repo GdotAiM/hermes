@@ -30,3 +30,6 @@
 | 2026-09-13 | H1b hygiene R1/R2/R4/R5 applied in-place; run gates remain tape C + event calendar + coverage | Active | QUANT_H1b §0d | |\n
 | 2026-09-13 | INV-002 opened: 6-video methodology seed = ICT Research Protocol v0.1; Wave 1 = H001–H004; INV-001 remains tape-blocked | Active | Human directive + ORION synthesis | Provenance: video_id+timestamp required |
 | 2026-09-13 | INV-002 adopts shared CAPTURE_STANDARD (not forked); claim IDs C-METH-*; HISTORIAN optional for pure process claims | Active | FORGE_PORTABILITY_protocol-v0.1 | |
+| 2026-09-13 | INV-002 CORPUS Part 4/5 IDs corrected: L81eMQhmXmc=Pillars; xnbtp_j81lI=Back Testing; all six on 2026 playlist | Active | DATA GOLDEN_SIX_REGISTER | |
+| 2026-09-13 | INV-002 ATLAS: Part 4 gives three pillars + H001–H004 parents; ~70% gap claim is verify-don’t-accept; ASR trap on RTH open 9:30 vs 9:00 | Provisional Hold | ATLAS_INV002_INDEX | |
+| 2026-09-13 | INV-002 Wave 1 parents Passed (C-METH-003–011,015); RTH open locked 9:30 ET; ORION specs H001–H004; QUANT RUN still HOLD for tape | Active | DATA_GATE_CMETH + ORION_WAVE1_HYP_SPECS | |

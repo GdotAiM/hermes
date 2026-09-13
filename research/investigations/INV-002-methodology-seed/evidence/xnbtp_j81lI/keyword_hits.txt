@@ -1,0 +1,141 @@
+00:00:23 Part four, I gave you three pillars to my smart money concepts. That way you
+00:00:28 can start with just those three and build on that as you go through the
+00:01:01 This idea of backtesting, I spent lots of time over the last few years thinking
+00:01:50 being greedy." No, I'm being practical.
+00:02:59 I'm going to do my best to discourage you from ever using market replay cuz
+00:03:16 candlestick. Whether you're going to be trading swing trading, long-term position trading, 4-hour charts, 1-hour charts, weekly
+00:03:24 charts if that's the time you're going to be trading on, the logic is still the same.
+00:03:28 We're not using a different methodology because we're going up in a different time frame. It's the same thing. You're
+00:03:36 And when you use market replay, you don't get that.
+00:03:40 You get two ticks, the opening and initial flurry of whatever it did, and then it gives you the close. And
+00:03:50 didn't watch the entire lifespan of that candlestick, and you need to be able to
+00:04:28 backtesting, where you're logging everything and recording your observations in your own voice, which I
+00:05:11 What difference does it really make? Cuz you're backtesting.
+00:05:14 You're going through the logic of what you would have implemented with the least of experience, going back
+00:05:50 characteristics, these subtle nuances that your job and your task is to record on a day-by-day basis.
+00:05:57 Now, I suggested that you do 6 weeks before and then go 6 weeks in the in the future
+00:06:35 with market replay, which is shameful.
+00:06:59 but you don't need market replay and you should stay away from it because it's literally toxic. It's not
+00:07:16 That same logic, you're going to transpose that same thing to whether you trade an hourly chart, a 4-hour chart, a
+00:07:20 daily chart, a weekly chart, a monthly chart. It doesn't change. It's the same
+00:07:32 1-minute chart's not moving any faster than the weekly chart is.
+00:07:38 The weekly and the 1-minute chart, they're all showing the same price at the same time.
+00:07:50 But, you need to do certain things to allow you to interpret price action in a
+00:08:04 I gave the pre-market session hours, 7:00 to 9:00 a.m. Eastern time.
+00:08:27 Then I gave the opening range for regular trading hours and its consequent encouragement.
+00:08:34 And then I gave the silver bullet for 10:00. The first incentive everybody got.
+00:08:58 And when you want to go back testing, what you're doing is is you're looking
+00:09:47 This is what your charts should look like when you log them. If it's in
+00:09:50 static form, don't worry about doing the the naked chart. Just do everything with
+00:10:01 that's 7:00 in the morning over here to 9:00 a.m. Eastern time.
+00:10:22 at 9:00 a.m.
+00:10:24 Cuz what that'll do is then if you're going to grade the opening range, which
+00:10:29 is 9:30 to 10:00 a.m. Eastern time, that first 30 minutes, you'll be able to see if there's any
+00:10:50 And what we want to do is you want to project them into the day.
+00:11:05 7:00 to 9:00 a.m. Eastern time. And then it started to project higher.
+00:11:29 this premium bearish fair value gap for an easy price run of over 100 handles.
+00:11:35 Fair value gap, this is for like brand new students, okay? You're looking for
+00:12:24 Especially when you watch or look at your charts on the weekend when the
+00:14:00 So, by having the fair value gap here, you want to annotate the high, key highs,
+00:14:58 Cuz if you're not trying to be precise about your logging and your backtesting,
+00:15:52 back up and trades into this fair value gap and annotate things like I was
+00:16:14 Which is a bearish fair value gap.
+00:16:24 middle of the fair value gap, the dotted line and that blue line. You see how it
+00:16:39 formed at 29,370.50 during the pre-market session hours. So there's your relative equal lows
+00:16:50 Look for relative equal lows and relative equal highs inside of this range between 7:00 and 9:00 because the
+00:17:34 I will say back test like I'm going to teach you for 6 weeks and most of you
+00:17:45 event horizon? Could you talk a little bit about opening range gaps?" When I'm
+00:18:21 But here we have fair value gap here.
+00:18:55 Why? Because the characteristic of a fair value gap if order flow is bearish
+00:19:00 the body should stay below the high.
+00:20:14 your in your journal, you want to record it like you did it.
+00:20:50 And be practical and realistic in the beginning. And then let your experience grow and dictate when you want to
+00:21:33 then when you get to the weekend, you're going to just go go through your every
+00:21:37 day annotations, whether be still pictures that you collect and you save in your journal,
+00:21:50 as a community to suggest things that you do when you save old data, when you save chart
+00:21:56 formations and you back test.
+00:21:59 This is how I consider back testing. You're looking at a hypothetical entry, hypothetical stop,
+00:22:25 because it helps you observe them.
+00:22:50 respecting the wick.
+00:23:18 thorough explanation as what you observed.
+00:23:48 into because you've sweet-talked yourself with love letters to yourself in these charts every single day for weeks and
+00:23:55 weeks and weeks and you make it a practice to do it every single day. Even
+00:24:23 You don't go into your journal and say, "I lost $25,000 today." or I blew the
+00:24:33 That's never going in your journal.
+00:25:04 We have the opening range gap and its consequent encouragement delivery. So, here's our
+00:25:10 gap here where the trading hours you'll see that down here in the lower right
+00:25:36 those two reference points that is the opening range gap for regular trading hours.
+00:25:42 This is a discount opening range gap because where we open at 9:30 is lower
+00:25:57 considered a discount opening range gap.
+00:26:12 then that that gap would be a premium opening range gap.
+00:26:15 Okay, so where we open at 9:30 determines what kind of gap it is.
+00:26:20 So, gap lower is discount, a gap higher is premium.
+00:26:25 So, this idea is we're looking at how the middle of the gap or consequent
+00:26:44 right to consequent encouragement on the regular trading hours opening range gap.
+00:26:48 So, mid gap. It traded there right rather quickly. And I'll just go through
+00:26:56 Eastern time with a discount opening range gap of 69 handles. That means from
+00:27:00 where we settled at 4:14 p.m. Eastern time previous day, while looking at regular trading hours as the final print
+00:27:11 The regular trading hours opening range gap consequent encroachment, which is the mid gap, was delivered just 5
+00:27:16 minutes after 9:30 a.m. Eastern time's opening price. That's right here on this candlestick. It hits it there.
+00:27:26 opening range gap standard deviations and negative 1.0 projection nails the high of the AM session. That's simply by
+00:27:34 taking this opening price and where we settled at final print previous day, put
+00:27:50 You'll get this level right here.
+00:28:17 settlement price at 4:14 p.m. Eastern time previous day regular trading hours final print to opening price at 9:30
+00:28:38 gap, and starts to sell off. Is that bearish? Yes. So that means we're going
+00:28:47 that gap.
+00:29:04 Regular trading hours, relatively high and low, you want to be observing them because the gap's going to come back and
+00:30:00 Where it's going to pull down into a low during the 10:00 hour.
+00:30:28 You want to obviously sure code everything you would see and observe.
+00:30:31 And while this was a rather small opening range gap it didn't take very long for price to
+00:31:19 All right, so here is the silver bullet 10:00 hour. Okay, so obviously we have
+00:31:25 10:00 denoted. Always have that on your chart. You can do it any way you want.
+00:31:34 over top of your candlestick and you want to be able to see if 10:00's
+00:31:44 it is. So here at 10:00 go straight on up.
+00:31:50 We have a fair value gap.
+00:31:53 This is candlestick number two that makes the fair value gap.
+00:32:06 Now this week I gave you an application literally just yesterday teaching you the
+00:32:14 classification of first presented fair value gap and the rule. So when you see
+00:32:18 these guys out there making lecture notes and or they done backtesting, they do AI the the I ran the numbers and his
+00:32:34 gap to sell off for over 175 handles.
+00:32:37 I love how consistent the concepts deliver on their unique and new logic that's respected to each one of
+00:32:52 one use this first presented fair value gap.
+00:33:00 By definition, it is the very first fair value gap. Absolutely very first one.
+00:33:40 But here's I'm Here's where I'm going to lean on the logic that you don't just go
+00:33:52 Meaning that the market will seek a low that forms during the 10:00 hour. Well,
+00:33:58 here's 10:00.
+00:34:05 candlestick that creates the fair value gap. So, am I going to be inclined to
+00:34:43 So, by using first instance of fair value gap, you know, when you get this low
+00:34:57 And it closes below middle of that gap. So, that's a wonderful shorting opportunity if you're going to
+00:35:09 10:00 low right there.
+00:35:17 10:00 right here. What low stands out?
+00:35:28 But by observing and recording these things in your chart, then back testing with these ideas and
+00:35:46 But you're learning to observe things.
+00:36:13 But that's the same logic they'll tell you or they'll tell me in comments. But
+00:36:23 this first instance of fair fair gap valid there.
+00:36:31 very plainly in no uncertain terms how to use first presented fair value gaps.
+00:36:40 Ring in the first presented fair value gap at 10:00 Eastern time a.m.
+00:36:47 Now a fair value gap with displacement.
+00:36:50 Oh, remember that? So if this was again what I just showed was the very first
+00:36:54 presented fair value gap. And it's true.
+00:37:29 So now I'm adding these details. First presented fair value gap with displacement take greater command over price delivery
+00:37:37 than just a simple initial formation of a fair value gap.
+00:37:41 Noticing this bissy, that candlestick right there, is also a reflection fair value gap in
+00:37:49 addition to it being an obvious bearish inversion fair value gap.
+00:37:56 The first gap was a down close candle.
+00:37:59 See it closed down here. But that gap between this candle's high and that
+00:38:01 candlestick's low, that's the actual gap that we showed as the first presented fair value gap. Let me show you again.
+00:38:44 Because that low is outside of 10:00.
+00:38:57 Pulling back to a low that forms in 10:00. Remember, folks, the dealing range is 30 minutes. The opening range
+00:39:03 is 30 minutes. I don't care how many people tell you it's a 5-minute opening
+00:39:06 range or a 15-minute opening range. I could care less. They're all wrong.
+00:39:42 This fair value gap has much more emphasis placed on it cuz it's going to
+00:39:50 Is the wicks going outside of it? No, ma'am.
+00:41:26 have made all this money and quit my job in 3 weeks." No.
+00:42:10 And it builds in this expectation that you don't get from market replay. Market
+00:42:15 replay is so stilted and stunted where you don't even see the drawdown.
+00:42:31 Whereas by journaling like this and then recording somewhere in here saying how much time, how many minutes, how much
+00:42:51 As we were talking about in lunch macro, this is a low that formed in 10:00. So
+00:43:28 over here that just so happens to form again during that 7:00 and 9:00 a.m.
+00:43:57 So hopefully you found this one insightful. Hopefully it inspires you to enjoy backtesting.
+00:44:01 Uh avoid market replay like it's the plague.
+00:46:50 Just for fun. Until next time, I wish you good luck, good trading, and be

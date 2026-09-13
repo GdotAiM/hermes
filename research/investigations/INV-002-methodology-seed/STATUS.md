@@ -1,16 +1,17 @@
 # INV-002 Status
-**Updated:** 2026-09-13
+**Updated:** 2026-09-13 (QUANT Wave 1 drafts)
 
-- [x] Program brief + Protocol v0.1
-- [x] Six-video corpus register
-- [x] Backlog H001–H012; Wave 1 = H001–H004
-- [x] DATA evidence packs for 6 videos (META/ACCESS + auto-captions)
-- [x] GOLDEN_SIX_REGISTER.md
-- [x] Wave 1 shared tape stub (`evidence/tape/WAVE1_SHARED_TAPE_REQUIREMENTS.md`) — coordinated with INV-001 stream C
-- [ ] ATLAS claim extract (methodology + pillars)
-- [ ] ORION hyp specs H001–H004
-- [ ] QUANT draft protocols (after claims)
-- [ ] CASSANDRA on H001 first
-- [ ] Shared tape data filed (human; single stack with stream C)
+- [x] DATA packs + Part 4/5 title fix
+- [x] ATLAS C-METH-001–019
+- [x] DATA gate: **Passed 003–011, 015**; 008 amended 9:30 only
+- [x] ORION Wave-1 hyp specs (`reviews/ORION_WAVE1_HYP_SPECS_2026-09-13.md`)
+- [x] QUANT H001 draft — `experiments/QUANT_H001_RTH_ORG_CE_PROTOCOL_2026-09-13.md` (ORION notified)
+- [x] QUANT H003 draft — `experiments/QUANT_H003_79_SWEEP_OPPOSITE_PROTOCOL_2026-09-13.md`
+- [x] QUANT H004 draft — `experiments/QUANT_H004_FIRST_1000_FVG_PROTOCOL_2026-09-13.md`
+- [x] QUANT H002 draft — `experiments/QUANT_H002_79_STATE_CLASSIFIER_PROTOCOL_2026-09-13.md`
+- [ ] CASSANDRA on H001 — standing by (verify-don’t-accept; no MERCURY)
+- [ ] Parts 1–3 + Week Lifecycle extract
+- [ ] Shared tape / RUN
 
-**DATA flag:** CORPUS.md Part 4/5 titles swapped vs YouTube — use META titles.
+**Passed open clock:** RTH = 9:30 ET (not 9:00).  
+**Draft order done:** H001 → H003 → H004 → H002. All HOLD for shared tape.

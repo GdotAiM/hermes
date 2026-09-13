@@ -1,14 +1,9 @@
-# How New Students Should Start Part 1
+# META — BWEPtHZ1Y2Y
 
-- video_id: `BWEPtHZ1Y2Y`
-- url: https://www.youtube.com/watch?v=BWEPtHZ1Y2Y
-- upload_date: 20260831
-- duration: 7165 s
-- channel: The Inner Circle Trader
-- channel_id: `UCtjxa77NqamhVC8atV85Rog`
-- access: **partial**
-- primary: **yes** (INV-002 golden methodology corpus)
-- investigation: INV-002-methodology-seed
-- dual_playlist_2026: **yes** — Also on INV-001 2026 playlist PLVgHx4Z63paaja3GW0dYSr6y_V2Sttx4-
-- taxonomy: **not primary** (map only)
-- captions: YouTube auto EN VTT present
+**Title:** How New Students Should Start Part 1
+**Channel:** The Inner Circle Trader
+**Duration:** 1:59:25
+**Upload:** 2026-08-31
+**URL:** https://youtu.be/BWEPtHZ1Y2Y
+**INV-002 role:** Part 1 — study start / NFP-Monday (not first-wave extract)
+**Caption kind:** ASR (automatic English). No official manual subtitles.

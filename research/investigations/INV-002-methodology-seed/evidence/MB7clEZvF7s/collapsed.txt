@@ -1,0 +1,660 @@
+00:00:07 Good evening folks. Welcome back. I appreciate your patience. Sometimes life gets in the way as I mentioned on hacks
+00:00:14 before posting here.
+00:00:16 So, we're in part three of how new students should begin and what they should do and what's
+00:00:23 the what's the most important things.
+00:00:28 You see a lot of hype around certain things in this industry like heat map,
+00:00:34 liquidity maps, um things that uh populate your chart. It makes the chart like really busy, really difficult to
+00:00:42 read and like what information is useful. And I kind of wanted to show you
+00:00:48 what you probably have suffered yourself because you didn't listen in the lectures where I said you have to be a
+00:00:54 good manager of the information and the data. All right. All right. So, what
+00:00:58 data am I referring to? Key levels, PDAs, high time frame, macro perspectives.
+00:01:05 I'm going to go through a really brief video here. And I can make this into a
+00:01:10 very long long video and bore you, but I want this to be number one straight to
+00:01:16 the point. That way, you know what to do, how to do it yourself. Each day,
+00:01:21 each week, each month, everything is the same continuous pattern. It's a regimen.
+00:01:28 So you do XYZ to get ABC123 data. Okay. And these reference points are what we use to call
+00:01:40 price moves, measure price moves continu uh continually on a continual basis to see whether or not there is um basically
+00:01:52 the likelihood of seeing a price move continue. So, we're measuring the strength or the weakness of a a price
+00:01:59 run and its continuity. So, if you're like most students that come to me and they listen to everything that
+00:02:07 I teach and they say, "Wow, there's I have all these lines on my chart. I have
+00:02:12 all these things on my chart and it probably looks very close to this." Now,
+00:02:17 I forced myself in front of Caleb the other day and you saw the recording for
+00:02:22 part one and part two. [sighs] The idea was to show him what most of
+00:02:29 you are probably doing and you're having so many things on your chart and it's
+00:02:35 hard to navigate. Which is the most important thing to be worrying about right now. How do you use this
+00:02:41 information? And more specifically, what information are we referring to? Okay, so I'm going to kind of go through that
+00:02:47 now. Um, we're going to talk about what matters most first. So, we're going to
+00:02:51 go to the little tab up here. Now, you should be able to see everything
+00:02:58 with the border here. This is you. I'm using Trading View. Now, you can do the
+00:03:01 same thing withever platform you use.
+00:03:05 You don't you don't have to use Trading View. You can use whatever you want to
+00:03:08 use, but preferably you want to have some kind of means of creating a
+00:03:13 workspace or a layout and keep them individually separate from one another.
+00:03:19 Otherwise, you'll have to deal with a chart like this. Now, I can navigate
+00:03:23 this. It's a little cumbersome. It's It gets on my nerves a little bit because
+00:03:27 there's so many things, you know, pining for my attention because of the things
+00:03:31 that's annotated here. But everything on this chart is exactly what's on my notepad. Okay, my notepad has
+00:03:41 everything you see here. So, to answer the question that people always say, can
+00:03:47 you show me what's on your notepad?
+00:03:49 Yeah, I get it all the time. Every time I mention I have a notepad next to me,
+00:03:52 invariably I'm going to see comments.
+00:03:55 Can you show us what you have written down? It's everything you see here on
+00:03:58 this chart. Everything with the exception of what I'm going to show you now.
+00:04:05 Go up here to layouts. Okay. So we have the open tab and we'll go down. These
+00:04:23 are all specific layouts that I use.
+00:04:26 Okay. Some of them I use for specific series like the notes and things I want
+00:04:31 to keep in that specific venue or or topical study. Uh I I'll save it as a space so that way I can
+00:04:41 come back to it and all the notes that I had in the last video in the last you
+00:04:45 know production of that continuing series everything will be germanine so I don't lose anything. Okay. And
+00:04:54 what you want to do is you want to create a space like this.
+00:04:59 Okay? And what it is is very simple.
+00:05:02 We're going to go up to the monthly chart.
+00:05:13 Okay.
+00:05:14 Now, by zooming in right away, you can see it's very simplistic. Very, very simple. Only
+00:05:25 thing I'm doing is I'm highlighting the last three months. Okay, so right now we're in
+00:05:33 September. Man, did this year fly already, didn't it? Here's August highest high and annotated as August
+00:05:44 2026 monthly high.
+00:05:47 Then here is monthly closing price. It's an up close candle for August. August 2026 closing price.
+00:05:58 Opening price for August annotated here.
+00:06:02 The the low of August.
+00:06:07 August 2026 monthly low. And the same thing going back to July. We have July's
+00:06:13 lowest low, July's opening price, I'm sorry, closing price, opening price for July, and the high for July.
+00:06:24 And then going back to June, you want to go back three months. Okay?
+00:06:29 So, three months worth of high, low, open, high, low, and close on the
+00:06:33 monthly chart. So we have the high for June, open on June, the close on June, and the low on the
+00:06:42 June contract or the data for June.
+00:06:46 [snorts] Now, what's the importance of having this information? Like what's the big deal? Okay, where are you at in
+00:06:52 reference to that entire range over the last three year uh three months? Not
+00:06:55 three years, three three months. Well, you have June's high and you have July's
+00:07:00 low.
+00:07:02 So where are we at in reference to that range? Okay, this is how you manage the
+00:07:07 information. Notice I have nothing else on this chart. I have no reference points to fair value gaps, order blocks,
+00:07:15 breakers. I don't have anything like first presented fair value gaps, new week opening gaps, new day opening gaps.
+00:07:20 None of that is here. None of it is here. Okay? So you want to have a very
+00:07:26 higher time frame macro perspective where you can just simply look at where we're at in the in the last three
+00:07:31 months, where are we at in the last month and where are we at in reference to the
+00:07:39 year if you want to go back to you know a full calendar year go back 12 months
+00:07:44 where are we at in that as well. So are we in a discount or a premium relative
+00:07:49 to that range? So the last three months since I teach in the mentorship if you
+00:07:54 go on the 2016 2017 mentorship playlists you eventually you'll get to a point
+00:08:00 where I'm talking about quarterly shifts. Okay, quarterly shifts are heavily linked to seasonal tendencies.
+00:08:08 They're the big moves. Okay, they're the very large swing trader perspectives.
+00:08:12 They're not down in the one minute charts like you see me doing majority of
+00:08:15 the time every single day. You proving there's something you can do every single day.
+00:08:21 by understanding what the seasonal tendencies are and by understanding what the next quarterly shift is likely to
+00:08:30 do. In other words, where is it likely to go over the next month to 3 months
+00:08:35 by having that macro perspective, which is why it's labeled here, monthly macro keys. keys being we're
+00:08:47 determining where we're at in reference to a specific range over the last three
+00:08:50 months inside a calendar year. Okay? And right now if you look at it, if we
+00:08:57 measure, you can work real easily on this time frame. You can see we're at
+00:09:04 halfway point right here. We we are sitting basically at if we closed for
+00:09:09 the month, which obviously we're not going to. We just finished the second day of trading for September 2026. Right
+00:09:16 now, we're sitting at half of the last 3 months range. So, we're running right
+00:09:20 inside of equilibrium of the last three months.
+00:09:25 So, we're going to demand that the weekly in the daily chart gives us more
+00:09:31 intel, more insight. Okay. When we're in the upper portion of it here, we're in a
+00:09:40 premium.
+00:09:42 When we're below 50% of it, we're in a discount.
+00:09:46 Okay? So, if you want to be trading with a short-term traders mentality, like
+00:09:51 getting in for a day or two or 3 days, maybe for one shot, one kill, you're
+00:09:55 going to use that type of logic to frame your trade. Very simple, isn't it? Now,
+00:10:01 most of you didn't even write that down, but you're going to wonder why you
+00:10:04 forgot it [laughter] months and years from now. You'll swear if you watch this video again, oh, he
+00:10:10 did say that stuff. Yes, I did. So, real quick, that's short and sweet. Now,
+00:10:15 there are several ways you can go through this. Uh, I like to go in to a
+00:10:20 monthly chart and I highlight the actual key levels, open, high, low, and close.
+00:10:24 And if you look real close, you'll see that the previous week high and the previous
+00:10:32 week low is there. See that? I keep it on this because I want to see with the
+00:10:38 monthly charts where that is as well in difference to the monthly charts. So everything here,
+00:10:45 the the weekly highs, the monthly highs, they're in blue.
+00:10:51 Okay. The opening prices, I want them in black and I want them in a dashed line.
+00:10:57 Dashed line. Dash line. Previous week's high and low. You're only keeping one reference of that. That's not something
+00:11:04 you got to do too much of. Okay? So, it's just what was last week's highest
+00:11:08 high and what was last week's lowest low between Monday and Friday. Okay? Now,
+00:11:14 you can be a stickler if you want. You can incorporate um Sunday if your your platform allows
+00:11:20 you to populate a chart separate. Uh if they don't compress the data Sunday and
+00:11:25 Monday, uh some platforms omit Sundays.
+00:11:28 So you'll you'll have to figure that part out on your on your own. But
+00:11:33 I I want to see what the weekly range was the previous week. So you're only
+00:11:38 tracking what? monthly highs, lows, open high and lows for each month, and previous week's high, previous week's
+00:11:45 low. Right away, that should remove a great deal of confusion about how much
+00:11:51 you're supposed to be spending on these monthly and and weekly charts. Okay, th
+00:11:55 those are the keys that you need to know. Now, where are we at in reference
+00:12:00 to previous weeks high and low?
+00:12:07 we're in the lower portion of it or a discount. Okay. So, now we go into a
+00:12:13 weekly chart.
+00:12:20 Here's previous week.
+00:12:23 Here's previous week's low and high respectively.
+00:12:27 Okay, we opened in the premium side of that range. How do we know that? We can
+00:12:33 measure it simply by doing this.
+00:12:37 Here's equilibrium. We opened in the premium side of it. During a time I told
+00:12:41 you seasonally, we're entering a time where index futures are usually weak.
+00:12:47 September is usually a weak month.
+00:12:50 Usually, we see lower prices. It doesn't mean that they can't twist this thing
+00:12:53 around and go against the grain, but generally, as a rule of thumb, September
+00:13:00 are usually bearish months, okay? Okay.
+00:13:02 And we usually trade down into some low in September or some low in October.
+00:13:06 Rare rare rare occurrence. We'll make the seasonal low in November. And then we get some kind of a flurry of action
+00:13:13 going in towards the end of the year trading up into the first week of
+00:13:16 February and that's usually the the catalyst. Okay, that usually generally takes place. But that's not a panacea.
+00:13:23 It's not a beall end all. It's not a it must be this way because ICT said so.
+00:13:27 It's just a general rule. Okay. So when you when you do your annotations on
+00:13:32 here, just get the information.
+00:13:35 Write down your key levels by measuring previous week's range. What levels are they? Your gradient levels and your
+00:13:42 octants. Okay. And take that off.
+00:13:51 Actually, I did the wrong one, didn't I?
+00:13:52 Yeah. I want to take the uh the fib off, not the previous week high low. All
+00:13:58 right. So now that's it. That's all you're done with that specific layout.
+00:14:03 So you get the key informations in regards to premium to discount relative to previous weeks high and low, relative
+00:14:08 to last month's high and low, relative to the last three months range. So it
+00:14:13 gives you an overview, a macro perspective, which is why it's named the macro keys. That means you know what
+00:14:21 you're looking for in reference to the real dealing range relative to time key time frames monthly, weekly, and
+00:14:28 daily. Bringing us down into the daily chart and we'll zoom in here.
+00:14:37 All right. Now, we are inside of an equilibrium price point just by looking at where we're at here to here.
+00:14:50 We're halfway point. You don't need to have all this detail, but if you're
+00:14:54 trying to learn how to do this, this is where you start. If you are lazy, and I
+00:14:59 don't mean to be condescending when I say that, but there is so many people
+00:15:02 that come to me. They say they want to learn how to do this. They say they're
+00:15:06 going to put the work in, but you have to be do you have to have your due
+00:15:10 diligence and care about the information management.
+00:15:16 It It doesn't take a lot of work to do these types of things, but if you're not
+00:15:20 interested in knowing these reference points, you're not going to learn well here.
+00:15:24 You're going to struggle and you're going to blame me. You're going to blame, you know, something outside of
+00:15:29 yourself when it's just simply you just simply being lazy. Okay? I have had lots
+00:15:34 of students that came to me over the last 34 years and they literally cannot
+00:15:39 follow rules generally. So they have to condition themselves to be disciplined, learn to do certain things. It's a
+00:15:46 day-by-day procedure. Once you have the monthly highs and lows, open, high, low, and close in the previous week's high
+00:15:51 and low. The only thing you're going to manage then from that point on is your
+00:15:55 daytoday analysis. So, I just want to ring this in because it's part of where what we've
+00:16:04 done recently. Uh, if you recall, I was looking at how price was using this
+00:16:11 cibby, this consequent encroachment of that wick, and that was likely to be an
+00:16:16 impact for continuation on the upside and it failed. This was the high of that
+00:16:22 gap right there. Not going to annotate the chart here, but you you can do these
+00:16:27 types of things. You can scribble all over them. Uh, let me do it. It's gonna
+00:16:31 probably be a longer video because of this stuff. But I mean, most of you
+00:16:36 don't care about that. You want longer ones. Other ones, give me a fivem minute
+00:16:39 trainer video. [laughter] So, we have the market reaching to the high of that and then we close outside
+00:16:46 of it. So, we had confirmation that we're probably going to go lower. We're
+00:16:51 entering a seasonal tendency where in the last week or so of August, it can be
+00:16:55 that early. And I told you that we were going to use this reference point here,
+00:17:03 including the volume and balance down here up to that. And I told you this is
+00:17:08 what we're going to do. We're going to shade it like this.
+00:17:13 See that? So, I told you I want to see it try to get down to that volume of
+00:17:17 bounce. It failed to do it that day, but up here I told you we're likely to go
+00:17:21 lower.
+00:17:23 And we had this area in here, which is it's it's kind of like a volume of
+00:17:27 bounce. I mean, if you really want to be a stickler about defining what it is,
+00:17:31 this is a slightly up close candle. If you look at the open, high, long, close,
+00:17:35 the open is 288 even. The close is 289.5.
+00:17:39 So, it's 1.5 handles or six ticks to the upside. It's still an up close candle technically,
+00:17:49 but if you if you factor that in, it's a small little volume of bounce below it
+00:17:53 and a volume of bounce to the high of it. When it's like this, I'm just going
+00:17:57 to call that whole range entire volume of bounce.
+00:18:01 And you can do these types of things here. Annotate that up to the body. Draw
+00:18:08 that out like that. No extension.
+00:18:16 We want to see all of the levels that would be graded inside this fail to
+00:18:21 support price. Why? Because we're looking for sellside here. Go back and look at the last two lectures in last
+00:18:27 week's two. You'll hear it. You'll hear me say this is the sell side. We're
+00:18:32 likely to draw down into that and the volume imbalance has been the the target
+00:18:38 for you over a week. Now if you look at that volume of balance
+00:18:45 like this.
+00:18:52 Okay. By having that type of information like this, what do you think price
+00:18:58 should do when it's trading down through this area here on a daily chart? What do
+00:19:02 you think should be witnessed in price action?
+00:19:09 It should do what?
+00:19:12 Be staggered. Like go down a little bit, has some struggles, go down a little
+00:19:16 bit, struggle, struggle. No, absolutely not.
+00:19:19 We have a wick here from Monday and then we have all of this on the
+00:19:26 daily chart where it's like open space.
+00:19:29 like there's um there isn't a whole lot of o opposition or obstruction to see price tra uh
+00:19:39 travel rather rather quickly and easily through that range. Then on Monday, we opened we traded down through it once
+00:19:47 and then we had a lot of mipation come in and then on Tuesday
+00:19:53 we gave up the entire thing overnight and ran right through it.
+00:19:59 So just let me please let me put this portion in here because that way I re I
+00:20:03 reviewed what we've done today, Tuesday, Monday in deference to this information. Then I'll finish what
+00:20:10 you're supposed to be doing as a new student. So, it kind of like brings
+00:20:13 everything together by having it look like this. When we go down into a one minute time frame,
+00:20:33 look what we say here.
+00:20:35 Look how look how powerful this is. By having you manipulate the data from
+00:20:42 specific time frames and transpose those ideas into lower time frames, you'll get a clarity that is unrivaled. You don't
+00:20:50 need heat map. You don't need liquidity maps. You don't need all these other
+00:20:53 things. Okay? Open, high, low, and close in deference to time will give you
+00:20:57 everything you need to look for. It gives you the highest degree of where
+00:21:01 the big moves are going to come. That's the importance of this lecture.
+00:21:05 Because everything I teach as a as as an educator using my conceptual ideas,
+00:21:12 there's nothing I can point to externally to say this is how you use my
+00:21:15 stuff. So you have to use my stuff the way I designed it. And by having the
+00:21:21 view of that daily fair value gap that I shaded in blue, remember it's inside of
+00:21:27 daily chart inside that big gray area which is the bottom of this blue area
+00:21:32 which is the volume imbalance and this is the high of it. Now there's a volume
+00:21:36 bounce up there too but no there isn't actually. Um this shaded area here.
+00:21:42 Watch what happens when we start to break lower on Tuesday at 3:00 a.m.
+00:21:47 cascades through it. Was there any real opposition? What about the support and resistance guys here? This should have
+00:21:53 been support, but it wasn't. How about this? Did it support it? Nope. How about
+00:21:57 that? Nope. Nope. It just went right on through. Notice that.
+00:22:02 Then we came right back up into that same area. But what is it trading to?
+00:22:08 It's trading to an octant relative to this blue shaded area. So when you have
+00:22:13 these levels here, when they become salient to what you think price is going
+00:22:17 to be utilizing right now or if you turn your chart on, it's trading right here
+00:22:21 at this moment.
+00:22:23 You simply go into your chart and you go out to a daily chart again, find your
+00:22:31 your range on that PD array that's building an interaction with.
+00:22:40 So, you take your fib, you grade it out from low up to high. Why am I doing
+00:22:48 these two levels here? Because there's no bodies except for this little tiny little piece here. So, there's a volume
+00:22:53 of balance there. And as this all the way down to that candlestick's close,
+00:22:58 it's a huge volume of balance. So, now we have that graded. So, these levels
+00:23:03 here are inside this gray box.
+00:23:07 Now, I already know some of your heads are spinning like, "Oh, this is complex.
+00:23:10 This is complicated." If you sincerely believe that, okay? If you sincerely believe what I just showed so far is
+00:23:16 complicated, do yourself the biggest favor and me a favor, too. Unsubscribe.
+00:23:21 Don't ever watch any of my videos again.
+00:23:22 And I don't mean that to be arrogant. I want you to understand that you are a
+00:23:26 problem. You are not trainable or teachable. You your your concern or interest is limited. And if you can't do
+00:23:35 this much or follow along with just this much, you'll never you'll never make it
+00:23:40 using my stuff. And I I mean that sincerely. I mean it wholeheartedly. Go
+00:23:44 do something else. Find someone else that's going to teach you. And I hope
+00:23:46 you do very well. Just it's simple as that, folks. But now because we have it
+00:23:50 graded, remember if it's going to sell off during the season tenant that I told
+00:23:55 you last week, last week we're going to be entering into that.
+00:24:02 We're in this big open air space where there shouldn't be a whole lot of
+00:24:05 opposition on the way down.
+00:24:08 See that? Now, with these levels here, every one of these levels here, get a
+00:24:13 mental note of these, okay? And then we're going to drop down into the one
+00:24:16 minute again.
+00:24:27 Look what's occurring.
+00:24:36 We break lower.
+00:24:38 This is the highest octant. This is the highest percentile. In other words, that
+00:24:42 blue shaded area I shaded on the daily chart. This is the high of it. This is
+00:24:47 the low of it. This is the lowest percentile. The highest percentile. The highest octant. If you break it up into
+00:24:52 eighs, upper quadrant, second octant between upper quadrant and consequent quotient or midpoint, lower octant below midpoint,
+00:25:06 lower quadrant, lowest octant, and then the lowest percentile. Okay, we break through it, come down to the upper
+00:25:15 quadrant, trade back up to the upper octant, sells off, goes down to lower octant,
+00:25:22 back up to upper quadrant, breaks lower to and through consequent encroachment, as you would expect. Why? Because it's
+00:25:32 inside of a daily area where there's really no candlesticks to build any support on. None. None whatsoever. It
+00:25:40 slices through that comes down to a lower octant. Now, at this point, if
+00:25:46 it's weak, it won't return back to consequent encroachment. Is that not what I teach with real order flow? Yes.
+00:25:53 We break again down to a lower quadrant, then comes right back up to what level?
+00:25:58 The octant, and you're looking at floor pivots, pivot numbers.
+00:26:03 Listen, there's other things going on that the market really uses. It really uses these levels here because it's
+00:26:11 algorithmic.
+00:26:12 It's scripted. You're going to tell me that all the buying and selling pressure
+00:26:16 happens to agree with the logic that I've come up with grading a very
+00:26:21 specific range. Come on now. Seriously.
+00:26:24 We break lower and then look how it's using the lowest quadrant there. We
+00:26:30 break lower to lowest octant. I'm sorry, quadrant rather. No octa. I'm sorry. My
+00:26:35 my eyes are failing me. I'm tired. And then we get down here, come back up to
+00:26:40 the lowest octant, and then finally we leave it. And now we're using the low of
+00:26:45 that fair value gap on the daily chart.
+00:26:46 And then what does it do?
+00:26:50 Trades down into the middle. This dashed line here or dotted line. That's half of
+00:26:55 that big gray buy center balance sell efficiency on the daily chart. It's this
+00:27:00 range. This whole big green gray area here and the low of that blue box. This
+00:27:05 blue box is that volume imbalance on the daily time frame. I told you it was
+00:27:08 going to likely go to last week. Got real close to it and then shied away and
+00:27:12 then ran it up real hard. And then now we've been selling off since. Look how
+00:27:16 it's behaving around the halfway point of that. Okay. And then we dropped down,
+00:27:22 come right back up.
+00:27:24 Look where we're at. Right here.
+00:27:26 Remember I told you what is it trading to earlier before I went back up to the
+00:27:30 daily chart? It's trading to its lowest octant. hits it here, sells off.
+00:27:43 Bang. There's your lowest um volume and bounce on the daily time frame. The the
+00:27:49 buy side of balance sell sign efficiency. Then it trades right back up to the middle of that daily buy sign
+00:27:54 balance sell sign efficiency. That's that dotted line there. Okay, look what it's doing.
+00:28:01 Hits it again.
+00:28:03 It's again, it's gyating around in here in no man's land. Why? Because it's hit
+00:28:09 the objective I told you we would hit for non-farm payroll week. Be done
+00:28:14 trading on Wednesdays. If you're brand new trader, a brand new trader needs to
+00:28:19 be done.
+00:28:28 By that time, 11:00 a.m. Eastern time, Wednesdays of non-farm payroll weeks.
+00:28:36 That doesn't mean you as a experienced trader using other things or using my
+00:28:41 stuff. It doesn't mean you can't take trades. It just means that my responsibility as an educator, I take it
+00:28:47 very s sincerely and serious.
+00:28:51 I I can come out here and promise you and not really mean it because I can't
+00:28:55 promise. No one can promise that you're going to be profitable. I can do that
+00:28:58 and be a liar. I can do that. Every one of us are human. We can make those types
+00:29:02 of errors. I don't do that. I've never promised you profitability. I have promised you and I have delivered a way
+00:29:11 of reading price action that is unique.
+00:29:14 It's not like anything else despite what you might think and hear and it will
+00:29:17 give you a greater degree of clarity and a methodology to follow where you're not
+00:29:23 lost amongst the time frames. Now I'm condensing the entire mentorship's focus points that I did in 2016 2017 all in
+00:29:33 this video now because I'm teaching things conceptually as I go in that mentorship.
+00:29:41 You're not paying attention to a lot of things I'm saying but I've said all
+00:29:44 these things here during those 12 months of of teaching. I've said all these
+00:29:50 things. You're going to take the higher time frame and transpose them down to
+00:29:54 the lower time frame. You're going to think in terms of premium and discount.
+00:29:57 You're going to grade the levels and the inefficiencies and you're going to look
+00:30:00 for these things and these are your key levels. Key levels and then time. Time
+00:30:04 is the aspect that's most important.
+00:30:07 So, if you'll permit me now, I'm going to go back up to the daily chart so I can
+00:30:13 remove the annotations on here so I can keep my my chart fresh. [snorts]
+00:30:23 I say that facitiously. It's always fresh with ICT. So, we take that out
+00:30:27 here and we'll take the volume and bounce off there. All right. So, we made
+00:30:33 our way down into Tuesday's I'm sorry, Wednesday's trading, taking out previous week's low. You see that? So, that's how
+00:30:41 we traded there. Very important information. We have a small little inefficiency between Wednesday's high and Monday's low. So,
+00:30:52 be mindful of that there. And now we can resume back with the the final portion
+00:30:58 of this video because I don't want it to go over an hour long. So, now we've done
+00:31:02 the monthly macro keys, which is the all the levels I've shown here, and then how you
+00:31:08 can use that chart. Get your information, draw your little annotations on it, but then go back and
+00:31:13 clean it all off. So that way you have all your levels with I showed you here.
+00:31:19 Okay, you have all your information, you have all your all your gradient levels and
+00:31:25 whatnot, but the next order of business is them now the inefficiencies as it
+00:31:31 relates to new week opening gaps and new day opening gaps. So we're going to go
+00:31:37 over to new equiping gap matrix.
+00:31:45 We don't want to save any of the changes.
+00:31:51 So, right away now we have another chart.
+00:31:55 This is too complex, Michael. I'm not going to do this right. And you're going
+00:31:58 to fail trying to make my stuff work in your hands if you don't do it. Simple as
+00:32:01 that. You're going to wonder why you ain't doing it. Why it ain't working for
+00:32:04 you? Because you're lazy. Okay? And uh yes, I'm going to be a little bit of a
+00:32:08 drill sergeant in this because I'm reminding you that you are the problem, not me. I taught these things. This
+00:32:14 stuff still works. And here you go. So, what are we looking for for new week
+00:32:19 opening gaps? Okay, which is the opening price at 6 p.m. Eastern time on Sunday,
+00:32:26 every Sunday. Okay. And the difference between that and where we settled on the
+00:32:33 previous Friday.
+00:32:36 Now, if there's a holiday that prevents us from trading on Friday, you'll just
+00:32:40 simply use Thursday. Okay? So, Sunday's always the beginning of a new week. It
+00:32:46 isn't going to change. There it is. So, what I do is I I teach all of you to
+00:32:51 have at least five of the past five weeks new week opening gaps. And if you
+00:32:58 scrub through, there they are.
+00:33:03 1 2 3 4 5. Okay, you want to label them.
+00:33:12 And if you see them on here, notice there's nothing else on this chart. I
+00:33:15 have no additional information. It's just these specific areas where there's a weekly gap and we
+00:33:27 want to keep a rotating fiveweek display of it. Okay. Now, it doesn't take long to create this. Put some music
+00:33:35 on, put some headphones on or whatever.
+00:33:37 Um, get a nice drink next to you, and just go through. And what you'll do,
+00:33:43 this is how you do it. You go to regular trading hours. If you want to set this
+00:33:48 up, you go to regular trading hours like that.
+00:33:51 And then what you want to do is you want to have, not regular trading hours, what
+00:33:54 am I saying? [laughter] Electronic trading hours. And then you want to do a
+00:34:01 calendar search to like for instance right now it's Wednesday September the 2nd my local time
+00:34:09 and you want to look at Sunday. So where's the Sunday previous? You got to
+00:34:13 go back into August. So you go here the 31st. Then you want to go to 1800.
+00:34:20 1800 military time is 600 p.m. Eastern time.
+00:34:26 there. So now when you go to it'll take you to the 31st right here.
+00:34:43 Sunday.
+00:34:46 Did I do that right? Why am I getting confused here?
+00:34:50 Mon clicked on Monday. So it's Sunday the 30th. I'm sorry. I apologize. I told
+00:34:55 you before last week when I was talking about this, it's a little wonky. I'm
+00:34:58 used to seeing my calendar have uh Sunday, not beginning with Monday, but I
+00:35:04 guess it's, you know, whatever. So, you go to the Sundays. So, the 30th is the
+00:35:09 previous Sunday of the present week because it's now September the 2nd, 2026. So, Sunday prior to that is the
+00:35:17 30th. Click on this. Make sure it's 1800. Go to So, it takes us right here.
+00:35:24 And you want to zoom in.
+00:35:28 Okay. Or since we have this little area over here, click this here. Grab that
+00:35:33 little area like that. And you want to find Friday. See that? 4:59 p.m.
+00:35:40 You're anchoring to the close on Friday at 4:59 p.m. That's the last print. And
+00:35:46 then you're going to take it to Monday or I'm sorry, Sunday's opening price.
+00:35:52 Since it's a down close candle, you're annotating to that level right there.
+00:35:56 So, you're doing that. Anchor to the close on Friday, 4:59 p.m. Drag it up to Sunday 6 p.m.
+00:36:06 opening price. And then you just simply annotate it by the the date NWG for new week opening gap. August 08
+00:36:17 30th.
+00:36:19 And I guess technically um that makes it easy for me as an American. Some some of
+00:36:25 you probably don't like to do the date like that. Just label any way you want.
+00:36:29 Just make sure that you're labeling as a new week opening gap and keep your
+00:36:32 colors consistent.
+00:36:35 And I have new day I'm sorry I have uh first percent of fair gaps on here as
+00:36:41 well. So but you then you go back to the next one.
+00:36:48 Simple as this. Ready? Watch. All I got to do is this. Click that. Everything's
+00:36:52 going to stay the same up here. 1,800.
+00:36:53 Then go here.
+00:36:55 And you can see how I did it. We're going to zoom in over here.
+00:37:07 There's the business. Friday the 21st at 4:59 p.m. It's a down close candle. So,
+00:37:11 you anchor to the close. And then on Sunday, we open up here.
+00:37:16 So we draw it from the low of Friday close up to the open on Sunday. Same
+00:37:22 thing. Now you're going to label it with that date August 23rd. And you want to
+00:37:25 do this with the last five, at least the last five. And you keep rolling
+00:37:31 uh populated chart.
+00:37:34 And if at any time you want to get rid of one, go to your object tree. If you're going
+00:37:42 to really be uh due diligence with this, I I don't care so much about doing this because I
+00:37:48 know what I'm looking for. I manage my data with my journals, not so much on
+00:37:52 screen. Um I only annotate my charts so that way you as students follow my
+00:37:56 logic, what I'm thinking. I honestly work off of piece of paper 99% of the
+00:38:01 time. So, but you would go through say for instance like this this week in week
+00:38:08 n week opening gap. See how I'm hovering over top of the middle of it? It
+00:38:12 highlights on the chart. See the little dots up here? Up here, right here.
+00:38:15 Watch. See that? Look in the area over here. See how it highlights?
+00:38:20 So, if you wanted to go into even greater detail and be really organized,
+00:38:24 which is what you should be doing as a brand new student, just toggle that so
+00:38:28 it's highlighted. And you can go over here, right click on it on your mouse, and go
+00:38:33 down to rename. And you can say you can say in log August 08
+00:38:44 back slash 23.
+00:38:48 Boom. So now what that helps you do as you populate more because you're going
+00:38:52 to continuously add more to this and do it by quarters. Okay? And when you start
+00:38:58 a new quarter, you're going to carry over. And all you got to do is just
+00:39:02 create a copy.
+00:39:04 Like you can go up here and create not like that. You want to go to like this,
+00:39:09 you can create a copy of it and then you can use the last few of them and delete
+00:39:15 all the ones prior. So that way you have it by quarter or if you want you can just create an
+00:39:21 enormous list of things here that you're going to manage. It just makes it a
+00:39:26 little bit more user friendly. I I think if you're going to do it electronically
+00:39:29 like like this and then say for instance you didn't want to see this one anymore.
+00:39:34 We're at a time where this has now become the eighth or the seventh or the
+00:39:37 sixth one. Looking back, all you got to do is simply do this. It's still in your
+00:39:43 list. You can still see it, but you can repopulate it by doing that. You see how
+00:39:47 easy that is? It's very, very, very important to manage, be a very good
+00:39:53 manager of the data because if you mishandle the data, you're not going to
+00:39:57 do well. Okay? See, already we're talking about something that's very, very simple, very simplistic. But 99% of
+00:40:05 you don't want to do this. You already are kicking and screaming like, man,
+00:40:08 this I just want to get in and buy the fair value gap and sell the you the
+00:40:12 breaker, the reapers, and I want to get in there and you trade my my deuce, and
+00:40:16 I want to do this, and I want to do that. That's all easier when you have
+00:40:20 this information on your charts. You know what you're looking for by having this information. So, let's go out to
+00:40:26 this again. Now, right away, where where are we at here? We're on the same chart.
+00:40:31 New equipment gaps right now. So, what do we what do we see price doing? What's
+00:40:36 it doing?
+00:40:37 It's just meandering around an empty space between two key PD arrays. A previous
+00:40:51 Monday first presented fair.
+00:40:55 Tuesday's first percent value gap today or Wednesday's first presented fair value gap.
+00:41:04 Yeah, it's inside the chart with new week opening gaps. Now, if you want to
+00:41:10 be a purist and you don't want to have present first presented fair value gaps
+00:41:15 on the chart that has end logs, that's fine. Create a separate little layout up
+00:41:21 here. Just do new week opening gap matrix and then do a end dog ng new day
+00:41:27 opening gap. Now what's a new day opening gap?
+00:41:31 New day opening gap is the difference between where we stopped trading at for instance look at uh this one here
+00:41:41 right there.
+00:41:52 I'm talking about new Dave and gap I said new Dave first presented fair gap.
+00:41:57 I apologize. I'm not going to be editing this out. This is going to be a one one
+00:42:00 one and done video. I'm tired. So instead of uh having first presented fair value gaps on your inog okay chart
+00:42:09 you can simply uh create a separate chart for first presented fair value gaps and just change change the title to
+00:42:15 first presented fair value gaps matrix.
+00:42:17 Okay a matrix is where everything lays out over top of price action and you
+00:42:22 read in deference to premium to discount equilibrium what key levels it's likely to reach for. If it's bearish, um it
+00:42:29 could go up and touch one of these um key PDAs and then sell off. It it just
+00:42:34 gives you an an idea where the next big price run or reaction is going to be.
+00:42:39 You're not trying to figure out what support and resistance level, what supply, what supply and demand zone it's
+00:42:43 going to be, uh you know, what trend line to follow, what high low to pick.
+00:42:48 My stuff gives you the the real core of why the market should be booking and why
+00:42:53 it should do it and when it should do it at what price level. So it removes all
+00:42:57 the ambiguity even though it may feel ambiguous to you now it's okay because
+00:43:02 you're you're you're learning for the first time purely learning for the first time. So
+00:43:08 um first percent gap what we're looking for when that occurs is we're simply
+00:43:12 looking for the first inefficiency that forms after 9:30. So this candlestick here is 938 930 is there. If you go
+00:43:23 through all this, there is no fair value gap that forms until this one right
+00:43:26 here. Okay. Now, you can have a separate layout or overview or not overview,
+00:43:36 what's it called? Um um workspace depending upon what platform you have.
+00:43:42 Same thing. We're saying the same thing where you where you collect information and only that information appears on
+00:43:47 that set of charts. Like for instance, what we're doing here for Trading View,
+00:43:50 we're using the NOG matrix. I just so happen to put my first fair value gaps
+00:43:56 on this with NOGS. So the first percent value gap, you can also use the first
+00:44:04 percent value gap that causes displacement.
+00:44:07 Okay? And an example of those things I've given in the past. But if you want
+00:44:12 to just be the pure form of how I taught it initially, this is how it is. is the
+00:44:16 first percent value you got the very first one that forms after 9:30. Okay?
+00:44:22 And you just collect them and then what happens is it populates on your chart
+00:44:27 and then you have information like this.
+00:44:33 We're in between two significant first% fair value gaps.
+00:44:39 We're a good great distance away from this enog. And there's another one way down there.
+00:44:47 Okay. So, we're kind of like in limbo here.
+00:44:51 Which is why again, couple that couple this right here. Couple what I'm showing
+00:44:56 you right here with the fact that it's now post 11:00 a.m. Eastern time on
+00:45:00 Wednesday for non-farm payroll week.
+00:45:05 Now you understand the the importance of why I tell you if you're a brand new
+00:45:08 student, stop trying to find setups, if you're trying to practice, if you're trying to tape read, if you're trying to
+00:45:16 uh demo trade and and and or if you made the mistake to try to you chase real
+00:45:21 money before you know what you're doing, um you're probably going to have some
+00:45:25 hardships and look what the market's been doing.
+00:45:30 I'm not surprised by this. Okay. To quote Nick Diaz, I think Nate Diaz as a
+00:45:36 UFC fighter, I ain't surprised.
+00:45:39 [laughter] So, long and short is I know what I'm looking for and it's these things that
+00:45:45 help me navigate that. Okay, these these key PD arrays help me navigate troubled
+00:45:52 waters. It tells me when I should be participating and when I should just sit
+00:45:55 still and not do anything. Look at look, I mean, look where we're at. What school
+00:46:00 of thought is going to say, "Yeah, we got to go in here and trade this." A
+00:46:03 gambler.
+00:46:05 A gambler. Gambler mentorships 101. You copy me traders 101. They're all going to be here trying to do something.
+00:46:11 They're going to get beat up and chopped up and sliced up. Okay. Um, while we're
+00:46:16 down in here, it's real easy to see things that would lend to uh expanding
+00:46:23 up because we've done so much on the downside.
+00:46:29 Okay. And in reaching for this liquidity and this liquidity and you saw that
+00:46:35 happen this morning. Um, you know, I I can trade in this environment down
+00:46:44 here, but it's important for me to illustrate why you as a brand new student
+00:46:49 shouldn't. So if I abstain from doing it and my departure from actively participating,
+00:46:59 if it encourages you by not doing it too, then I've done the the job of a
+00:47:05 good teacher. That's my that's my focus on it. All right, so let's finish this
+00:47:09 up here. Uh the other bit of business is you want to be logging. These are all
+00:47:13 things that you're logging in and how you're tracking your charts. This is not
+00:47:16 back testing, by the way. Back testing is seeing what you see with these
+00:47:21 information points that I'm showing you managing the data.
+00:47:25 Now we want to look at regular trading hours opening range gap matrix. Okay. So
+00:47:30 if you click here, no, I don't want to save any changes. Now here is the
+00:47:36 regular trading hours opening range gap matrix. Now right away this looks like what is this? What is what am I supposed
+00:47:43 to do with this? Very very useful information.
+00:47:48 Whenever you're in doubt, okay, if you have nesting like in a consolidation or consolidating market,
+00:47:54 you're going to encounter this where you have a lot of regular trading hours
+00:47:59 opening range gaps. Same thing you'll have with first presented fair value gaps or
+00:48:05 um end dogs, new day opening gaps or even maybe new week opening gaps. If
+00:48:10 it's a really long protracted uh consolidation, you may start seeing blending in or overlapping
+00:48:18 of key PD arrays, especially if we're we're marking out ranges like this. So,
+00:48:22 we had a huge enormous opening range gap here on Tuesday's trading. That's the
+00:48:28 one that's shaded in like a pink hue.
+00:48:30 Okay. And there's one here.
+00:48:38 There's one here.
+00:48:43 There's one up here.
+00:48:45 It's this one here from last Wednesday. And then we have this one here.
+00:48:55 Now, what I want you to look at is the largest one that we're inside of, the
+00:49:01 widest one, is in the pink shaded area.
+00:49:04 So, if there's ever a doubt of what would I be using, and I've said this
+00:49:08 before, so the people that listen to me when I do X spaces and Twitter spaces or
+00:49:12 I talk in those long droning point parts of my videos, you'll hear me say this,
+00:49:18 okay? It's not form fitting it.
+00:49:19 Everybody knows what I'm teaching in regards to this. When there's nested PDAs like Nogs or regular trading hours,
+00:49:26 opening range gaps, regular trading hours, opening range gaps are where we stop trading.
+00:49:33 Notice we're down here in regular trading hours time, not electronic. So, make sure you're toggled to regular
+00:49:38 trading hours. And then up here, we'll zoom in here.
+00:49:46 This candlestick is the last one on Monday at 4:14 p.m. That's the final
+00:49:51 print for regular trading hours on a one minute time frame. Notice that that closing price is what you want.
+00:49:58 That just so happens to be Wednesday's regular trading hours, opening range gap high. What makes it that? Because we
+00:50:07 open all the way down here Wednesday morning at 9:30 Eastern time right there.
+00:50:20 Okay. So that opening price at 9:30 Eastern time while looking at the chart
+00:50:26 through regular trading hours RTH that gives you the full regular trading hours opening
+00:50:37 range gap for Tuesday's trading of this week or September 1st 2026.
+00:50:46 Now, if we take a look at that range, Tuesday's range is split in half here
+00:50:53 for the record trading hours gap. That's that's this is equilibrium of that gap
+00:50:58 or as we call it because it's a gap or inefficiency. It's consequent encouragement. I don't care if you don't
+00:51:05 like the name. Okay? Later on when we learn more things, you'll understand why
+00:51:09 that name was given to it. [laughter] I don't like that name, dude. So, we
+00:51:15 opened down here, meandered around, went up into last Wednesday's regular trading hours, opening range gap,
+00:51:26 a proportion of that. You can grade that out. When you have this chart like this,
+00:51:30 if you ever want to like do a gradient application on it, say, say for
+00:51:35 instance, say we want to grade Wednesday, August 26, regular trading hours, opening range gap, real easy. go
+00:51:41 into your regular trading hours opening range gap matrix chart overlay where nothing else is on the chart and then
+00:51:47 use the data like this. The date is the 26th of August. Okay? And it's regular
+00:51:51 trading hours opening range gap. So we want to go to the calendar little thing down here. We want to go to
+00:51:59 August 26 is the gap. So August 26 and we want to go to
+00:52:08 9:30 in the morning.
+00:52:12 right there. So now watch what happens when we do this.
+00:52:17 Boom. We go right to the very day and the minute marker at 9:30. 9:30 we
+00:52:23 opened down here where we settled the previous day there on Tuesday at 4:14
+00:52:31 p.m. Eastern time. You see that? See how we're managing the data? We're keeping
+00:52:35 everything consistent. Nothing is being done differently. But now we can grade it. We can go to the close of that
+00:52:42 candlestick on the previous day at 4:14 p.m. Eastern time. Drag it down to the
+00:52:47 very first tick, opening price at 9:30.
+00:52:50 Drop it. Now we graded that. So now we can go back to price action where we're
+00:52:57 at right now. Scrub back over here.
+00:53:04 Moved around. Moved around. Moved around. And look, look at the levels and how it's respecting that. Look at that.
+00:53:13 Look at that. And then we get to consequent corion of Tuesday's regular trading hours, opening range gap. If
+00:53:19 we're in a seasonal tendency that's bearish and we're in an area where on
+00:53:25 the daily chart, we had that big open volume imbalance. It was shaded in blue
+00:53:28 on the daily chart. Remember all of this freef fall that took place overnight. It looks like it just gapped
+00:53:37 down there like that. But overnight in electronic trading hours, it traded down through that. We already we already saw
+00:53:42 that. But any retracement only went right up to half the gap for regular
+00:53:46 trading hours. Opening range gap for Tuesday, September 1st here. Look at that. Beautiful. Look at the bodies.
+00:53:54 What's it telling you? It's bearish. So that low is going to be taken. Trades
+00:53:59 lower. comes right back up into the lowest octant of Wednesday's August 26 right trading hours open range cap at
+00:54:07 that hits it takes out the low here goes lower and now look what we've been doing
+00:54:23 chopping wood but it's reacting off of key levels And this is a shadow.
+00:54:32 Okay, look how price is respecting this little area in here.
+00:54:38 And look how it's respected that right there.
+00:54:41 When you see a shadow, this is for order block lovers, okay? When you see a
+00:54:45 shadow, what is a shadow? The pink area, remember the pink area is that large
+00:54:49 Tuesday, September 1st, 2026 regular trading hours, open range gap.
+00:54:57 That's the low of it here and the high of it is up there. Okay. Notice how the Wednesday
+00:55:09 September 2nd regular trading hours open range gap overlaps with Tuesday's and it creates this little different color. See
+00:55:17 that? See that?
+00:55:20 This one's formed inside of this area here that's pink. This is a shared
+00:55:25 space.
+00:55:26 So, it's nesting.
+00:55:29 The area that creates the bleed over where it creates a slightly different hue and color. That's what I call a
+00:55:35 shadow.
+00:55:37 Notice how it changes right there and it anchors to a down close candle, which is
+00:55:43 an order block.
+00:55:45 That's how you know that order block is valid there. And you can see it rally
+00:55:49 right back up into the lowest octant and the lower quadrant of Wednesday's August
+00:55:56 26th riot.
+00:56:00 Knowing what you're looking for even in slop like this in somebody else's eyes.
+00:56:06 I can find setups in there using the stuff I'm teaching you here.
+00:56:11 But you have to be very nimble. And I'm teaching you not to require these types
+00:56:16 of setups. This is going to only satiate the the the gambler, the the action
+00:56:22 hound, the person that needs to be doing something right now or they don't feel
+00:56:24 like they're progressing or growing as a trader.
+00:56:28 Most of your time is going to be in an analysis doing what I've done so far in
+00:56:34 this video, showing you where the data is, how to get the data, what to do with
+00:56:37 the data, what key PDAs are you looking at, what's the point of it all. And by
+00:56:43 blending all these things, what you end up discovering is you have the five
+00:56:47 pillars of algorithmic price delivery.
+00:56:50 That being the monthly, weekly, daily, macro perspective with keys of open, high, low, and close on those time
+00:56:57 frames. Then you have the new week opening gap matrix and its gradient levels. And once you do these gradients,
+00:57:05 again, just be mindful that you want to take them off for journaling. Okay, the
+00:57:10 purpose is when you're journaling once you annotate a level like this and say
+00:57:14 you want to be uh you want to study how why this was in consolidation
+00:57:21 you want to show your chart have the information in it so that way you can
+00:57:25 get the context this is Wednesday's August 26 trading hours opening range gap Wednesday September 2nd reg opening
+00:57:34 range gap by having that we can now have a reference point and we can see where
+00:57:42 these things are in terms of when we do a screenshot. Say for instance, you want
+00:57:47 to do a screenshot and you would go up to here, go there and then uh download
+00:57:52 image and that way it would populate your chart. Obviously, you want to write
+00:57:57 out any annotation like I'm I'm I'm so excited to see how that order
+00:58:04 block right there was supported by a shadow which was two regular trading average opening range gaps bleeding over
+00:58:11 together. That makes a very strong support or resistance level. And there's no trend line that's necessary. If you
+00:58:18 were looking at just classic support resistance, folks, let's be honest, okay? Be honest. Now, you would have
+00:58:23 used this high here. So, you would have done this and it goes through it. How are you
+00:58:33 going to trust when you're going to buy it? When you think it's going to
+00:58:35 supposedly bounce off of that versus this is the bleed over.
+00:58:43 I'm trying to find right where that that that point is where they become an
+00:58:47 overlap between the shaded area red here or pink and this box here overlaps. Now
+00:58:52 look at that compared to that.
+00:58:59 Much more precise. Much much more precise.
+00:59:04 And the same bit of business, you know, on on this area here where we have down
+00:59:10 close candles here consecutively. That's all one order block changing state of delivery is that opening price there.
+00:59:16 Extend that over. There's the order block being used there. There didn't touch it there. So now it's bullish.
+00:59:22 It's really going to send that higher and right on up into the lower quadrant
+00:59:27 of Wednesday's regular trading hours, open range gap. Everything I just showed you tonight, everything I showed you
+00:59:35 will give you every facet of trading.
+00:59:37 Whether you're a swing trader on a daily time frame, weekly time frame, monthly
+00:59:40 time frame, short-term trader, one shot, one one shot, one kill. That means position trading taking a trade from one
+00:59:47 to five days hold time to intraday swing trader to scalper intraday or high frequency
+00:59:56 trader.
+00:59:58 Everything can work off the framework I just gave you here. And if you would
+01:00:03 have gone through the mentorship properly, listen to everything I said in regards to what you're supposed to be do
+01:00:09 with this information. when you get the information, it's not like, oh, I'm going to look at it and that's that's
+01:00:14 all there is. No, you have to manage the information. And then by managing the
+01:00:19 information and keeping record of where everything is, that's trading, folks. I took all the uh the key levels off here
+01:00:25 and I got to make sure I turn this off here. And now going back to
+01:00:34 my working chart, all those pieces of information are here with the exception of the open, high,
+01:00:40 low, close on the monthly, weekly, and daily, and previous week's range. I can
+01:00:45 tap into that anytime by simply going up here to monthly keys. So there we are. And there we are
+01:00:53 punching down below previous week's low right there during the macro time at 7
+01:00:59 a.m. 6:50 a.m. 7:10 a.m. Interesting how that converges, isn't it?
+01:01:04 [gasps and sighs] Oh my goodness. It's almost like it works like I described it
+01:01:08 would. [laughter] It's almost like I wrote Oh, almost said it. He's listening, isn't he? [laughter]
+01:01:15 Hope you found it insightful. Till talk to you next time. Be safe.
