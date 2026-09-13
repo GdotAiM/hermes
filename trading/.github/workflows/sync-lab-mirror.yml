@@ -1,0 +1,20 @@
+name: sync-lab-mirror
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "AGENT.md"
+      - "ALLOWLIST.md"
+      - "config.yaml"
+      - "src/mint/**"
+      - "SYNC.md"
+jobs:
+  note:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync instructions
+        run: |
+          echo "SoT is mint-agent. Update hermes-x/trading/ via:"
+          echo "  ./scripts/sync_to_hermes_x.sh /path/to/hermes-x && PR on hermes-x"

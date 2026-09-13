@@ -1,0 +1,16 @@
+name: mint-e2e-dry
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  dry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: E2E dry-run (no broker submit)
+        run: bash fixtures/paper_pilot_e2e/run_e2e_dry.sh

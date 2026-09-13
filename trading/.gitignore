@@ -13,3 +13,7 @@ dist/
 secrets/
 *token*
 *secret*
+
+dispatch/out/
+fixtures/generated_filters/
+fixtures/paper_pilot_e2e/LAST_JOURNAL.md
