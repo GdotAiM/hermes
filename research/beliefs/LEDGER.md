@@ -56,3 +56,4 @@
 | 2026-09-13 | H002b packaging SURVIVED; ORION exploratory RUN authorized on CONTINUOUS-KAGGLE | Active | CASSANDRA_H002b_REDTEAM | No MERCURY; not panacea |
 | 2026-09-13 | H002b board FAILS: hard-majority log-loss SURVIVES rejected as artifact; soft-prior lift≈0; CASSANDRA CRITICAL | Active | CASSANDRA_H002b_RESULTS_REDTEAM + H002b_BOARD_LOCK | No MERCURY |
 | 2026-09-13 | Wave 1 exploratory chapter CLOSED on CONTINUOUS-KAGGLE: H001b verify+specialness FAIL; H002b FAIL; H003c FAIL; H004b FAIL; H009b INCONCLUSIVE parked | Active | WAVE1_EXPLORATORY_BOARD | |
+| 2026-09-13 | LOOM workflow agent package landed: agent/ + W1–W3 + docs/prompts + INV/_TEMPLATE + GitHub PR templates | Active | agent/README.md | Process compliance; ORION keeps board locks |

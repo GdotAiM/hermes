@@ -8,13 +8,34 @@ Financial-intelligence research ledger for a multi-agent paper-trading research 
 
 | Path | Purpose |
 |------|---------|
+| `agent/` | **LOOM** workflow agent package — stage machine, workflows, config |
 | `beliefs/` | Belief ledger — what we thought and what changed |
 | `evidence/` | Source map, taxonomy intake, macro baselines |
-| `investigations/` | Live investigations (INV-001, …) |
-| `summaries/` | Intelligence summaries |
+| `investigations/` | Live investigations (INV-001, …) + `_TEMPLATE/` |
+| `summaries/` | Intelligence summaries + board/utilization templates |
 | `ROSTER.md` | Agent roster and pipeline |
 | `docs/WORKFLOW_BLUEPRINT.md` | Portable multi-agent + GitHub collaboration blueprint |
 | `docs/CLAUDE_CODE_STARTER.md` | One-page starter prompt for Claude Code / external agents |
+| `docs/prompts/` | Per-role mission prompts (ORION, ATLAS, QUANT, …) |
+| `docs/ANTI_PATTERNS.md` | Wave 1 process anti-patterns |
+
+
+## Agent package (LOOM)
+
+Portable stage machine for multi-agent research via GitHub. **ORION** owns science priority/board; **LOOM** owns process compliance.
+
+| Doc | Path |
+|-----|------|
+| Package README | [`agent/README.md`](agent/README.md) |
+| LOOM charter | [`agent/AGENT.md`](agent/AGENT.md) |
+| Config | [`agent/config.yaml`](agent/config.yaml) |
+| Solo mode | [`agent/SOLO_MODE.md`](agent/SOLO_MODE.md) |
+| W1 Claim→Gate | [`agent/workflows/W1_CLAIM_TO_GATE.md`](agent/workflows/W1_CLAIM_TO_GATE.md) |
+| W2 Hyp→Board | [`agent/workflows/W2_HYP_TO_BOARD.md`](agent/workflows/W2_HYP_TO_BOARD.md) |
+| W3 Utilization | [`agent/workflows/W3_UTILIZATION.md`](agent/workflows/W3_UTILIZATION.md) |
+| Role prompts | [`docs/prompts/`](docs/prompts/) |
+| INV templates | [`investigations/_TEMPLATE/`](investigations/_TEMPLATE/) |
+| Blueprint | [`docs/WORKFLOW_BLUEPRINT.md`](docs/WORKFLOW_BLUEPRINT.md) |
 
 ## Active investigations
 

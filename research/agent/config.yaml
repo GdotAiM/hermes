@@ -1,0 +1,101 @@
+# HERMES-X LOOM — workflow agent config
+# Repo: https://github.com/GdotAiM/hermes-x
+# Owner: LOOM (process) · ORION (science priority)
+
+repo:
+  url: https://github.com/GdotAiM/hermes-x
+  package: agent/
+  conductor: LOOM
+
+roles:
+  - id: ORION
+    title: Director of Financial Intelligence / Synthesis
+    prompt: docs/prompts/ORION.md
+  - id: ATLAS
+    title: Market Intelligence
+    prompt: docs/prompts/ATLAS.md
+  - id: DATA
+    title: Data Quality
+    prompt: docs/prompts/DATA.md
+  - id: QUANT
+    title: Quantitative Research
+    prompt: docs/prompts/QUANT.md
+  - id: CASSANDRA
+    title: Research Red Team
+    prompt: docs/prompts/CASSANDRA.md
+  - id: HISTORIAN
+    title: Market Behavior Historian
+    prompt: docs/prompts/HISTORIAN.md
+  - id: MACRO
+    title: Macroeconomic Intelligence
+    prompt: docs/prompts/MACRO.md
+  - id: FORGE
+    title: CTO / Systems Architect
+    prompt: docs/prompts/FORGE.md
+  - id: RISK
+    title: Portfolio Risk Officer
+    prompt: docs/prompts/RISK.md
+  - id: MERCURY
+    title: Experimental AI Portfolio Manager
+    prompt: docs/prompts/MERCURY.md
+  - id: LOOM
+    title: Workflow Conductor
+    charter: agent/AGENT.md
+
+workflows:
+  W1:
+    name: Claim to Gate
+    path: agent/workflows/W1_CLAIM_TO_GATE.md
+    stages: [OBSERVE, GATE]
+  W2:
+    name: Hyp to Board
+    path: agent/workflows/W2_HYP_TO_BOARD.md
+    stages: [SPEC, PROTOCOL, PACKAGING, AUTH, RUN, RESULTS_RT, BOARD, UPDATE]
+  W3:
+    name: Utilization
+    path: agent/workflows/W3_UTILIZATION.md
+    stages: [UTILIZE, DEMOTE, LEDGER]
+
+decision_vocabulary:
+  - VERIFY_COMPLETE
+  - SURVIVES
+  - FAILS
+  - INCONCLUSIVE
+  - HOLD
+  - PACKAGING_SURVIVED
+  - DID_NOT_SURVIVE_PACKAGING
+
+banned_moves:
+  - soft_near_miss_when_fails_or_inconclusive
+  - post_peek_gate_amend_same_sample
+  - mercury_from_verify_fails_inconclusive
+  - relabel_parameter_as_observed_after_results
+  - survives_from_packaging_alone
+  - run_without_orion_auth_in_status
+  - frequency_called_edge_without_specialness_expectancy
+  - skip_packaging
+  - commit_secrets_or_raw_large_tape
+  - raise_paper_caps_without_human
+
+paper_caps:
+  starting_equity_usd: 100000
+  max_trade_risk_pct: 0.5
+  max_daily_loss_pct: 2.0
+  max_portfolio_dd_pct: 5.0
+  live_execution: false
+  raise_requires: human
+
+claim_discipline:
+  layers: [Observed, Interpretation, Hypothesis]
+  parameter_label_required: true
+  new_hyp_id_after_peek: true
+
+handoff:
+  require_next_role: true
+  require_file_path: true
+
+success_definition: validated_discoveries_including_fails
+
+solo_mode: agent/SOLO_MODE.md
+blueprint: docs/WORKFLOW_BLUEPRINT.md
+anti_patterns: docs/ANTI_PATTERNS.md

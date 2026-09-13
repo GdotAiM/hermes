@@ -2,11 +2,14 @@
 
 ORION (Director of Financial Intelligence) — synthesis layer. Determines what matters.
 
+**LOOM** (Workflow Conductor) — process compliance / stage machine. See `agent/AGENT.md`. ORION = science priority/board; LOOM = packaging gates, vocabulary, handoffs.
+
 ## Live agents
 
 | Agent | Role | Status |
 |-------|------|--------|
 | ORION | Synthesis / Financial Intelligence Director | Live (this chat) |
+| LOOM | Workflow Conductor (stage machine / process compliance) | Live |
 | ATLAS | Market Intelligence | Live |
 | QUANT | Quantitative Research | Live |
 | CASSANDRA | Research Red Team | Live |

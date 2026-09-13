@@ -6,6 +6,10 @@
 
 This document is the portable “how we work.” If an agent can read markdown and commit files, it can join the lab.
 
+
+> **Agent package:** Executable stage-machine + role prompts live under [`agent/`](../agent/README.md) (LOOM). Start with [`agent/AGENT.md`](../agent/AGENT.md). Solo: [`agent/SOLO_MODE.md`](../agent/SOLO_MODE.md). Workflows W1/W2/W3: [`agent/workflows/`](../agent/workflows/). Role prompts: [`docs/prompts/`](prompts/). Anti-patterns: [`docs/ANTI_PATTERNS.md`](ANTI_PATTERNS.md).
+
+
 ---
 
 ## 0. Success definition
@@ -264,6 +268,8 @@ ORION synthesis products: `summaries/2026-09-13_WAVE1_EXPLORATORY_BOARD.md`, `*_
 
 ## 7. Onboarding a new agent (Claude Code / Cloud / local)
 
+**Agent package (LOOM):** [`agent/README.md`](../agent/README.md) · charter [`agent/AGENT.md`](../agent/AGENT.md) · workflows W1/W2/W3 under [`agent/workflows/`](../agent/workflows/).
+
 **One-pager:** [`docs/CLAUDE_CODE_STARTER.md`](CLAUDE_CODE_STARTER.md) (copy-paste prompt + role cheat-sheet).
 
 Paste this into the new agent’s system or first message:
@@ -319,6 +325,9 @@ Deliver: Intelligence Summary · Key Findings · Contradictions · Confidence ·
 
 | Doc | Path |
 |-----|------|
+| LOOM agent package | `agent/README.md` · `agent/AGENT.md` |
+| Role prompts | `docs/prompts/` |
+| Anti-patterns | `docs/ANTI_PATTERNS.md` |
 | Protocol v0.1 | `protocols/ICT_RESEARCH_PROTOCOL_v0.1.md` |
 | Roster | `ROSTER.md` |
 | Capture standard | `investigations/INV-001-2026-lectures/CAPTURE_STANDARD.md` |
