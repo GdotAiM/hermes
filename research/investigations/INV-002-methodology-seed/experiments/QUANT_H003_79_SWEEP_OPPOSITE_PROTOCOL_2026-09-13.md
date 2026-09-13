@@ -1,17 +1,19 @@
-# QUANT H003 — Experiment Protocol (DRAFT ONLY · NO RUN)
+# QUANT H003 — Experiment Protocol (DRAFT · PACKAGING RED-TEAM)
 **Hypothesis ID:** H003  
 **Investigation:** INV-002 · Wave 1  
 **Parents (Passed Observed only):** C-METH-003, C-METH-004, C-METH-006  
-**ORION rank:** #2 in draft order (after H001)  
-**Author:** QUANT · **Filed:** 2026-09-13  
-**Run status:** **HOLD** — shared tape
+**ORION:** Unparked for CASSANDRA packaging review after H001b SURVIVED (2026-09-13)  
+**Author:** QUANT · **Filed:** 2026-09-13 · **Updated:** 2026-09-13 (unpark)  
+**Run status:** **SUPERSEDED by H003b** — do not run. See `QUANT_H003b_79_SWEEP_OPPOSITE_PROTOCOL_2026-09-13.md`
 
 ---
 
 ## 0. Lock
 
-Pre-reg before peek. No INV-001 lunch import. RTH open **9:30 ET**.  
-CASSANDRA to attack **control choice** before RUN (ORION note).
+Pre-reg before peek. No INV-001 lunch import. RTH open **9:30 ET** (Passed open clock).  
+H001 superseded by H001b — do not run H001. **No MERCURY/RISK.**
+
+CASSANDRA: attack **control choice** and sweep definition before any RUN clearance.
 
 ---
 
@@ -27,9 +29,12 @@ Passed **006:** one-side sweep of 7–9 → aim opposite end = “bread-and-butt
 
 | Field | Lock |
 |-------|------|
-| Instrument | MNQ (prefer) / NQ documented · 1m · America/New_York |
-| Days | Trading days ex Sundays (003); need ETH 07:00–09:00 + RTH |
-| Tape | Shared stream C / WAVE1 |
+| Instrument | **MNQ** prefer (shared stream C) / NQ documented · 1m · America/New_York |
+| Days | Trading days ex Sundays (003); need ETH 07:00–09:00 + RTH through primary horizon |
+| Event primary | Non-CPI/FOMC/NFP — cite INV-001 `EVENT_CALENDAR_CPI_FOMC_NFP.md` |
+| Tape | Shared stream C / WAVE1 — one stack |
+| Min N | **80** paired (or treated) days for decision; else INCONCLUSIVE |
+| Coverage | Project on ≥20 RTH days before claiming N≥80 |
 
 ---
 
@@ -37,64 +42,83 @@ Passed **006:** one-side sweep of 7–9 → aim opposite end = “bread-and-butt
 
 ### 3.1 7–9 range
 
-On day \(D\), window \(W=[07:00, 09:00)\) ET:
+Window \(W=[07:00, 09:00)\) ET:
 
 - \(H_{79}\) = max high in \(W\)  
 - \(L_{79}\) = min low in \(W\)  
-- Exclude if \(H_{79}-L_{79} < 2\) MNQ pts (degenerate)
+- Exclude if \(H_{79}-L_{79} < 2\) MNQ pts (PARAMETER degenerate floor)
+
+**Tick levels:** \(H_{79}\), \(L_{79}\) from 1m highs/lows (already on tick grid).
 
 ### 3.2 First sweep after 09:30
 
-In RTH after 09:30 (primary horizon end **12:00 ET**; also report 10:00 / 11:00):
+Primary horizon end **12:00 ET**; co-report 10:00 / 11:00.
 
 - **Sweep high first:** first time `high ≥ H_{79}` before any `low ≤ L_{79}`  
 - **Sweep low first:** first time `low ≤ L_{79}` before any `high ≥ H_{79}`  
 - **Neither by horizon:** no treatment unit (coverage)
 
-Sweep time \(\tau_s\). Buffer beyond extreme: **0 pts** primary (touch); sensitivity +2 pts.
+\(	au_s\) = sweep time. Buffer beyond extreme: **0 pts** primary; sensitivity +2 pts (post-OOS descriptive).
 
-### 3.3 Opposite target
+### 3.3 Opposite target + success
 
-- If swept high first → target = \(L_{79}\)  
-- If swept low first → target = \(H_{79}\)  
+- Swept high first → target \(L_{79}\)  
+- Swept low first → target \(H_{79}\)  
 
-**Success:** after \(\tau_s\), price overlaps target before horizon end.
+**Success:** after \(	au_s\), any bar overlaps target before horizon (`low ≤ target ≤ high`).
 
 ### 3.4 Path metrics
 
-- Time-to-target (minutes)  
-- MAE: adverse excursion from sweep extreme toward continuation before target (points)  
-- MFE: favorable toward target before target hit or horizon  
+Time-to-target (minutes); MAE (adverse from sweep extreme before target/horizon); MFE (favorable toward target).
 
 ---
 
-## 4. Controls (pre-reg; CASSANDRA to stress)
+## 4. Controls (locked for packaging attack)
 
-| Control | Definition | Role |
-|---------|------------|------|
-| **Primary** | Days with a defined 7–9 range but **no** one-side sweep by 12:00 — \(P(\text{touch both extremes by 12:00})\) or random: pick a random “pseudo-sweep” side at 09:30 and measure opposite hit | Isolates sweep conditioning |
-| **Secondary** | Random-side: on sweep days, ignore actual first side; assign random side — should ≈0.5 if no edge | Sanity |
-| **Secondary** | First sweep of **09:30–10:00 OR high/low** (30m OR per 015) instead of 7–9 — different object; descriptive only |
+Ambiguous “or” removed — **one primary**:
 
-**Primary falsification Δ:** \(P(\text{opp}|\text{first sweep 7–9}) - P_{\text{ctrl}}\)  
-CASSANDRA may replace primary control before RUN without peek → amend note or NEW id if structural.
+| Role | Definition |
+|------|------------|
+| **PRIMARY control** | On the **same** first-sweep days: assign a **random side** (seeded) as if it were the first sweep; measure \(P(\text{hit opposite of random side})\) by same horizon. Paired Δ vs actual first-sweep success. |
+| **Secondary A** | Days with valid 7–9 range but **no** one-side sweep by 12:00 — descriptive only (different estimand) |
+| **Secondary B** | First sweep of **09:30–10:00** high/low (30m OR, C-METH-015) — different object; descriptive; do not conflate with 7–9 box |
+
+**Primary Δ:** \(P(\text{opp}|\text{actual first sweep}) - P(\text{opp}|\text{random side})\) on same days.  
+Bootstrap 10_000 on days.  
+
+If CASSANDRA rejects this control, ORION-acked amend or **NEW hyp id** (no peek).
 
 ---
 
 ## 5. Falsification
 
 **FAILS** if OOS N≥80: Δ≤0 or bootstrap 95% CI includes ≤0.  
-**SURVIVES** if Δ>0, CI>0, walk-forward median Δ>0.  
-**INCONCLUSIVE** if N<80 / tape fail.
+**SURVIVES** if Δ>0, CI entirely above 0, walk-forward median Δ>0 — label **SURVIVES (7–9 opposite after first sweep)**.  
+**INCONCLUSIVE** if N<80 / tape / coverage fail.
 
-Event stratification: non-event primary (INV-001 calendar).
+IS 60% / OOS 40% time-ordered; walk-forward step 20 days.
+
+Ban: treating SURVIVES as MERCURY permission.
 
 ---
 
-## 6. Blockers
+## 6. Bias hunt
 
-Shared tape; coverage projection; CASSANDRA on control; no MERCURY/RISK.
+- [ ] Look-ahead / completed bars only  
+- [ ] Sweep side unique (ties: if same bar sweeps both — exclude or rule: **exclude** dual-sweep bars as treatment)  
+- [ ] Primary = random-side paired control (not no-sweep)  
+- [ ] No 30m OR conflation in prose  
+- [ ] Event calendar  
+- [ ] No lunch import  
 
-## 7. Path
+---
+
+## 7. Blockers
+
+1. CASSANDRA packaging red-team (queued)  
+2. Shared stream C + coverage projection  
+3. No MERCURY/RISK  
+
+## 8. Path
 
 `experiments/QUANT_H003_79_SWEEP_OPPOSITE_PROTOCOL_2026-09-13.md`

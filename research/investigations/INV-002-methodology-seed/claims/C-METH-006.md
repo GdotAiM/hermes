@@ -18,3 +18,4 @@
 **Alias:** C-2026-106 (retired 2026-09-13 — remapped to C-METH-006)
 **Notes:** H003
 **DATA reviewed:** 2026-09-13 — INV-002 priority gate; Passed
+**H003 lock:** evidence/L81eMQhmXmc/H003_BOX_LOCK.md — demo sweep = REL (not box LL); target = opposite 7–9 HH/LL.

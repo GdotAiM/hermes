@@ -1,16 +1,14 @@
 # INV-002 Status
-**Updated:** 2026-09-13 (CASSANDRA — H001b SURVIVED)
+**Updated:** 2026-09-13 (QUANT — H003c primary / H003b rival SURVIVED)
 
-- [x] DATA packs + Part 4/5 title fix
-- [x] ATLAS C-METH-001–019
-- [x] DATA gate: **Passed 003–011, 015**; 008 amended 9:30 only
-- [x] ORION Wave-1 hyp specs
-- [x] QUANT H001 draft — **CASSANDRA HOLD** (do not run)
-- [x] QUANT **H001b** draft — `experiments/QUANT_H001b_RTH_ORG_CE_PROTOCOL_2026-09-13.md` (verify \(\hat P\) primary)
-- [x] CASSANDRA H001b — **SURVIVED packaging** (`reviews/CASSANDRA_H001b_REDTEAM_2026-09-13.md`)
-- [x] QUANT H003 / H004 / H002 drafts — **parked** until H001b clears
-- [ ] DATA \(P_{ref}\)/\(P_{open}\) META locks
-- [ ] Shared tape / coverage projection / RUN
+- [x] H001b SURVIVED — HOLD tape/META/coverage
+- [x] H003b packaging **SURVIVED** as **Rival B only** — SELECTION-DEPENDENT + tertile match added; **≠ lecture confirmation**
+- [x] **H003c** lecture primary filed — `experiments/QUANT_H003c_REL_TO_RANGE_PROTOCOL_2026-09-13.md` (ATLAS `H003_BOX_LOCK.md`)
+- [ ] CASSANDRA score H003c
+- [ ] H004 / H002 parked
+- [ ] Shared tape / RUN
 
-**Passed open clock:** RTH = 9:30 ET (not 9:00).  
-**Rule:** No runs. No MERCURY. Packaging clear on H001b; RUN still HOLD on DATA/coverage.
+**Rule:** No runs. No MERCURY. Do not narrate H003b as lecture confirmation.
+- [x] ATLAS H003 box lock — REL/REH → opposite HH/LL (`evidence/L81eMQhmXmc/H003_BOX_LOCK.md`)
+- [x] CASSANDRA H003b → **rival-map only** (`reviews/CASSANDRA_H003b_RIVAL_ONLY_2026-09-13.md`)
+- [x] CASSANDRA H003c — **SURVIVED packaging** (`reviews/CASSANDRA_H003c_REDTEAM_2026-09-13.md`); RUN HOLD: REL demo spot-check + SELECTION-DEPENDENT + tape

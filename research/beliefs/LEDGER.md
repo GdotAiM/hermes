@@ -35,3 +35,4 @@
 | 2026-09-13 | INV-002 Wave 1 parents Passed (C-METH-003–011,015); RTH open locked 9:30 ET; ORION specs H001–H004; QUANT RUN still HOLD for tape | Active | DATA_GATE_CMETH + ORION_WAVE1_HYP_SPECS | |
 | 2026-09-13 | INV-002 H001 DID NOT SURVIVE decision-ready; CRITICAL=estimand must be P(hit by 10:00)+CI not CE-vs-random specialness; QUANT → H001b | Active | CASSANDRA_H001_REDTEAM | |
 | 2026-09-13 | INV-002 H001b SURVIVED red team (packaging); RUN HOLD for tape/coverage/META; H001 superseded | Active | CASSANDRA_H001b_REDTEAM | |
+| 2026-09-13 | INV-002 H003c packaging SURVIVED (REL→HH/LL lecture map); H003b rival-only; RUN HOLD for REL detector + tape | Active | CASSANDRA_H003c_REDTEAM | |

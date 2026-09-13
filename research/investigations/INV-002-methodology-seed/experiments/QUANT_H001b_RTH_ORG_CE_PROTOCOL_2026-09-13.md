@@ -6,7 +6,7 @@
 **CASSANDRA:** `reviews/CASSANDRA_H001_REDTEAM_2026-09-13.md` → HOLD; H001 not decision-ready  
 **Author:** QUANT · **Filed:** 2026-09-13  
 **Revision class:** Pre-reg revision — **no results peeked**  
-**Run status:** **HOLD** — shared tape + DATA print META + coverage projection
+**Run status:** **HOLD** — CASSANDRA packaging **SURVIVED** (`reviews/CASSANDRA_H001b_REDTEAM_2026-09-13.md`); tick-rounding R1 locked. Still no run without stream C + Pref/Popen META + coverage
 
 ---
 
@@ -15,6 +15,14 @@
 CASSANDRA **CRITICAL:** H001’s FAILS/SURVIVES gate was CE-vs-random-level “specialness,” which is **not** C-METH-009’s verify-don’t-accept product (running frequency of hit-by-10:00).  
 
 H001b restores primary estimand = \(\hat P(\text{hit CE by 10:00})\) + CI. CE-specialness Δ is **secondary**, separately labeled — **never** bare SURVIVES for specialness alone.
+
+
+---
+
+## 0b. CASSANDRA H001b packaging SURVIVED (2026-09-13)
+
+`reviews/CASSANDRA_H001b_REDTEAM_2026-09-13.md` — design cleared. Optional R1 tick-rounding frozen in §3.0.  
+External RUN gates unchanged: stream C + \(P_{ref}\)/\(P_{open}\) META + coverage projection. No MERCURY.
 
 ---
 
@@ -49,7 +57,7 @@ C-METH-**015**: 30m opening/dealing range ≠ overnight ORG CE. Results must say
 | Prior-day type | Rule |
 |----------------|------|
 | Normal RTH | \(P_{ref}\) = **last trade / bar close in 16:14 ET** minute on MNQ 1m (ICT 4:14 p.m. final print) |
-| Early close | **Exclude** day \(D\) from primary if prior session is early-close / holiday (no reliable 16:14 RTH analogue) — PARAMETER alternative only with DATA one-pager + ORION ack |
+| Early close | **Exclude** day \(D\) from primary if prior session is early-close / holiday (no reliable 16:14 RTH analogue) — PARAMETER alternative only with DATA one-pager + ORION ack. **Estimand:** primary \(\hat P\) = **normal-prior-session days only**; report exclusion count in coverage |
 | Missing 16:14 bar | Exclude day; count in coverage |
 | Not used | Cash 16:00 close; futures settlement; 16:00 bar — unless DATA META explicitly overrides (would be NEW note) |
 
@@ -68,6 +76,11 @@ Freeze chosen primary in stream C META field before RUN.
 ## 3. Gap, CE, hit
 
 \(G = P_{open} - P_{ref}\); \(\mathrm{CE} = (P_{ref}+P_{open})/2\).
+
+### 3.0 Tick rounding (CASSANDRA R1 — pre-code LOW)
+
+**Locked:** Before overlap tests, round **both** CE and null level \(U\) to the **nearest 0.25** MNQ point (half-toward-even / banker's optional; default = round half away from 0 to nearest 0.25 grid).  
+\(P_{ref}\) / \(P_{open}\) stay as META prints; compute raw CE then round. Do **not** mix raw-float overlap with tick-rounded levels in the same run.
 
 ### 3.1 Hit deadline (MEDIUM co-report)
 
@@ -97,7 +110,7 @@ Time-to-CE = first hit bar minutes after 09:30 (misses = NA).
 
 | Label | Meaning | Allowed? |
 |-------|---------|----------|
-| **VERIFY COMPLETE (frequency filed)** | \(\hat P\)+CI+distro filed under frozen protocol; foil plotted | **Yes** — primary success of the *process* |
+| **VERIFY COMPLETE (frequency filed)** | \(\hat P\)+CI+distro filed under frozen protocol; foil plotted | **Yes** — process only. **≠ trade permission / edge** (R3). No MERCURY until separate hyp |
 | **SURVIVES (CE-specialness)** | Secondary Δ only (§5) | Yes if §5 gates met — **separate sentence** |
 | Bare “H001b SURVIVES” | Ambiguous | **Banned** |
 | “Confirms / consistent with 70%” | Foil gravity | **Banned** (fails CASSANDRA prose) |
@@ -152,6 +165,7 @@ Conditional “lift” may be reported; it is **not** the primary verify product
 ## 7. Bias hunt
 
 - [x] Primary = \(\hat P\)+CI verify product (not specialness)  
+- [x] Tick rounding: CE and U to nearest 0.25 before overlap (R1)  
 - [x] 0.70 FOIL; foil-gravity prose banned  
 - [x] Null algorithm specified + fill-depth curve  
 - [ ] DATA \(P_{ref}\) 16:14 early-close/holiday policy filed  
@@ -171,7 +185,8 @@ Conditional “lift” may be reported; it is **not** the primary verify product
 4. CASSANDRA re-clear H001b if ORION queues  
 5. H003–H004–H002 remain draft until H001b clears packaging  
 
-**No MERCURY/RISK.**
+**No MERCURY/RISK.** Standing ban (R3): **VERIFY COMPLETE ≠ trade permission** — filing \(\hat P\) is not scientific endorsement of an edge.
+
 
 ---
 
