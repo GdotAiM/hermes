@@ -31,8 +31,8 @@ LIVE_MARKERS = ("api.alpaca.markets",)  # paper-api is separate
 
 
 def _repo_config_path() -> Path:
-    # trading/adapters/thisfile → trading/config.yaml
-    return Path(__file__).resolve().parent.parent / "config.yaml"
+    # src/mint/adapters/thisfile → repo root config.yaml
+    return Path(__file__).resolve().parents[3] / "config.yaml"
 
 
 def _simple_yaml_bool(text: str, key: str, default: bool = False) -> bool:

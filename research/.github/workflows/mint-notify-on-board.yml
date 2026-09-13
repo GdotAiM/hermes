@@ -1,0 +1,34 @@
+name: mint-notify-on-board
+on:
+  push:
+    branches: [main]
+    paths:
+      - "summaries/**"
+      - "beliefs/LEDGER.md"
+  workflow_dispatch:
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dispatch notice
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="HERMES-X board/ledger change — run MINT scan_clears"
+          BODY="Change on hermes-x@${GITHUB_SHA}.
+
+          MINT (no auto-order):
+          \`\`\`bash
+          git clone https://github.com/GdotAiM/mint-agent.git && cd mint-agent
+          git clone https://github.com/GdotAiM/hermes-x.git ../hermes-x
+          HERMES_X_PATH=../hermes-x PYTHONPATH=src python3 -m mint.dispatch.scan_clears --hermes-x ../hermes-x --apply-filters
+          cat dispatch/out/latest.json
+          \`\`\`
+          entry_candidate still needs allowlist + RISK + human before --submit."
+          if gh issue create -R GdotAiM/mint-agent --title "$TITLE" --body "$BODY" 2>/dev/null; then
+            echo "Opened mint-agent issue"
+          else
+            echo "$BODY" > mint-dispatch-notice.md
+            echo "Wrote mint-dispatch-notice.md (cross-repo issue may need PAT)"
+          fi

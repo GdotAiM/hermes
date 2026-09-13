@@ -59,3 +59,4 @@
 | 2026-09-13 | LOOM workflow agent package landed: agent/ + W1–W3 + docs/prompts + INV/_TEMPLATE + GitHub PR templates | Active | agent/README.md | Process compliance; ORION keeps board locks |
 | 2026-09-13 | MINT paper execution / P&L layer added under `trading/`; live locked (dual unlock required) | Active | trading/README.md + config.yaml | Wave 1 allowlist = filters/logging only; no live; no SURVIVES entries |
 | 2026-09-13 | MINT execution layer added (paper-first); standalone clone https://github.com/GdotAiM/mint-agent ; live dual-locked | Active | trading/ + mint-agent | No live; Wave 1 no entry allowlist |
+| 2026-09-13 | MINT dispatch+sync closed: mint-agent SoT, scan_clears tickets, hermes notify Action, weekday ORION clear-scan routine; E2E dry-run exercised | Active | mint-agent@c27fcf2 | Not auto-trade |
