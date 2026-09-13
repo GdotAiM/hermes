@@ -13,6 +13,7 @@ Financial-intelligence research ledger for a multi-agent paper-trading research 
 | `investigations/` | Live investigations (INV-001, …) |
 | `summaries/` | Intelligence summaries |
 | `ROSTER.md` | Agent roster and pipeline |
+| `docs/WORKFLOW_BLUEPRINT.md` | Portable multi-agent + GitHub collaboration blueprint |
 
 ## Active investigations
 
