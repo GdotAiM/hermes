@@ -33,3 +33,5 @@
 | 2026-09-13 | INV-002 CORPUS Part 4/5 IDs corrected: L81eMQhmXmc=Pillars; xnbtp_j81lI=Back Testing; all six on 2026 playlist | Active | DATA GOLDEN_SIX_REGISTER | |
 | 2026-09-13 | INV-002 ATLAS: Part 4 gives three pillars + H001–H004 parents; ~70% gap claim is verify-don’t-accept; ASR trap on RTH open 9:30 vs 9:00 | Provisional Hold | ATLAS_INV002_INDEX | |
 | 2026-09-13 | INV-002 Wave 1 parents Passed (C-METH-003–011,015); RTH open locked 9:30 ET; ORION specs H001–H004; QUANT RUN still HOLD for tape | Active | DATA_GATE_CMETH + ORION_WAVE1_HYP_SPECS | |
+| 2026-09-13 | INV-002 H001 DID NOT SURVIVE decision-ready; CRITICAL=estimand must be P(hit by 10:00)+CI not CE-vs-random specialness; QUANT → H001b | Active | CASSANDRA_H001_REDTEAM | |
+| 2026-09-13 | INV-002 H001b SURVIVED red team (packaging); RUN HOLD for tape/coverage/META; H001 superseded | Active | CASSANDRA_H001b_REDTEAM | |
