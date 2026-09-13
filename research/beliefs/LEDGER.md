@@ -28,3 +28,4 @@
 | 2026-09-13 | H1 DID NOT SURVIVE red team as run-ready; CRITICAL=control mismatch (need lunch same-polarity FVG control); QUANT ordered to file H1b | Active | CASSANDRA_H1_C015_REDTEAM | No run; no MERCURY |\n
 | 2026-09-13 | H1b SURVIVED red team (packaging); run still blocked on tape C + event calendar + coverage projection | Active | CASSANDRA_H1b_C015_REDTEAM | No MERCURY |\n
 | 2026-09-13 | H1b hygiene R1/R2/R4/R5 applied in-place; run gates remain tape C + event calendar + coverage | Active | QUANT_H1b §0d | |\n
+| 2026-09-13 | INV-002 opened: 6-video methodology seed = ICT Research Protocol v0.1; Wave 1 = H001–H004; INV-001 remains tape-blocked | Active | Human directive + ORION synthesis | Provenance: video_id+timestamp required |

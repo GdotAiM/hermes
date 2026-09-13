@@ -14,7 +14,12 @@ Financial-intelligence research ledger for a multi-agent paper-trading research 
 | `summaries/` | Intelligence summaries |
 | `ROSTER.md` | Agent roster and pipeline |
 
-## INV-001 (active)
+## Active investigations
+
+### INV-002 — Methodology seed (program definition)
+Six-video golden corpus → ICT Research Protocol v0.1. Wave 1: H001–H004 (gap 50%, 7–9→RTH, one-side sweep, first 10:00 FVG). See `investigations/INV-002-methodology-seed/` and `protocols/ICT_RESEARCH_PROTOCOL_v0.1.md`.
+
+### INV-001 (active)
 
 2026 ICT SMC lectures — session algorithms. Pilot: NY Lunch Algorithmic Theory (`C90xGr3kW8Y`).
 
