@@ -1,0 +1,39 @@
+{
+  "SOURCE": "Yahoo Finance via yfinance (keyless)",
+  "RETRIEVAL": "2026-09-13T10:09:30.292589+00:00",
+  "TIMEZONE_NOTE": "Yahoo daily bars are exchange-session labeled; treat as America/New_York calendar dates for RTH studies. Intraday timestamps typically UTC-aware from yfinance \u2014 convert to ET before session logic.",
+  "INSTRUMENT_PRIMARY": "NQ=F (CME continuous front-month proxy)",
+  "KNOWN_LIMITATIONS": [
+    "Continuous contract \u2014 roll adjustments undocumented by Yahoo; not true Mar 2026 MNQ",
+    "Not 1-minute \u2014 Wave 1 H001\u2013H004 remain blocked on stream C",
+    "1h history capped (~60d on this pull)",
+    "Gaps/missing bars possible around rolls and holidays",
+    "Suitable for H008\u2013H010 HTF/weekly/state pilots only"
+  ],
+  "FILES": {
+    "NQ=F_1d.csv": {
+      "rows": 502,
+      "start": "2024-09-13",
+      "end": "2026-09-11",
+      "granularity": "1d"
+    },
+    "NQ=F_1wk.csv": {
+      "rows": 261,
+      "start": "2021-09-13",
+      "end": "2026-09-07",
+      "granularity": "1wk"
+    },
+    "NQ=F_1h.csv": {
+      "rows": 1121,
+      "start": "2026-07-05 18:00:00-04:00",
+      "end": "2026-09-11 16:00:00-04:00",
+      "granularity": "1h"
+    },
+    "QQQ_1d.csv": {
+      "rows": 501,
+      "start": "2024-09-12",
+      "end": "2026-09-11",
+      "granularity": "1d"
+    }
+  }
+}

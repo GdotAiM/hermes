@@ -1,14 +1,16 @@
 # INV-002 Status
-**Updated:** 2026-09-13 (QUANT — H003c primary / H003b rival SURVIVED)
+**Updated:** 2026-09-13
 
-- [x] H001b SURVIVED — HOLD tape/META/coverage
-- [x] H003b packaging **SURVIVED** as **Rival B only** — SELECTION-DEPENDENT + tertile match added; **≠ lecture confirmation**
-- [x] **H003c** lecture primary filed — `experiments/QUANT_H003c_REL_TO_RANGE_PROTOCOL_2026-09-13.md` (ATLAS `H003_BOX_LOCK.md`)
-- [ ] CASSANDRA score H003c
-- [ ] H004 / H002 parked
-- [ ] Shared tape / RUN
+## Wave 1
+- [x] H001b / H003c packaging SURVIVED
+- [ ] Stream C 1m — still HOLD
 
-**Rule:** No runs. No MERCURY. Do not narrate H003b as lecture confirmation.
-- [x] ATLAS H003 box lock — REL/REH → opposite HH/LL (`evidence/L81eMQhmXmc/H003_BOX_LOCK.md`)
-- [x] CASSANDRA H003b → **rival-map only** (`reviews/CASSANDRA_H003b_RIVAL_ONLY_2026-09-13.md`)
-- [x] CASSANDRA H003c — **SURVIVED packaging** (`reviews/CASSANDRA_H003c_REDTEAM_2026-09-13.md`); RUN HOLD: REL demo spot-check + SELECTION-DEPENDENT + tape
+## Wave 2 (H008–H010) — ACTIVE
+- [x] Free keyless tape FREE_YF_NQ filed (NQ=F 1wk/1d/1h + QQQ 1d)
+- [ ] DATA gate PASS WITH CONDITIONS
+- [ ] ATLAS Week Lifecycle (`dmHSwlmS9iY`) claims
+- [ ] QUANT protocols H008–H010
+- [ ] CASSANDRA packaging
+- [ ] Pilot runs on free tape after packaging
+
+**ORION rank:** H009 → H010 → H008

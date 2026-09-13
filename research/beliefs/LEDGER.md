@@ -36,3 +36,5 @@
 | 2026-09-13 | INV-002 H001 DID NOT SURVIVE decision-ready; CRITICAL=estimand must be P(hit by 10:00)+CI not CE-vs-random specialness; QUANT → H001b | Active | CASSANDRA_H001_REDTEAM | |
 | 2026-09-13 | INV-002 H001b SURVIVED red team (packaging); RUN HOLD for tape/coverage/META; H001 superseded | Active | CASSANDRA_H001b_REDTEAM | |
 | 2026-09-13 | INV-002 H003c packaging SURVIVED (REL→HH/LL lecture map); H003b rival-only; RUN HOLD for REL detector + tape | Active | CASSANDRA_H003c_REDTEAM | |
+| 2026-09-13 | H003c REL detector (1-bar fractal τ=2) is PARAMETER not lecture-locked; 1-tick red-line match FAIL until demo-session tape | Active | H003c_REL_DETECTOR_LOCK | |
+| 2026-09-13 | Wave 2 H008–H010 opened on free keyless Yahoo NQ=F tape (1wk/1d/1h); Wave 1 still needs stream C 1m; rank H009→H010→H008 | Active | FREE_YF_NQ | |
