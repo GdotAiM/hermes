@@ -85,3 +85,8 @@ W1 is complete when:
 4. ORION can open W2 without inventing ungated Observed claims.
 
 **Banned:** Treating ungated Interpretation as Passed Observed; inventing video timestamps; committing secrets or raw tape.
+
+## YouTube RAW intake
+
+`python3 scripts/ingest_youtube.py <url> --hermes-x . --investigation <INV-folder>`
+Writes RAW pack under `investigations/<INV>/evidence/<video_id>/` + `evidence/intake_tickets/`. ATLAS triages next — never auto-promotes.

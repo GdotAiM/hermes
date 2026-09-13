@@ -35,3 +35,6 @@ __pycache__/
 # Large market data (store locally / LFS later)
 **/KAGGLE_NQ_1M_2022_2025/*.csv
 **/FREE_YF_NQ/*.csv
+
+# intake runtime
+evidence/intake_tickets/latest.json
