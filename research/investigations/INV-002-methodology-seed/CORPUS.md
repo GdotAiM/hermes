@@ -12,3 +12,10 @@
 | 6 | `dmHSwlmS9iY` | The Week In The Life Cycle Of Price | https://youtu.be/dmHSwlmS9iY |
 
 **Note:** `xnbtp_j81lI` also appears on the official 2026 SMC playlist inventory (INV-001). Treat as methodology primary here; session-algorithm claims stay under INV-001 unless lecture-conditioned.
+
+## DATA correction (2026-09-13)
+YouTube titles (authoritative for packs):
+- `L81eMQhmXmc` = Part **4** — Pillars Of Daily Log Entries (upload 20260904)
+- `xnbtp_j81lI` = Part **5** — Back Testing Properly (upload 20260909)
+
+Working titles in the table above had Part 4/5 swapped; amend when convenient. All six IDs also appear on the INV-001 2026 playlist inventory.

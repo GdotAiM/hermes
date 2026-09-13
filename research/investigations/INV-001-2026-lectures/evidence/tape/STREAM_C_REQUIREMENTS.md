@@ -43,3 +43,10 @@ Until a concrete tape meeting this stub is filed under `evidence/tape/` with a D
 1. Place raw files + checksum manifest in `evidence/tape/C_MNQ_20260310-20260311/` (or equivalent).
 2. Write `META.md` filling SOURCE/TZ/GRANULARITY/DATE RANGE/INSTRUMENT/LIMITATIONS.
 3. Ask DATA to amend `DATA_GATE_2026-09-13.md` (or new dated gate) → PASS WITH CONDITIONS for QUANT on this stream only.
+
+---
+
+## Coordination — INV-002 Wave 1 (2026-09-13)
+Shared physical stack: INV-002 must **reuse** this stream C archive (extend date range as needed for H001–H004).  
+See: `investigations/INV-002-methodology-seed/evidence/tape/WAVE1_SHARED_TAPE_REQUIREMENTS.md`  
+Do not create a second MNQ/NQ 1m dump.
