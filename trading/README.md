@@ -50,6 +50,8 @@ src/mint/
 
 **SoT = this repo.** Lab mirror = `hermes-x/trading/`. See [`SYNC.md`](SYNC.md).
 
+CI Action `sync-lab-mirror` opens a hermes-x PR when SoT changes (**needs** secret `HERMES_X_SYNC_TOKEN`; fails closed if missing).
+
 ```bash
 ./scripts/sync_to_hermes_x.sh /path/to/hermes-x
 ./scripts/check_drift.sh /path/to/hermes-x
@@ -67,9 +69,10 @@ Tickets ≠ orders. See [`dispatch/README.md`](dispatch/README.md).
 ## E2E dry-run (fixture)
 
 ```bash
-bash fixtures/paper_pilot_e2e/run_e2e_dry.sh
+HERMES_X_PATH=/path/to/hermes-x REQUIRE_HERMES_SCAN=1 bash fixtures/paper_pilot_e2e/run_e2e_dry.sh
 ```
 
+CI clones hermes-x and sets `REQUIRE_HERMES_SCAN=1` so the dispatch scan cannot silently skip.
 Path B paper-pilot fixture — not a science SURVIVES.
 
 ## Safety

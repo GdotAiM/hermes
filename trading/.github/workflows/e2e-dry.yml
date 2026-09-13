@@ -8,9 +8,30 @@ jobs:
   dry:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout mint-agent
+        uses: actions/checkout@v4
+        with:
+          path: mint-agent
+
+      - name: Checkout hermes-x (for dispatch scan)
+        uses: actions/checkout@v4
+        with:
+          repository: GdotAiM/hermes-x
+          path: hermes-x
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: E2E dry-run (no broker submit)
+
+      - name: E2E dry-run including HERMES-X → MINT scan
+        working-directory: mint-agent
+        env:
+          HERMES_X_PATH: ${{ github.workspace }}/hermes-x
+          REQUIRE_HERMES_SCAN: "1"
         run: bash fixtures/paper_pilot_e2e/run_e2e_dry.sh
+
+      - name: Assert dispatch tickets written
+        working-directory: mint-agent
+        run: |
+          test -f dispatch/out/latest.json
+          python3 -c "import json; d=json.load(open('dispatch/out/latest.json')); assert 'ticket_count' in d; print(d['ticket_count'], d.get('entry_candidates'))"
