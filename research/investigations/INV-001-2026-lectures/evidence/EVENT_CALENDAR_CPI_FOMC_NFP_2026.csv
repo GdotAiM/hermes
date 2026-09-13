@@ -1,0 +1,33 @@
+event_date,event_type,reference_or_meeting,release_time_et,timezone,exclude_primary,notes,source
+2026-01-13,CPI,Dec 2025,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-02-13,CPI,Jan 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-03-11,CPI,Feb 2026,08:30,America/New_York,yes,lecture_C90xGr3kW8Y_C-2026-012,bls_cpi_schedule
+2026-04-10,CPI,Mar 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-05-12,CPI,Apr 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-06-10,CPI,May 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-07-14,CPI,Jun 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-08-12,CPI,Jul 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-09-11,CPI,Aug 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-10-14,CPI,Sep 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-11-10,CPI,Oct 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-12-10,CPI,Nov 2026,08:30,America/New_York,yes,,bls_cpi_schedule
+2026-01-09,NFP,Dec 2025,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-02-11,NFP,Jan 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-03-06,NFP,Feb 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-04-03,NFP,Mar 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-05-08,NFP,Apr 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-06-05,NFP,May 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-07-02,NFP,Jun 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-08-07,NFP,Jul 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-09-04,NFP,Aug 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-10-02,NFP,Sep 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-11-06,NFP,Oct 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-12-04,NFP,Nov 2026,08:30,America/New_York,yes,,bls_empsit_schedule
+2026-01-28,FOMC,2026-01-27/28,~14:00,America/New_York,yes,decision_day,fed_fomc_calendar
+2026-03-18,FOMC,2026-03-17/18,~14:00,America/New_York,yes,decision_day_SEP,fed_fomc_calendar
+2026-04-29,FOMC,2026-04-28/29,~14:00,America/New_York,yes,decision_day,fed_fomc_calendar
+2026-06-17,FOMC,2026-06-16/17,~14:00,America/New_York,yes,decision_day_SEP,fed_fomc_calendar
+2026-07-29,FOMC,2026-07-28/29,~14:00,America/New_York,yes,decision_day,fed_fomc_calendar
+2026-09-16,FOMC,2026-09-15/16,~14:00,America/New_York,yes,decision_day_SEP,fed_fomc_calendar
+2026-10-28,FOMC,2026-10-27/28,~14:00,America/New_York,yes,decision_day,fed_fomc_calendar
+2026-12-09,FOMC,2026-12-08/09,~14:00,America/New_York,yes,decision_day_SEP,fed_fomc_calendar

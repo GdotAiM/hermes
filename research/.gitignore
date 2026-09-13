@@ -1,0 +1,29 @@
+# Media / large binaries
+**/*.mp4
+**/*.webm
+**/*.mkv
+**/frames/
+**/*.jpg
+**/*.jpeg
+**/*.png
+**/*.webp
+
+# Captions can be regenerated; keep META/ACCESS
+**/auto_captions*.vtt
+
+# Secrets / local credentials
+.env
+.env.*
+*.pem
+*credentials*
+*token*
+*secret*
+
+# OS / editor
+.DS_Store
+*.swp
+__pycache__/
+.venv/
+
+# Scratch
+/workspace/
