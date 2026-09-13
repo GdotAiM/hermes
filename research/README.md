@@ -2,7 +2,7 @@
 
 Financial-intelligence research ledger for a multi-agent paper-trading research org.
 
-**ORION** is the synthesis layer (this repo’s curator). Specialists (ATLAS, QUANT, CASSANDRA, MACRO, HISTORIAN, DATA, RISK, FORGE, MERCURY) feed evidence here.
+**ORION** is the synthesis layer (this repo’s curator). Specialists (ATLAS, QUANT, CASSANDRA, MACRO, HISTORIAN, DATA, RISK, FORGE, MERCURY) feed evidence here. **MINT** is the paper execution / P&L layer (`trading/`).
 
 ## Layout
 
@@ -17,6 +17,8 @@ Financial-intelligence research ledger for a multi-agent paper-trading research 
 | `docs/WORKFLOW_BLUEPRINT.md` | Portable multi-agent + GitHub collaboration blueprint |
 | `docs/CLAUDE_CODE_STARTER.md` | One-page starter prompt for Claude Code / external agents |
 | `docs/prompts/` | Per-role mission prompts (ORION, ATLAS, QUANT, …) |
+| `trading/` | **MINT** execution / P&L layer — paper default, live locked |
+| `risk/` | RISK gates + paper book |
 | `docs/ANTI_PATTERNS.md` | Wave 1 process anti-patterns |
 
 
@@ -50,11 +52,27 @@ Six-video golden corpus → ICT Research Protocol v0.1. Wave 1: H001–H004 (gap
 - **QUANT run HOLD** until tape stream C (MNQ Mar 2026, 1m, ET) is filed
 - Large lecture media and auto-captions are **not** in git (see `.gitignore`)
 
+
+## Trading layer (MINT)
+
+**MINT** turns cleared research into **paper** orders, journals, and P&L. Default `mode: paper`; live requires human dual unlock. Wave 1 has **no tradeable edge**.
+
+| Doc | Path |
+|-----|------|
+| Package README | [`trading/README.md`](trading/README.md) |
+| MINT charter | [`trading/AGENT.md`](trading/AGENT.md) |
+| Config | [`trading/config.yaml`](trading/config.yaml) |
+| Allowlist | [`trading/ALLOWLIST.md`](trading/ALLOWLIST.md) |
+| W4 Execution | [`trading/workflows/W4_EXECUTION.md`](trading/workflows/W4_EXECUTION.md) |
+| Alpaca adapter | [`trading/adapters/alpaca.md`](trading/adapters/alpaca.md) |
+| Paper stub | [`trading/adapters/alpaca_paper_stub.py`](trading/adapters/alpaca_paper_stub.py) |
+| Role prompt | [`docs/prompts/MINT.md`](docs/prompts/MINT.md) |
+
 ## Hard paper limits
 
 - Starting equity: $100,000
 - Max trade risk: 0.5% · Max daily loss: 2% · Max portfolio DD: 5%
-- No live execution
+- No live execution (MINT live locked unless human dual unlock)
 
 ## Secrets
 

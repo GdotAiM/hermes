@@ -1,0 +1,77 @@
+# HERMES-X MINT — trading package config
+# PAPER DEFAULT. Live OFF until human + RISK + SURVIVES allowlist.
+
+package: trading/
+owner: MINT
+mode: paper
+live_execution: false
+
+paper_caps:
+  starting_equity_usd: 100000
+  max_trade_risk_pct: 0.5
+  max_daily_loss_pct: 2.0
+  max_portfolio_dd_pct: 5.0
+  raise_requires: human
+
+unlock_live_requires:
+  - human_sets_live_execution_true_in_this_file
+  - risk_acknowledgement
+  - survives_cleared_strategy_on_allowlist
+
+broker:
+  adapter: alpaca_paper
+  # secrets NEVER in git — read from environment:
+  # ALPACA_API_KEY, ALPACA_SECRET_KEY, optional ALPACA_PAPER_BASE_URL
+  paper_only: true
+
+allowlist:
+  trade_strategies: []   # empty until SURVIVES + RISK + human
+  logging_priors:
+    - id: H001b_CE_BY_1000_PRIOR
+      board_ref: summaries/2026-09-13_UTILIZATION_FROM_WAVE1.md
+      status: VERIFY_COMPLETE_PRIOR_ONLY
+      note: "~56% CE-by-10:00 prior; NOT an entry; specialness FAILS"
+  no_trade_demotions:
+    - id: H001b_CE_MIDPOINT_ENTRY
+      reason: specialness_fails
+      board_ref: summaries/2026-09-13_UTILIZATION_FROM_WAVE1.md
+    - id: H002b_7_9_FIRST_SIDE
+      reason: FAILS
+      board_ref: summaries/2026-09-13_H002b_BOARD_LOCK.md
+    - id: H003c_REL_OPPOSITE
+      reason: FAILS
+      board_ref: summaries/2026-09-13_UTILIZATION_FROM_WAVE1.md
+    - id: H004b_FIRST_1000_FVG
+      reason: FAILS
+      board_ref: summaries/2026-09-13_H004b_BOARD_LOCK.md
+  watchlist_logging_only:
+    - id: H009b_WEEKLY_DOL
+      status: INCONCLUSIVE
+      board_ref: summaries/2026-09-13_H009b_BOARD_LOCK.md
+      note: logging/watchlist framing only; not sized edge
+
+banned_moves:
+  - live_execution_without_unlock
+  - trade_from_verify_fails_inconclusive
+  - ce_midpoint_entry_from_h001b_alone
+  - raise_paper_caps_without_human
+  - store_api_secrets_in_git
+  - frequency_called_edge_without_specialness_expectancy
+
+proposal_required_fields:
+  - TIMESTAMP
+  - INSTRUMENT
+  - HYPOTHESIS_ID
+  - BOARD_REF
+  - ENTRY
+  - STOP
+  - TARGET
+  - RISK_$
+  - RISK_R
+  - INVALIDATION
+  - EVIDENCE
+  - CONTRADICTIONS
+  - CONFIDENCE
+  - DECISION  # TRADE|PASS|WAIT|INVALIDATED
+
+success_definition: risk_adjusted_expectancy_and_decision_quality_under_caps_not_trade_count

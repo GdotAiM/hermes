@@ -19,11 +19,12 @@ ORION (Director of Financial Intelligence) — synthesis layer. Determines what 
 | RISK | Portfolio Risk Officer | Live |
 | FORGE | CTO / Systems Architect | Live |
 | MERCURY | Experimental AI Portfolio Manager | Live |
+| MINT | Execution & P&L (paper default; live locked) | Live package |
 
 ## Pipeline
 
-ATLAS / MACRO / HISTORIAN / DATA → QUANT → CASSANDRA → RISK → MERCURY → ORION
-FORGE beside the loop (systems that improve research capability)
+ATLAS / MACRO / HISTORIAN / DATA → QUANT → CASSANDRA → RISK → MERCURY → **MINT** (paper exec / P&L) → ORION
+FORGE beside the loop (systems) · LOOM beside the loop (process) · MINT paper-only until human live unlock
 
 ## Paper hard caps
 
@@ -31,7 +32,8 @@ FORGE beside the loop (systems that improve research capability)
 - Max trade risk: 0.5%
 - Max daily loss: 2%
 - Max portfolio drawdown: 5%
-- No live execution; limits cannot rise without human approval
+- No live execution without human dual unlock (`MINT_LIVE=1` + config `live_enabled`); limits cannot rise without human approval
+- MINT package: `trading/` — Wave 1 allowlist has **no entry strategies**
 
 ## Human
 
