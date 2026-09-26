@@ -7,10 +7,15 @@
  *
  * Public API:
  *   replay.setBars(bars)        – attach or swap the bar series
- *   replay.setFrame(i)          – jump to a frame index (0..bars.length-1)
+ *   replay.setFrame(i)          – jump to a frame index (0..bars.length-1); activates replay
+ *   replay.step(delta)          – move ±n bars (from the last bar if inactive)
+ *   replay.reset()              – leave replay (frame -1, all bars visible)
  *   replay.togglePlay()         – play or pause
  *   replay.setSpeed(msPerBar)   – milliseconds per bar; default 300
- *   replay.state                – { playing, frame, speed, barsCount }
+ *   replay.state                – { playing, frame, speed, barsCount, active }
+ *
+ * frame === -1 means replay is inactive: every bar is drawn. Once a frame is
+ * set, the chart hides bars after the playhead and follows it.
  *
  * Events emitted on window:
  *   'replay:state'  – fired after every state mutation or frame tick
@@ -33,11 +38,32 @@ export class ReplayController {
   /** Attach or replace the bar series. Call after loadSymbol/loadTf. */
   setBars(bars) {
     this.bars = bars || [];
-    this.frame = Math.min(this.frame, this.bars.length - 1);
-    if (this.frame < 0) this.frame = 0;
-    // Inform chart of the current frame so it can draw the playhead
-    this.chart._setReplayFrame(this.frame);
+    // New series (symbol / TF / source change) → leave replay, show all bars
+    this.playing = false;
+    this._stopTimer();
+    this.frame = -1;
+    this.chart._setReplayFrame(-1);
     this._emit();
+  }
+
+  get active() {
+    return this.frame >= 0;
+  }
+
+  /** Leave replay mode: all bars visible, label back to "—". */
+  reset() {
+    this.playing = false;
+    this._stopTimer();
+    this.frame = -1;
+    this.chart._setReplayFrame(-1);
+    this._emit();
+  }
+
+  /** Step ±delta bars. When inactive, steps from the last bar. */
+  step(delta) {
+    if (!this.bars.length) return;
+    const base = this.frame >= 0 ? this.frame : this.bars.length - 1;
+    this.setFrame(base + delta);
   }
 
   /** Move the playhead to index i. Clamps to valid range. */
@@ -49,6 +75,13 @@ export class ReplayController {
 
   /** Toggle play/pause. */
   togglePlay() {
+    if (!this.bars.length) return;
+    // Starting from inactive (or the end): rewind to one screen back so play reveals bars
+    if (!this.playing && (this.frame < 0 || this.frame >= this.bars.length - 1)) {
+      const screen = this.chart.visibleCount || 80;
+      this.frame = Math.max(0, this.bars.length - 1 - screen);
+      this.chart._setReplayFrame(this.frame);
+    }
     this.playing = !this.playing;
     if (this.playing) {
       this._startTimer();
@@ -65,6 +98,7 @@ export class ReplayController {
       Math.abs(curr - this.speed) < Math.abs(prev - this.speed) ? curr : prev
     );
     if (Math.abs(nearest - this.speed) < this.speed * 0.1) this.speed = nearest;
+    if (this.playing) this._startTimer(); // apply new speed immediately
     this._emit();
   }
 
@@ -74,6 +108,7 @@ export class ReplayController {
       frame: this.frame,
       speed: this.speed,
       barsCount: this.bars.length,
+      active: this.frame >= 0,
     };
   }
 

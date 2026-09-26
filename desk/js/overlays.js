@@ -126,6 +126,8 @@ function drawOpeningRanges(ctx, chart, ranges, start, end, plot) {
   for (const or of ranges) {
     // Visible if OR overlaps viewport time
     if (or.endTime < t0 || or.startTime > t1) continue;
+    // During replay, only show ranges that have fully formed (no future high/low)
+    if (chart._replayFrame >= 0 && !chart._splitMode && or.endTime > t1) continue;
 
     // Map times to x via nearest bar indices
     const i0 = findIdxNear(chart.bars, or.startTime, start, end);

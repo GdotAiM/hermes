@@ -174,7 +174,6 @@ function init() {
         chart.setBars(result.bars);
         setTag('#chartTagA', `${result.meta.symbol || 'CSV'} · CSV`);
         replay.setBars(result.bars);
-        replay.setFrame(-1);
         updateHeader(result.meta);
         updateStatus(result.meta);
         // Update symbol desc when CSV loads (CSV may have its own symbol hint)
@@ -198,7 +197,6 @@ function init() {
     setTag('#chartTagA', `${series.meta.symbol} · ${tfLabel(tf)}`);
     loadChartB();
     replay.setBars(series.bars);
-    replay.setFrame(-1);
     updateHeader(series.meta);
     updateStatus(series.meta);
     updateReplayUI();
@@ -638,32 +636,50 @@ if (document.readyState === 'loading') {
 
 // — Slice F — Replay / Scrubber UI wiring
 function updateReplayUI() {
+  if (!replay) return;
   const s = replay.state;
   const frameEl = $('#replayFrame');
-  const playingEl = $('#replayPlaying');
-  if (frameEl) frameEl.textContent = s.frame >= 0 ? `${s.frame + 1}/${s.barsCount}` : '—';
-  if (playingEl) playingEl.textContent = s.playing ? '⏸' : '▶';
-  // Highlight active speed button
+  const playBtn = $('#replayPlay');
+  const exitBtn = $('#replayExit');
+  const scrubber = $('#replayScrub');
+  if (frameEl) frameEl.textContent = s.active ? `${s.frame + 1}/${s.barsCount}` : '—';
+  // Header must not leak the future while replaying: show the playhead bar's close
+  if (s.active && replay.bars[s.frame]) {
+    const bar = replay.bars[s.frame];
+    const last = $('#lastPrice');
+    const chg = $('#priceChg');
+    if (last) last.textContent = bar.close.toFixed(2);
+    if (chg) {
+      chg.textContent = 'replay';
+      chg.classList.remove('up', 'down');
+    }
+  } else if (series?.meta) {
+    updateHeader(series.meta);
+  }
+  if (playBtn) playBtn.textContent = s.playing ? '⏸' : '▶';
+  if (exitBtn) exitBtn.hidden = !s.active;
+  if (scrubber) {
+    const max = Math.max(0, s.barsCount - 1);
+    scrubber.min = '0';
+    scrubber.max = String(max);
+    scrubber.value = String(s.active ? s.frame : max);
+  }
   document.querySelectorAll('.replay-speed-btn').forEach((b) => {
     b.classList.toggle('active', Number(b.dataset.ms) === s.speed);
   });
-  // Refresh chart redrawn via events — already handled by replay._setReplayFrame
-  // but we also update frame display when replay fires
 }
 
 (function setupReplayUI() {
   const playBtn = $('#replayPlay');
   const prevBtn = $('#replayPrev');
   const nextBtn = $('#replayNext');
+  const exitBtn = $('#replayExit');
   const scrubber = $('#replayScrub');
 
   if (playBtn) playBtn.addEventListener('click', () => replay.togglePlay());
-  if (prevBtn) prevBtn.addEventListener('click', () => {
-    replay.setFrame(Math.max(0, replay.frame - 1));
-  });
-  if (nextBtn) nextBtn.addEventListener('click', () => {
-    replay.setFrame(Math.min(replay.bars.length - 1, replay.frame + 1));
-  });
+  if (prevBtn) prevBtn.addEventListener('click', () => replay.step(-1));
+  if (nextBtn) nextBtn.addEventListener('click', () => replay.step(1));
+  if (exitBtn) exitBtn.addEventListener('click', () => replay.reset());
   if (scrubber) {
     scrubber.addEventListener('input', () => {
       replay.setFrame(Number(scrubber.value));
@@ -673,20 +689,12 @@ function updateReplayUI() {
     btn.addEventListener('click', () => replay.setSpeed(Number(btn.dataset.ms)));
   });
 
-  window.addEventListener('replay:frame', () => {
-    updateReplayUI();
-    if (scrubber) {
-      scrubber.min = '0';
-      scrubber.max = String(replay.bars.length - 1);
-      scrubber.value = String(replay.frame);
-    }
-  });
-
+  window.addEventListener('replay:frame', () => updateReplayUI());
   window.addEventListener('replay:state', () => updateReplayUI());
 
   // Space = play/pause
   window.addEventListener('keydown', (e) => {
-    if (e.target && /^(INPUT|TEXTAREA|SELECT)$/i.test(e.target.tagName)) return;
+    if (e.target && /^(INPUT|TEXTAREA|SELECT|BUTTON)$/i.test(e.target.tagName)) return;
     if (e.key === ' ') {
       e.preventDefault();
       replay.togglePlay();
@@ -695,4 +703,3 @@ function updateReplayUI() {
 
   updateReplayUI();
 })();
-

@@ -12,6 +12,7 @@ const COLORS = {
   crosshair: '#6ea8fe',
   text: '#e8eaed',
   muted: '#8b93a7',
+  warn: '#c9a227',
 };
 
 export class Chart {
@@ -229,6 +230,8 @@ export class Chart {
   /** Called by ReplayController to set the frame index for the playhead. */
   _setReplayFrame(frame) {
     this._replayFrame = frame;
+    // Viewport follows the playhead: keep the newest revealed bar right-aligned.
+    if (frame >= 0) this.offset = 0;
     this.draw();
   }
 
@@ -258,7 +261,7 @@ export class Chart {
       const slot = count > 0 ? plot.w / count : 10;
       const dx = x - this.dragStartX;
       const dBars = Math.round(dx / slot);
-      const maxOff = Math.max(0, this.bars.length - 10);
+      const maxOff = Math.max(0, this._barCount() - 10);
       this.offset = clamp(this.dragStartOffset + dBars, 0, maxOff);
     }
     if (this._draggingLevel !== null) {
@@ -293,8 +296,15 @@ export class Chart {
     };
   }
 
-  _visibleRange() {
+  /** Bars available to draw: all bars, or up to the replay playhead (future hidden). */
+  _barCount() {
     const n = this.bars.length;
+    if (!this._splitMode && this._replayFrame >= 0) return Math.min(n, this._replayFrame + 1);
+    return n;
+  }
+
+  _visibleRange() {
+    const n = this._barCount();
     const count = Math.min(this.visibleCount, n);
     const end = n - this.offset;
     const start = Math.max(0, end - count);
@@ -426,7 +436,7 @@ export class Chart {
       ctx.fill();
     }
 
-    // Replay playhead — vertical line at the current frame
+    // Replay playhead — vertical line at the current frame (future bars are hidden)
     if (!this._splitMode && this._replayFrame >= start && this._replayFrame < end && this.bars[this._replayFrame]) {
       const px = this.idxToX(this._replayFrame);
       ctx.save();
@@ -438,22 +448,21 @@ export class Chart {
       ctx.moveTo(px, plot.y);
       ctx.lineTo(px, plot.y + plot.h);
       ctx.stroke();
-      // Small triangle pointer at top
-      ctx.beginPath();
-      ctx.moveTo(px, plot.y);
-      ctx.lineTo(px - 5, plot.y - 7);
-      ctx.lineTo(px + 5, plot.y - 7);
-      ctx.closePath();
-      ctx.fillStyle = COLORS.warn;
-      ctx.fill();
-      // Bar label under the triangle
+      ctx.globalAlpha = 1;
+      // Bar-time pill in the top padding (clear of the time axis), kept inside the plot
       const bar = this.bars[this._replayFrame];
-      const label = formatEt(bar.time);
+      const label = 'Replay ' + formatEt(bar.time);
       ctx.font = 'bold 10px system-ui, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
+      const tw = ctx.measureText(label).width + 12;
+      let lx = px - tw / 2;
+      lx = clamp(lx, plot.x, plot.x + plot.w - tw);
+      const ly = plot.y - 20;
       ctx.fillStyle = COLORS.warn;
-      ctx.fillText(label, px, plot.y + plot.h + 2);
+      ctx.fillRect(lx, ly, tw, 16);
+      ctx.fillStyle = COLORS.bg;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, lx + 6, ly + 8);
       ctx.restore();
     }
 
@@ -653,7 +662,7 @@ export class Chart {
         const slot = count > 0 ? plot.w / count : 10;
         const dx = x - this.dragStartX;
         const dBars = Math.round(dx / slot);
-        const maxOff = Math.max(0, this.bars.length - 10);
+        const maxOff = Math.max(0, this._barCount() - 10);
         this.offset = clamp(this.dragStartOffset + dBars, 0, maxOff);
       }
       if (this._draggingLevel !== null) {
@@ -686,9 +695,9 @@ export class Chart {
       (e) => {
         e.preventDefault();
         const dir = e.deltaY > 0 ? 1 : -1;
-        const next = clamp(Math.round(this.visibleCount * (1 + dir * 0.12)), 20, Math.min(400, this.bars.length));
+        const next = clamp(Math.round(this.visibleCount * (1 + dir * 0.12)), 20, Math.max(20, Math.min(400, this._barCount())));
         this.visibleCount = next;
-        const maxOff = Math.max(0, this.bars.length - 10);
+        const maxOff = Math.max(0, this._barCount() - 10);
         this.offset = clamp(this.offset, 0, maxOff);
         this.draw();
       },
