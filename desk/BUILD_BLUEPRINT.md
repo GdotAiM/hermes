@@ -50,13 +50,13 @@ js/app.js           UI wiring
 **Commit:** `feat(desk): session replay scrubber`
 
 ### Slice G — Real tape adapter (v1)
-**Goal:** read-only adapter interface + Yahoo/free or hermes-x CSV loader; synthetic remains fallback.  
+**Goal:** read-only adapter interface + Yahoo/free or research/ (hermes-x) CSV loader; synthetic remains fallback.  
 **Files:** `js/adapters/readme.md`, `js/adapters/synthetic.js`, `js/adapters/csv.js`.  
 **Never** auto-trade.  
 **Commit:** `feat(desk): read-only market data adapter interface`
 
 ### Slice H — Paper ticket → MINT (v1+)
-**Goal:** disabled until allowlist; opens journal stub / deep-link to mint-agent Path B.  
+**Goal:** disabled until allowlist; opens journal stub / deep-link to MINT (`trading/`) Path B.  
 **Depends:** MINT allowlist SURVIVES or human pilot stamp.  
 **Commit:** `feat(desk): paper ticket stub linked to MINT Path B`
 
@@ -67,8 +67,8 @@ js/app.js           UI wiring
 ## Cross-links
 | System | Role |
 |--------|------|
-| hermes-x | Research SoT / board locks / lab rail copy |
-| mint-agent | Execution; Desk never routes live |
+| `research/` (was hermes-x) | Research SoT / board locks / lab rail copy — same monorepo, `../research/` |
+| `trading/` (was mint-agent) | Execution; Desk never routes live — `../trading/` |
 | LOOM | Process; Desk is product surface |
 
 ## Resume checklist (after cutoff)

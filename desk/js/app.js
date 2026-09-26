@@ -350,7 +350,7 @@ function init() {
 
     const deeplinkEl = $('#ticketDeeplink');
     const symId = meta?.symbol || currentSymbol;
-    if (deeplinkEl) deeplinkEl.textContent = `mint-agent://desk?sym=${encodeURIComponent(symId)}&tf=${currentTf}m`;
+    if (deeplinkEl) deeplinkEl.textContent = `mint://desk?sym=${encodeURIComponent(symId)}&tf=${currentTf}m`;
 
     const modal = $('#ticketModal');
     if (modal) modal.hidden = false;

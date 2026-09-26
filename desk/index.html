@@ -51,7 +51,7 @@
           <button type="button" class="btn ghost csv-clear-btn" id="btnClearCsv" title="Clear CSV source">✕</button>
         </div>
         <div class="research-source-group" role="group" aria-label="HERMES-X research source">
-          <input type="text" id="researchSourceInput" class="csv-input" placeholder="Research JSON…" />
+          <input type="text" id="researchSourceInput" class="csv-input" placeholder="Research JSON (e.g. ../research/…json)" />
           <button type="button" class="btn csv-load-btn" id="btnLoadResearch" title="Load research artifact">Load</button>
           <button type="button" class="btn ghost csv-clear-btn" id="btnClearResearch" title="Clear research source">✕</button>
         </div>
@@ -218,8 +218,8 @@
           </ul>
         </div>
         <div class="ticket-footer">
-          <p class="card-sub">MINT agent reference:</p>
-          <code class="ticket-deeplink" id="ticketDeeplink">mint-agent://desk?sym=NQ1!&tf=15m</code>
+          <p class="card-sub">MINT agent reference (<code>trading/</code>):</p>
+          <code class="ticket-deeplink" id="ticketDeeplink">mint://desk?sym=NQ1!&tf=15m</code>
           <p class="card-sub" style="margin-top:6px">Path B — Human-explicit paper pilot + RISK</p>
           <p class="card-sub" style="color:var(--warn); margin-top:4px">Wave 1: zero SURVIVES. No entries. Paper only.</p>
         </div>
