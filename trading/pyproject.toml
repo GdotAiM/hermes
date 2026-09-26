@@ -1,0 +1,22 @@
+[project]
+name = "mint-agent"
+version = "0.1.0"
+description = "MINT — paper-first execution & P&L AI agent for HERMES-X (Alpaca-ready)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "GdotAiM / HERMES-X" }]
+dependencies = []
+
+[project.optional-dependencies]
+alpaca = ["alpaca-py>=0.21.0"]
+
+[project.scripts]
+mint = "mint.adapters.alpaca_paper_stub:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

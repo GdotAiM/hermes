@@ -1,0 +1,75 @@
+# MINT standalone agent config
+# PAPER default. Live locked unless human unlocks.
+
+layer:
+  id: MINT
+  title: Execution & P&L AI Agent
+  hermes_x_upstream: https://github.com/GdotAiM/hermes-x
+
+mode: paper
+live_enabled: false
+# Live also requires env MINT_LIVE=1. Both must be true.
+
+equity:
+  starting_usd: 100000
+  currency: USD
+
+risk_caps:
+  max_trade_risk_pct: 0.5
+  max_daily_loss_pct: 2.0
+  max_portfolio_dd_pct: 5.0
+  raise_requires: human
+
+require_board_ref: true
+require_risk_accept: true
+require_allowlist: true
+
+strategy_allowlist:
+  - id: no_trade_filters
+    kind: filter
+    board_status_required: null
+    notes: "Encode FAILS demotions; never generates entries"
+  - id: research_logging
+    kind: logging
+    board_status_required: null
+    notes: "Log priors / watchlist frames; no size"
+
+brokers:
+  alpaca:
+    enabled: true
+    default: true
+    paper:
+      base_url: https://paper-api.alpaca.markets
+    live:
+      base_url: https://api.alpaca.markets
+    env:
+      api_key: ALPACA_API_KEY
+      secret_key: ALPACA_SECRET_KEY
+      base_url: ALPACA_BASE_URL
+    adapter_docs: src/mint/adapters/alpaca.md
+    stub: src/mint/adapters/alpaca_paper_stub.py
+
+workflows:
+  W4:
+    name: Execution
+    path: src/mint/workflows/W4_EXECUTION.md
+    stages: [READ_BOARD, CANDIDATE, RISK_CHECK, SIZE, PAPER_ORDER, JOURNAL, DAILY_PNL]
+
+journal:
+  template: src/mint/journal/_TEMPLATE_DECISION.md
+
+strategies:
+  template: src/mint/strategies/_TEMPLATE.md
+
+banned:
+  - live_without_dual_unlock
+  - order_from_verify_fails_inconclusive
+  - order_without_board_ref
+  - order_without_risk_accept
+  - strategy_not_on_allowlist
+  - raise_caps_without_human
+  - commit_secrets
+
+wave1:
+  tradeable: false
+  note: "Nothing tradeable yet from HERMES-X Wave 1; CE 56% prior not entry"
