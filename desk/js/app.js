@@ -3,7 +3,7 @@
  * Slice A: persist TF + overlay prefs in localStorage
  */
 
-import { generateSeries, activeSessionLabel, SYMBOLS } from './data.js';
+import { generateSeries, resampleSeries, activeSessionLabel, SYMBOLS } from './data.js';
 import { Chart } from './chart.js';
 import { createOverlays } from './overlays.js';
 import { ReplayController } from './replay.js';
@@ -118,26 +118,32 @@ function init() {
     return chartB;
   }
 
-  /** Chart B shows the same symbol on the next-higher timeframe. */
+  /**
+   * Chart B shows the same symbol on the next-higher timeframe, resampled from
+   * chart A's bars so both panels show the same price path. D has no higher
+   * TF in the ladder, so D pairs with an independently generated 4H series
+   * (tagged as such).
+   */
   function loadChartB() {
-    if (!chartB || !splitEnabled) return;
+    if (!chartB || !splitEnabled || !series) return;
     const tfB = companionTf(currentTf);
-    let bars;
-    let meta;
-    if (csvSource && series && series.meta && series.meta.source) {
-      bars = series.bars; // CSV has a single native TF — mirror it
-      meta = series.meta;
-      chartB.setLevelsKey(levelsKey(currentSymbol, currentTf, csvSource) + ':B');
-      setTag('#chartTagB', `${meta.symbol || 'CSV'} · CSV`);
+    const isCsv = !!(csvSource && series.meta && series.meta.source);
+    let sB;
+    let tag;
+    if (tfB > currentTf) {
+      sB = resampleSeries({ ...series, tfMinutes: currentTf }, tfB);
+      tag = `${sB.meta.symbol || 'CSV'} · ${tfLabel(tfB)}${isCsv ? ' (CSV resampled)' : ''}`;
+    } else if (isCsv) {
+      sB = series; // cannot go lower than the CSV's native TF — mirror it
+      tag = `${series.meta.symbol || 'CSV'} · CSV`;
     } else {
-      const sB = generateSeries(currentSymbol, tfB);
-      bars = sB.bars;
-      meta = sB.meta;
-      chartB.setLevelsKey(levelsKey(currentSymbol, tfB, ''));
-      setTag('#chartTagB', `${meta.symbol} · ${tfLabel(tfB)}`);
+      sB = generateSeries(currentSymbol, tfB);
+      tag = `${sB.meta.symbol} · ${tfLabel(tfB)} (separate synthetic path)`;
     }
-    metaHolderB.meta = meta;
-    chartB.setBars(bars);
+    chartB.setLevelsKey(levelsKey(currentSymbol, tfB, isCsv ? csvSource : '') + (isCsv && tfB <= currentTf ? ':B' : ''));
+    metaHolderB.meta = sB.meta;
+    chartB.setBars(sB.bars);
+    setTag('#chartTagB', tag);
   }
 
   function setTag(sel, text) {

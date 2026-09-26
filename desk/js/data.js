@@ -281,6 +281,51 @@ function detectFVGs(bars) {
   return out.filter((f) => !f.mitigated || f.endIdx > bars.length - 80).slice(-24);
 }
 
+/**
+ * Slice I — aggregate a series to a higher timeframe so the 2-up companion
+ * chart shows the *same* price path (not an independently generated one).
+ * Buckets are ET-aligned (D = ET calendar day). Session = first constituent
+ * bar's session; PDH/PDL = last constituent bar's values. FVGs are recomputed
+ * on the aggregated bars; opening ranges are reused from the source for
+ * TF ≤ 1H (time-based) and omitted above that.
+ * @param {{ bars: Array, meta: object, tfMinutes?: number }} src
+ * @param {number} tfMinutes target timeframe (must be > source TF)
+ */
+export function resampleSeries(src, tfMinutes) {
+  const step = tfMinutes * 60 * 1000;
+  const ET_OFF = 4 * 3600 * 1000;
+  const out = [];
+  let cur = null;
+  let curKey = null;
+  for (const b of src.bars || []) {
+    const key = tfMinutes >= 1440 ? b.dayKey : Math.floor((b.time - ET_OFF) / step);
+    if (key !== curKey) {
+      if (cur) out.push(cur);
+      curKey = key;
+      cur = { ...b };
+    } else {
+      cur.high = Math.max(cur.high, b.high);
+      cur.low = Math.min(cur.low, b.low);
+      cur.close = b.close;
+      cur.pdh = b.pdh;
+      cur.pdl = b.pdl;
+    }
+  }
+  if (cur) out.push(cur);
+  const last = out[out.length - 1];
+  const meta = {
+    ...(src.meta || {}),
+    last: last ? last.close : src.meta?.last,
+    session: last ? last.session : src.meta?.session,
+    pdh: last ? last.pdh : src.meta?.pdh,
+    pdl: last ? last.pdl : src.meta?.pdl,
+    openingRanges: tfMinutes <= 60 ? (src.meta?.openingRanges || []) : [],
+    fvgs: detectFVGs(out),
+    resampledFrom: src.tfMinutes ?? null,
+  };
+  return { bars: out, tfMinutes, meta };
+}
+
 export function activeSessionLabel(ms = Date.now()) {
   return classifySession(ms);
 }
