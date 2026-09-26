@@ -1,9 +1,10 @@
 # HERMES-X LOOM — workflow agent config
-# Repo: https://github.com/GdotAiM/hermes-x
+# Repo: https://github.com/GdotAiM/hermes
 # Owner: LOOM (process) · ORION (science priority)
 
 repo:
-  url: https://github.com/GdotAiM/hermes-x
+  url: https://github.com/GdotAiM/hermes
+  root: research/   # monorepo subdir; paths below are relative to research/
   package: agent/
   conductor: LOOM
 

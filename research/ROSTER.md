@@ -33,7 +33,7 @@ FORGE beside the loop (systems) · LOOM beside the loop (process) · MINT paper-
 - Max daily loss: 2%
 - Max portfolio drawdown: 5%
 - No live execution without human dual unlock (`MINT_LIVE=1` + config `live_enabled`); limits cannot rise without human approval
-- MINT package: `trading/` — Wave 1 allowlist has **no entry strategies**
+- MINT package: `../trading/` (monorepo root `trading/`) — Wave 1 allowlist has **no entry strategies**
 
 ## Human
 

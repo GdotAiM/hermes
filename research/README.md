@@ -1,8 +1,10 @@
-# PROJECT HERMES-X
+# PROJECT HERMES-X — research spine (`research/`)
+
+> Part of the [GdotAiM/hermes](../README.md) monorepo. Formerly the standalone repo `GdotAiM/hermes-x`. Siblings: [`../trading/`](../trading/) (MINT) and [`../desk/`](../desk/) (HERMES Desk).
 
 Financial-intelligence research ledger for a multi-agent paper-trading research org.
 
-**ORION** is the synthesis layer (this repo’s curator). Specialists (ATLAS, QUANT, CASSANDRA, MACRO, HISTORIAN, DATA, RISK, FORGE, MERCURY) feed evidence here. **MINT** is the paper execution / P&L layer (`trading/`).
+**ORION** is the synthesis layer (this repo’s curator). Specialists (ATLAS, QUANT, CASSANDRA, MACRO, HISTORIAN, DATA, RISK, FORGE, MERCURY) feed evidence here. **MINT** is the paper execution / P&L layer ([`../trading/`](../trading/)).
 
 ## Layout
 
@@ -17,7 +19,8 @@ Financial-intelligence research ledger for a multi-agent paper-trading research 
 | `docs/WORKFLOW_BLUEPRINT.md` | Portable multi-agent + GitHub collaboration blueprint |
 | `docs/CLAUDE_CODE_STARTER.md` | One-page starter prompt for Claude Code / external agents |
 | `docs/prompts/` | Per-role mission prompts (ORION, ATLAS, QUANT, …) |
-| `trading/` | **MINT** execution / P&L layer — paper default, live locked |
+| [`../trading/`](../trading/) | **MINT** execution / P&L layer — paper default, live locked (monorepo sibling) |
+| [`../desk/`](../desk/) | **HERMES Desk** — ICT charting terminal (monorepo sibling) |
 | `risk/` | RISK gates + paper book |
 | `docs/ANTI_PATTERNS.md` | Wave 1 process anti-patterns |
 
@@ -59,14 +62,15 @@ Six-video golden corpus → ICT Research Protocol v0.1. Wave 1: H001–H004 (gap
 
 | Doc | Path |
 |-----|------|
-| Package README | [`trading/README.md`](trading/README.md) |
-| MINT charter | [`trading/AGENT.md`](trading/AGENT.md) |
-| Config | [`trading/config.yaml`](trading/config.yaml) |
-| Allowlist | [`trading/ALLOWLIST.md`](trading/ALLOWLIST.md) |
-| W4 Execution | [`trading/workflows/W4_EXECUTION.md`](trading/workflows/W4_EXECUTION.md) |
-| Alpaca adapter | [`trading/adapters/alpaca.md`](trading/adapters/alpaca.md) |
-| Paper stub | [`trading/adapters/alpaca_paper_stub.py`](trading/adapters/alpaca_paper_stub.py) |
+| Package README | [`../trading/README.md`](../trading/README.md) |
+| MINT charter | [`../trading/AGENT.md`](../trading/AGENT.md) |
+| Config | [`../trading/config.yaml`](../trading/config.yaml) |
+| Allowlist | [`../trading/ALLOWLIST.md`](../trading/ALLOWLIST.md) |
+| W4 Execution | [`../trading/src/mint/workflows/W4_EXECUTION.md`](../trading/src/mint/workflows/W4_EXECUTION.md) |
+| Alpaca adapter | [`../trading/src/mint/adapters/alpaca.md`](../trading/src/mint/adapters/alpaca.md) |
+| Paper stub | [`../trading/src/mint/adapters/alpaca_paper_stub.py`](../trading/src/mint/adapters/alpaca_paper_stub.py) |
 | Role prompt | [`docs/prompts/MINT.md`](docs/prompts/MINT.md) |
+| Dispatch (board → tickets) | [`../trading/dispatch/README.md`](../trading/dispatch/README.md) |
 
 ## Hard paper limits
 

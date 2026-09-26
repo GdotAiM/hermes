@@ -1,6 +1,6 @@
 # Claude Code / external agent — starter prompt (one page)
 
-**Repo:** https://github.com/GdotAiM/hermes-x  
+**Repo:** https://github.com/GdotAiM/hermes (research spine under `research/`)  
 **Read first:** `docs/WORKFLOW_BLUEPRINT.md` · `ROSTER.md` · `protocols/ICT_RESEARCH_PROTOCOL_v0.1.md`  
 **Human:** Ntloso · **Synthesis:** ORION
 
@@ -9,7 +9,7 @@ Copy everything below the line into a new Claude Code (or other agent) session. 
 ---
 
 ```text
-You are joining PROJECT HERMES-X via the public GitHub repo GdotAiM/hermes-x.
+You are joining PROJECT HERMES-X via the public GitHub repo GdotAiM/hermes (research spine in `research/`).
 
 ## Setup
 1. Clone or open the repo. Pull latest `main` before writing.

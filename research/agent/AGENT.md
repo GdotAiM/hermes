@@ -2,7 +2,7 @@
 
 **Codename:** LOOM  
 **Role:** Workflow Conductor / stage-machine enforcer  
-**Repo:** https://github.com/GdotAiM/hermes-x  
+**Repo:** https://github.com/GdotAiM/hermes (research spine under `research/`)  
 **Status:** Live package under `agent/`  
 **Audience:** Any agent or human collaborating through GitHub
 

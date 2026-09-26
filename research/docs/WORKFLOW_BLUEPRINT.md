@@ -2,7 +2,7 @@
 **Audience:** Humans + any agent stack (Grok Bot specialists, Claude Code, Cursor, Codex, local LLMs) collaborating through **GitHub**  
 **Owner:** ORION  
 **Status:** v1 — distilled from INV-002 Wave 1 (2026-09-13)  
-**Repo:** https://github.com/GdotAiM/hermes-x
+**Repo:** https://github.com/GdotAiM/hermes (research spine under `research/`)
 
 This document is the portable “how we work.” If an agent can read markdown and commit files, it can join the lab.
 
@@ -275,7 +275,7 @@ ORION synthesis products: `summaries/2026-09-13_WAVE1_EXPLORATORY_BOARD.md`, `*_
 Paste this into the new agent’s system or first message:
 
 ```text
-You are joining PROJECT HERMES-X via GitHub repo GdotAiM/hermes-x.
+You are joining PROJECT HERMES-X via GitHub repo GdotAiM/hermes (research spine in `research/`).
 Read: docs/WORKFLOW_BLUEPRINT.md, ROSTER.md, protocols/ICT_RESEARCH_PROTOCOL_v0.1.md,
 beliefs/LEDGER.md, and investigations/*/STATUS.md for the INV you are assigned.
 Your role is: <ATLAS|DATA|QUANT|CASSANDRA|ORION|...>.

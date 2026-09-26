@@ -33,7 +33,7 @@ Wave 1 taught us that role volume is not progress. Validated discoveries (includ
 
 ## Repo
 
-https://github.com/GdotAiM/hermes-x
+https://github.com/GdotAiM/hermes (research spine under `research/`)
 
 ## Hard reminder
 

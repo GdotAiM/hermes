@@ -8,16 +8,17 @@
 - RISK PASS / SIZE DOWN / NO-TRADE
 - `trading/config.yaml` allowlist + caps
 - MERCURY proposals (optional) that already clear gates
-- `risk/BOOK.md`, `trading/ALLOWLIST.md`
+- `research/risk/BOOK.md`, `trading/ALLOWLIST.md`
+- Dispatch tickets: `trading/dispatch/out/latest.json` (from `mint.dispatch.scan_clears`)
 
 ## Outputs
 
 | Artifact | Path |
 |----------|------|
-| Decision journal | `trading/journal/<DATE>_DECISION_*.md` |
-| Strategy cards | `trading/strategies/<id>.md` |
-| Paper order (dry-run / submit) | via `trading/adapters/alpaca_paper_stub.py` |
-| Book / P&L sync | `risk/BOOK.md` |
+| Decision journal | `trading/src/mint/journal/<DATE>_DECISION_*.md` |
+| Strategy cards | `trading/src/mint/strategies/<id>.md` |
+| Paper order (dry-run / submit) | via `trading/src/mint/adapters/alpaca_paper_stub.py` (`python3 -m mint`) |
+| Book / P&L sync | `research/risk/BOOK.md` |
 
 ## Hard bans
 
