@@ -945,6 +945,12 @@ input {
   color: var(--text);
 }
 
+.draft-badge.lock-badge {
+  color: var(--accent);
+  background: var(--accent-dim);
+  border-color: rgba(110, 168, 254, 0.3);
+}
+
 .draft-badge {
   font-size: 9px;
   font-weight: 700;
@@ -1056,3 +1062,16 @@ input {
   border-color: rgba(110, 168, 254, 0.35);
   color: var(--accent);
 }
+
+/* —— Board-lock markdown in research card / ticket status (Slice J/K) —— */
+.research-decision {
+  font-weight: 600;
+}
+
+.ticket-val.ticket-board-fails { color: var(--down); }
+.ticket-val.ticket-board-survives { color: var(--up); }
+.ticket-val.ticket-board-inconclusive,
+.ticket-val.ticket-board-hold,
+.ticket-val.ticket-board-open,
+.ticket-val.ticket-board-verify,
+.ticket-val.ticket-board-verify-complete { color: var(--warn); }

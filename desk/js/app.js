@@ -41,6 +41,8 @@ let currentSymbol = 'NQ';
 let csvSource = '';
 // Slice J — optional HERMES-X research artifact source; empty = no context
 let hermesXSource = '';
+// Slice K — board status of the loaded research artifact (null = none loaded)
+let researchStatus = null; // { status, id }
 // Slice I — optional split (2-up layout)
 let splitEnabled = false;
 let chartB = null;
@@ -328,7 +330,8 @@ function init() {
         }
       } catch (err) {
         console.warn('HERMES-X adapter failed:', err);
-        if (body) body.innerHTML = `<span style="color:var(--down);font-size:11px">Failed to load: ${err.message}</span>`;
+        clearResearchCard({ keepCard: true });
+        if (body) body.innerHTML = `<span style="color:var(--down);font-size:11px">Failed to load: ${escHtml(err.message)}</span>`;
         hermesXSource = '';
         savePrefs({ hermesXSource: '' });
       }
@@ -339,8 +342,7 @@ function init() {
       hermesXSource = '';
       if (researchInput) researchInput.value = '';
       savePrefs({ hermesXSource: '' });
-      const card = $('#researchCard');
-      if (card) card.hidden = true;
+      clearResearchCard();
     });
   }
   // Render existing research on init if pref is set
@@ -353,14 +355,12 @@ function init() {
       if (result.ok && result.artifact) {
         renderResearchCard(result.artifact, result.draft);
       } else {
-        if (body) body.innerHTML = '';
-        if (card) card.hidden = true;
+        clearResearchCard();
         hermesXSource = '';
         savePrefs({ hermesXSource: '' });
       }
     }).catch(() => {
-      if (body) body.innerHTML = '';
-      if (card) card.hidden = true;
+      clearResearchCard();
       hermesXSource = '';
       savePrefs({ hermesXSource: '' });
     });
@@ -400,6 +400,14 @@ function init() {
     if (symEl && meta?.symbol) symEl.textContent = meta.symbol;
     if (tfEl) tfEl.textContent = `${currentTf}m`;
     if (lastEl && meta?.last != null) lastEl.textContent = meta.last.toFixed(2);
+
+    const boardEl = $('#ticketBoard');
+    if (boardEl) {
+      boardEl.textContent = researchStatus
+        ? `${researchStatus.status}${researchStatus.id ? ' · ' + researchStatus.id : ''}`
+        : 'idle · Wave 1 (no research loaded)';
+      boardEl.className = 'ticket-val' + (researchStatus ? ' ticket-board-' + researchStatus.status.toLowerCase().replace(/\s+/g, '-') : '');
+    }
 
     const deeplinkEl = $('#ticketDeeplink');
     const symId = meta?.symbol || currentSymbol;
@@ -522,28 +530,31 @@ function updateStatus(meta) {
 function renderResearchCard(artifact, draft = false) {
   const card = $('#researchCard');
   const body = $('#researchBody');
-  const idEl = $('#researchId');
-  const symEl = $('#researchSymbol');
-  const tfEl = $('#researchTf');
-  const sessEl = $('#researchSession');
   const badgeEl = $('#researchDraftBadge');
 
   if (!card || !body) return;
 
-  // Header fields
-  if (idEl) idEl.textContent = artifact.researchId || '—';
-  if (symEl) symEl.textContent = artifact.symbol || '—';
-  if (tfEl) tfEl.textContent = artifact.timeframe || '—';
-  if (sessEl) sessEl.textContent = artifact.session || '—';
+  // Header meta — only fields the artifact actually provides
+  const metaEl = $('#researchMeta');
+  if (metaEl) {
+    const bits = [artifact.researchId, artifact.symbol, artifact.timeframe, artifact.session, artifact.asOf]
+      .filter((v) => v && v !== '—' && v !== 'unknown');
+    metaEl.innerHTML = bits
+      .map((b, i) => `${i ? '<span class="sep">·</span>' : ''}<span class="${i === 0 ? 'research-id' : ''}">${escHtml(b)}</span>`)
+      .join('');
+  }
   if (badgeEl) badgeEl.hidden = !draft;
+  const lockBadge = $('#researchLockBadge');
+  if (lockBadge) lockBadge.hidden = artifact.format !== 'board-lock-md';
 
-  // Update board status chip in topbar
+  // Update board status chip in topbar (+ remembered for the paper ticket)
   const statusChip = $('#boardStatusChip');
+  const boardStatus = artifact.boardStatus || null;
+  researchStatus = boardStatus ? { status: boardStatus, id: artifact.researchId !== 'unknown' ? artifact.researchId : '' } : null;
   if (statusChip) {
-    const boardStatus = artifact.boardStatus;
     if (boardStatus) {
-      statusChip.textContent = boardStatus;
-      statusChip.title = `Board status: ${boardStatus}`;
+      statusChip.textContent = researchStatus.id ? `${researchStatus.id} · ${boardStatus}` : boardStatus;
+      statusChip.title = `Research board status: ${boardStatus}`;
       statusChip.hidden = false;
       statusChip.className = 'board-status-chip board-status-' + boardStatus.toLowerCase().replace(/\s+/g, '-');
     } else {
@@ -553,6 +564,14 @@ function renderResearchCard(artifact, draft = false) {
 
   // Build body HTML
   const parts = [];
+
+  // Decision (board-lock markdown)
+  if (artifact.decision) {
+    parts.push(`<div class="research-section">
+      <div class="research-section-title">Decision (locked)</div>
+      <div class="research-section-body research-decision">${escHtml(artifact.decision)}</div>
+    </div>`);
+  }
 
   // Hypothesis
   if (artifact.hypothesis) {
@@ -604,13 +623,21 @@ function renderResearchCard(artifact, draft = false) {
     </div>`);
   }
 
+  // Next experiment (board-lock markdown)
+  if (artifact.next) {
+    parts.push(`<div class="research-section">
+      <div class="research-section-title">Next experiment</div>
+      <div class="research-section-body">${escHtml(artifact.next)}</div>
+    </div>`);
+  }
+
   // Dataset info
   const ds = artifact.dataset || {};
   if (ds.name || ds.source || ds.oos != null) {
     const dsParts = [];
-    if (ds.name) dsParts.push(`Dataset: ${escHtml(ds.name)}`);
+    if (ds.name) dsParts.push(`${artifact.format === 'board-lock-md' ? 'Tape' : 'Dataset'}: ${escHtml(ds.name)}`);
     if (ds.source) dsParts.push(`Source: ${escHtml(ds.source)}`);
-    if (ds.oos != null) dsParts.push(ds.oos ? 'OOS ✓' : 'In-sample');
+    if (artifact.format !== 'board-lock-md' && ds.oos != null) dsParts.push(ds.oos ? 'OOS ✓' : 'In-sample');
     parts.push(`<div class="research-section">
       <div class="research-section-title">Dataset</div>
       <div class="research-section-body">${dsParts.join(' · ')}</div>
@@ -618,6 +645,28 @@ function renderResearchCard(artifact, draft = false) {
   }
 
   body.innerHTML = parts.join('');
+}
+
+/** Hide the research card (unless keepCard) and reset the chip + ticket status. */
+function clearResearchCard({ keepCard = false } = {}) {
+  researchStatus = null;
+  const card = $('#researchCard');
+  const body = $('#researchBody');
+  const metaEl = $('#researchMeta');
+  const chip = $('#boardStatusChip');
+  if (chip) {
+    chip.hidden = true;
+    chip.textContent = '';
+  }
+  if (metaEl) metaEl.innerHTML = '';
+  const lockBadge = $('#researchLockBadge');
+  if (lockBadge) lockBadge.hidden = true;
+  const draftBadge = $('#researchDraftBadge');
+  if (draftBadge) draftBadge.hidden = true;
+  if (!keepCard) {
+    if (body) body.innerHTML = '';
+    if (card) card.hidden = true;
+  }
 }
 
 function escHtml(s) {
