@@ -20,7 +20,7 @@
   --ui: 13px;
   --ui-sm: 12px;
   --rail-w: 320px;
-  --left-w: 88px;
+  --left-w: 120px;
   --top-h: 52px;
   --status-h: 28px;
 }
@@ -226,6 +226,7 @@ input {
   padding: 12px 8px;
   gap: 16px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .tf-group {
@@ -643,13 +644,16 @@ input {
 /* —— CSV source input (Slice G) —— */
 .csv-source-group {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   padding-top: 8px;
   border-top: 1px solid var(--border);
 }
 
 .csv-input {
-  flex: 1;
+  flex: 1 1 100%;
+  width: 100%;
+  min-width: 0;
   border: 1px solid var(--border-soft);
   background: var(--panel-2);
   color: var(--text);
@@ -669,11 +673,12 @@ input {
 }
 
 .csv-load-btn {
+  flex: 1 1 auto;
   border: 1px solid var(--border);
   background: var(--panel-2);
   color: var(--text);
   border-radius: var(--radius-sm);
-  padding: 5px 10px;
+  padding: 4px 6px;
   cursor: pointer;
   font-size: 11px;
   font-weight: 500;
@@ -681,11 +686,12 @@ input {
 }
 
 .csv-clear-btn {
+  flex: 0 0 auto;
   border: 1px solid var(--border);
   background: transparent;
   color: var(--muted);
   border-radius: var(--radius-sm);
-  padding: 5px 8px;
+  padding: 4px 8px;
   cursor: pointer;
   font-size: 12px;
 }
@@ -815,6 +821,7 @@ input {
 /* —— Research context card (Slice J) —— */
 .research-source-group {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   padding-top: 6px;
   border-top: 1px solid var(--border);
