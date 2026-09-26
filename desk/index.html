@@ -90,12 +90,14 @@
       </aside>
 
       <!-- Chart stage -->
-      <section class="chart-stage" aria-label="Chart">
+      <section class="chart-stage" id="chartStageA" aria-label="Chart">
         <canvas id="chart"></canvas>
+        <div class="chart-tag" id="chartTagA"></div>
         <div class="ohlc-hud" id="ohlcHud" hidden></div>
       </section>
       <section class="chart-stage chart-stage-split" id="chartStageB" hidden aria-label="Second chart">
         <canvas id="chartB"></canvas>
+        <div class="chart-tag" id="chartTagB"></div>
         <div class="ohlc-hud" id="ohlcHudB" hidden></div>
       </section>
 

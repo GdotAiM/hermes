@@ -100,15 +100,62 @@ function init() {
   let metaHolder = { meta: null };
   chart.setOverlays(createOverlays(() => metaHolder.meta));
 
-  // Slice I — split layout: create second chart if enabled
-  if (splitEnabled) {
+  // Slice I — split layout: chart B is created lazily the first time 2-up is shown.
+  const metaHolderB = { meta: null };
+
+  function ensureChartB() {
+    if (chartB) return chartB;
     const canvasB = $('#chartB');
     const hudB = $('#ohlcHudB');
-    if (canvasB) {
-      chartB = new Chart(canvasB, hudB);
-      chartB.setOverlays(createOverlays(() => metaHolder.meta));
-      chartB._setSplitMode(true);
+    if (!canvasB) return null;
+    chartB = new Chart(canvasB, hudB);
+    chartB.setOverlays(createOverlays(() => metaHolderB.meta));
+    chartB._setSplitMode(true);
+    chartB.setOverlayFlags(readFlagsFromDom());
+    chartB.setTool(chart.tool);
+    return chartB;
+  }
+
+  /** Chart B shows the same symbol on the next-higher timeframe. */
+  function loadChartB() {
+    if (!chartB || !splitEnabled) return;
+    const tfB = companionTf(currentTf);
+    let bars;
+    let meta;
+    if (csvSource && series && series.meta && series.meta.source) {
+      bars = series.bars; // CSV has a single native TF — mirror it
+      meta = series.meta;
+      chartB.setLevelsKey(levelsKey(currentSymbol, currentTf, csvSource) + ':B');
+      setTag('#chartTagB', `${meta.symbol || 'CSV'} · CSV`);
+    } else {
+      const sB = generateSeries(currentSymbol, tfB);
+      bars = sB.bars;
+      meta = sB.meta;
+      chartB.setLevelsKey(levelsKey(currentSymbol, tfB, ''));
+      setTag('#chartTagB', `${meta.symbol} · ${tfLabel(tfB)}`);
     }
+    metaHolderB.meta = meta;
+    chartB.setBars(bars);
+  }
+
+  function setTag(sel, text) {
+    const el = $(sel);
+    if (el) el.textContent = text;
+  }
+
+  function applySplit(enabled) {
+    splitEnabled = !!enabled;
+    const main = document.querySelector('.main');
+    const stageB = $('#chartStageB');
+    main?.classList.toggle('split', splitEnabled);
+    if (stageB) stageB.hidden = !splitEnabled;
+    $('#btnSplit')?.classList.toggle('active', splitEnabled);
+    if (splitEnabled) {
+      ensureChartB();
+      chartB?.resize();
+      loadChartB();
+    }
+    chart.resize();
   }
 
   /**
@@ -125,7 +172,7 @@ function init() {
         metaHolder.meta = result.meta;
         chart.setLevelsKey(levelsKey(sym, tf, csvSource));
         chart.setBars(result.bars);
-        if (chartB) chartB.setBars(result.bars);
+        setTag('#chartTagA', `${result.meta.symbol || 'CSV'} · CSV`);
         replay.setBars(result.bars);
         replay.setFrame(-1);
         updateHeader(result.meta);
@@ -135,6 +182,7 @@ function init() {
         if (descEl) descEl.textContent = `CSV · ${result.meta.rowsParsed ?? result.bars.length} bars`;
         applySymbolChip(sym); // keep chip highlight
         savePrefs({ symbol: sym });
+        loadChartB();
         updateReplayUI();
         return;
       } catch (err) {
@@ -147,7 +195,8 @@ function init() {
     metaHolder.meta = series.meta;
     chart.setLevelsKey(levelsKey(sym, tf, ''));
     chart.setBars(series.bars);
-    if (chartB) chartB.setBars(series.bars);
+    setTag('#chartTagA', `${series.meta.symbol} · ${tfLabel(tf)}`);
+    loadChartB();
     replay.setBars(series.bars);
     replay.setFrame(-1);
     updateHeader(series.meta);
@@ -204,6 +253,7 @@ function init() {
       document.querySelectorAll('.tool-btn').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       chart.setTool(btn.dataset.tool);
+      if (chartB) chartB.setTool(btn.dataset.tool);
       savePrefs({ tool: btn.dataset.tool });
     });
   });
@@ -328,19 +378,15 @@ function init() {
     });
   }
 
-  // Slice I — Split layout toggle
+  // Slice I — Split layout toggle (works live; chart B created on demand)
   const btnSplit = $('#btnSplit');
+  applySplit(splitEnabled);
   if (btnSplit) {
-    btnSplit.classList.toggle('active', splitEnabled);
-    document.querySelector('.main')?.classList.toggle('split', splitEnabled);
     btnSplit.addEventListener('click', () => {
-      splitEnabled = !splitEnabled;
-      document.querySelector('.main')?.classList.toggle('split', splitEnabled);
-      btnSplit.classList.toggle('active', splitEnabled);
+      applySplit(!splitEnabled);
       savePrefs({ split: splitEnabled });
     });
   }
-
 
   // Slice H — Paper ticket → MINT stub
   const btnPaperTicket = $('#btnPaperTicket');
@@ -386,7 +432,10 @@ function init() {
     });
   }
 
-  window.addEventListener('resize', () => chart.resize());
+  window.addEventListener('resize', () => {
+    chart.resize();
+    if (chartB) chartB.resize();
+  });
 
   // Slice B — keyboard shortcuts
   window.addEventListener('keydown', (e) => {
@@ -433,6 +482,19 @@ function init() {
     }
   });
 
+}
+
+const TF_LABELS = { 1: '1m', 5: '5m', 15: '15m', 60: '1H', 240: '4H', 1440: 'D' };
+function tfLabel(tf) {
+  return TF_LABELS[tf] || `${tf}m`;
+}
+
+/** Next-higher timeframe for the 2-up companion chart (D pairs with 4H). */
+function companionTf(tf) {
+  const ladder = [1, 5, 15, 60, 240, 1440];
+  const i = ladder.indexOf(tf);
+  if (i < 0) return 60;
+  return i === ladder.length - 1 ? ladder[i - 1] : ladder[i + 1];
 }
 
 function updateHeader(meta) {

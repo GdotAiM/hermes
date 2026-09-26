@@ -1021,20 +1021,34 @@ input {
 }
 
 /* —— 2-up split layout (Slice I) —— */
-.main.split .chart-stage {
-  display: none;
-}
-
-.main.split #chartStageB {
-  display: block;
-}
-
+/* Single stage by default; in split mode both stages share the width. */
 .chart-stage-split {
   display: none;
+  border-left: 1px solid var(--border);
 }
 
-.main.split .chart-stage-split {
+.main.split .chart-stage-split:not([hidden]) {
   display: block;
+}
+
+.chart-tag {
+  position: absolute;
+  top: 6px;
+  right: 72px;
+  z-index: 2;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: rgba(18, 22, 28, 0.85);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+}
+
+.main:not(.split) .chart-tag {
+  display: none;
 }
 
 #btnSplit.active {
