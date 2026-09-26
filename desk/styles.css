@@ -25,6 +25,12 @@
   --status-h: 28px;
 }
 
+/* The HTML `hidden` attribute must always win over component display rules
+   (.modal-overlay{display:flex}, .board-status-chip{display:inline-flex}, …). */
+[hidden] {
+  display: none !important;
+}
+
 *,
 *::before,
 *::after {
