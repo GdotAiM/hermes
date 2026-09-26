@@ -1,10 +1,11 @@
-# Dispatch — HERMES-X → MINT
+# Dispatch — research spine → MINT
 
-Watches lab **board locks** + **LEDGER** and emits **tickets** (no broker calls).
+Watches lab **board locks** (`../research/summaries/*BOARD_LOCK*.md`) + **LEDGER** (`../research/beliefs/LEDGER.md`) and emits **tickets** (no broker calls).
 
 ```bash
-PYTHONPATH=src python3 -m mint.dispatch.scan_clears --hermes-x ../hermes-x
-PYTHONPATH=src python3 -m mint.dispatch.scan_clears --hermes-x ../hermes-x --apply-filters
+# from trading/ — research root auto-detected at ../research
+PYTHONPATH=src python3 -m mint.dispatch.scan_clears
+PYTHONPATH=src python3 -m mint.dispatch.scan_clears --apply-filters
 cat dispatch/out/latest.json
 ```
 
@@ -15,4 +16,6 @@ cat dispatch/out/latest.json
 | `prior_log` (VERIFY) | Research logging only |
 | `ignore` (INCONCLUSIVE) | Park |
 
-Automation: hermes-x Action `mint-notify-on-board.yml` notifies on board/LEDGER changes. Scanner is the local/CI worker.
+Automation: root Action `.github/workflows/mint-notify-on-board.yml` runs this scanner in-repo on research board/LEDGER changes and publishes `latest.json` as a job summary + artifact.
+
+Scheduled routines must either run from `trading/` with `PYTHONPATH=src` (or after `pip install -e trading`) — otherwise `python3 -m mint...` fails with `ModuleNotFoundError: No module named 'mint'`.

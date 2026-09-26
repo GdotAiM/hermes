@@ -41,7 +41,7 @@ Skip forward only when a stage outputs **NO-TRADE / IDLE** (still journal the re
 
 ### Checklist
 
-- [ ] Open latest `summaries/*_BOARD_LOCK.md` and utilization memo
+- [ ] Open latest `research/summaries/*_BOARD_LOCK.md` and utilization memo
 - [ ] Record labels per hyp (SURVIVES / FAILS / VERIFY / INCONCLUSIVE)
 - [ ] Confirm whether **any** SURVIVES exists (Wave 1: no)
 
@@ -74,7 +74,7 @@ Skip forward only when a stage outputs **NO-TRADE / IDLE** (still journal the re
 
 ### Checklist
 
-- [ ] File or cite RISK memo / gate outcome (`risk/GATES.md`, `risk/BOOK.md`)
+- [ ] File or cite RISK memo / gate outcome (`research/risk/GATES.md`, `research/risk/BOOK.md`)
 - [ ] Caps: 0.5% / trade · 2% / day · 5% DD · equity base $100k
 - [ ] Correlation / cluster / event notes if any open book
 - [ ] Outcome: PASS · SIZE DOWN · NO-TRADE · HOLD
@@ -128,7 +128,7 @@ python trading/adapters/alpaca_paper_stub.py place_order --symbol FAKE --qty 1 -
 
 ### Checklist
 
-- [ ] Update or propose update to `risk/BOOK.md` (equity, daily P&L, DD)
+- [ ] Update or propose update to `research/risk/BOOK.md` (equity, daily P&L, DD)
 - [ ] Flat book → $0 P&L is valid
 - [ ] LEDGER row only when belief/process state changes (e.g. first paper fill)
 
@@ -136,7 +136,7 @@ python trading/adapters/alpaca_paper_stub.py place_order --symbol FAKE --qty 1 -
 
 ```
 Next: RISK
-Path: risk/BOOK.md
+Path: research/risk/BOOK.md
 Ask: Acknowledge flat book; no Wave 1 tickets.
 
 Next: ORION

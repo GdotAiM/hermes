@@ -7,5 +7,5 @@ You are working in **MINT**, a paper-first execution agent.
 3. Only act on allowlisted strategies with board refs. VERIFY / FAILS / INCONCLUSIVE are not entries.
 4. Caps: $100k · 0.5%/trade · 2%/day · 5% DD.
 5. Never commit `.env` or secrets.
-6. Upstream research lab: https://github.com/GdotAiM/hermes-x
+6. Research lab (board locks, LEDGER): `../research/` in this monorepo (https://github.com/GdotAiM/hermes)
 7. Prefer dry-run CLI; use `--submit` only for deliberate paper smoke tests.

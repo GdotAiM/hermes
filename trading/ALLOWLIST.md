@@ -17,7 +17,7 @@ A strategy id may be added to `trading/config.yaml` → `strategy_allowlist` onl
 3. W3 utilization memo states what is tradeable vs prior-only.
 4. RISK gate **PASS** or **SIZE DOWN** (not NO-TRADE / HOLD).
 5. Human ack for first paper pilot of that strategy (MERCURY may propose; MINT journals).
-6. Strategy file under `trading/strategies/` maps `hypothesis_id` → entry/stop/target → required board status.
+6. Strategy file under `trading/src/mint/strategies/` maps `hypothesis_id` → entry/stop/target → required board status.
 7. PR / commit updates allowlist + LEDGER row.
 
 ### Path B — Human-explicit paper pilot + RISK
@@ -70,7 +70,7 @@ Active allowlist ids (see `config.yaml`):
 1. Edit `trading/config.yaml` `strategy_allowlist`.
 2. Add/update `trading/strategies/<id>.md` from `_TEMPLATE.md`.
 3. Cite board lock + RISK memo paths in the PR body.
-4. Add `beliefs/LEDGER.md` row.
+4. Add `research/beliefs/LEDGER.md` row.
 5. Never enable live in the same change without separate human unlock docs.
 
 ---

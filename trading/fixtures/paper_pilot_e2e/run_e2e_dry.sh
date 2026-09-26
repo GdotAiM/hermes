@@ -2,9 +2,13 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
+# Monorepo default: research spine is ../research next to trading/.
+if [[ -z "${HERMES_X_PATH:-}" && -d "$ROOT/../research/summaries" ]]; then
+  HERMES_X_PATH="$(cd "$ROOT/../research" && pwd)"
+fi
 export HERMES_X_PATH="${HERMES_X_PATH:-}"
 
-echo "== 1. Scan hermes-x =="
+echo "== 1. Scan research spine (${HERMES_X_PATH:-unset}) =="
 if [[ -n "${HERMES_X_PATH}" && -d "${HERMES_X_PATH}/summaries" ]]; then
   PYTHONPATH=src python3 -m mint.dispatch.scan_clears --hermes-x "$HERMES_X_PATH" --apply-filters
   test -f dispatch/out/latest.json

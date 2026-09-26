@@ -4,7 +4,8 @@
 layer:
   id: MINT
   title: Execution & P&L AI Agent
-  hermes_x_upstream: https://github.com/GdotAiM/hermes-x
+  hermes_x_upstream: https://github.com/GdotAiM/hermes
+  research_path: ../research   # in-repo research spine (relative to trading/)
 
 mode: paper
 live_enabled: false

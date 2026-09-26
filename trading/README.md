@@ -1,6 +1,6 @@
 # MINT Agent
 
-**Paper-first execution & P&L AI agent** for [PROJECT HERMES-X](https://github.com/GdotAiM/hermes-x).
+**Paper-first execution & P&L AI agent** for PROJECT HERMES-X — the `trading/` part of the [GdotAiM/hermes](../README.md) monorepo.
 
 MINT is the company layer that turns **board-locked** research into risk-capped paper orders (Alpaca API/CLI-ready). It does **not** invent ICT setups from chat.
 
@@ -10,16 +10,17 @@ MINT is the company layer that turns **board-locked** research into risk-capped 
 
 **Wave 1 reality:** no cleared tradeable edge yet. Allowlist = no-trade filters + research logging only.
 
-## Quick start
+## Quick start (inside the GdotAiM/hermes monorepo)
 
 ```bash
-git clone https://github.com/GdotAiM/mint-agent.git
-cd mint-agent
+git clone https://github.com/GdotAiM/hermes.git
+cd hermes/trading
 python3 -m venv .venv && source .venv/bin/activate
-pip install -e .
-cp .env.example .env   # add PAPER Alpaca keys if you want account smoke tests
-python3 -m mint account                 # dry / paper account (needs keys for live HTTP)
-python3 -m mint order --symbol QQQ --qty 1 --side buy   # dry-run by default
+pip install -e .            # or prefix commands with PYTHONPATH=src
+cp .env.example .env        # add PAPER Alpaca keys if you want account smoke tests
+python3 -m mint account                                   # dry / paper account
+python3 -m mint place_order --symbol QQQ --qty 1 --side buy   # dry-run by default
+python3 -m pytest -q        # tests (pytest config sets pythonpath=src)
 ```
 
 ## Layout
@@ -30,49 +31,50 @@ AGENTS.md                # Operating rules for coding agents
 config.yaml              # Paper/live locks, caps, allowlist
 ALLOWLIST.md             # How strategies get clearance
 docs/MINT_PROMPT.md      # Role prompt
+dispatch/                # research board -> MINT tickets (no orders)
 src/mint/
   adapters/              # Alpaca docs + paper stub
+  dispatch/scan_clears.py
   workflows/W4_EXECUTION.md
   journal/               # Decision templates
   strategies/            # Strategy templates
+tests/                   # pytest
 ```
 
-## Relationship to HERMES-X
+## Relationship to the rest of the monorepo
 
-| Layer | Repo / role |
-|-------|-------------|
-| Research lab | [hermes-x](https://github.com/GdotAiM/hermes-x) — ORION, LOOM, QUANT, CASSANDRA, … |
-| Execution | **this repo** — MINT |
-| Mirror in lab | `hermes-x/trading/` stays in sync as the lab-side package |
+| Layer | Path | Role |
+|-------|------|------|
+| Research spine | [`../research/`](../research/) | ORION, LOOM, QUANT, CASSANDRA, … board locks + LEDGER |
+| Execution | **`trading/` (this folder)** | MINT |
+| Desk | [`../desk/`](../desk/) | HERMES Desk charting terminal; paper ticket stub points here |
 
-
-## Sync with hermes-x
-
-**SoT = this repo.** Lab mirror = `hermes-x/trading/`. See [`SYNC.md`](SYNC.md).
-
-CI Action `sync-lab-mirror` opens a hermes-x PR when SoT changes (**needs** secret `HERMES_X_SYNC_TOKEN`; fails closed if missing).
-
-```bash
-./scripts/sync_to_hermes_x.sh /path/to/hermes-x
-./scripts/check_drift.sh /path/to/hermes-x
-```
+This folder was imported with full history from the former standalone repo
+`GdotAiM/mint-agent`. The old `hermes-x/trading/` lab mirror and its sync
+scripts/Action are **retired** — see [`SYNC.md`](SYNC.md).
 
 ## Auto-dispatch (not auto-trade)
 
+From `trading/` — the research spine is auto-detected at `../research`:
+
 ```bash
-HERMES_X_PATH=/path/to/hermes-x PYTHONPATH=src python3 -m mint.dispatch.scan_clears --hermes-x "$HERMES_X_PATH"
+PYTHONPATH=src python3 -m mint.dispatch.scan_clears            # writes dispatch/out/latest.json
+PYTHONPATH=src python3 -m mint.dispatch.scan_clears --apply-filters
 cat dispatch/out/latest.json
 ```
 
+Override with `--hermes-x PATH` (alias `--research`) or `HERMES_RESEARCH_PATH` / `HERMES_X_PATH`.
+The scanner exits **2** with a clear error if `summaries/` or `beliefs/LEDGER.md` is missing.
 Tickets ≠ orders. See [`dispatch/README.md`](dispatch/README.md).
 
 ## E2E dry-run (fixture)
 
 ```bash
-HERMES_X_PATH=/path/to/hermes-x REQUIRE_HERMES_SCAN=1 bash fixtures/paper_pilot_e2e/run_e2e_dry.sh
+REQUIRE_HERMES_SCAN=1 bash fixtures/paper_pilot_e2e/run_e2e_dry.sh
 ```
 
-CI clones hermes-x and sets `REQUIRE_HERMES_SCAN=1` so the dispatch scan cannot silently skip.
+CI (root `.github/workflows/mint-e2e-dry.yml`) runs pytest + this script against `../research`
+with `REQUIRE_HERMES_SCAN=1` so the dispatch scan cannot silently skip.
 Path B paper-pilot fixture — not a science SURVIVES.
 
 ## Safety

@@ -1,35 +1,22 @@
-# Sync contract: mint-agent ↔ hermes-x/trading/
+# Sync contract — RETIRED
 
-**Source of truth (SoT):** this repo — `GdotAiM/mint-agent`  
-**Lab mirror:** `GdotAiM/hermes-x` path `trading/`
+`trading/` is now the **single source of truth** for MINT inside the
+[GdotAiM/hermes](../README.md) monorepo. It was imported with full git history
+from the former standalone repo `GdotAiM/mint-agent` (main @ `7fd5855`).
 
-If they drift, **execution trusts mint-agent**; the lab mirror is for researchers reading one tree.
+Previously:
 
-## How sync works
+- `GdotAiM/mint-agent` was SoT and `GdotAiM/hermes-x` carried a flattened
+  `trading/` lab mirror.
+- `scripts/sync_to_hermes_x.sh`, `scripts/sync_from_hermes_x.sh`,
+  `scripts/check_drift.sh` and the `sync-lab-mirror` GitHub Action (needing
+  secret `HERMES_X_SYNC_TOKEN`) kept them aligned.
 
-| Direction | When | How |
-|-----------|------|-----|
-| **mint-agent → hermes-x/trading/** (primary) | Push to `main` (paths below) or `workflow_dispatch` | GitHub Action [`sync-lab-mirror.yml`](.github/workflows/sync-lab-mirror.yml): runs `scripts/sync_to_hermes_x.sh`, then opens a PR on hermes-x. **Requires** repo secret `HERMES_X_SYNC_TOKEN` (classic PAT with `repo` on hermes-x). Without the secret the Action **fails** (no silent stub). |
-| **Local** | Anytime | `./scripts/sync_to_hermes_x.sh /path/to/hermes-x` then PR manually |
-| **hermes-x/trading → mint-agent** | Rare hotfix | `scripts/sync_from_hermes_x.sh` then PR here; prefer fixing in mint-agent |
+All of that is removed: there is one tree, so there is nothing to sync or drift.
+The old mirror (byte-identical to mint-agent@7fd5855 apart from its generated
+README stub) remains in history under `research/trading/` before the import.
 
-Paths that trigger CI sync: `AGENT.md`, `ALLOWLIST.md`, `config.yaml`, `src/mint/**`, `SYNC.md`, sync script/workflow.
+Research inputs are read in-repo: `mint.dispatch.scan_clears` defaults to
+`../research` (summaries/ board locks + beliefs/LEDGER.md).
 
-**Not** a git submodule (on purpose): keeps mint-agent independently clonable.
-
-## Secret setup (one-time)
-
-1. Create a classic PAT with `repo` scope (access to `GdotAiM/hermes-x`).
-2. mint-agent → Settings → Secrets → Actions → `HERMES_X_SYNC_TOKEN`.
-3. Re-run **sync-lab-mirror** via Actions → workflow_dispatch.
-
-## Drift check
-
-```bash
-./scripts/check_drift.sh /path/to/hermes-x
-# exit 0 = match; 1 = drift
-```
-
-## Human rule
-
-Do not edit `hermes-x/trading/` by hand except through sync. Edit mint-agent, sync, PR.
+`HERMES_X_SYNC_TOKEN` is no longer needed; revoke that PAT if it was created.

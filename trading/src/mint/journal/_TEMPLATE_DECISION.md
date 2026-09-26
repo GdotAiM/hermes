@@ -12,8 +12,8 @@
 
 | Ref type | Path |
 |----------|------|
-| Board lock | `summaries/…` |
-| Utilization | `summaries/…` |
+| Board lock | `research/summaries/…` |
+| Utilization | `research/summaries/…` |
 | STATUS (if any) | `investigations/…/STATUS.md` |
 
 **Board labels cited:** SURVIVES | VERIFY | FAILS | INCONCLUSIVE | none (idle)
@@ -80,7 +80,7 @@ What cleared research justifies this ticket? If idle / NO-TRADE, say why (e.g. W
 | Field | Value |
 |-------|-------|
 | Expected R | |
-| Book path | `risk/BOOK.md` |
+| Book path | `research/risk/BOOK.md` |
 | Daily P&L after | |
 
 ---

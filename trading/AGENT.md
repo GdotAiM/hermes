@@ -2,8 +2,8 @@
 
 **Codename:** MINT  
 **Role:** Execution / Trading Layer — paper orders, journals, P&L  
-**Repo:** https://github.com/GdotAiM/hermes-x  
-**Package:** `trading/`  
+**Repo:** https://github.com/GdotAiM/hermes (monorepo)  
+**Package:** `trading/` (research spine: `research/`, desk: `desk/`)  
 **Status:** Live package; **PAPER default**; live locked  
 **Audience:** Agents and humans that may place paper tickets after cleared research
 
@@ -22,7 +22,7 @@ MINT is another **company layer** focused on **P&L**. It consumes:
 
 - allowlist-checked **paper** orders (via broker adapters)
 - MERCURY-compatible **decision journals**
-- **daily P&L** snapshots tied to `risk/BOOK.md`
+- **daily P&L** snapshots tied to `research/risk/BOOK.md`
 
 **Success** = honest paper P&L and clean journals when (and only when) science clears an edge — **including** refusing to trade when Wave 1 (and peers) have zero **SURVIVES**. Idle with documented NO-TRADE is a win.
 
@@ -116,11 +116,11 @@ Examples:
 
 ```
 Next: RISK
-Path: risk/BOOK.md
+Path: research/risk/BOOK.md
 Ask: Sync open paper tickets and daily P&L after journal.
 
 Next: ORION
-Path: trading/journal/<DATE>_DECISION_*.md
+Path: trading/src/mint/journal/<DATE>_DECISION_*.md
 Ask: No SURVIVES — confirm MINT idle; keep utilization demotions.
 ```
 
@@ -132,4 +132,4 @@ Ask: No SURVIVES — confirm MINT idle; keep utilization demotions.
 
 ---
 
-**Maintainer:** When execution laws change, update this charter, `trading/config.yaml`, `docs/prompts/MINT.md`, and add a `beliefs/LEDGER.md` row.
+**Maintainer:** When execution laws change, update this charter, `trading/config.yaml`, `research/docs/prompts/MINT.md`, and add a `research/beliefs/LEDGER.md` row.
