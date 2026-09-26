@@ -6,7 +6,7 @@ labels: []
 ---
 
 ## Investigation
-- Path: `investigations/`
+- Path: `research/investigations/`
 - Owner role this issue assigns:
 - Wave / hyp ids:
 

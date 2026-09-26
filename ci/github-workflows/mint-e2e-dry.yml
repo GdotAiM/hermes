@@ -1,0 +1,47 @@
+name: mint-e2e-dry
+# MINT (trading/) tests + E2E dry-run including research/ -> MINT dispatch scan.
+# Replaces mint-agent's e2e-dry.yml (which cloned hermes-x separately).
+on:
+  push:
+    branches: [main]
+    paths:
+      - "trading/**"
+      - "research/summaries/**"
+      - "research/beliefs/LEDGER.md"
+      - ".github/workflows/mint-e2e-dry.yml"
+  pull_request:
+    paths:
+      - "trading/**"
+      - "research/summaries/**"
+      - "research/beliefs/LEDGER.md"
+      - ".github/workflows/mint-e2e-dry.yml"
+  workflow_dispatch:
+jobs:
+  dry:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: trading
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test deps
+        run: python3 -m pip install --quiet pytest
+
+      - name: pytest (trading/)
+        run: python3 -m pytest -q
+
+      - name: E2E dry-run including research/ -> MINT scan
+        env:
+          HERMES_X_PATH: ${{ github.workspace }}/research
+          REQUIRE_HERMES_SCAN: "1"
+        run: bash fixtures/paper_pilot_e2e/run_e2e_dry.sh
+
+      - name: Assert dispatch tickets written
+        run: |
+          test -f dispatch/out/latest.json
+          python3 -c "import json; d=json.load(open('dispatch/out/latest.json')); assert 'ticket_count' in d; print(d['ticket_count'], d.get('entry_candidates'))"

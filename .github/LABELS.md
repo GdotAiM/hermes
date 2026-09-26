@@ -19,6 +19,6 @@ Documented process labels for issues/PRs. Create these in the GitHub UI (or `gh 
 
 ## Related
 
-- Stage machine: `agent/AGENT.md`
-- Workflows: `agent/workflows/`
-- Blueprint: `docs/WORKFLOW_BLUEPRINT.md`
+- Stage machine: `research/agent/AGENT.md`
+- Workflows: `research/agent/workflows/`
+- Blueprint: `research/docs/WORKFLOW_BLUEPRINT.md`

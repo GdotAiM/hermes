@@ -1,0 +1,46 @@
+name: mint-notify-on-board
+# On research board/LEDGER changes, run MINT scan_clears in-repo and publish
+# the tickets (job summary + artifact). No orders are ever placed.
+# Previously this opened an issue on GdotAiM/mint-agent; now trading/ is in this repo.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "research/summaries/**"
+      - "research/beliefs/LEDGER.md"
+  workflow_dispatch:
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: trading
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run MINT scan_clears against research/
+        run: PYTHONPATH=src python3 -m mint.dispatch.scan_clears --hermes-x ../research --apply-filters
+
+      - name: Job summary
+        run: |
+          {
+            echo "## MINT dispatch scan (research@${GITHUB_SHA::7})"
+            echo
+            echo '```json'
+            cat dispatch/out/latest.json
+            echo '```'
+            echo
+            echo "entry_candidate still needs allowlist + RISK + human before any paper --submit. No live execution."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mint-dispatch-${{ github.sha }}
+          path: |
+            trading/dispatch/out/latest.json
+            trading/fixtures/generated_filters/
+          if-no-files-found: error

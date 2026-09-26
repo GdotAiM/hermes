@@ -2,7 +2,7 @@
 <!-- What stage(s) does this PR complete? One role preferred. -->
 
 - Role wearing: <!-- ATLAS | DATA | QUANT | CASSANDRA | ORION | ... | LOOM -->
-- Investigation: `investigations/`
+- Investigation: `research/investigations/`
 - Hyp / claim ids:
 
 ## Stage checklist
