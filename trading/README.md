@@ -73,7 +73,7 @@ Tickets ≠ orders. See [`dispatch/README.md`](dispatch/README.md).
 REQUIRE_HERMES_SCAN=1 bash fixtures/paper_pilot_e2e/run_e2e_dry.sh
 ```
 
-CI (root `.github/workflows/mint-e2e-dry.yml`) runs pytest + this script against `../research`
+CI (`mint-e2e-dry.yml` (staged in `ci/github-workflows/`, to be moved to root `.github/workflows/`)) runs pytest + this script against `../research`
 with `REQUIRE_HERMES_SCAN=1` so the dispatch scan cannot silently skip.
 Path B paper-pilot fixture — not a science SURVIVES.
 

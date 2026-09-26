@@ -32,7 +32,7 @@ research/beliefs/LEDGER.md ─────────┼─▶ trading: mint.di
 - **research/trading → desk.** Serve the repo root (`python3 -m http.server 8765`, open
   `/desk/`); the desk loads research JSON and MINT tickets by same-origin relative paths
   (`../research/…`, `../trading/dispatch/out/latest.json`). No GitHub raw URLs.
-- **CI** (root `.github/workflows/`, path-filtered):
+- **CI** (path-filtered; **staged in [`ci/github-workflows/`](ci/github-workflows/) until moved to `.github/workflows/`** — see that README; the creating token lacked the `workflow` scope):
   - `mint-e2e-dry.yml` — `trading/**` or research board/LEDGER changes → pytest + E2E dry-run
     (working-directory `trading`, scanning `../research`).
   - `mint-notify-on-board.yml` — research board/LEDGER change on `main` → runs `scan_clears`

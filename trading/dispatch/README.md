@@ -16,6 +16,6 @@ cat dispatch/out/latest.json
 | `prior_log` (VERIFY) | Research logging only |
 | `ignore` (INCONCLUSIVE) | Park |
 
-Automation: root Action `.github/workflows/mint-notify-on-board.yml` runs this scanner in-repo on research board/LEDGER changes and publishes `latest.json` as a job summary + artifact.
+Automation: Action `mint-notify-on-board.yml` (staged in `ci/github-workflows/`, to be moved to root `.github/workflows/`) runs this scanner in-repo on research board/LEDGER changes and publishes `latest.json` as a job summary + artifact.
 
 Scheduled routines must either run from `trading/` with `PYTHONPATH=src` (or after `pip install -e trading`) — otherwise `python3 -m mint...` fails with `ModuleNotFoundError: No module named 'mint'`.
