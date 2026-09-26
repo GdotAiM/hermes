@@ -178,6 +178,7 @@ function init() {
         replay.setBars(result.bars);
         updateHeader(result.meta);
         updateStatus(result.meta);
+        renderMarketRead(result, sym);
         // Update symbol desc when CSV loads (CSV may have its own symbol hint)
         const descEl = $('#symbolDesc');
         if (descEl) descEl.textContent = `CSV · ${result.meta.rowsParsed ?? result.bars.length} bars`;
@@ -201,6 +202,7 @@ function init() {
     replay.setBars(series.bars);
     updateHeader(series.meta);
     updateStatus(series.meta);
+    renderMarketRead(series, sym);
     updateReplayUI();
   }
 
@@ -398,7 +400,7 @@ function init() {
     const tfEl = $('#ticketTf');
     const lastEl = $('#ticketLastBar');
     if (symEl && meta?.symbol) symEl.textContent = meta.symbol;
-    if (tfEl) tfEl.textContent = `${currentTf}m`;
+    if (tfEl) tfEl.textContent = tfLabel(currentTf);
     if (lastEl && meta?.last != null) lastEl.textContent = meta.last.toFixed(2);
 
     const boardEl = $('#ticketBoard');
@@ -411,7 +413,7 @@ function init() {
 
     const deeplinkEl = $('#ticketDeeplink');
     const symId = meta?.symbol || currentSymbol;
-    if (deeplinkEl) deeplinkEl.textContent = `mint://desk?sym=${encodeURIComponent(symId)}&tf=${currentTf}m`;
+    if (deeplinkEl) deeplinkEl.textContent = `mint://desk?sym=${encodeURIComponent(symId)}&tf=${tfLabel(currentTf)}`;
 
     const modal = $('#ticketModal');
     if (modal) modal.hidden = false;
@@ -512,6 +514,64 @@ function updateHeader(meta) {
   chg.textContent = `${sign}${meta.chg.toFixed(2)} (${sign}${meta.chgPct.toFixed(2)}%)`;
   chg.classList.toggle('up', meta.chg >= 0);
   chg.classList.toggle('down', meta.chg < 0);
+}
+
+/**
+ * Right rail "Market read" — generated from the loaded bars/meta for the
+ * current symbol (descriptive, synthetic). Also sets the Lab clears note.
+ */
+function renderMarketRead(data, sym) {
+  const list = $('#marketReadList');
+  const symEl = $('#marketReadSym');
+  const meta = data?.meta || {};
+  const bars = data?.bars || [];
+  const last = bars[bars.length - 1];
+  if (symEl) symEl.textContent = `${meta.symbol || sym} · ${meta.source ? 'CSV' : 'synthetic'}`;
+  const note = $('#labClearsNote');
+  if (note) {
+    note.textContent = sym === 'NQ' && !meta.source
+      ? 'Board locks on CONTINUOUS-KAGGLE-NQ1M — priors & falsifications, not edges.'
+      : `No ${meta.source ? 'CSV-tape' : sym} hypotheses on the research board — NQ Wave-1 results shown for reference only.`;
+  }
+  if (!list || !last) return;
+  const px = (v) => (v == null ? '—' : Number(v).toFixed(2));
+  const pdh = meta.pdh ?? last.pdh;
+  const pdl = meta.pdl ?? last.pdl;
+  const rows = [];
+
+  // Structure: where are we vs the prior-day range, and day change
+  let structure;
+  if (pdh != null && pdl != null) {
+    if (last.close > pdh) structure = `Trading above PDH ${px(pdh)} (+${px(last.close - pdh)}).`;
+    else if (last.close < pdl) structure = `Trading below PDL ${px(pdl)} (${px(last.close - pdl)}).`;
+    else structure = `Inside prior-day range ${px(pdl)} – ${px(pdh)}.`;
+  } else {
+    structure = 'No prior-day range in the loaded bars.';
+  }
+  if (meta.chg != null) structure += ` Day ${meta.chg >= 0 ? '+' : ''}${px(meta.chg)} (${meta.chg >= 0 ? '+' : ''}${Number(meta.chgPct || 0).toFixed(2)}%).`;
+  rows.push(['Structure', structure]);
+
+  // Liquidity: nearest prior-day extreme
+  if (pdh != null && pdl != null) {
+    const dH = Math.abs(pdh - last.close);
+    const dL = Math.abs(last.close - pdl);
+    const near = dH <= dL ? `PDH ${px(pdh)} (${px(dH)} pts away)` : `PDL ${px(pdl)} (${px(dL)} pts away)`;
+    const far = dH <= dL ? `PDL ${px(pdl)}` : `PDH ${px(pdh)}`;
+    rows.push(['Liquidity', `Nearest prior-day extreme: ${near}; opposite side ${far}.`]);
+  }
+
+  // Sessions: last bar session + latest opening range + open FVGs
+  const ors = meta.openingRanges || [];
+  const lastOr = ors[ors.length - 1];
+  const openFvgs = (meta.fvgs || []).filter((f) => !f.mitigated).length;
+  let sess = `Last bar: ${last.session || '—'} session.`;
+  if (lastOr) sess += ` Latest OR ${px(lastOr.low)} – ${px(lastOr.high)}.`;
+  sess += ` ${openFvgs} unmitigated FVG${openFvgs === 1 ? '' : 's'} in the loaded bars.`;
+  rows.push(['Sessions', sess]);
+
+  list.innerHTML = rows
+    .map(([k, v]) => `<li><span class="read-label">${escHtml(k)}</span><span class="read-body">${escHtml(v)}</span></li>`)
+    .join('');
 }
 
 function updateStatus(meta) {

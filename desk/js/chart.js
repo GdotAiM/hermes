@@ -536,10 +536,15 @@ export class Chart {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     const labelEvery = Math.max(1, Math.floor(count / 6));
+    const minX = 2;
+    const maxX = plot.x + plot.w - 2;
     for (let i = start; i < end; i += labelEvery) {
       const x = this.idxToX(i);
       const label = formatEt(this.bars[i].time);
-      ctx.fillText(label, x, plot.y + plot.h + 8);
+      const half = ctx.measureText(label).width / 2;
+      // Keep edge labels fully inside the plot (first label used to clip at x<0)
+      const cx = clamp(x, minX + half, maxX - half);
+      ctx.fillText(label, cx, plot.y + plot.h + 8);
     }
   }
 
