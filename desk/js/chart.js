@@ -50,6 +50,7 @@ export class Chart {
     this.dragStartOffset = 0;
 
     this._levels = []; // user long/short levels {price, type, id}
+    this._levelsKey = null; // localStorage key (per symbol + TF); null = not persisted
     this.tool = 'cursor';
     this._selectedIdx = -1;
     this._draggingLevel = null;
@@ -146,14 +147,61 @@ export class Chart {
     this.draw();
   }
 
+  /**
+   * Slice E — bind user levels to a localStorage key (e.g. per symbol + TF)
+   * and load whatever is stored there. Pass null to detach.
+   */
+  setLevelsKey(key) {
+    this._levelsKey = key || null;
+    this._levels = [];
+    this._selectedIdx = -1;
+    this._draggingLevel = null;
+    if (this._levelsKey) {
+      try {
+        const raw = JSON.parse(localStorage.getItem(this._levelsKey) || '[]');
+        if (Array.isArray(raw)) {
+          this._levels = raw
+            .filter((lv) => lv && Number.isFinite(Number(lv.price)) && (lv.type === 'long' || lv.type === 'short'))
+            .map((lv) => ({ price: Number(lv.price), type: lv.type, id: String(lv.id || Math.random().toString(36).slice(2)) }));
+        }
+      } catch {
+        this._levels = [];
+      }
+    }
+    this.draw();
+  }
+
+  _saveLevels() {
+    if (!this._levelsKey) return;
+    try {
+      if (this._levels.length) {
+        localStorage.setItem(this._levelsKey, JSON.stringify(this._levels));
+      } else {
+        localStorage.removeItem(this._levelsKey);
+      }
+    } catch {
+      /* storage full / disabled — levels stay in memory */
+    }
+  }
+
+  get levels() {
+    return this._levels.map((lv) => ({ ...lv }));
+  }
+
+  hasSelection() {
+    return this._selectedIdx >= 0 && this._selectedIdx < this._levels.length;
+  }
+
   addLevel(price, type) {
     this._levels.push({ price, type, id: Math.random().toString(36).slice(2) });
+    this._saveLevels();
     this.draw();
   }
 
   clearLevels() {
     this._levels = [];
     this._selectedIdx = -1;
+    this._saveLevels();
     this.draw();
   }
 
@@ -166,6 +214,7 @@ export class Chart {
     if (this._selectedIdx < 0 || this._selectedIdx >= this._levels.length) return;
     this._levels.splice(this._selectedIdx, 1);
     this._selectedIdx = -1;
+    this._saveLevels();
     this.draw();
   }
 
@@ -576,7 +625,10 @@ export class Chart {
         c.setPointerCapture(e.pointerId);
         return;
       }
-      this._selectedIdx = -1;
+      if (this._selectedIdx !== -1) {
+        this._selectedIdx = -1;
+        this.draw();
+      }
       this.dragging = true;
       this.dragStartX = x;
       this.dragStartOffset = this.offset;
@@ -612,6 +664,7 @@ export class Chart {
     });
 
     c.addEventListener('pointerup', (e) => {
+      if (this._draggingLevel !== null) this._saveLevels();
       this.dragging = false;
       this._draggingLevel = null;
       try {
@@ -620,6 +673,8 @@ export class Chart {
     });
 
     c.addEventListener('pointerleave', () => {
+      if (this._draggingLevel !== null) this._saveLevels();
+      this._draggingLevel = null;
       this.mouse.inside = false;
       this.dragging = false;
       this._hideHud();

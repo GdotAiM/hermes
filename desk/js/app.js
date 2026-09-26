@@ -11,6 +11,13 @@ import { loadCsv } from './adapters/csv.js';
 import { loadHermesX, HermesXAdapter } from './adapters/hermesX.js';
 
 const PREFS_KEY = 'hermes-desk:prefs:v1';
+const LEVELS_PREFIX = 'hermes-desk:levels:v1';
+
+/** Slice E — per symbol/TF (or per CSV source/TF) storage key for user levels. */
+function levelsKey(sym, tf, csv) {
+  const scope = csv ? `csv:${csv}` : sym;
+  return `${LEVELS_PREFIX}:${scope}:${tf}`;
+}
 
 function loadPrefs() {
   try {
@@ -116,6 +123,7 @@ function init() {
         const result = await loadCsv(csvSource);
         series = result;
         metaHolder.meta = result.meta;
+        chart.setLevelsKey(levelsKey(sym, tf, csvSource));
         chart.setBars(result.bars);
         if (chartB) chartB.setBars(result.bars);
         replay.setBars(result.bars);
@@ -137,6 +145,7 @@ function init() {
     }
     series = generateSeries(sym, tf);
     metaHolder.meta = series.meta;
+    chart.setLevelsKey(levelsKey(sym, tf, ''));
     chart.setBars(series.bars);
     if (chartB) chartB.setBars(series.bars);
     replay.setBars(series.bars);
@@ -415,7 +424,12 @@ function init() {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Delete' || e.key === 'Backspace') {
       if (e.target && /^(INPUT|TEXTAREA|SELECT)$/i.test(e.target.tagName)) return;
-      chart.deleteSelected();
+      for (const c of [chart, chartB]) {
+        if (c && c.hasSelection()) {
+          e.preventDefault();
+          c.deleteSelected();
+        }
+      }
     }
   });
 
