@@ -391,7 +391,13 @@ export class Chart {
     const { start, end, count } = this._visibleRange();
 
     if (this.overlays) {
+      // Clip overlays to the plot so off-scale FVG/OR boxes can't bleed into the time axis
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(plot.x, plot.y, plot.w, plot.h);
+      ctx.clip();
       this.overlays.draw(ctx, this, this.overlayFlags);
+      ctx.restore();
     }
 
     // Grid
