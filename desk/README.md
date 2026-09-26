@@ -45,7 +45,7 @@ No code fetches GitHub raw URLs or sibling repos; all references are same-origin
 ## Notes
 
 - Connection pill shows **Paper research** — this is not a live broker.
-- Paper ticket button is intentionally disabled.
+- Paper ticket opens a read-only stub (no order entry) that shows chart context, the loaded research board status and the MINT Path B reference.
 - Data is synthetic and session-aware (Asia / London / NY), for UI research only.
 
 ## Continuing the build
