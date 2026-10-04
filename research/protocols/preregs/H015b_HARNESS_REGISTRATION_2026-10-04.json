@@ -1,0 +1,41 @@
+{
+  "id": "H015b",
+  "kind": "harness registration note (not a prereg edit)",
+  "prereg": "research/protocols/preregs/H015b_FORWARD_PREREG_2026-10-04.json",
+  "prereg_tag": "prereg-H015b -> 49be2d6c47878ea48da15fadd969a0af3ef94e5a",
+  "prereg_sha256": "3ee30e047a4e37b748730b809efd79a7d86b05e04bb7237537e9984c661e0453",
+  "registration_acceptance": {
+    "H015": "ORION accepted registration at push time of 33d996d on 2026-10-04",
+    "H015b": "Per ORION's ruling (c) of 2026-10-04, H015b supersedes H015 under the same registration terms. Its registration timestamp is the push of 49be2d6 (tag prereg-H015b) to origin/feat/ftn-research-bridge on 2026-10-04, before the first eligible session (London 2026-10-05 02:00 NY = 08:00 SAST). H015 is superseded with no R read",
+    "validity": "checked by content against tag prereg-H015b: the prereg and all 96 pinned files must be byte-identical to `git show prereg-H015b:<path>`, else the harness refuses to run (harness_hash_mismatch)"
+  },
+  "harness_commit": "0ff2163 (forward/h015-harness)",
+  "harness_sha256": {
+    "repo_root": "GdotAiM/hermes",
+    "files": {
+      "research/forward/H015/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "research/forward/H015/duka.py": "8d6aa466069cb38a7b8acbe5597d7b2be874778c8fa0d1274a990b0628dc4425",
+      "research/forward/H015/h015.py": "9431ec211b6c81d970ed29fe431a234eaf4071ad88826177712ffe74a1b105fb",
+      "research/protocols/preregs/H015b_DATA_APPENDIX_2026-10-04.md": "6e7f642707a1b61fe5a8d273391a70d5ce046ea341436b9d08a75294faf0e7dc"
+    }
+  },
+  "harness_digest": "733499035da5e33dcf3f177619144b5e893f7b7c9fd62086c49b9e17a7f208be",
+  "harness_digest_method": "sha256 of json.dumps(harness_sha256, sort_keys=True) (h015.harness_digest); clearance files must carry this value",
+  "registration_rule": "the earliest commit on origin/main, origin/feat/ftn-research-bridge or origin/forward/h015-harness that adds this note is the harness registration time; a row counts only if computed after it and the current manifest equals this one",
+  "data_appendix": "research/protocols/preregs/H015b_DATA_APPENDIX_2026-10-04.md (in the manifest)",
+  "certification_evidence": {
+    "C11_burned_per_session_repro": "research/evidence/quant/H015b_HARNESS_REPRO_BURNED_2026-10-04.json (US100 185/185, mean -0.017935; US500 167/167, mean +0.009554; 0 mismatches in entry_time, entry, stop, R, exit)",
+    "C5_repull": "research/evidence/quant/H015b_HARNESS_C5_REPULL_2026-10-04.json (5 burned-window days x 2 instruments x BID/ASK: bi5 bytes equal to marketdata raw and normalised bars equal to marketdata's native Dukascopy parquet, 20/20; 0 bars 17:00-17:59 NY)"
+  },
+  "first_R_requires": [
+    "CASSANDRA clears H015b (CASSANDRA_CLEARED.json with harness_digest in the data dir)",
+    "DATA clears H015b and certifies the pipeline C1-C13 (DATA_CERTIFIED.json with harness_digest)"
+  ],
+  "feed_disclosure": "Dukascopy CFD BID 1m (datafeed), unlike H013/H014 (TradingView CAPITALCOM)",
+  "holm_co_report_addendum": {
+    "binding": false,
+    "text": "Non-binding Holm co-report across the active forward family H013 (Model U v1), H014 (MMXM v5 A) and H015b (FTN REV): each report lists each test's primary one-sided p (H015b: session-cluster bootstrap p) with Holm thresholds 0.0167 / 0.025 / 0.05. Promotion to SURVIVES follows ORION's family rule research/protocols/FORWARD_FAMILY_RULE_2026-10-04.md (main ebfa83b); kills and futility are never relaxed"
+  },
+  "scheduled_run": "python research/forward/H015/h015.py final  (from the repo root, at or after 01:00 UTC = 03:00 SAST daily; scores the previous NY day)",
+  "paper_only": "no orders, no broker calls, MINT actionability none, allowlist unchanged"
+}

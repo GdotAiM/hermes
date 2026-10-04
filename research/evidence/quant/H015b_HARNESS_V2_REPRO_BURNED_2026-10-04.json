@@ -1,0 +1,16 @@
+{
+ "US100": {
+  "n_harness": 185,
+  "n_csv": 185,
+  "mean_R": -0.017935483295335022,
+  "mismatches": [],
+  "n_mismatch": 0
+ },
+ "US500": {
+  "n_harness": 167,
+  "n_csv": 167,
+  "mean_R": 0.009554152983001987,
+  "mismatches": [],
+  "n_mismatch": 0
+ }
+}
