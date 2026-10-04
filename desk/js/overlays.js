@@ -3,6 +3,8 @@
  * Asia / London / NY session shading, PDH/PDL, FVG, CE mid, opening range
  */
 
+import { fmtPx } from './format.js';
+
 const SESSION_FILL = {
   Asia: 'rgba(110, 168, 254, 0.04)',
   London: 'rgba(201, 162, 39, 0.05)',
@@ -102,7 +104,7 @@ function drawPDHPDL(ctx, chart, start, end, plot) {
     ctx.lineTo(plot.x + plot.w, y);
     ctx.stroke();
     ctx.fillStyle = 'rgba(110, 168, 254, 0.85)';
-    ctx.fillText('PDH ' + pdh.toFixed(2), plot.x + 6, y - 2);
+    ctx.fillText('PDH ' + fmtPx(pdh), plot.x + 6, y - 2);
   }
   if (pdl != null) {
     const y = chart.priceToY(pdl);
@@ -113,7 +115,7 @@ function drawPDHPDL(ctx, chart, start, end, plot) {
     ctx.stroke();
     ctx.fillStyle = 'rgba(239, 83, 80, 0.8)';
     ctx.textBaseline = 'top';
-    ctx.fillText('PDL ' + pdl.toFixed(2), plot.x + 6, y + 2);
+    ctx.fillText('PDL ' + fmtPx(pdl), plot.x + 6, y + 2);
   }
   ctx.setLineDash([]);
 }

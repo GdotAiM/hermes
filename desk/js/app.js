@@ -9,6 +9,10 @@ import { createOverlays } from './overlays.js';
 import { ReplayController } from './replay.js';
 import { loadCsv } from './adapters/csv.js';
 import { loadHermesX, HermesXAdapter } from './adapters/hermesX.js';
+import {
+  DAY_CONTEXT_SAMPLES, displayValue, loadDayContextFile, loadDayContextUrl, projectDayContext,
+} from './adapters/dayContext.js';
+import { fmtPx, inferDecimals, setPriceDecimals } from './format.js';
 
 const PREFS_KEY = 'hermes-desk:prefs:v1';
 const LEVELS_PREFIX = 'hermes-desk:levels:v1';
@@ -43,6 +47,9 @@ let csvSource = '';
 let hermesXSource = '';
 // Slice K — board status of the loaded research artifact (null = none loaded)
 let researchStatus = null; // { status, id }
+// FTN DayContext (handoff.v1) — read-only projection; null = none loaded
+let dayContext = null; // parsed handoff
+let dayContextSource = ''; // relative path (file-picker loads are not persisted)
 // Slice I — optional split (2-up layout)
 let splitEnabled = false;
 let chartB = null;
@@ -91,6 +98,7 @@ function init() {
   if (prefs.symbol && SYMBOLS[prefs.symbol]) currentSymbol = prefs.symbol;
   if (typeof prefs.csvSource === 'string' && prefs.csvSource) csvSource = prefs.csvSource;
   if (typeof prefs.hermesXSource === 'string' && prefs.hermesXSource) hermesXSource = prefs.hermesXSource;
+  if (typeof prefs.dayContextSource === 'string' && prefs.dayContextSource) dayContextSource = prefs.dayContextSource;
   splitEnabled = !!prefs.split;
   applyFlagsToDom(prefs.overlays);
 
@@ -132,7 +140,7 @@ function init() {
     let tag;
     if (tfB > currentTf) {
       sB = resampleSeries({ ...series, tfMinutes: currentTf }, tfB);
-      tag = `${sB.meta.symbol || 'CSV'} · ${tfLabel(tfB)}${isCsv ? ' (CSV resampled)' : ''}`;
+      tag = `${sB.meta.symbol || 'CSV'} · ${tfLabel(tfB)}${isCsv ? ' (CSV resampled)' : SYMBOLS[currentSymbol]?.synthetic ? ' · SYNTHETIC' : ''}`;
     } else if (isCsv) {
       sB = series; // cannot go lower than the CSV's native TF — mirror it
       tag = `${series.meta.symbol || 'CSV'} · CSV`;
@@ -143,6 +151,7 @@ function init() {
     chartB.setLevelsKey(levelsKey(currentSymbol, tfB, isCsv ? csvSource : '') + (isCsv && tfB <= currentTf ? ':B' : ''));
     metaHolderB.meta = sB.meta;
     chartB.setBars(sB.bars);
+    chartB.setContextLevels(contextLevelsFor());
     setTag('#chartTagB', tag);
   }
 
@@ -178,6 +187,7 @@ function init() {
         const result = await loadCsv(csvSource);
         series = result;
         metaHolder.meta = result.meta;
+        setPriceDecimals(result.meta.dp ?? inferDecimals(result.meta.last));
         chart.setLevelsKey(levelsKey(sym, tf, csvSource));
         chart.setBars(result.bars);
         setTag('#chartTagA', `${result.meta.symbol || 'CSV'} · CSV`);
@@ -191,6 +201,7 @@ function init() {
         applySymbolChip(sym); // keep chip highlight
         savePrefs({ symbol: sym });
         loadChartB();
+        applyDayContextToCharts();
         updateReplayUI();
         return;
       } catch (err) {
@@ -201,10 +212,12 @@ function init() {
     }
     series = generateSeries(sym, tf);
     metaHolder.meta = series.meta;
+    setPriceDecimals(series.meta.dp ?? 2);
     chart.setLevelsKey(levelsKey(sym, tf, ''));
     chart.setBars(series.bars);
-    setTag('#chartTagA', `${series.meta.symbol} · ${tfLabel(tf)}`);
+    setTag('#chartTagA', `${series.meta.symbol} · ${tfLabel(tf)}${SYMBOLS[sym]?.synthetic ? ' · SYNTHETIC' : ''}`);
     loadChartB();
+    applyDayContextToCharts();
     replay.setBars(series.bars);
     updateHeader(series.meta);
     updateStatus(series.meta);
@@ -286,7 +299,11 @@ function init() {
     if (el) el.addEventListener('change', syncFlags);
   }
 
-  loadTf(currentTf);
+  // Restore saved symbol + TF. loadSymbol also sets the header and symbol chip —
+  // before this, a saved ES/YM (or EURUSD/XAUUSD) reloaded with an "NQ1!" header
+  // and the NQ chip highlighted while the chart showed the saved symbol.
+  applyTfChip(currentTf);
+  loadSymbol(currentSymbol);
   syncFlags();
 
   // Slice G — CSV data source input
@@ -374,6 +391,104 @@ function init() {
     });
   }
 
+  // FTN DayContext — handoff.v1 loader (relative path, sample list, or file picker)
+  const dcInput = $('#dayContextSourceInput');
+  const dcList = $('#dcSampleList');
+  if (dcList) dcList.innerHTML = DAY_CONTEXT_SAMPLES.map((p) => `<option value="${escHtml(p)}"></option>`).join('');
+  if (dcInput && dayContextSource) dcInput.value = dayContextSource;
+
+  function contextLevelsFor() {
+    if (!dayContext || csvSource) return [];
+    if (dayContext.symbol !== currentSymbol) return [];
+    return projectDayContext(dayContext).levels;
+  }
+  function applyDayContextToCharts() {
+    const lv = contextLevelsFor();
+    chart.setContextLevels(lv);
+    if (chartB) chartB.setContextLevels(lv);
+    renderDayContextStatus();
+  }
+  function renderDayContextStatus() {
+    const st = $('#dcStatus');
+    if (!st) return;
+    st.className = 'dc-status';
+    if (!dayContext) {
+      st.textContent = "Read-only projection of FTN's handoff.v1. Nothing here is derived by the Desk.";
+      return;
+    }
+    const n = projectDayContext(dayContext).levels.length;
+    if (csvSource) {
+      st.classList.add('dc-warn');
+      st.textContent = `CSV tape loaded — FTN levels (${n}) not drawn on CSV bars.`;
+    } else if (dayContext.symbol !== currentSymbol) {
+      st.classList.add('dc-warn');
+      st.innerHTML = `Chart is ${escHtml(SYMBOLS[currentSymbol]?.id || currentSymbol)}; handoff is ${escHtml(dayContext.symbol)} — ${n} FTN level(s) not drawn.` +
+        (SYMBOLS[dayContext.symbol] ? ` <button type="button" class="btn csv-load-btn" id="btnDcSwitch">Show ${escHtml(dayContext.symbol)}</button>` : '');
+      $('#btnDcSwitch')?.addEventListener('click', () => loadSymbol(dayContext.symbol));
+    } else {
+      st.textContent = `${n} FTN level(s) drawn verbatim from the handoff on synthetic ${dayContext.symbol} bars (bars ≠ the ${dayContext.date} tape). Hover a row for its JSON path.`;
+    }
+  }
+  function setDayContext(h, sourceLabel) {
+    dayContext = h;
+    renderDayContextCard(h, sourceLabel);
+    applyDayContextToCharts();
+  }
+  async function loadDayContextFromPath(path, { quiet = false } = {}) {
+    const st = $('#dcStatus');
+    try {
+      const h = await loadDayContextUrl(path);
+      dayContextSource = path;
+      savePrefs({ dayContextSource: path });
+      setDayContext(h, path);
+    } catch (err) {
+      if (!quiet) console.warn('DayContext load failed:', err);
+      clearDayContext({ keepSource: false });
+      if (st) {
+        st.className = 'dc-status dc-err';
+        st.textContent = `Failed to load DayContext: ${err.message}`;
+      }
+    }
+  }
+  function clearDayContext({ keepSource = false } = {}) {
+    dayContext = null;
+    if (!keepSource) {
+      dayContextSource = '';
+      savePrefs({ dayContextSource: '' });
+    }
+    renderDayContextCard(null);
+    applyDayContextToCharts();
+  }
+  $('#btnLoadDayContext')?.addEventListener('click', () => {
+    const p = (dcInput?.value || '').trim();
+    if (p) loadDayContextFromPath(p);
+  });
+  $('#btnPickDayContext')?.addEventListener('click', () => $('#dayContextFile')?.click());
+  $('#dayContextFile')?.addEventListener('change', async (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    try {
+      const h = await loadDayContextFile(f);
+      dayContextSource = '';
+      savePrefs({ dayContextSource: '' });
+      setDayContext(h, `file: ${f.name}`);
+    } catch (err) {
+      clearDayContext();
+      const st = $('#dcStatus');
+      if (st) {
+        st.className = 'dc-status dc-err';
+        st.textContent = `Failed to load DayContext: ${err.message}`;
+      }
+    } finally {
+      e.target.value = '';
+    }
+  });
+  $('#btnClearDayContext')?.addEventListener('click', () => {
+    if (dcInput) dcInput.value = '';
+    clearDayContext();
+  });
+  if (dayContextSource) loadDayContextFromPath(dayContextSource, { quiet: true });
+
   // Slice C — PNG export
   const exportBtn = $('#btnExport');
   if (exportBtn) {
@@ -407,7 +522,7 @@ function init() {
     const lastEl = $('#ticketLastBar');
     if (symEl && meta?.symbol) symEl.textContent = meta.symbol;
     if (tfEl) tfEl.textContent = tfLabel(currentTf);
-    if (lastEl && meta?.last != null) lastEl.textContent = meta.last.toFixed(2);
+    if (lastEl && meta?.last != null) lastEl.textContent = fmtPx(meta.last);
 
     const boardEl = $('#ticketBoard');
     if (boardEl) {
@@ -515,9 +630,9 @@ function updateHeader(meta) {
   const last = $('#lastPrice');
   const chg = $('#priceChg');
   if (!meta || !last) return;
-  last.textContent = meta.last.toFixed(2);
+  last.textContent = fmtPx(meta.last);
   const sign = meta.chg >= 0 ? '+' : '';
-  chg.textContent = `${sign}${meta.chg.toFixed(2)} (${sign}${meta.chgPct.toFixed(2)}%)`;
+  chg.textContent = `${sign}${fmtPx(meta.chg)} (${sign}${meta.chgPct.toFixed(2)}%)`;
   chg.classList.toggle('up', meta.chg >= 0);
   chg.classList.toggle('down', meta.chg < 0);
 }
@@ -540,7 +655,7 @@ function renderMarketRead(data, sym) {
       : `No ${meta.source ? 'CSV-tape' : sym} hypotheses on the research board — NQ Wave-1 results shown for reference only.`;
   }
   if (!list || !last) return;
-  const px = (v) => (v == null ? '—' : Number(v).toFixed(2));
+  const px = (v) => fmtPx(v);
   const pdh = meta.pdh ?? last.pdh;
   const pdl = meta.pdl ?? last.pdl;
   const rows = [];
@@ -735,6 +850,52 @@ function clearResearchCard({ keepCard = false } = {}) {
   }
 }
 
+/**
+ * FTN DayContext card — renders projectDayContext() rows. Values are shown via
+ * displayValue() (stringify only); every row's title is its handoff JSON path.
+ */
+function renderDayContextCard(h, sourceLabel = '') {
+  const body = $('#dcBody');
+  const meta = $('#dcMeta');
+  const badge = $('#dcBadge');
+  if (!body || !meta) return;
+  if (!h) {
+    body.innerHTML = '';
+    meta.innerHTML = '';
+    if (badge) badge.hidden = true;
+    return;
+  }
+  const view = projectDayContext(h);
+  if (badge) badge.hidden = false;
+  const hv = (path) => view.header.find((r) => r.path === path);
+  meta.innerHTML = ['symbol', 'date', 'session', 'mode']
+    .map((p) => hv(p))
+    .filter(Boolean)
+    .map((r, i) => `${i ? '<span class="sep">·</span>' : ''}<span class="${i === 0 ? 'research-id' : ''}" title="${escHtml(r.path)}">${escHtml(displayValue(r.value))}</span>`)
+    .join('') + (sourceLabel ? `<span class="sep">·</span><span title="${escHtml(sourceLabel)}">${escHtml(String(sourceLabel).split('/').pop())}</span>` : '');
+  const rowHtml = (r) => {
+    const txt = r.display ?? displayValue(r.value);
+    const isNull = r.value === null;
+    return `<span class="dc-k" title="${escHtml(r.path)}">${escHtml(r.label)}</span><span class="dc-v${isNull ? ' dc-null' : ''}" title="${escHtml(r.path)}">${escHtml(txt)}</span>`;
+  };
+  const openByDefault = new Set(['ms', 'charter', 'pam1', 'ftn']);
+  const fp = hv('fingerprint');
+  const parts = view.sections.map((sec) => `
+    <details class="research-section" data-dc="${escHtml(sec.id)}" ${openByDefault.has(sec.id) ? 'open' : ''}>
+      <summary><span class="research-section-title">${escHtml(sec.title)}${sec.rows.length ? ` (${sec.rows.length})` : ''}</span></summary>
+      ${sec.note ? `<div class="dc-note">${escHtml(sec.note)}</div>` : ''}
+      ${sec.rows.length ? `<div class="dc-rows">${sec.rows.map(rowHtml).join('')}</div>` : ''}
+    </details>`);
+  if (view.levels.length) {
+    parts.push(`<details class="research-section" data-dc="levels" open>
+      <summary><span class="research-section-title">Chart levels from handoff (${view.levels.length})</span></summary>
+      <div class="dc-rows">${view.levels.map((l) => `<span class="dc-k" title="${escHtml(l.path)}"><span class="dc-levels-swatch" style="background:${l.color}"></span>${escHtml(l.label)}</span><span class="dc-v" title="${escHtml(l.path)}">${escHtml(String(l.price))}</span>`).join('')}</div>
+    </details>`);
+  }
+  if (fp) parts.push(`<div class="dc-note" title="fingerprint">snapshot ${escHtml(displayValue(fp.value))} · producer ${escHtml(displayValue(hv('producer')?.value))}</div>`);
+  body.innerHTML = parts.join('');
+}
+
 function escHtml(s) {
   return String(s)
     .replace(/&/g, '&amp;')
@@ -763,7 +924,7 @@ function updateReplayUI() {
     const bar = replay.bars[s.frame];
     const last = $('#lastPrice');
     const chg = $('#priceChg');
-    if (last) last.textContent = bar.close.toFixed(2);
+    if (last) last.textContent = fmtPx(bar.close);
     if (chg) {
       chg.textContent = 'replay';
       chg.classList.remove('up', 'down');

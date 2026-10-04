@@ -45,6 +45,10 @@
           <button type="button" class="sym-chip" data-sym="ES">ES</button>
           <button type="button" class="sym-chip" data-sym="YM">YM</button>
         </div>
+        <div class="sym-group sym-group-fx" role="group" aria-label="FX / metal symbols (synthetic)" title="Synthetic EURUSD / XAUUSD — for FTN DayContext projection">
+          <button type="button" class="sym-chip" data-sym="EURUSD" title="EURUSD — synthetic data">EURUSD</button>
+          <button type="button" class="sym-chip" data-sym="XAUUSD" title="XAUUSD — synthetic data">XAU</button>
+        </div>
         <div class="csv-source-group" role="group" aria-label="CSV data source">
           <input type="text" id="csvSourceInput" class="csv-input" placeholder="CSV URL or path…" />
           <button type="button" class="btn csv-load-btn" id="btnLoadCsv" title="Load CSV data">Load</button>
@@ -103,6 +107,24 @@
 
       <!-- Right rail -->
       <aside class="right-rail" aria-label="Market context">
+        <article class="card dc-card" id="dayContextCard">
+          <h2 class="card-title">
+            FTN DayContext
+            <span class="draft-badge lock-badge" id="dcBadge" hidden>handoff.v1</span>
+          </h2>
+          <div class="dc-loader" role="group" aria-label="FTN DayContext source">
+            <input type="text" id="dayContextSourceInput" class="csv-input" list="dcSampleList" placeholder="../ftn/dispatch/out/handoff_latest.json" />
+            <datalist id="dcSampleList"></datalist>
+            <button type="button" class="btn csv-load-btn" id="btnLoadDayContext" title="Load handoff.v1 by relative path">Load</button>
+            <button type="button" class="btn csv-load-btn" id="btnPickDayContext" title="Pick a local handoff JSON file">File…</button>
+            <button type="button" class="btn ghost csv-clear-btn" id="btnClearDayContext" title="Clear DayContext">✕</button>
+            <input type="file" id="dayContextFile" accept=".json,application/json" hidden />
+          </div>
+          <div class="research-meta" id="dcMeta"></div>
+          <div class="dc-status" id="dcStatus">Read-only projection of FTN's handoff.v1. Nothing here is derived by the Desk.</div>
+          <div class="research-body" id="dcBody"></div>
+        </article>
+
         <article class="card" id="researchCard" hidden>
           <h2 class="card-title">
             Research context
