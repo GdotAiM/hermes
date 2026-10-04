@@ -94,4 +94,27 @@ Historical · Live observation · Paper · Live (dual unlock). Not separate prod
 
 ## Non-goals (Phase I)
 
-API · DB · live primary feed · Mint wiring · ORION/LOOM changes · new ICT detectors · merging the three repos.
+API · DB · live primary feed · Mint wiring · ORION/LOOM changes · new ICT detectors.
+
+~~merging the three repos~~ — **superseded 2026-10-04 by the user's decision** ("Yes, integrate FTN
+fully as planned"): FTN now lives in the `GdotAiM/hermes` monorepo as `ftn/`, alongside
+`research/` (HERMES-X), `trading/` (MINT) and `desk/` (HERMES Desk). The invariants above are
+unchanged: DayContext is still the only shared object and handoff.v1 is still transport only.
+"Mint wiring" remains read-only (see below) — MINT never acts on FTN output.
+
+## Monorepo status (2026-10-04)
+
+| Slice | State | Where |
+|-------|-------|-------|
+| I1b handoff.v1 + PAM1 on export | DONE | `src/ftn/os/handoff.py` (IOF `confidence` exported as `qualification` to satisfy the bans) |
+| I1c acceptance fixture tests | DONE | `tests/test_handoff_contract.py`, `dispatch/schema/handoff.v1.schema.json`, `src/ftn/os/handoff_contract.py`, `dispatch/samples/` |
+| I1d–e Desk `dayContext.js` | DONE | `../desk/js/adapters/dayContext.js` + `../desk/tests/dayContext.test.mjs` |
+| I1f Manual E2E projection | DONE (headless screenshots; fixture E2E `../scripts/e2e_fixtures.sh`) | |
+| I2 Mint read-only | DONE (context only) | `../trading/src/mint/dispatch/ftn_context.py` + `../trading/tests/test_ftn_context.py` |
+| HERMES-X evidence intake | DONE | `../research/scripts/file_ftn_handoff.py` → `../research/evidence/ftn/`; questions `../research/investigations/INV-003-ftn-intake/` |
+
+**I1 acceptance answer: yes.** Every PAM1 / Charter / Market State value and every chart level
+the Desk shows is read verbatim from a handoff JSON path (the row's tooltip shows the path);
+the node test asserts value == handoff[path] for both committed samples and that the adapter
+contains none of the old desk's level math. Limits: Desk bars are synthetic; FTN is
+forex-first while Desk/Wave-1 research are index-first.
