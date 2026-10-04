@@ -73,3 +73,16 @@ Server it from your dev server and point the adapter at the URL.
 - No Yahoo Finance or API key plumbing in this slice — that comes later (Slice G+).
 - FVG and opening-range detection runs on whatever bars the adapter produces.
 - The adapter is purely research-grade. There is zero trade-routing code here.
+
+### `dayContext.js` — FTN DayContext (handoff.v1), not a bar adapter
+Read-only projection of FTN's `../ftn/dispatch/out/handoff_latest.json` (or a committed
+sample / local file). It supplies **context and display-only levels**, never bars, and never
+derives ICT facts: every value it emits carries the handoff JSON path it was read from.
+
+```js
+import { loadDayContextUrl, projectDayContext } from './adapters/dayContext.js';
+const h = await loadDayContextUrl('../ftn/dispatch/out/handoff_latest.json'); // throws on banned fields
+const { sections, levels } = projectDayContext(h);
+chart.setContextLevels(levels); // only when chart symbol === h.symbol
+```
+Acceptance test: `node desk/tests/dayContext.test.mjs`.

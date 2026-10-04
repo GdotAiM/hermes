@@ -8,12 +8,16 @@ on:
       - "trading/**"
       - "research/summaries/**"
       - "research/beliefs/LEDGER.md"
+      - "ftn/dispatch/samples/**"
+      - "ftn/src/ftn/os/handoff_contract.py"
       - ".github/workflows/mint-e2e-dry.yml"
   pull_request:
     paths:
       - "trading/**"
       - "research/summaries/**"
       - "research/beliefs/LEDGER.md"
+      - "ftn/dispatch/samples/**"
+      - "ftn/src/ftn/os/handoff_contract.py"
       - ".github/workflows/mint-e2e-dry.yml"
   workflow_dispatch:
 jobs:
@@ -32,7 +36,7 @@ jobs:
       - name: Install test deps
         run: python3 -m pip install --quiet pytest
 
-      - name: pytest (trading/)
+      - name: pytest (trading/) — incl. tests/test_ftn_context.py (FTN DayContext → no orders)
         run: python3 -m pytest -q
 
       - name: E2E dry-run including research/ -> MINT scan
@@ -45,3 +49,8 @@ jobs:
         run: |
           test -f dispatch/out/latest.json
           python3 -c "import json; d=json.load(open('dispatch/out/latest.json')); assert 'ticket_count' in d; print(d['ticket_count'], d.get('entry_candidates'))"
+
+      - name: FTN DayContext reader on the committed sample (context only, 0 order intents)
+        run: |
+          PYTHONPATH=src python3 -m mint.dispatch.ftn_context --handoff ../ftn/dispatch/samples/handoff_v1_m9_reconstruction_eurusd_2017-05-30_london.json
+          python3 -c "import json; r=json.load(open('dispatch/out/ftn_context_latest.json')); assert r['execution']['order_intents_emitted']==0 and r['execution']['actionable_for_mint'] is False; print(r['board_gate'])"

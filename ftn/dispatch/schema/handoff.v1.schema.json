@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/GdotAiM/hermes/ftn/dispatch/schema/handoff.v1.schema.json",
+  "title": "HERMES handoff.v1 — DayContext transport (day_context_handoff)",
+  "description": "The single cross-part contract: ftn/dispatch/out/handoff_latest.json. Structural rules only; the recursive signal/order ban walk lives in ftn.os.handoff_contract (authoritative). Banned anywhere: BUY/SELL calls, confidence, best_pam, pam_rank, broker_*, order fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "kind", "producer", "consumer", "mode", "fingerprint", "symbol", "date",
+               "session", "market_state", "candidates", "ftn_annotation", "session_ticket", "contrary", "notes"],
+  "properties": {
+    "schemaVersion": { "const": "1" },
+    "kind": { "const": "day_context_handoff" },
+    "producer": { "type": "string" },
+    "consumer": { "type": "string" },
+    "mode": { "const": "paper" },
+    "fingerprint": { "type": "string" },
+    "symbol": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "session": { "type": ["string", "null"] },
+    "market_state": {
+      "type": "object",
+      "required": ["sentiment", "institutional", "profile", "charter", "pam1_evidence", "pam1_completeness"],
+      "properties": {
+        "sentiment": { "type": "object" },
+        "institutional": {
+          "type": "object",
+          "not": { "required": ["confidence"] }
+        },
+        "profile": { "type": ["string", "null"] },
+        "charter": { "type": ["object", "null"] },
+        "pam1_evidence": { "type": ["object", "null"] },
+        "pam1_completeness": { "type": ["object", "null"] },
+        "opens": { "type": ["object", "null"] },
+        "scenarios": { "type": ["object", "null"] }
+      },
+      "propertyNames": { "not": { "enum": ["confidence", "best_pam", "pam_rank", "BUY", "SELL", "broker_instruction", "order"] } }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["module", "state", "eligible", "reason", "origin"],
+        "properties": {
+          "module": { "type": "string" },
+          "state": { "type": "string" },
+          "eligible": { "type": "boolean" },
+          "reason": { "type": ["string", "null"] },
+          "origin": { "type": ["string", "null"] }
+        },
+        "propertyNames": { "not": { "enum": ["confidence", "best_pam", "pam_rank", "rank", "side", "order"] } }
+      }
+    },
+    "ftn_annotation": {
+      "type": "object",
+      "required": ["family", "bias", "four"],
+      "properties": {
+        "family": { "type": ["string", "null"] },
+        "bias": { "type": ["string", "null"] },
+        "four": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "price"],
+            "properties": { "index": { "type": "integer" }, "name": { "type": "string" }, "price": { "type": "number" } }
+          }
+        }
+      }
+    },
+    "session_ticket": { "type": ["object", "null"] },
+    "contrary": { "type": ["string", "null"] },
+    "notes": { "type": "array", "items": { "type": "string" } },
+    "_provenance": { "type": "object" }
+  }
+}

@@ -1091,3 +1091,22 @@ input {
   margin-bottom: 0;
   font-size: 10px;
 }
+
+/* —— FTN DayContext card (dayContext.js, handoff.v1 read-only projection) —— */
+.sym-group-fx { margin-top: -4px; }
+.dc-loader { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.dc-loader .csv-input { flex: 1 1 100%; min-width: 0; }
+.dc-status { font-size: 10.5px; color: var(--muted-2); margin: 2px 0 6px; line-height: 1.4; }
+.dc-status.dc-warn { color: var(--warn); }
+.dc-status.dc-err { color: var(--down); }
+.dc-card details { border-top: 1px solid var(--border); padding-top: 4px; }
+.dc-card summary { cursor: pointer; list-style: none; }
+.dc-card summary::-webkit-details-marker { display: none; }
+.dc-card summary .research-section-title::before { content: '▸ '; }
+.dc-card details[open] summary .research-section-title::before { content: '▾ '; }
+.dc-note { font-size: 10px; color: var(--muted-2); font-style: italic; margin: 2px 0 4px; }
+.dc-rows { display: grid; grid-template-columns: minmax(0, 46%) minmax(0, 54%); gap: 2px 8px; font-size: 11px; }
+.dc-k { color: var(--muted); overflow-wrap: anywhere; }
+.dc-v { color: var(--text); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.dc-v.dc-null { color: var(--muted-2); font-style: italic; }
+.dc-levels-swatch { display: inline-block; width: 8px; height: 2px; margin-right: 4px; vertical-align: middle; }

@@ -72,3 +72,36 @@ def test_decision_section_is_bounded():
     assert sc._decision_status(text) == "INCONCLUSIVE"
     assert sc._decision_status("## Decision\nH2b FAILS.\n") == "FAILS"
     assert sc._decision_status("## Decision\nH1 SURVIVES board.\n") == "SURVIVES"
+
+
+def test_open_and_negated_survives_never_clear(tmp_path):
+    """Regression (2026-10-04 H013/H014 locks): 'Not SURVIVES', '= OPEN' and
+    'SURVIVES / edge language is forbidden' must not become entry_candidates."""
+    root = tmp_path / "research"
+    (root / "summaries").mkdir(parents=True)
+    (root / "beliefs").mkdir(parents=True)
+    (root / "summaries" / "2026-10-04_HO1_BOARD_LOCK.md").write_text(
+        "# HO1\n\n## Decision (FINAL lock)\n**HO1 = OPEN** — NEEDS MORE DATA.\n"
+        "- Not SURVIVES. No MERCURY. No paper orders.\n\n## Context\n| H | SURVIVES |\n",
+        encoding="utf-8",
+    )
+    (root / "summaries" / "2026-10-04_HO2_BOARD_LOCK.md").write_text(
+        "# HO2\n\n## Decision\n**HO2 = FAILS (historical) / frozen forward-only test OPEN**\n",
+        encoding="utf-8",
+    )
+    (root / "summaries" / "2026-10-04_HO3_BOARD_LOCK.md").write_text(
+        "# HO3\n\n## Decision\nThis is not SURVIVES; park.\n", encoding="utf-8"
+    )
+    (root / "beliefs" / "LEDGER.md").write_text(
+        "| date | belief |\n|---|---|\n"
+        '| 2026-10-04 | HO1 = OPEN · NEEDS MORE DATA; board: "SURVIVES / edge language is forbidden" | Active |\n',
+        encoding="utf-8",
+    )
+    out = tmp_path / "out"
+    assert sc.main(["--hermes-x", str(root), "--out", str(out)]) == 0
+    data = json.loads((out / "latest.json").read_text())
+    kinds = {t["hypothesis_hint"]: (t["kind"], t["board_status"]) for t in data["tickets"]}
+    assert kinds["2026-10-04_HO1_BOARD_LOCK"] == ("ignore", "OPEN")
+    assert kinds["2026-10-04_HO2_BOARD_LOCK"] == ("demote_filter", "FAILS")
+    assert "2026-10-04_HO3_BOARD_LOCK" not in kinds or kinds["2026-10-04_HO3_BOARD_LOCK"][0] != "entry_candidate"
+    assert data["entry_candidates"] == 0

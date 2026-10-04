@@ -6,10 +6,12 @@ on:
     branches: [main]
     paths:
       - "desk/**"
+      - "ftn/dispatch/samples/**"
       - ".github/workflows/desk-check.yml"
   pull_request:
     paths:
       - "desk/**"
+      - "ftn/dispatch/samples/**"
       - ".github/workflows/desk-check.yml"
   workflow_dispatch:
 jobs:
@@ -36,3 +38,5 @@ jobs:
             test -e "$ref" || { echo "missing: $ref"; exit 1; }
             echo "ok $ref"
           done
+      - name: FTN DayContext adapter acceptance (I1 — no desk-side derivation)
+        run: node tests/dayContext.test.mjs

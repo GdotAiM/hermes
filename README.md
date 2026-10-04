@@ -1,20 +1,48 @@
 # HERMES — research → execution → desk (monorepo)
 
 One repo for PROJECT HERMES-X: the **research evidence spine**, the **MINT** paper-first
-execution layer, and the **HERMES Desk** ICT charting terminal.
+execution layer, the **HERMES Desk** ICT charting terminal, and **FTN** (Filling The
+Numbers), the paper-first ICT daily-range engine that produces the shared DayContext.
 
 | Path | What it is | Formerly |
 |------|------------|----------|
 | [`research/`](research/) | Research evidence spine — `investigations/`, `evidence/`, `beliefs/LEDGER.md`, `summaries/` (board locks, utilization memos), `protocols/`, `risk/`, `scripts/`, and the **LOOM** workflow-agent package in `agent/`. ORION curates. | [`GdotAiM/hermes-x`](https://github.com/GdotAiM/hermes-x) |
 | [`trading/`](trading/) | **MINT** — paper-first execution & P&L layer. Python package `mint` (`trading/src/mint`): Alpaca paper stub, dispatch scanner, W4 execution workflow, allowlist, journals. | [`GdotAiM/mint-agent`](https://github.com/GdotAiM/mint-agent) |
-| [`desk/`](desk/) | **HERMES Desk** — vanilla HTML/CSS/JS Canvas ICT trading terminal (slices A–K: overlays, replay, data adapter, paper ticket → MINT, research-contract adapter, board-status chip). | [`GdotAiM/hermes-desk`](https://github.com/GdotAiM/hermes-desk) |
+| [`desk/`](desk/) | **HERMES Desk** — vanilla HTML/CSS/JS Canvas ICT trading terminal (slices A–K: overlays, replay, data adapter, paper ticket → MINT, research-contract adapter, board-status chip) + FTN DayContext adapter (`js/adapters/dayContext.js`). | [`GdotAiM/hermes-desk`](https://github.com/GdotAiM/hermes-desk) |
+| [`ftn/`](ftn/) | **FTN** — Filling The Numbers: paper-first ICT daily-range engine (`src/ftn`: `os/` Month-1–12 + PAM1 modules, `engine`, `models` REV/CONSO/PIP20/BB/FTN, `workflow/orchestrator`, `adapters`, `journal`), 58 fixtures (EURUSD-first, 2 XAUUSD), 171 docs. **DayContext producer**: exports `ftn/dispatch/out/handoff_latest.json` (handoff.v1). | `ftn-agent` zip (no git history; no GitHub repo) |
 
-All three were imported **with full git history** (`git filter-repo --to-subdirectory-filter`
+`research/`, `trading/` and `desk/` were imported **with full git history** (`git filter-repo --to-subdirectory-filter`
 per repo, then `git merge --allow-unrelated-histories`; no squash). Use
 `git log --full-history -- <dir>` / `git log --follow` to browse per-part history. Commit SHAs
-of imported history differ from the original repos (paths were rewritten).
+of imported history differ from the original repos (paths were rewritten). `ftn/` came from a
+zip with no history and was added as a single import commit (2026-10-04).
 
 ## How the parts connect
+
+### The one shared contract: handoff.v1 (FTN DayContext)
+
+```
+ftn/ (FTN brief) ──▶ ftn/dispatch/out/handoff_latest.json   schemaVersion "1", kind "day_context_handoff", mode "paper"
+                        │   schema: ftn/dispatch/schema/handoff.v1.schema.json
+                        │   validator + recursive bans: ftn.os.handoff_contract   (samples: ftn/dispatch/samples/)
+          ┌─────────────┼──────────────────────────────┬───────────────────────────────────┐
+          ▼             ▼                              ▼                                   ▼
+ desk: dayContext.js   trading: mint.dispatch.ftn_context   research: scripts/file_ftn_handoff.py   (human)
+ read-only projection  context record only — never orders  → research/evidence/ftn/ (evidence intake)
+```
+
+- **Bans** (absent at any depth, enforced by FTN tests, the Desk guard and the MINT reader):
+  BUY/SELL calls, `confidence`, `best_pam` / `pam_rank`, `broker_*`, order fields.
+  FTN's internal IOF label `confidence` is exported as `qualification`.
+- **Desk** displays Market State, Charter, PAM1, candidates and FTN levels verbatim (no
+  desk-side derivation — FTN's I1 acceptance test, `desk/tests/dayContext.test.mjs`).
+- **MINT** logs DayContext as context; FTN candidates, the FTN session ticket and PAM1 never
+  become orders (`trading/tests/test_ftn_context.py`). Only a research board SURVIVES can
+  clear a strategy, and even then entries go through allowlist + RISK + human ack.
+- **Research** files handoffs as evidence, not claims; open questions live in
+  `research/investigations/INV-003-ftn-intake/` (no verdicts).
+
+### Research board → MINT → Desk
 
 ```
 research/summaries/*_BOARD_LOCK.md ─┐
@@ -37,7 +65,8 @@ research/beliefs/LEDGER.md ─────────┼─▶ trading: mint.di
     (working-directory `trading`, scanning `../research`).
   - `mint-notify-on-board.yml` — research board/LEDGER change on `main` → runs `scan_clears`
     in-repo, posts `latest.json` to the job summary + artifact.
-  - `desk-check.yml` — `desk/**` → JS module syntax check + `index.html` asset refs.
+  - `desk-check.yml` — `desk/**` → JS module syntax check + `index.html` asset refs + DayContext adapter acceptance test.
+  - `ftn-check.yml` — `ftn/**` (+ MINT dispatch, desk adapter) → FTN pytest, handoff sample validation, `scripts/e2e_fixtures.sh`.
 
 Paths written inside `research/` docs are relative to `research/` (e.g. `summaries/…` means
 `research/summaries/…`) unless prefixed with `trading/` or `desk/`.
@@ -54,9 +83,28 @@ PYTHONPATH=src python3 -m mint.dispatch.scan_clears      # → dispatch/out/late
 PYTHONPATH=src python3 -m mint place_order --symbol QQQ --qty 1 --side buy   # dry-run
 cd ..
 
+# FTN tests + one-shot fixture E2E (FTN brief → contract → MINT scan → ftn_context → desk test)
+cd ftn && rm -f dispatch/out/*.json && python3 -m pytest -q && cd ..
+scripts/e2e_fixtures.sh            # or: make e2e   (E2E_TESTS=1 / make e2e-full adds pytest)
+
 # Desk
-python3 -m http.server 8765   # open http://localhost:8765/desk/
+python3 -m http.server 8765   # open http://localhost:8765/desk/  → EURUSD → FTN DayContext → Load
 ```
+
+## Honest limits
+
+- **Desk data is synthetic** for every symbol (NQ/ES/YM and the new EURUSD/XAUUSD). FTN levels
+  are drawn verbatim from the handoff onto *synthetic* bars — they line up in scale only; the
+  bars are not the fixture day's tape.
+- **FTN is forex-first** (EURUSD pips, some XAUUSD); the Desk and Wave-1 research are
+  **index-first** (NQ points). There is no EURUSD/XAUUSD tape in `research/` yet.
+- FTN fixtures are hand-labelled single days, not a sample; FTN's tests prove reconstruction,
+  not edge. Nothing FTN emits is a tradeable claim until the research board says SURVIVES.
+- No single FTN fixture carries both PAM1/Charter and FTN four levels, so there are two
+  committed samples.
+- FTN `fingerprint` is a salted `hash()` (changes per process unless `PYTHONHASHSEED` is
+  pinned); FTN's test suite persists tickets in `ftn/dispatch/out/` and fails a second run
+  unless that directory is cleared (CI and `scripts/e2e_fixtures.sh` clear it).
 
 ## Paper-only limits (hard)
 

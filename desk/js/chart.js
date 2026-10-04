@@ -3,6 +3,8 @@
  * DPR-aware, crosshair, OHLC HUD, pan/zoom, axes
  */
 
+import { fmtPx, roundToDp } from './format.js';
+
 const COLORS = {
   bg: '#0b0e11',
   up: '#26a69a',
@@ -58,6 +60,10 @@ export class Chart {
     this._levelDragStartY = 0;
     this._levelDragStartPrice = 0;
     this._replayFrame = -1; // -1 = no replay active
+    // FTN DayContext levels — display-only lines supplied by the dayContext adapter
+    // (prices copied verbatim from handoff.v1; never computed here). Not persisted,
+    // not draggable, not user levels.
+    this._contextLevels = [];
 
     this._boundResize = () => this.resize();
     this._ro = new ResizeObserver(() => this.resize());
@@ -71,6 +77,13 @@ export class Chart {
     this.bars = bars || [];
     this.offset = 0;
     this.visibleCount = Math.min(80, Math.max(40, this.bars.length));
+    this._autoscale();
+    this.draw();
+  }
+
+  /** @param {Array<{price:number,label:string,color?:string,path?:string}>} levels */
+  setContextLevels(levels) {
+    this._contextLevels = Array.isArray(levels) ? levels.filter((l) => Number.isFinite(l?.price)) : [];
     this._autoscale();
     this.draw();
   }
@@ -266,7 +279,7 @@ export class Chart {
     }
     if (this._draggingLevel !== null) {
       const price = this.yToPrice(y);
-      this._levels[this._draggingLevel].price = Math.round(price * 100) / 100;
+      this._levels[this._draggingLevel].price = roundToDp(price);
     }
     this.draw();
   }
@@ -341,7 +354,11 @@ export class Chart {
       hi = Math.max(hi, lv.price);
       lo = Math.min(lo, lv.price);
     }
-    const pad = (hi - lo) * 0.08 || 10;
+    for (const lv of this._contextLevels) {
+      hi = Math.max(hi, lv.price);
+      lo = Math.min(lo, lv.price);
+    }
+    const pad = (hi - lo) * 0.08 || (Math.abs(hi) >= 100 ? 10 : Math.abs(hi) * 0.001 || 1);
     this.minY = lo - pad;
     this.maxY = hi + pad;
   }
@@ -412,6 +429,40 @@ export class Chart {
       }
     }
 
+    // FTN DayContext levels (display-only, from handoff.v1)
+    if (this._contextLevels.length) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(plot.x, plot.y, plot.w, plot.h);
+      ctx.clip();
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'bottom';
+      const placed = []; // [y, leftEdge] of drawn labels — shift left on overlap
+      for (const lv of this._contextLevels) {
+        const y = this.priceToY(lv.price);
+        const col = lv.color || '#b388ff';
+        ctx.strokeStyle = col;
+        ctx.globalAlpha = 0.8;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 3]);
+        ctx.beginPath();
+        ctx.moveTo(plot.x, y);
+        ctx.lineTo(plot.x + plot.w, y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = col;
+        const text = `${lv.label} ${fmtPx(lv.price)}`;
+        const tw = ctx.measureText(text).width + 10;
+        let right = plot.x + plot.w - 6;
+        for (const [py, pLeft] of placed) if (Math.abs(py - y) < 11 && right > pLeft - 8) right = pLeft - 8;
+        placed.push([y, right - tw + 10]);
+        ctx.fillText(text, right, y - 2);
+      }
+      ctx.restore();
+    }
+
     // User levels
     for (let i = 0; i < this._levels.length; i++) {
       const lv = this._levels[i];
@@ -431,7 +482,7 @@ export class Chart {
       ctx.font = (isSelected ? 'bold ' : '') + '11px system-ui, sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText(
-        (lv.type === 'long' ? 'Long ' : 'Short ') + lv.price.toFixed(2),
+        (lv.type === 'long' ? 'Long ' : 'Short ') + fmtPx(lv.price),
         plot.x + 4,
         y - 4
       );
@@ -530,7 +581,7 @@ export class Chart {
     for (let i = 0; i <= steps; i++) {
       const price = this.maxY - ((this.maxY - this.minY) * i) / steps;
       const y = plot.y + (plot.h * i) / steps;
-      ctx.fillText(price.toFixed(2), plot.x + plot.w + 8, y);
+      ctx.fillText(fmtPx(price), plot.x + plot.w + 8, y);
     }
   }
 
@@ -576,7 +627,7 @@ export class Chart {
 
     // Price label on axis
     const price = this.yToPrice(y);
-    const label = price.toFixed(2);
+    const label = fmtPx(price);
     ctx.font = '11px system-ui, sans-serif';
     const tw = ctx.measureText(label).width + 10;
     const ly = y;
@@ -603,10 +654,10 @@ export class Chart {
     const cls = up ? 'hud-up' : 'hud-down';
     el.hidden = false;
     el.innerHTML = `
-      <div class="hud-row"><span class="hud-label">O</span><span class="${cls}">${bar.open.toFixed(2)}</span></div>
-      <div class="hud-row"><span class="hud-label">H</span><span class="${cls}">${bar.high.toFixed(2)}</span></div>
-      <div class="hud-row"><span class="hud-label">L</span><span class="${cls}">${bar.low.toFixed(2)}</span></div>
-      <div class="hud-row"><span class="hud-label">C</span><span class="${cls}">${bar.close.toFixed(2)}</span></div>
+      <div class="hud-row"><span class="hud-label">O</span><span class="${cls}">${fmtPx(bar.open)}</span></div>
+      <div class="hud-row"><span class="hud-label">H</span><span class="${cls}">${fmtPx(bar.high)}</span></div>
+      <div class="hud-row"><span class="hud-label">L</span><span class="${cls}">${fmtPx(bar.low)}</span></div>
+      <div class="hud-row"><span class="hud-label">C</span><span class="${cls}">${fmtPx(bar.close)}</span></div>
       <div class="hud-row" style="margin-top:4px;color:#8b93a7">${formatEtFull(bar.time)} · ${bar.session}</div>
     `;
     // Position near cursor, keep inside plot
@@ -633,7 +684,7 @@ export class Chart {
       const y = e.clientY - rect.top;
       if (this.tool === 'long' || this.tool === 'short') {
         const price = this.yToPrice(y);
-        this.addLevel(Math.round(price * 100) / 100, this.tool);
+        this.addLevel(roundToDp(price), this.tool);
         return;
       }
       // Check if clicking on a level
@@ -678,7 +729,7 @@ export class Chart {
       }
       if (this._draggingLevel !== null) {
         const price = this.yToPrice(e.clientY - rect.top);
-        this._levels[this._draggingLevel].price = Math.round(price * 100) / 100;
+        this._levels[this._draggingLevel].price = roundToDp(price);
       }
       this.draw();
     });

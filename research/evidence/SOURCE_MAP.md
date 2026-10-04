@@ -12,6 +12,7 @@
 | FORGE | Live agent → ORION | Systems Architect | Workflow & architecture evaluation |
 | MERCURY | Live agent → ORION | Paper Portfolio Mgr | Timestamped decisions + daily audit |
 | Human (Ntloso) | Chat / uploads | Researcher | Final approval; live capital authority |
+| FTN (Filling The Numbers) | `ftn/` → `ftn/dispatch/out/handoff_latest.json` (handoff.v1) | DayContext producer (paper-first ICT daily-range engine) | Filed as evidence via `research/scripts/file_ftn_handoff.py` → `evidence/ftn/`; forex-first (EURUSD, some XAUUSD); fixtures are hand-labelled, not tape |
 | Local ledger | `/home/box/hermes-x` | ORION | Beliefs, investigations, summaries |
 
 Connectors (GitHub, Drive, etc.): deferred.

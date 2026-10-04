@@ -5,9 +5,16 @@
 
 /** Symbol metadata — price level, seed, and volatility multiplier per symbol. */
 const SYMBOLS = {
-  NQ: { id: 'NQ1!', name: 'Nasdaq 100 Continuous', basePrice: 19850, volMult: 1.0, seed: 0x4e51000 },
-  ES: { id: 'ES1!', name: 'S&P 500 E-mini Continuous', basePrice: 5620,  volMult: 1.0, seed: 0x7a2c300 },
-  YM: { id: 'YM1!', name: 'Dow Futures Continuous',     basePrice: 42100, volMult: 1.0, seed: 0x1f8e500 },
+  NQ: { id: 'NQ1!', name: 'Nasdaq 100 Continuous', basePrice: 19850, volMult: 1.0, dp: 2, seed: 0x4e51000 },
+  ES: { id: 'ES1!', name: 'S&P 500 E-mini Continuous', basePrice: 5620,  volMult: 1.0, dp: 2, seed: 0x7a2c300 },
+  YM: { id: 'YM1!', name: 'Dow Futures Continuous',     basePrice: 42100, volMult: 1.0, dp: 2, seed: 0x1f8e500 },
+  // FX / metal for FTN DayContext projection (FTN is forex-first). SYNTHETIC random
+  // walks like the others — the scale (≈1.117 EURUSD, ≈1240 XAUUSD, i.e. the era of
+  // FTN's 2017–18 fixtures) is only so FTN handoff levels land on-screen. volMult
+  // rescales the index-point session volatility (15m base 8 pts → ≈8 pips EURUSD,
+  // ≈2 USD XAUUSD).
+  EURUSD: { id: 'EURUSD', name: 'Euro / US Dollar — SYNTHETIC', basePrice: 1.1170, volMult: 0.0001, dp: 5, seed: 0x3e0d500, synthetic: true },
+  XAUUSD: { id: 'XAUUSD', name: 'Gold spot — SYNTHETIC',        basePrice: 1240,   volMult: 0.25,   dp: 2, seed: 0x5a0c700, synthetic: true },
 };
 
 const SESSION = {
@@ -74,6 +81,9 @@ export function generateSeries(symbol = 'NQ', tfMinutes = 15, count = null) {
   const n = count ?? defaults[tfMinutes] ?? 400;
   const step = tfMinutes * 60 * 1000;
   const sym = SYMBOLS[symbol] || SYMBOLS.NQ;
+  const dp = sym.dp ?? 2;
+  const vm = sym.volMult ?? 1;
+  const roundPx = (x) => roundDp(x, dp);
   const rand = mulberry32(sym.seed + tfMinutes);
 
   // End near "now" rounded to TF, weekday
@@ -99,9 +109,9 @@ export function generateSeries(symbol = 'NQ', tfMinutes = 15, count = null) {
   function volFor(ms) {
     const s = classifySession(ms);
     const base = tfMinutes <= 5 ? 4.5 : tfMinutes <= 15 ? 8 : tfMinutes <= 60 ? 18 : tfMinutes <= 240 ? 35 : 90;
-    if (s === 'NY') return base * 1.35;
-    if (s === 'London') return base * 1.1;
-    return base * 0.75;
+    if (s === 'NY') return base * 1.35 * vm;
+    if (s === 'London') return base * 1.1 * vm;
+    return base * 0.75 * vm;
   }
 
   let dayOpen = null;
@@ -171,7 +181,7 @@ export function generateSeries(symbol = 'NQ', tfMinutes = 15, count = null) {
   const openingRanges = computeOpeningRanges(bars, orBars);
 
   // Fair value gaps (3-candle)
-  const fvgs = detectFVGs(bars);
+  const fvgs = detectFVGs(bars, dp);
 
   const last = bars[bars.length - 1];
   const firstOfDay = bars.find((b) => b.dayKey === last.dayKey);
@@ -184,18 +194,21 @@ export function generateSeries(symbol = 'NQ', tfMinutes = 15, count = null) {
       symbol: sym.id,
       last: last.close,
       chg: roundPx(dayChg),
-      chgPct: firstOfDay ? roundPx((dayChg / firstOfDay.open) * 100) : 0,
+      chgPct: firstOfDay ? roundDp((dayChg / firstOfDay.open) * 100, 2) : 0,
       session: last.session,
       pdh: last.pdh,
       pdl: last.pdl,
       openingRanges,
       fvgs,
+      dp,
+      synthetic: true,
     },
   };
 }
 
-function roundPx(x) {
-  return Math.round(x * 100) / 100;
+function roundDp(x, dp = 2) {
+  const f = 10 ** dp;
+  return Math.round(x * f) / f;
 }
 
 function computeOpeningRanges(bars, nBars) {
@@ -221,7 +234,8 @@ function computeOpeningRanges(bars, nBars) {
 }
 
 /** 3-candle FVG: gap between candle[i-2].high and candle[i].low (bull) or reverse */
-function detectFVGs(bars) {
+function detectFVGs(bars, dp = 2) {
+  const roundPx = (x) => roundDp(x, dp);
   const out = [];
   for (let i = 2; i < bars.length; i++) {
     const a = bars[i - 2];
@@ -320,7 +334,7 @@ export function resampleSeries(src, tfMinutes) {
     pdh: last ? last.pdh : src.meta?.pdh,
     pdl: last ? last.pdl : src.meta?.pdl,
     openingRanges: tfMinutes <= 60 ? (src.meta?.openingRanges || []) : [],
-    fvgs: detectFVGs(out),
+    fvgs: detectFVGs(out, src.meta?.dp ?? 2),
     resampledFrom: src.tfMinutes ?? null,
   };
   return { bars: out, tfMinutes, meta };

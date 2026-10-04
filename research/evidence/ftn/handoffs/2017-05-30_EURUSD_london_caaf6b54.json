@@ -1,0 +1,342 @@
+{
+  "schemaVersion": "1",
+  "kind": "day_context_handoff",
+  "producer": "ftn-agent",
+  "consumer": "hermes-x|hermes-desk",
+  "mode": "paper",
+  "fingerprint": "3725971691324029648",
+  "symbol": "EURUSD",
+  "date": "2017-05-30",
+  "session": "london",
+  "market_state": {
+    "sentiment": {
+      "direction": "bullish",
+      "expected_delivery": "higher",
+      "indicator": {
+        "name": "williams_r",
+        "period": 10,
+        "timeframe": "m15",
+        "value": -82.0,
+        "state": "bullish"
+      },
+      "reference_open": "gmt0",
+      "asian_range": {
+        "high": 1.1176,
+        "low": 1.1151
+      },
+      "liquidity_probe": {
+        "preferred_side": "sell_side",
+        "observed_side": "sell_side"
+      },
+      "judas_side": "sell_side",
+      "reaction": {
+        "pd_array_reaction": "confirmed"
+      },
+      "basis": [
+        "williams_r",
+        "pair_iof",
+        "asian_range",
+        "opening_price"
+      ]
+    },
+    "institutional": {
+      "sponsorship": {
+        "monthly": "bullish",
+        "weekly": "bullish",
+        "daily": "bullish",
+        "h4": "bullish"
+      },
+      "daytrade_iof": {
+        "daily": "bullish",
+        "h4": "bullish",
+        "m60": "bearish"
+      },
+      "state": "bullish",
+      "qualification": "qualified",
+      "notes": [
+        "m60_countertrend"
+      ]
+    },
+    "dxy": {
+      "from": "premium",
+      "relationship": "supportive",
+      "institutional": {
+        "sponsorship": {
+          "monthly": "bearish",
+          "weekly": "bearish",
+          "daily": "bearish",
+          "h4": "bearish"
+        },
+        "daytrade_iof": {
+          "daily": "bearish",
+          "h4": "bearish",
+          "m60": "bearish"
+        },
+        "state": "bearish",
+        "qualification": "aligned"
+      }
+    },
+    "profile": "reversal_watch",
+    "origin_pd_array": "D_FVG_bull",
+    "opposing_target_arrays": [
+      "PDH",
+      "WSH",
+      "FTN_cbdr_up_1"
+    ],
+    "opens": {
+      "gmt0": 1.1168,
+      "ny_midnight": 1.1169
+    },
+    "scenarios": {
+      "primary": "sell-side probe under Asia/open into daily bullish FVG, then delivery higher",
+      "contrary": "acceptance below origin FVG / failure of PD-array reaction"
+    },
+    "month1": null,
+    "month2": null,
+    "month3": null,
+    "month4": null,
+    "month5": {
+      "quarterly_shift": {
+        "state": "unclear",
+        "lookback_months": "none",
+        "direction": "unclear",
+        "origin": "ict_source"
+      },
+      "ipda_window": {
+        "days": "none",
+        "high": null,
+        "low": null,
+        "origin": "ict_source"
+      },
+      "open_float": {
+        "buy_side": "unclear",
+        "sell_side": "unclear",
+        "origin": "ict_source"
+      },
+      "open_float_pools": {
+        "pool_ids": [],
+        "origin": "ict_source"
+      },
+      "institutional_swing": {
+        "kind": "none",
+        "entry_annotation": "none",
+        "origin": "ict_source"
+      },
+      "confirming": {
+        "ten_year_notes": false,
+        "ten_year_yields": false,
+        "interest_rate_differentials": false,
+        "intermarket": false,
+        "seasonal_tendency": "none"
+      },
+      "htf_pd": {
+        "dealing_range_tf": "none",
+        "equilibrium": null,
+        "nearest_premium_id": null,
+        "nearest_discount_id": "D_FVG_bull",
+        "origin": "ict_source"
+      },
+      "setup_progression": "none",
+      "entry_technique": "none",
+      "position_management": "none",
+      "position_opportunity": {
+        "flag": false,
+        "reason": "no_quarterly_or_ipda"
+      }
+    },
+    "month6": {
+      "market_selection": {
+        "state": "suitable",
+        "origin": "ict_source"
+      },
+      "htf_draw": "bullish",
+      "swing_family": "bull",
+      "sequential_pattern": {
+        "name": "mwd_all_bullish",
+        "state": "watching",
+        "origin": "ict_source"
+      },
+      "supporting_evidence": {
+        "htf_trend": true,
+        "institutional_order_flow": true,
+        "pd_arrays": true,
+        "seasonal_tendency": false,
+        "interest_rates": false,
+        "cot": false,
+        "intermarket": false
+      },
+      "risk_frame": {
+        "stop_reference": "D_FVG_bull",
+        "target_reference": "PDH",
+        "reward_frame": "discount_to_premium",
+        "origin": "ict_source"
+      },
+      "million_dollar_swing": {
+        "state": "incomplete",
+        "missing": [
+          "seasonal_tendency",
+          "major_market_analysis",
+          "intermarket_analysis",
+          "top_down_analysis",
+          "management"
+        ],
+        "origin": "ict_source"
+      },
+      "swing_opportunity": {
+        "flag": true,
+        "reason": "suitable_family_risk"
+      }
+    },
+    "month7": null,
+    "month8": {
+      "ict_true_day": {
+        "clock": "America/New_York",
+        "day_anchor": "00:00",
+        "asian": [
+          "20:00",
+          "00:00"
+        ],
+        "london_kz": [
+          "01:00",
+          "05:00"
+        ],
+        "london_close": [
+          "10:00",
+          "12:00"
+        ],
+        "ny_am": [
+          "07:00",
+          "10:00"
+        ],
+        "cbdr_window": [
+          "14:00",
+          "20:00"
+        ],
+        "origin": "ict_source"
+      },
+      "cbdr": {
+        "height_pips": 24.0,
+        "body_height_pips": null,
+        "wick_high": null,
+        "wick_low": null,
+        "body_high": null,
+        "body_low": null,
+        "classification": "ideal",
+        "daytrade_classic": true,
+        "origin": "ict_source"
+      },
+      "asian_height_pips": 25.0,
+      "london_session_gate": {
+        "allowed": true,
+        "reason": null,
+        "origin": "ict_source"
+      },
+      "ict_london_profile": "none",
+      "daily_extreme_projection": {
+        "draw": "none",
+        "sd_levels": [],
+        "source_range": "cbdr",
+        "selected_level": null,
+        "basis": [],
+        "origin": "ict_source"
+      },
+      "daytrade_opportunity": false,
+      "htf_entry_overlap": {
+        "present": true,
+        "array_id": "D_FVG_bull",
+        "timeframe": "daily",
+        "relationship": "seed_only",
+        "origin": "ict_source"
+      },
+      "ict_guidance": {
+        "approx_setups_per_day": 2,
+        "adr_capture_pct": "65-75",
+        "note": "guidance not hermes_governance"
+      }
+    },
+    "month10": null,
+    "month11": null,
+    "month12": null,
+    "charter": null,
+    "pam1_evidence": null,
+    "pam1_completeness": null
+  },
+  "candidates": [
+    {
+      "module": "REV",
+      "state": "selected",
+      "eligible": true,
+      "reason": "named_extreme_raid+htf_pd+mss",
+      "origin": "hermes_interpretation"
+    },
+    {
+      "module": "CONSO",
+      "state": "ineligible",
+      "eligible": false,
+      "reason": "box_null",
+      "origin": "ict_source"
+    },
+    {
+      "module": "PIP20",
+      "state": "ineligible",
+      "eligible": false,
+      "reason": "profile=reversal_watch",
+      "origin": "hermes_interpretation"
+    },
+    {
+      "module": "BB",
+      "state": "invalidated",
+      "eligible": false,
+      "reason": "named_extreme_plus_htf_array",
+      "origin": "hermes_governance"
+    },
+    {
+      "module": "FTN",
+      "state": "annotate",
+      "eligible": false,
+      "reason": "objectives_only",
+      "origin": "hermes_governance"
+    }
+  ],
+  "ftn_annotation": {
+    "family": "pivots",
+    "bias": "bullish",
+    "four": [
+      {
+        "index": 1,
+        "name": "M3",
+        "price": 1.1192499999999999
+      },
+      {
+        "index": 2,
+        "name": "R1",
+        "price": 1.1209333333333331
+      },
+      {
+        "index": 3,
+        "name": "M4",
+        "price": 1.1226999999999998
+      },
+      {
+        "index": 4,
+        "name": "R2",
+        "price": 1.1244666666666665
+      }
+    ]
+  },
+  "session_ticket": {
+    "id": "2017-05-30-EURUSD-london-REV",
+    "kind": "paper_entry",
+    "module": "REV",
+    "session": "london"
+  },
+  "contrary": "acceptance below origin FVG / failure of PD-array reaction",
+  "notes": [
+    "Transport only: DayContext snapshot for research projection.",
+    "Consumers must not mutate Market State or invent ICT rules.",
+    "PAM recognition and completeness are not execution instructions.",
+    "Legacy kind was 'month9_handoff'; primary kind is 'day_context_handoff'.",
+    "Forbidden as signal fields: trade direction recommendation, model ranking, broker command.",
+    "Institutional IOF label is exported as 'qualification' (internal field name is banned in handoff.v1)."
+  ]
+}
