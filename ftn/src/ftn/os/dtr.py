@@ -30,6 +30,7 @@ from ftn.os.m10_confluence import derive_month10
 from ftn.os.m11_mega import derive_month11
 from ftn.os.m12_topdown import derive_month12
 from ftn.os.pam_recognize import derive_charter
+from ftn.os.m13_context import has_model13_evidence
 from ftn.os.pam1_evidence import parse_pam1_evidence
 from ftn.os.pam1_complete import annotate_pam1_completeness
 
@@ -97,6 +98,7 @@ def build_context(path: str | Path):
         or raw.get("ict_charter")
         or (raw.get("evidence") or {}).get("identified_pam")
         or (raw.get("evidence") or {}).get("recognized_pams")
+        or has_model13_evidence(raw)
     )
     if ch_ev:
         raw_ch = dict(raw)

@@ -69,10 +69,18 @@ def build_families(pack: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+DIRECTIONAL = ("bullish", "bearish")
+
+
 def detect_bias(pack: dict[str, Any], explicit: str) -> str:
-    if explicit in ("bullish", "bearish"):
+    """Explicit --bias wins; else the fixture's htf_bias; else "undetermined".
+
+    Never defaults to a direction (previously fell back to "bullish").
+    """
+    if explicit in DIRECTIONAL:
         return explicit
-    return pack.get("htf_bias", "bullish")
+    b = pack.get("htf_bias")
+    return b if b in DIRECTIONAL else "undetermined"
 
 
 def _sorted_unique(levels: list[float]) -> list[float]:
@@ -101,6 +109,8 @@ def count_four(
     price: float,
     family: str = "pivots",
 ) -> list[dict[str, Any]]:
+    if bias not in DIRECTIONAL:
+        return []  # no directional count without an established bias
     ladder = family_ladder(families, family)
     if bias == "bullish":
         ahead = [(n, v) for n, v in ladder if v > price]

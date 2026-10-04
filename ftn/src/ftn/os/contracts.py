@@ -182,8 +182,14 @@ def context_fingerprint(ctx: DayContext) -> str:
     Same DayContext → same fingerprint in every process, regardless of
     PYTHONHASHSEED (the old ``str(abs(hash(blob)))`` was salted per process).
     """
+    data = asdict(ctx)
+    # Additive optional layers (Model 13 card) are omitted while absent, so the
+    # fingerprints of main's committed handoff.v1 samples do not move.
+    ch = data.get("charter")
+    if isinstance(ch, dict) and ch.get("model13") is None:
+        ch.pop("model13", None)
     blob = json.dumps(
-        _canonical(asdict(ctx)), sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str
+        _canonical(data), sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str
     )
     return "sha256:" + hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 

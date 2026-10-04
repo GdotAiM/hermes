@@ -39,6 +39,13 @@ def _check_run_pack(pack: dict, fixture: Path | None) -> None:
         raise RunFixtureError(f"{name}: not an `ftn run`/`ftn prep` fixture: missing {', '.join(missing)}.{hint}")
 
 
+def _model13_annotations(cfg: dict, pack: dict) -> dict:
+    if not cfg.get("model13_bridge_enabled"):
+        return {}
+    from ftn.os.m13_context import model13_annotation
+    return {"model13": model13_annotation(pack)}
+
+
 def run_workflow(
     *,
     symbol: str,
@@ -88,6 +95,9 @@ def run_workflow(
         no_trade_reasons.append("setup_gate_incomplete")
     if cfg.get("mode") != "paper":
         no_trade_reasons.append("non_paper_mode_refused")
+    if direction == "undetermined":
+        # No explicit --bias and no htf_bias: no four-count (never a default bullish).
+        no_trade_reasons.append("bias_undetermined")
 
     setup_complete = len(no_trade_reasons) == 0
     # I0: FTN never clears anything for MINT. `entry_candidate` is MINT's own kind
@@ -125,6 +135,8 @@ def run_workflow(
         "stage": stage,
         "stages": STAGES if stage == "all" else ["PREP"],
         "ticket": ticket,
+        # Model 13 (Charter bridge) annotation: off by default, never changes the ticket.
+        "annotations": _model13_annotations(cfg, pack),
         "note": "No orders placed. Research ticket, not a contract and not for MINT; only handoff.v1 crosses parts.",
     }
 
