@@ -80,8 +80,22 @@ def _decision_text(text: str) -> str:
     return rest[: nxt.start()] if nxt else rest[:800]
 
 
+# Explicit verdict line in a Decision section, e.g. "**H004b = FAILS.**",
+# "**H013 = OPEN** — NEEDS MORE DATA", "**H014 = FAILS (historical) / … OPEN**".
+EXPLICIT_STATUS_RE = re.compile(
+    r"\*\*[^*=\n]*=\s*(INCONCLUSIVE|FAILS|VERIFY COMPLETE|VERIFY|SURVIVES|OPEN|HOLD)\b", re.I
+)
+# Negated mentions must never count as a clearance ("Not SURVIVES", "no SURVIVES").
+NEGATED_SURVIVES_RE = re.compile(r"\b(not|no|never|is\s+not|isn't)\s+SURVIVES\b", re.I)
+
+
 def _decision_status(text: str) -> str:
     dec = _decision_text(text)
+    m = EXPLICIT_STATUS_RE.search(dec)
+    if m:
+        label = m.group(1).upper()
+        return "VERIFY" if label.startswith("VERIFY") else label
+    dec = NEGATED_SURVIVES_RE.sub(" ", dec)
     # Order: INCONCLUSIVE before FAILS/SURVIVES so "INCONCLUSIVE" parks.
     for label, rx in (
         ("INCONCLUSIVE", INCONCLUSIVE_RE),
@@ -138,6 +152,17 @@ def scan_board_locks(summaries: Path) -> list[Ticket]:
                     True,
                 )
             )
+        elif status in ("OPEN", "HOLD"):
+            tickets.append(
+                Ticket(
+                    "ignore",
+                    str(path),
+                    hint,
+                    status,
+                    f"{status} — no verdict yet (forward test / needs data); no size; park",
+                    False,
+                )
+            )
         elif status == "INCONCLUSIVE":
             tickets.append(
                 Ticket(
@@ -160,7 +185,10 @@ def scan_ledger(ledger: Path) -> list[Ticket]:
     """
     tickets: list[Ticket] = []
     text = _read(ledger)
-    reject_markers = ("rejected", "artifact", "inconclusive", "fails", "parked", "not survive", "did not survive")
+    reject_markers = (
+        "rejected", "artifact", "inconclusive", "fails", "parked", "not survive", "did not survive",
+        "no survives", "forbidden", "= open", "needs more data", "forward-only",
+    )
     for i, line in enumerate(text.splitlines()):
         if not line.startswith("|"):
             continue

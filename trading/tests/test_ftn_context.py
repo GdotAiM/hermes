@@ -87,7 +87,7 @@ def test_reader_never_emits_orders(tmp_path, no_network_no_orders, decision, sam
 
 
 def test_real_monorepo_board_blocks(tmp_path, no_network_no_orders):
-    """Against the in-repo research spine (Wave 1: zero SURVIVES) the gate is blocked."""
+    """Against the real in-repo research spine: whatever the board says, zero order intents."""
     rc = fc.main(["--handoff", str(M9), "--out", str(tmp_path)])
     assert rc == 0
     rec = json.loads((tmp_path / "ftn_context_latest.json").read_text())
