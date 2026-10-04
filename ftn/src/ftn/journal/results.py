@@ -4,8 +4,9 @@ For each Month 9 session ticket from the bar-derived kernel it records the trace
 allowed, the paper outcome (correct-side BID/ASK fills, ``research.outcomes.simulate_both`` with DATA's
 slippage floors; the same functions the scorer uses, called read-only).
 
-H016 seal: no R is computed for any session after the burned window (2026-09-25) unless a human-signed
-clearance stamp records that BOTH CASSANDRA and DATA cleared H016. Sealed rows carry
+H016b seal: no R is computed for any session after the burned window (2026-09-25) unless a human-signed
+clearance stamp records that BOTH CASSANDRA and DATA cleared H016b (prereg-H016b, which superseded H016
+pre-data; a stamp for H016, H015b or anything else does not open the seal). Sealed rows carry
 ``result.status = "sealed_pending_cassandra_data_clearance"`` and ``R = None``; the outcome function is never
 called for them, so no forward R is read. The burned window 2025-08-25 -> 2026-09-25 is open (already burned).
 
@@ -24,11 +25,14 @@ from ftn.paths import journal_dir
 BURNED_START = date(2025, 8, 25)
 BURNED_END = date(2026, 9, 25)
 SEALED = "sealed_pending_cassandra_data_clearance"
+PREREG_ID = "H016b"
 JOURNAL_NAME = "paper_results.jsonl"
 
 
 def clearance_ok(path: str | Path | None) -> tuple[bool, str]:
-    """A clearance stamp counts only if a human signed it and it names H016 with CASSANDRA and DATA cleared."""
+    """A clearance stamp counts only if a human signed it, names H016b, and records CASSANDRA and DATA cleared
+    for H016b (``CASSANDRA: CLEARED H016b`` / ``DATA: CLEARED H016b``, or a bare ``CLEARED`` in a stamp whose
+    only hypothesis id is H016b). A stamp that names H016 / H015b or any other id never counts."""
     from ftn.os.mint_draft import stamp_is_signed
     if not path:
         return False, "no_clearance_stamp"
@@ -36,10 +40,13 @@ def clearance_ok(path: str | Path | None) -> tuple[bool, str]:
     if not p.is_file():
         return False, "clearance_stamp_missing"
     text = p.read_text(encoding="utf-8")
-    if not re.search(r"\bH016\b", text):
-        return False, "clearance_stamp_not_for_H016"
+    ids = set(re.findall(r"\bH\d{3}[a-z]?\b", text))
+    if PREREG_ID not in ids:
+        return False, "clearance_stamp_not_for_H016b"
+    if ids != {PREREG_ID}:
+        return False, "clearance_stamp_names_other_hypotheses"
     for who in ("CASSANDRA", "DATA"):
-        if not re.search(rf"^\s*{who}:\s*CLEARED\b", text, re.M):
+        if not re.search(rf"^\s*{who}:\s*CLEARED(\s+{PREREG_ID})?\s*$", text, re.M):
             return False, f"clearance_missing_{who.lower()}"
     if not stamp_is_signed(text):
         return False, "clearance_stamp_unsigned"
@@ -54,7 +61,7 @@ def result_for(row: dict, outcome, clearance: tuple[bool, str]) -> dict:
         return {"status": "no_ticket", "R": None, "reason": row.get("reason")}
     if d > BURNED_END and not clearance[0]:
         return {"status": SEALED, "R": None, "seal_reason": clearance[1],
-                "note": "H016 forward window: no R until CASSANDRA and DATA clear H016 (human-signed stamp)"}
+                "note": "H016b forward window: no R until CASSANDRA and DATA clear H016b (human-signed stamp)"}
     if d < BURNED_START:
         return {"status": "outside_burned_window", "R": None}
     if not tradeable(row):

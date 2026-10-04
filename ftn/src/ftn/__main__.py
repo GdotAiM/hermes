@@ -58,15 +58,15 @@ def build_parser() -> argparse.ArgumentParser:
     tr = sub.add_parser("trace", help="Pipeline trace (ftn.trace.v1) for one day's Month 9 sessions (bar-derived; context only)")
     tr.add_argument("--date", required=True)
     add_bars(tr)
-    rs = sub.add_parser("results", help="Paper results journal: trace + outcome per session (H016 forward R sealed)")
+    rs = sub.add_parser("results", help="Paper results journal: trace + outcome per session (H016b forward R sealed)")
     rs.add_argument("--from", dest="date_from", required=True)
     rs.add_argument("--to", dest="date_to", required=True)
     rs.add_argument("--clearance", type=Path, default=None,
-                    help="human-signed H016 clearance stamp (CASSANDRA: CLEARED + DATA: CLEARED); without it, "
+                    help="human-signed H016b clearance stamp (CASSANDRA: CLEARED + DATA: CLEARED); without it, "
                          "sessions after 2026-09-25 stay sealed (no R computed)")
     rs.add_argument("--no-write", action="store_true")
     add_bars(rs)
-    gd = sub.add_parser("guard", help="F1: re-run the H016 base streams on the burned window and byte-compare to the registration CSVs")
+    gd = sub.add_parser("guard", help="F1: re-run the H016b registration-input streams on the burned window, byte-compare, check H016b eligibility (254/258)")
     gd.add_argument("--trace", action="store_true", help="also run with the pipeline trace attached")
     hy = sub.add_parser("hypotheses", help="Print the typed FTN hypothesis family (JSON)")
     lp = sub.add_parser("live-probe", help="Probe live DATA adapters (quotes only; orders refused)")
@@ -107,8 +107,10 @@ def main(argv: list[str] | None = None) -> int:
             out["base"] = inv.compare(inv.regenerate(Path(td) / "base", hists))
             if args.trace:
                 out["trace"] = inv.compare(inv.regenerate(Path(td) / "trace", hists, trace=True))
-        print(json.dumps(out, indent=2))
-        return 0 if all(v["identical"] for r in out.values() for v in r.values()) else 1
+        elig = inv.h016b_eligibility(hists)
+        print(json.dumps({**out, "h016b_eligibility": elig}, indent=2))
+        ok = all(v["identical"] for r in out.values() for v in r.values())
+        return 0 if ok and elig["matches_prereg"] and elig["n_eligible"] == 254 else 1
     if args.command == "hypotheses":
         from ftn.research.hypotheses import HYPOTHESES
         print(json.dumps([h.to_dict() for h in HYPOTHESES], indent=2))

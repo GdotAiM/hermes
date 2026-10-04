@@ -3,7 +3,7 @@
 The trace is assembled AFTER ``evaluate_candidates`` + the research-draft gate chain have run, from the frozen
 DayContext they used, and is never written back. It is not handoff.v1 (no handoff change, F6 is out of scope),
 it is not read by MINT, and it never changes a candidate, ticket, stop, gate or fingerprint
-(``tests/test_ticket_invariance.py`` re-runs the H016 registration streams with the trace on).
+(``tests/test_ticket_invariance.py`` re-runs the H016b registration-input streams with the trace on).
 
 Stages and roles (what each month actually does in code today):
   bias     IOF state/confidence (feeds REV eligibility: ``institutional_context_clear``) and the REV direction from

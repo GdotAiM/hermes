@@ -1,5 +1,5 @@
 """F2/F3/F4/F5/F7 wiring: `ftn run` through Month 9, pipeline trace, bar-derived context, W%R context,
-paper results journal with the H016 seal. Context never feeds REV (see also test_ticket_invariance.py)."""
+paper results journal with the H016b seal. Context never feeds REV (see also test_ticket_invariance.py)."""
 from __future__ import annotations
 
 import json
@@ -132,11 +132,16 @@ def test_blocked_and_no_ticket_rows_read_nothing():
 
 
 @pytest.mark.parametrize("text,ok,why", [
-    ("H016\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: ntloso ngubeni\n", True, "cleared"),
-    ("H016\nCASSANDRA: CLEARED\nSignature: x y\n", False, "clearance_missing_data"),
-    ("H016\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: ____\n", False, "clearance_stamp_unsigned"),
-    ("STATUS: UNSIGNED\nH016\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: a\n", False, "clearance_stamp_unsigned"),
-    ("H015b\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: a\n", False, "clearance_stamp_not_for_H016"),
+    ("H016b\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: ntloso ngubeni\n", True, "cleared"),
+    ("H016b\nCASSANDRA: CLEARED H016b\nDATA: CLEARED H016b\nSignature: ntloso ngubeni\n", True, "cleared"),
+    ("H016b\nCASSANDRA: CLEARED\nSignature: x y\n", False, "clearance_missing_data"),
+    ("H016b\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: ____\n", False, "clearance_stamp_unsigned"),
+    ("STATUS: UNSIGNED\nH016b\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: a\n", False, "clearance_stamp_unsigned"),
+    ("H016\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: a\n", False, "clearance_stamp_not_for_H016b"),
+    ("H015b\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: a\n", False, "clearance_stamp_not_for_H016b"),
+    ("H016 and H016b\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: a\n", False, "clearance_stamp_names_other_hypotheses"),
+    ("H016b\nCASSANDRA: CLEARED H016\nDATA: CLEARED\nSignature: a\n", False, "clearance_stamp_names_other_hypotheses"),
+    ("H016b\nCASSANDRA: CLEARED pending\nDATA: CLEARED\nSignature: a\n", False, "clearance_missing_cassandra"),
 ])
 def test_clearance_stamp(tmp_path, text, ok, why):
     p = tmp_path / "c.md"
@@ -147,7 +152,7 @@ def test_clearance_stamp(tmp_path, text, ok, why):
 
 def test_cleared_forward_session_reads_outcome(tmp_path):
     p = tmp_path / "c.md"
-    p.write_text("H016\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: ntloso ngubeni\n")
+    p.write_text("H016b\nCASSANDRA: CLEARED\nDATA: CLEARED\nSignature: ntloso ngubeni\n")
     rec = jr.journal_rows([_row("2026-10-05")], lambda r: {"R": 2.0}, p, write=False)[0]
     assert rec["result"]["status"] == "forward_cleared"
 

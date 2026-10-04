@@ -1,6 +1,6 @@
 """Attach ``ftn.trace.v1`` to bar-derived Month 9 session rows WITHOUT touching the kernel or its log.
 
-``research/kernel_log.session_ticket_log`` (H016-pinned, unchanged) produces the session rows. For every ticket
+``research/kernel_log.session_ticket_log`` (H016/H016b-pinned, unchanged) produces the session rows. For every ticket
 row this module re-evaluates the SAME causal kernel step at the row's entry time (``build_raw`` →
 ``kernel_step``, bars up to the entry close only), attaches the same session ticket, and checks that the
 MarketState fingerprint equals the row's fingerprint, i.e. the trace describes exactly the state the kernel
