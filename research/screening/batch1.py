@@ -65,7 +65,9 @@ def run_s3(workers=5):
             if i % 20 == 0:
                 print(f"s3 {i}/{len(jobs)}", flush=True)
     OUT.mkdir(exist_ok=True)
-    (OUT / "s3_nulls.json").write_text(json.dumps(res))
+    import gzip
+    with gzip.open(OUT / "s3_nulls.json.gz", "wt") as fh:
+        json.dump(res, fh)
 
 
 # ---------------------------------------------------------------- S1 new instruments
@@ -135,7 +137,9 @@ def report():
         t["R_era2"] = t["R"] - (ERA_SENS - 1) * fr / t["risk_pts"]
     s1 = json.loads((OUT / "s1_trades.json").read_text()) if (OUT / "s1_trades.json").is_file() else {"coverage": {}, "trades": {}}
     s1_ok = {s for s, c in s1["coverage"].items() if c.get("status") == "ok"}
-    nulls = json.loads((OUT / "s3_nulls.json").read_text())
+    import gzip
+    with gzip.open(OUT / "s3_nulls.json.gz", "rt") as fh:
+        nulls = json.load(fh)
     dlrep = {}
     try:
         dlrep = json.loads(Path("/workspace/screening-data/build_report.json").read_text())
@@ -264,6 +268,16 @@ def write_md(meta, res):
                  f"{f(s1['mean'])} [{f(s1['lo'])}, {f(s1['hi'])}] | {v['S1']} | {v['S2']} | {v['S3']} | {v['power']:.3f} | {v['power_ceiling']:.3f} | {'yes' if v['QUALIFIES'] else 'no'} |")
     L += ["", "Holm per stage across the 3 candidates of this batch at α_screen = 0.10 (S1 and S3). S2 is rule-based.",
           "Power ceiling = the gate power when S1 is at least as good as the burned era-cost mean. This is the most S1 could give; it is a derived bound, not a protocol change.", ""]
+    L += ["## Reading (screening caveats)", "",
+          "- No candidate qualifies. Each one fails S1 and S2, and the gate power is 0.025 because μ_plan ≤ 0. Even if S1 had matched the burned "
+          "era-cost mean, the power ceiling stays below 0.8 for all three (C2 comes closest, and only because of its selection-inflated burned mean on 53 trades).",
+          "- S1: REV loses on all three new instruments. Pooled C1 is −0.130R, and the GER40 CI excludes 0. The costs come from the declared scaling rules "
+          "(p90 killzone spread, slippage floors). A gross-of-cost sensitivity was not pre-registered and is not reported. GER40's NY AM killzone "
+          "is the Frankfurt afternoon, and the attached US macro calendar does not matter there (REV does not read it).",
+          "- S3: the burned REV mean beats both null types (shuffled days, matched random walk). The nulls are negative on average (costs), "
+          "so the rule does not profit on pure noise, but S3 was run on the same burned window the rule was fixed on.",
+          "- C2 (Wednesday) was picked as the best of 18 burned splits. Its S1 mean is −0.027R (2 of 3 instruments negative), which is consistent with a selection artefact.",
+          "- Era costs (×1.5) and the US500 holdout start date (2019-01-02) are planning assumptions, because the holdout is sealed.", ""]
     (OUT / "REPORT.md").write_text("\n".join(L) + "\n")
 
 
