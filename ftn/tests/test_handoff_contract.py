@@ -129,3 +129,19 @@ def test_jsonschema_agrees_on_samples():
     bad["BUY"] = True
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(bad, schema)
+
+
+@pytest.mark.parametrize(
+    "fixture,sample",
+    [
+        ("m9_reconstruction_eurusd.json", "handoff_v1_m9_reconstruction_eurusd_2017-05-30_london.json"),
+        ("pam1_evidence_eurusd.json", "handoff_v1_pam1_evidence_eurusd_2018-01-10.json"),
+    ],
+)
+def test_committed_samples_match_regeneration(fixture, sample):
+    """Samples are real FTN output, not hand-edited: regenerating gives the same
+    payload (fingerprint excluded — it is a salted hash(), see samples/README.md)."""
+    fresh = json.loads(json.dumps(_built(ROOT / "fixtures" / fixture), default=str))
+    committed = json.loads((ROOT / "dispatch" / "samples" / sample).read_text())
+    fresh.pop("fingerprint"); committed.pop("fingerprint")
+    assert fresh == committed
