@@ -1,3 +1,5 @@
+> **UNDER RE-CHECK 2026-10-04 — label convention → re-checked; superseded by H004b_RERUN_LABELFIX_2026-10-04.md** · Decision unchanged: FAILS. Summary: LABELFIX_RERUN_SUMMARY_2026-10-04.md
+
 # H004b EXPLORATORY RESULTS — 2026-09-13
 
 **Stream label (mandatory):** `CONTINUOUS-KAGGLE-NQ1M` · **roll undocumented** · **Excel truncation FLAG** · **not MNQ Mar 2026** · **not stream C** · **not Silver Bullet proof**

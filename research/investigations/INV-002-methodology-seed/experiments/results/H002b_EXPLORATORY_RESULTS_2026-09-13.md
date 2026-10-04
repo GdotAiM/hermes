@@ -1,3 +1,5 @@
+> **UNDER RE-CHECK 2026-10-04 — label convention → re-checked; superseded by H002b_RERUN_LABELFIX_2026-10-04.md** · Board decision unchanged: FAILS (soft empirical prior). Summary: LABELFIX_RERUN_SUMMARY_2026-10-04.md
+
 # H002b EXPLORATORY RESULTS — 2026-09-13
 
 **Stream label (mandatory):** `CONTINUOUS-KAGGLE-NQ1M` · **roll undocumented** · **Excel truncation FLAG** · **not stream C** · **not MNQ Mar 2026** · no 2026 lecture-day identity

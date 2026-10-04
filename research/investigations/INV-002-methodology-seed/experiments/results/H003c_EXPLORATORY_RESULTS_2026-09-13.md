@@ -1,3 +1,5 @@
+> **SUSPENDED 2026-10-04 — Kaggle labels are bar-close; superseded by H003c_RERUN_LABELFIX_2026-10-04.md** · Re-run filed: decision CHANGED FAILS → INCONCLUSIVE (OOS N_treat 52 < 80). Summary: LABELFIX_RERUN_SUMMARY_2026-10-04.md
+
 # H003c EXPLORATORY RESULTS — 2026-09-13
 
 **Stream label (mandatory):** `CONTINUOUS-KAGGLE-NQ1M` · **roll undocumented** · **not MNQ Mar 2026** · **no 2026 lecture-day identity/calibration**

@@ -26,3 +26,7 @@ Push closed Wave 1 ledger; then human priority: stream C for INV-001 vs optional
 
 ## Success metric
 Validated discoveries including clean **FAILS** > agent volume.
+
+---
+## ADDENDUM 2026-10-04 (ORION): label fix
+The Kaggle NQ 1m labels are bar-close (DATA, 2026-10-04), and Wave 1 has been re-run in bar-open time with frozen protocols. **H003c moves FAILS → INCONCLUSIVE (power only: OOS N_treat 52 < 80; Δ −0.269, more adverse; no rescue on this tape).** H001b, H002b, H004b and H009b keep their verdicts with updated numbers; H001b is now ≈59% OOS (0.588), not ≈56%. Headline unchanged: no validated edge. The text above is kept as filed. See `2026-10-04_LABELFIX_BOARD_UPDATE.md`.

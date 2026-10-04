@@ -1,3 +1,5 @@
+> **UNDER RE-CHECK 2026-10-04 — label convention → re-checked; superseded by H009b_RERUN_LABELFIX_2026-10-04.md** · Decision unchanged: INCONCLUSIVE (N_OOS 38 < 80). Summary: ../../results/LABELFIX_RERUN_SUMMARY_2026-10-04.md
+
 # H009b Powered Re-run — Kaggle daily aggregate
 **Run date:** 2026-09-13  
 **Authorization:** ORION RUN AUTHORIZATION — H009b powered re-run on Kaggle daily aggregate  
