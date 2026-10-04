@@ -128,15 +128,36 @@ def test_context_layers_do_not_change_gate_result(fresh, tmp_path):
 # ---------------------------------------------------------- gate 2 direction
 
 def test_direction_gate(fresh):
+    """REV direction comes from the raid (D18 fix), BB/PIP20 from the daytrade IOF."""
     h = _handoff()
     cfg = _pilot_cfg(fresh)
-    unclear = copy.deepcopy(h)
-    unclear["market_state"]["institutional"]["state"] = "unclear"
-    d = draft_from_handoff(unclear, cfg, FLAT)
-    assert d["direction_hypothesis"] == "unclear" and d["blocked_by"] == "direction:undetermined"
     bear = copy.deepcopy(h)
-    bear["market_state"]["institutional"]["state"] = "bearish"
-    assert draft_from_handoff(bear, cfg, FLAT)["direction_hypothesis"] == "bearish"
+    bear["market_state"]["institutional"]["state"] = "bearish"  # IOF no longer sets REV direction
+    d = draft_from_handoff(bear, cfg, FLAT)
+    assert d["direction_hypothesis"] == "bullish" and d["direction_source"] == "raid"
+    assert d["gates_before_contract_pass"] is True
+    both = copy.deepcopy(h)
+    both["execution_context"]["raid"]["also"] = ["pdh"]
+    d = draft_from_handoff(both, cfg, FLAT)
+    assert d["direction_hypothesis"] == "unclear" and d["blocked_by"] == "direction:undetermined"
+    none = copy.deepcopy(h)
+    none["execution_context"]["raid"] = {"level": None, "price": None, "taken": False, "also": None}
+    assert draft_from_handoff(none, cfg, FLAT)["blocked_by"] == "direction:undetermined"
+    bb = copy.deepcopy(h)
+    bb["candidates"] = [{**x, "state": "selected" if x["module"] == "BB" else "ineligible"} for x in bb["candidates"]]
+    bb["session_ticket"] = {**bb["session_ticket"], "module": "BB"}
+    bb["market_state"]["institutional"]["state"] = "unclear"
+    d = draft_from_handoff(bb, cfg, FLAT)
+    assert d["direction_hypothesis"] == "unclear" and d["blocked_by"] == "direction:undetermined"
+
+
+def test_plain_handoff_has_no_gate_evidence(fresh):
+    """Without the in-memory execution context, REV direction is undetermined; the draft
+    keeps main's I0 meaning (IOF label, context only) and says so."""
+    st, cands, _, ftn = brief_from_fixture(REV_FX)
+    d = draft_from_handoff(build_handoff(st, cands, ftn), _pilot_cfg(fresh), FLAT)
+    assert d["blocked_by"] == "direction:undetermined"
+    assert d["direction_source"] == "iof_label_only_no_execution_context"
 
 
 def _conso_handoff(h, edge, box=(1.1211, 1.1142)):

@@ -25,6 +25,7 @@ from ftn.os.mint_draft import _side, draft_from_handoff, gate_input
 from ftn.research.daycontext import History, build_raw
 
 KILLZONES = {"london": (time(2, 0), time(5, 0)), "ny_am": (time(7, 0), time(10, 0))}
+REV_UNDETERMINED = "rev_direction_undetermined_raid_both_or_neither"
 FLAT_BOOK = {"daily_loss_pct": 0.0, "drawdown_pct": 0.0, "source": "scorer_flat_book"}
 
 
@@ -54,6 +55,8 @@ def session_ticket_log(hist: History, cfg: dict, days: list[date] | None = None)
                         row["reason"] = "insufficient_history_or_bars"
                         break
                     ctx, state, cands, sel = kernel_step(raw, cfg, tmp)
+                    if any(c.module == "REV" and c.reason == REV_UNDETERMINED for c in cands):
+                        row["rev_direction_undetermined_seen"] = True
                     if sel is not None:
                         tk = SessionTicket(id=f"{d}-{hist.s.symbol}-{sname}-{sel.module}",
                                            kind="paper_entry", module=sel.module, session=sname)

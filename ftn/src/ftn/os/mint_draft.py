@@ -56,7 +56,7 @@ def execution_context(state) -> dict:
     sym = c.symbol or ""
     return {
         "last": c.last,
-        "raid": {k: (ev.get("raid") or {}).get(k) for k in ("level", "price", "taken")},
+        "raid": {k: (ev.get("raid") or {}).get(k) for k in ("level", "price", "taken", "also")},
         "box": {k: (ev.get("box") or {}).get(k) for k in ("high", "low")} if ev.get("box") else None,
         "conso_raided_edge": raided_edge(ev.get("box"), ev.get("raid")),
         "stop_reference": ev.get("stop_reference"),
@@ -82,7 +82,13 @@ def _side(module: str, handoff: dict) -> tuple[str | None, str]:
         edge = (handoff.get("execution_context") or {}).get("conso_raided_edge")
         side = {"low": "buy", "high": "sell"}.get(edge or "")
         return side, f"conso_raided_edge={edge}"
-    if module in {"REV", "BB", "PIP20"}:
+    if module == "REV":
+        # REV direction comes from the raid, not the IOF (REPORT D18 fix)
+        from ftn.models.rev import rev_direction
+        raid = (handoff.get("execution_context") or {}).get("raid") or {}
+        d = rev_direction(raid)
+        return {"bullish": "buy", "bearish": "sell"}.get(d or ""), f"raid={raid.get('level')}"
+    if module in {"BB", "PIP20"}:
         side = "buy" if iof == "bullish" else "sell" if iof == "bearish" else None
         return side, f"daytrade_iof={iof}"
     return None, "not_an_entry_model"
@@ -198,7 +204,12 @@ def direction_gate(module: str, orient: str | None, basis: str, handoff: dict) -
     if orient is None:
         return _gate("direction", False, "undetermined", basis=basis)
     if module == "REV":
-        level = ((handoff.get("execution_context") or {}).get("raid") or {}).get("level")
+        raid = (handoff.get("execution_context") or {}).get("raid") or {}
+        level = raid.get("level")
+        also = set(raid.get("also") or [])
+        if (level in LOW_RAIDS and also & HIGH_RAIDS) or (level in HIGH_RAIDS and also & LOW_RAIDS):
+            return _gate("direction", False, "rev_raid_both_sides", basis=basis,
+                         direction_proposed=_LABEL[orient])
         want = "buy" if level in LOW_RAIDS else "sell" if level in HIGH_RAIDS else None
         if want is None:
             return _gate("direction", False, "rev_raid_level_unknown", basis=basis,
@@ -241,6 +252,12 @@ def draft_from_handoff(handoff: dict, cfg: dict | None = None, book: dict | None
     risk = gates[2]
     ms = handoff.get("market_state") or {}
     iof = (ms.get("institutional") or {}).get("state") or "unclear"
+    has_ctx = "execution_context" in handoff
+    if module in ENTRY_MODULES and has_ctx:
+        hyp, src = _LABEL.get(orient or "", "unclear"), basis.split("=")[0]
+    else:
+        # plain handoff.v1 (no gate evidence): main's I0 meaning — the IOF label, context only
+        hyp, src = iof, "iof_label_only_no_execution_context"
     return {
         "kind": DRAFT_KIND,
         "mode": "paper",
@@ -255,7 +272,8 @@ def draft_from_handoff(handoff: dict, cfg: dict | None = None, book: dict | None
         "symbol": handoff.get("symbol"),
         "date": handoff.get("date"),
         "session": handoff.get("session"),
-        "direction_hypothesis": _LABEL.get(orient or "", "unclear") if module in ENTRY_MODULES else iof,
+        "direction_hypothesis": hyp,
+        "direction_source": src,
         "iof_state": iof,
         "module": module,
         "entry_reference": risk.get("entry_reference"),

@@ -39,6 +39,9 @@ def build_parser() -> argparse.ArgumentParser:
     sc.add_argument("--research-dir", type=Path, default=None, help="default: <monorepo>/research")
     sc.add_argument("--no-write", action="store_true")
     sc.add_argument("--no-interp", action="store_true", help="skip the interpretation-trigger variant")
+    sc.add_argument("--tag", default="", help="suffix for output files (e.g. _rev_raid_side)")
+    sc.add_argument("--before", default=None, help="previous FTN_M9_SCORE_*.json for a before/after table")
+    sc.add_argument("--with-legacy", action="store_true", help="also run the pre-D18 kernel-side-as-is streams")
     hy = sub.add_parser("hypotheses", help="Print the typed FTN hypothesis family (JSON)")
     lp = sub.add_parser("live-probe", help="Probe live DATA adapters (quotes only; orders refused)")
     lp.add_argument("--symbol", default="EURUSD")
@@ -70,9 +73,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "score":
         from ftn.research.score import score
         res = score(asof=args.asof, bars_us100=args.bars_us100, bars_us500=args.bars_us500,
-                    research_dir=args.research_dir, write=not args.no_write, with_interp=not args.no_interp)
+                    research_dir=args.research_dir, write=not args.no_write, with_interp=not args.no_interp,
+                    tag=args.tag, before=args.before, with_legacy=args.with_legacy)
         print(json.dumps({k: {"tickets": v["tickets"], "modules": v["modules"], "summary": v["summary"],
-                              "foil_pct": v["foil_pct"]} for k, v in res.items()}, indent=2, default=str))
+                              "foil_pct": v["foil_pct"]} for k, v in res.items() if not k.startswith("_")}, indent=2, default=str))
         return 0
     if args.command == "brief":
         from ftn.os.contracts import FixtureError

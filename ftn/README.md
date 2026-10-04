@@ -51,7 +51,8 @@ FTN ticket; since ftn-fixes its kind is `ftn_setup_ticket`/`no_trade` — never 
 `entry_candidate` — and `actionable_for_mint` is always `false`) and the legacy research draft from `src/ftn/os/mint_draft.py`. That draft is
 no longer written by default; with `FTN_WRITE_MINT_DRAFT=1`, `ftn brief` writes
 `dispatch/drafts/ftn_draft_*.json` (outside `dispatch/out/`). It carries
-`direction_hypothesis` (the IOF label: bullish/bearish/unclear), never a buy/sell `side`
+`direction_hypothesis` (bullish/bearish/unclear; `direction_source` says where it came from: the raid for REV,
+the daytrade IOF for BB/PIP20, the raided box edge for CONSO), never a buy/sell `side`
 (I0 bans BUY/SELL), and `actionable_for_mint: false`. MINT's reader rejects both; only
 handoff.v1 crosses part boundaries.
 
@@ -96,7 +97,8 @@ rm -f dispatch/out/*.json && pytest                                     # clean 
 
 1. `kernel_ticket` — the kernel selected an entry model (REV/CONSO/BB/PIP20) and persisted its session ticket.
 2. `direction` — `direction_hypothesis` (bullish/bearish) from evidence, never defaulted
-   (REV/BB/PIP20: daytrade IOF; CONSO: raided box edge).
+   (REV: from the raid — low raided → bullish, high raided → bearish, both/neither → no ticket;
+   BB/PIP20: daytrade IOF; CONSO: raided box edge). For REV the D18 direction-vs-raid check stays as a safety net.
 3. `risk` — `config.yaml` caps: 0.5% per trade, 2% daily loss, 5% drawdown, valid protective stop.
 4. `allowlist` — the model is on `config.yaml mint_allowlist` (see `docs/MINT_ALLOWLIST.md`); stamps must be signed.
 5. `mode` — paper only. Live stays dual-locked and refused; no broker routing.

@@ -241,8 +241,14 @@ def test_score_writes_exploratory_reports(synth, tmp_path, monkeypatch):
     monkeypatch.setattr(stats, "N_BOOT", 200)
     monkeypatch.setattr(sc, "trading_days", lambda s: trading_days(s, min_rth_bars=100))
     res = sc.score(asof="2026-01-01", bars_us100=str(synth[0]), bars_us500=str(synth[1]),
-                   research_dir=tmp_path, with_interp=True)
+                   research_dir=tmp_path, with_interp=True, with_legacy=True)
     assert {"US100_base", "US100_base_legacy_side", "US500_base", "US100_interp"} <= set(res)
+    before = tmp_path / "evidence/quant/FTN_M9_SCORE_2026-01-01.json"
+    res2 = sc.score(asof="2026-01-01", bars_us100=str(synth[0]), bars_us500=str(synth[1]),
+                    research_dir=tmp_path, with_interp=False, tag="_after", before=before)
+    assert "US100_base_legacy_side" not in res2 and res2["_before"]["US100_base"]["tickets"] == res["US100_base"]["tickets"]
+    md2 = (tmp_path / "summaries/2026-01-01_FTN_M9_EXPLORATORY_SCORE_AFTER.md").read_text()
+    assert "BEFORE vs AFTER" in md2 and "cannot confirm" in md2 and "EXPLORATORY" in md2
     md = (tmp_path / "summaries/2026-01-01_FTN_M9_EXPLORATORY_SCORE.md").read_text()
     assert "EXPLORATORY" in md and "CASSANDRA" in md and "DATA" in md and "SURVIVES language" in md
     pre = json.loads((tmp_path / "protocols/preregs/FTN_HYPOTHESES_EXPLORATORY_2026-01-01.json").read_text())
@@ -251,3 +257,66 @@ def test_score_writes_exploratory_reports(synth, tmp_path, monkeypatch):
     assert (tmp_path / "evidence/quant/FTN_M9_TICKETS_US100_base_2026-01-01.csv").is_file()
     for r in res["US100_base"]["hypotheses"]:
         assert r["status"] == "evaluated" or r["status"].startswith("not_evaluable")
+
+
+# --- REV direction from the raid (user decision on D18, 2026-10-04) ---------------------
+
+from ftn.models.rev import evaluate_rev, raided_sides, rev_direction  # noqa: E402
+
+
+@pytest.mark.parametrize("raid,want", [
+    ({"taken": True, "level": "pdl"}, "bullish"),
+    ({"taken": True, "level": "week_so_far_low", "also": ["pdl"]}, "bullish"),
+    ({"taken": True, "level": "pdh"}, "bearish"),
+    ({"taken": True, "level": "ith", "also": ["week_so_far_high"]}, "bearish"),
+    ({"taken": True, "level": "pdh", "also": ["pdl"]}, None),          # both raided
+    ({"taken": True, "level": "pdl", "also": ["week_so_far_high"]}, None),
+    ({"taken": False, "level": "pdl"}, None),                          # neither raided
+    ({"taken": True, "level": None}, None),
+    ({}, None),
+    (None, None),
+])
+def test_rev_direction_from_raid(raid, want):
+    assert rev_direction(raid) == want
+
+
+def test_raided_sides():
+    assert raided_sides({"taken": True, "level": "pdh", "also": ["pdl", "itl"]}) == {"high", "low"}
+    assert raided_sides({"taken": False, "level": "pdh"}) == set()
+
+
+def _rev_state(fx, **raid):
+    import dataclasses
+    st = freeze_market_state(build_context(fx))
+    ev = dict(st.context.evidence or {})
+    ev["raid"] = {**(ev.get("raid") or {}), **raid}
+    return freeze_market_state(dataclasses.replace(st.context, evidence=ev))
+
+
+def test_rev_both_sides_raided_never_selects():
+    fx = FIX / "m9_raw_eurusd.json"
+    assert evaluate_rev(_rev_state(fx))["candidate"].state == "selected"
+    r = evaluate_rev(_rev_state(fx, also=["pdh"]))
+    assert r["candidate"].state == "ineligible"
+    assert r["candidate"].reason == "rev_direction_undetermined_raid_both_or_neither"
+    assert r["execution"]["direction"] is None and r["execution"]["confirmed"] is False
+
+
+@pytest.mark.parametrize("name", ["m9_raw_eurusd.json", "m9_reconstruction_eurusd.json", "m9_rev_inside_box.json",
+                                  "m9_calendar_watchlist.json", "m9_calendar_idle.json"])
+def test_rev_fixtures_still_select_with_raid_direction(name, monkeypatch):
+    from ftn.os.briefing import brief_from_fixture
+    from ftn.os.mint_draft import gate_input
+    st, cands, _, ftn = brief_from_fixture(FIX / name)
+    assert [c.module for c in cands if c.state == "selected"] == ["REV"]
+    d = draft_from_handoff(gate_input(st, build_handoff(st, cands, ftn)))
+    assert d["direction_source"] == "raid" and d["direction_hypothesis"] in {"bullish", "bearish"}
+    assert d["blocked_by"] == "allowlist:not_on_mint_allowlist"  # D18 safety net passes
+
+
+def test_d18_safety_net_still_blocks_incoherent_direction():
+    from ftn.os.mint_draft import direction_gate
+    g = direction_gate("REV", "sell", "raid=pdl", _ho("pdl"))
+    assert g["pass"] is False and g["reason"] == "rev_direction_conflicts_with_raid"
+    g = direction_gate("REV", "buy", "raid=pdl", {"execution_context": {"raid": {"level": "pdl", "taken": True, "also": ["pdh"]}}})
+    assert g["pass"] is False and g["reason"] == "rev_raid_both_sides"
