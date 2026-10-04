@@ -14,3 +14,9 @@ Run from the repo root with `PYTHONPATH=ftn/src:.` and numpy available:
     python3 -m research.screening.dl download 64 && python3 -m research.screening.dl build
     python -m research.screening.batch1 s3 && python -m research.screening.batch1 s1 && python -m research.screening.batch1 report
     python -m pytest research/screening/tests
+
+## Batch 2 (Model U v1, MMXM v1–v5)
+- Protocol addendum: `PROTOCOL_BATCH2.md` (committed `0a3b052` before any run).
+- Frozen code is vendored and sha-pinned in `batch2/vendor` and `batch2/configs`; `batch2/adapters.py` runs it.
+- Run: `PYTHONPATH=ftn/src:. python -m research.screening.run_batch2 {burned|s1|s3|report}`.
+- Results are in `batch2/REPORT.md` and `batch2/results.json`. Nothing qualifies.

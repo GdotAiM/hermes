@@ -116,3 +116,14 @@ def test_constants_match_protocol():
 def test_power_formula():
     assert batch1.power(-0.1, 1.4, 1.3, 1000) == 0.025
     assert batch1.power(0.1, 1.4, 1.0, batch1.n_for_power(0.1, 1.4, 1.0)) == pytest.approx(0.8, abs=0.01)
+
+
+def test_batch2_pins_and_params():
+    from research.screening.batch2 import adapters as A
+    from research.screening import run_batch2 as B
+    assert A.verify_pins() == {}
+    p = B.params("D6", "US100"); assert (p["tick"], p["min_swing"], p["root"], p["cost_rt"]) == (0.25, 3.0, "NQ", 2.55)
+    p = B.params("D6", "US500", "frozen"); assert p["cost_rt"] == 0.5 and p["min_swing"] == 1.0
+    p = B.params("D1", "US100", "frozen"); assert p["cost_per_side"] == 0.8
+    g = B.params("D1", "XAUUSD"); assert abs(g["tick"] - 0.04241) < 1e-5 and abs(g["cost_rt"] - 1.402) < 1e-9
+    assert set(B.HOLDOUT["D1"]) == {"US100"} and len(B.NAMES) == 6
