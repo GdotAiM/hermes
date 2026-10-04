@@ -140,3 +140,10 @@ desk-reference/          # old standalone desk (superseded, reference only)
 ## License
 
 MIT
+
+## Research bridge (exploratory)
+
+`python3 -m ftn hypotheses` prints the typed month-layer hypotheses. `python3 -m ftn score`
+runs the Month 9 kernel over 1m bars and writes EXPLORATORY reports into `../research/`
+(pending CASSANDRA + DATA). See `docs/RESEARCH_BRIDGE.md`. MINT reads the gate-chain status
+read-only through `trading/src/mint/dispatch/ftn_gate.py`.

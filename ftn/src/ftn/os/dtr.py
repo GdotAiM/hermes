@@ -62,6 +62,9 @@ def build_context(path: str | Path):
         ev["mss"] = bool(ms.get("mss") or ms.get("displacement"))
         ev["displacement"] = ms.get("displacement")
         ev["mss_meta"] = {k: ms[k] for k in ("source", "raid_bar_index", "swing") if k in ms}
+        if ms.get("raid_bar_index") is not None:
+            # closes after the raid bar (used only by the CONSO interpretation trigger)
+            ev["post_raid_closes"] = [float(b["c"]) for b in bars[int(ms["raid_bar_index"]) + 1:]]
     wr_raw = dict(raw)
     # sentiment WR uses tape into the raid, not the displacement after
     idx = (ev.get("mss_meta") or {}).get("raid_bar_index")

@@ -233,6 +233,8 @@ def main(argv: list[str] | None = None) -> int:
         help="Research spine root (default: $HERMES_RESEARCH_PATH, $HERMES_X_PATH, or ../research in the monorepo)",
     )
     ap.add_argument("--out", type=Path, default=None, help="Output dir (default: dispatch/out)")
+    ap.add_argument("--ftn-drafts", type=Path, default=None,
+                    help="FTN drafts dir for the log-only research-draft gate chain (default ../ftn/dispatch/drafts)")
     ap.add_argument("--apply-filters", action="store_true", help="Write demote snippets under fixtures/generated_filters")
     args = ap.parse_args(argv)
     hx = resolve_research_root(args.hermes_x)
@@ -268,6 +270,8 @@ def main(argv: list[str] | None = None) -> int:
         "tickets": [asdict(t) for t in uniq],
         "note": "No orders placed. entry_candidate still needs allowlist+RISK+human.",
     }
+    from mint.dispatch.ftn_gate import read_ftn_gate  # read-only, log-only; never a ticket
+    payload["ftn_gate_chain"] = read_ftn_gate(args.ftn_drafts)
     path = out / f"dispatch_{stamp}.json"
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     latest = out / "latest.json"

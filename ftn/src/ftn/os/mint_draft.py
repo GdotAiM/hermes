@@ -88,6 +88,10 @@ def _side(module: str, handoff: dict) -> tuple[str | None, str]:
     return None, "not_an_entry_model"
 
 
+LOW_RAIDS = {"pdl", "week_so_far_low", "itl"}
+HIGH_RAIDS = {"pdh", "week_so_far_high", "ith"}
+
+
 def _stop(module: str, side: str | None, handoff: dict) -> tuple[float | None, str]:
     ctx = handoff.get("execution_context") or {}
     if ctx.get("stop_reference") is not None:
@@ -185,8 +189,23 @@ def mode_gate(cfg: dict) -> dict:
 
 
 def direction_gate(module: str, orient: str | None, basis: str, handoff: dict) -> dict:
+    """Direction must be determined AND, for REV, oppose the raided extreme (REPORT D18).
+
+    REV is "Trading Market Reversals": a sell-side (low) raid reverses up (bullish) and a
+    buy-side (high) raid reverses down (bearish). ``detect_mss`` already looks for the MSS
+    in that reversal direction, so a direction that agrees with the raid is incoherent.
+    """
     if orient is None:
         return _gate("direction", False, "undetermined", basis=basis)
+    if module == "REV":
+        level = ((handoff.get("execution_context") or {}).get("raid") or {}).get("level")
+        want = "buy" if level in LOW_RAIDS else "sell" if level in HIGH_RAIDS else None
+        if want is None:
+            return _gate("direction", False, "rev_raid_level_unknown", basis=basis,
+                         direction_proposed=_LABEL[orient])
+        if want != orient:
+            return _gate("direction", False, "rev_direction_conflicts_with_raid", basis=basis,
+                         direction_proposed=_LABEL[orient], raid_level=level, reversal_direction=_LABEL[want])
     return _gate("direction", True, "determined", basis=basis)
 
 

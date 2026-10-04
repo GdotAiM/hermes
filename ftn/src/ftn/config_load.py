@@ -196,6 +196,7 @@ SCHEMA: dict[str, Any] = {
     "measurement_families": ("list", str),
     "confluence": {"require_pd_overlap": bool, "overlap_tolerance_pips": ("num", 0, None)},
     "model13_bridge_enabled": bool,
+    "interpretation_triggers": {"conso": bool, "bb": bool, "pip20": bool},
     "mint_allowlist": ("list", ("allow_entry",)),
     "journal": {"template": str},
     "banned": ("list", str),
@@ -320,6 +321,8 @@ def load_config(path: str | Path | None = None) -> dict[str, Any]:
         if key in rc:
             cfg[key] = rc[key]
     cfg["mint_allowlist"] = list(doc.get("mint_allowlist") or [])
+    trig = doc.get("interpretation_triggers") or {}
+    cfg["interpretation_triggers"] = {k: bool(trig.get(k, False)) for k in ("conso", "bb", "pip20")}
     cfg["equity_usd"] = float((doc.get("equity") or {}).get("starting_usd", 100000))
     if "min_atr_pips" in vol:
         cfg["min_atr_pips"] = float(vol["min_atr_pips"])
