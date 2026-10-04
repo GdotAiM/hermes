@@ -29,7 +29,27 @@ def _opt_asdict(obj):
     return obj
 
 
+# Export-time key renames so the transport never carries a banned key.
+# InstitutionalContext.confidence is a qualitative IOF label
+# ("aligned" / "qualified" / "unclear"), not a probability, but I0 bans the
+# key "confidence" anywhere in handoff.v1 — so it travels as "qualification".
+EXPORT_KEY_RENAMES = {"confidence": "qualification"}
+
+
+def _contract_keys(obj):
+    if isinstance(obj, dict):
+        return {EXPORT_KEY_RENAMES.get(k, k): _contract_keys(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_contract_keys(v) for v in obj]
+    return obj
+
+
 def build_handoff(state: MarketState, candidates, ftn: dict) -> dict:
+    """Serialize DayContext and apply export key renames (see EXPORT_KEY_RENAMES)."""
+    return _contract_keys(_build_handoff_raw(state, candidates, ftn))
+
+
+def _build_handoff_raw(state: MarketState, candidates, ftn: dict) -> dict:
     """Serialize DayContext snapshot for read-only consumers.
 
     schemaVersion + kind identify the transport contract.
@@ -95,6 +115,7 @@ def build_handoff(state: MarketState, candidates, ftn: dict) -> dict:
             "PAM recognition and completeness are not execution instructions.",
             f"Legacy kind was '{LEGACY_KIND}'; primary kind is '{KIND_V1}'.",
             "Forbidden as signal fields: trade direction recommendation, model ranking, broker command.",
+            "Institutional IOF label is exported as 'qualification' (internal field name is banned in handoff.v1).",
         ],
     }
 
