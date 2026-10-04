@@ -1,0 +1,41 @@
+{
+  "generated": "2026-10-04 (SAST) on branch forward/h013-h014-scripts; registration time = landing on origin/main (first-parent commit time)",
+  "H013": {
+    "deployed_root": "/workspace/ict-blueprint/forward-test",
+    "repo_copy": "research/forward_harness/H013",
+    "gate_files_sha256": {
+      "h013_harness.py": "ab1e9eb15b3b91c682a3e0197308ab85879140fe4c4a1b3ab8a502fe630bd13c",
+      "tv_final.py": "070a0ec50bd9f1fdde645dd96f8f34fe9186c49bbeeec18ff4c973d00cb51c83",
+      "backfill_tv.py": "8acde80f3fbf1cf2725fb1244f09cf9d4f8bfc328b5253fb9705f3394acfecc9",
+      "h013_live_watch.py": "435982c1e3beccb327909b4bbfa9074ee8e7e2e07b6020caeff7e67b7be4a5a9",
+      "tv_feed.py": "2773d47246f7f31329ab271c3d740265b990ca2f3cd1cd57b0150f4b4f7c8336"
+    },
+    "informational_sha256": {
+      "live_check.py": "c399e71fb07e0262aa555adb328be993d4239593192e0c3e7da80f7ddd4237ae",
+      "README.md": "f496cb3986e48849d2fb6a9b622a6214c2c0b2b45cb1a39724c733b7c1f82adb",
+      "run_h013_h014_session.sh": "7f9149031b6ebae7340c1ea0084d8a0732f228ead9cdaaa19b0e4815ad7e1ff9",
+      "tests_h013/test_h013_harness.py": "ccd94bb0009c96a7d65fa984583e50687cb6f2c7235ed84b32217483190ae4ca"
+    },
+    "pre_patch_sha256": {
+      "tv_final.py": "4a6d45dca283faeae2e4de18a9cfc2ade92588c3c325b24b5281535be14fbdab",
+      "backfill_tv.py": "75c6d863deebf797307af5ecda53ea1c7457873be38011afdf6b37b832ffba4f",
+      "live_check.py": "1fdbecd442e9e5d143d203791c52fa6334865e53488c95117210f26d91fe034e",
+      "README.md": "10ccbd0f3938689d7627872c1b9c9066807a38b2c45c2613aa7e513dc07c1aac"
+    },
+    "unchanged": {
+      "forward_v1.py": "7c2a180afe048a13dd404131eb17fadb261ca432819749014560adf0abad2525"
+    }
+  },
+  "H014": {
+    "deployed_root": "/workspace/mmxm/forward",
+    "repo_copy": "research/forward_harness/H014",
+    "gate_files_sha256": {
+      "h014_forward.py": "06b03999fa9875a15712801af2ecc521ccba3225456299b1d4383aa1ee17605b",
+      "tv_feed.py": "2773d47246f7f31329ab271c3d740265b990ca2f3cd1cd57b0150f4b4f7c8336"
+    },
+    "informational_sha256": {
+      "README.md": "f77399c3b4946534d154da4bad0cfc6864861fc422985e40268db798db607ebb",
+      "tests/test_h014_forward.py": "52e22ba4321fd85c4c14dd6915d832049528be03c81d39c1f635e28e5cb6c237"
+    }
+  }
+}

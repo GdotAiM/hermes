@@ -64,6 +64,20 @@
     "exit-reason breakdown; no exit tuning",
     "random-entry baseline on the same days"
   ],
-  "harness_sha256": "PENDING - an MMXM forward harness (CAPITALCOM only, raw-bar persistence, holiday + min-bar filters, frozen hashes above) does not exist yet; it must be built, hashed and committed here before first_eligible_session",
+  "harness_sha256": {
+    "status": "REGISTERED when this file lands on origin/main (the harness checks origin/main at run time and records the landing commit time); before that, rows are logged but never counted",
+    "deployed_root": "/workspace/mmxm/forward",
+    "repo_copy": "research/forward_harness/H014",
+    "files": {
+      "h014_forward.py": "06b03999fa9875a15712801af2ecc521ccba3225456299b1d4383aa1ee17605b",
+      "tv_feed.py": "2773d47246f7f31329ab271c3d740265b990ca2f3cd1cd57b0150f4b4f7c8336"
+    },
+    "informational_not_gating": {
+      "README.md": "f77399c3b4946534d154da4bad0cfc6864861fc422985e40268db798db607ebb",
+      "tests/test_h014_forward.py": "52e22ba4321fd85c4c14dd6915d832049528be03c81d39c1f635e28e5cb6c237"
+    },
+    "replaces": "PENDING - an MMXM forward harness (CAPITALCOM only, raw-bar persistence, holiday + min-bar filters, frozen hashes above) does not exist yet; it must be built, hashed and committed here before first_eligible_session",
+    "manifest": "research/forward_harness/HARNESS_SHA256.json"
+  },
   "changes_after_registration": "any change to a pinned hash, feed, window, cost, exit or filter voids counting from that point and requires a new ID (H014b)"
 }

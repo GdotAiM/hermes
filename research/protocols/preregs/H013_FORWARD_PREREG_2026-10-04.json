@@ -64,6 +64,25 @@
     "1-pt trade-through on entries and stops; R capped at +5; long/short split",
     "ex-gap-days and ex-holiday results"
   ],
-  "harness_sha256": "PENDING - patched forward harness (FILL_THRU=1, CAPITALCOM only, holiday + min-bar filters, raw-bar persistence, docs corrected) must be hashed and committed here before first_eligible_session",
+  "harness_sha256": {
+    "status": "REGISTERED when this file lands on origin/main (the harness checks origin/main at run time and records the landing commit time); before that, rows are logged but never counted",
+    "deployed_root": "/workspace/ict-blueprint/forward-test",
+    "repo_copy": "research/forward_harness/H013",
+    "files": {
+      "h013_harness.py": "ab1e9eb15b3b91c682a3e0197308ab85879140fe4c4a1b3ab8a502fe630bd13c",
+      "tv_final.py": "070a0ec50bd9f1fdde645dd96f8f34fe9186c49bbeeec18ff4c973d00cb51c83",
+      "backfill_tv.py": "8acde80f3fbf1cf2725fb1244f09cf9d4f8bfc328b5253fb9705f3394acfecc9",
+      "h013_live_watch.py": "435982c1e3beccb327909b4bbfa9074ee8e7e2e07b6020caeff7e67b7be4a5a9",
+      "tv_feed.py": "2773d47246f7f31329ab271c3d740265b990ca2f3cd1cd57b0150f4b4f7c8336"
+    },
+    "informational_not_gating": {
+      "live_check.py": "c399e71fb07e0262aa555adb328be993d4239593192e0c3e7da80f7ddd4237ae",
+      "README.md": "f496cb3986e48849d2fb6a9b622a6214c2c0b2b45cb1a39724c733b7c1f82adb",
+      "run_h013_h014_session.sh": "7f9149031b6ebae7340c1ea0084d8a0732f228ead9cdaaa19b0e4815ad7e1ff9",
+      "tests_h013/test_h013_harness.py": "ccd94bb0009c96a7d65fa984583e50687cb6f2c7235ed84b32217483190ae4ca"
+    },
+    "replaces": "PENDING - patched forward harness (FILL_THRU=1, CAPITALCOM only, holiday + min-bar filters, raw-bar persistence, docs corrected) must be hashed and committed here before first_eligible_session",
+    "manifest": "research/forward_harness/HARNESS_SHA256.json"
+  },
   "changes_after_registration": "any change to a pinned hash, feed, window, exit or filter voids counting from that point and requires a new ID (H013b)"
 }
