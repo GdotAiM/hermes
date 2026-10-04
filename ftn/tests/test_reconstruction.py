@@ -369,7 +369,10 @@ def test_mint_draft_paper():
     ftn = rest[-1] if rest else {}
     d = draft_from_handoff(build_handoff(st, cands, ftn if isinstance(ftn, dict) else {}))
     assert d["actionable_for_mint"] is False and d["mode"] == "paper"
-    assert d["module"] == "REV" and d["side"] == "buy"
+    # I0 bans BUY/SELL: the draft carries the IOF label, never a trade side
+    assert d["module"] == "REV" and "side" not in d and d["direction_hypothesis"] == "bullish"
+    from ftn.os.handoff_contract import find_ban_violations
+    assert find_ban_violations(d) == []
 
 
 

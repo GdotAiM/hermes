@@ -145,3 +145,24 @@ def test_committed_samples_match_regeneration(fixture, sample):
     committed = json.loads((ROOT / "dispatch" / "samples" / sample).read_text())
     fresh.pop("fingerprint"); committed.pop("fingerprint")
     assert fresh == committed
+
+
+def test_brief_writes_no_mint_draft_by_default(monkeypatch):
+    from ftn.os.briefing import brief_from_fixture
+    from ftn.paths import draft_dir, out_dir
+
+    brief_from_fixture(ROOT / "fixtures" / "m9_reconstruction_eurusd.json")
+    assert not list(out_dir().glob("*draft*")) and not list(draft_dir().glob("*.json"))
+
+
+def test_opt_in_draft_goes_to_drafts_not_out(monkeypatch):
+    from ftn.os.briefing import brief_from_fixture
+    from ftn.paths import draft_dir, out_dir
+
+    monkeypatch.setenv("FTN_WRITE_MINT_DRAFT", "1")
+    brief_from_fixture(ROOT / "fixtures" / "m9_reconstruction_eurusd.json")
+    assert not list(out_dir().glob("*draft*"))
+    d = json.loads((draft_dir() / "ftn_draft_latest.json").read_text())
+    assert "side" not in d and d["actionable_for_mint"] is False
+    assert d["direction_hypothesis"] in {"bullish", "bearish", "unclear"}
+    assert find_ban_violations(d) == []

@@ -120,9 +120,34 @@ def test_banned_handoff_rejected_nothing_written(tmp_path, no_network_no_orders,
 
 
 def test_ftn_mint_draft_is_not_accepted(tmp_path):
-    """FTN also writes mint_draft_*.json (with a side field). It is NOT the contract."""
+    """Legacy FTN mint_draft_*.json (old shape, with a side field) is NOT the contract."""
     draft = {"kind": "mint_paper_draft", "mode": "paper", "side": "buy", "symbol": "EURUSD"}
     p = tmp_path / "mint_draft_latest.json"
+    p.write_text(json.dumps(draft))
+    with pytest.raises(fc.HandoffRejected):
+        fc.load_handoff(p)
+
+
+def test_real_ftn_research_draft_is_rejected(tmp_path):
+    """The draft FTN actually generates (opt-in) carries no side and is still rejected."""
+    import subprocess
+    import sys
+
+    ftn_root = fc.MONOREPO_ROOT / "ftn"
+    code = (
+        "import json,sys;"
+        "from ftn.os.mint_draft import draft_from_handoff;"
+        "print(json.dumps(draft_from_handoff(json.load(open(sys.argv[1])))))"
+    )
+    out = subprocess.run(
+        [sys.executable, "-c", code, str(M9)],
+        cwd=ftn_root, env={"PYTHONPATH": str(ftn_root / "src"), "PATH": ""},
+        capture_output=True, text=True, check=True,
+    ).stdout
+    draft = json.loads(out)
+    assert draft["kind"] == "ftn_research_draft" and "side" not in draft
+    assert draft["direction_hypothesis"] in {"bullish", "bearish", "unclear"}
+    p = tmp_path / "ftn_draft_latest.json"
     p.write_text(json.dumps(draft))
     with pytest.raises(fc.HandoffRejected):
         fc.load_handoff(p)

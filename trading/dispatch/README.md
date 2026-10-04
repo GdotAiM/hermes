@@ -34,7 +34,7 @@ PYTHONPATH=src python3 -m mint.dispatch.ftn_context --handoff ../ftn/dispatch/sa
 - Rejects (exit 1, writes nothing) anything that is not `schemaVersion "1"` /
   `kind "day_context_handoff"` / `mode "paper"`, or that carries a banned field at
   any depth (BUY/SELL calls, confidence, best_pam/pam_rank, broker_*, order fields).
-  FTN's `mint_draft_*.json` files are **not** the contract and are rejected.
+  FTN's research drafts (legacy `mint_draft_*.json`, now opt-in `ftn/dispatch/drafts/ftn_draft_*.json`, no buy/sell side) are **not** the contract and are rejected.
 - Records context (symbol/date/session, profile, candidates, PAM1 completeness,
   FTN objectives, FTN session-ticket id) plus the research board gate.
 - `execution.order_intents_emitted` is always `0`; FTN candidates, the FTN
