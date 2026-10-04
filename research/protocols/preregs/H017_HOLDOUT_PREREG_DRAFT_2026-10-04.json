@@ -397,7 +397,7 @@
  "one_shot": {
   "single_run": "exactly ONE binding execution of harness-H017-v1 over the whole frozen manifest; no interim looks, no kill/futility (nothing sequential), no partial windows, no per-year or per-instrument early reads",
   "no_peeking": "no process may open, load, decode, content-hash or compute on any bar inside the certified ranges for research before the run, except DATA's integrity QC and pre-run hash attestation (outcome-free)",
-  "no_reruns": "the verdict of the run is final. A technical failure that produces NO R (crash before any outcome row is written, confirmed by the sealed log) may be re-executed once at the identical digest and manifest, with the failure log published. Once any R value exists the run is complete",
+  "no_reruns": "ORION #9 (quoted in orion_rulings): NO reruns. A crash before outputs counts as NO-RUN (no verdict; nothing unsealed). Any rerun - after a crash or otherwise - needs CASSANDRA's WRITTEN approval, filed in the repo before the rerun starts. (Replaces the draft's earlier automatic crash-rerun exception.)",
   "changes": "any change of rule, cost, window, criterion or code after the run needs a new ID and fresh (certified-untouched or forward) data; this holdout cannot be reused",
   "N": "N is whatever the frozen window yields (not a stopping rule). If counted N < 400 (pooled) the verdict is INCONCLUSIVE (underpowered), not PASS/FAIL - N is outcome-free (Q5)"
  },
@@ -791,7 +791,30 @@
   "alpha": "one-sided 0.05, Holm across F2 members (1 member: p < 0.05; with an FX arm: 0.025 / 0.05)",
   "p": "statistical_test.p_value",
   "independence": "F2 verdicts never change F1 thresholds or verdicts and vice versa; each SURVIVES carries its family tag",
-  "relation_to_H016b_promotion": "whether an H017 PASS can serve as the 'new-ID replication' for an H016b PASS (or vice versa) is for ORION (Q6); default: no - they are reported side by side and never pooled"
+  "relation_to_H016b_promotion": "ORION #6 (quoted in orion_rulings.6): H017 MAY serve as the new-ID replication for H016b, in either direction, only if ALL replication_conditions hold; both passing = ONE finding ('REV, forward and historical holdout'), not two discoveries; if any condition fails, an H016b pass still needs a separate new-ID replication. Trades are never pooled"
+ },
+ "orion_rulings": {
+  "file": "/home/box/hermes-x/summaries/2026-10-04_H017_RULINGS.md",
+  "sha256": "b2901aff9b4742e730ba3abf3fe84eb5a4e4b2afc9f5f57b6d414103d03592d9",
+  "attribution": "ORION, 2026-10-04 ~13:50 SAST",
+  "6": "Yes, in either direction, but only if all of these hold:\n- Identical frozen rules: same REV version, entry and exit logic, and cost model, including the correct-side co-report.\n- No overlapping bars or sessions with H016b's counted window. DATA must certify H017's tape as untouched.\n- H017 is pre-registered, with its tag set, before H016b's first counted row. Otherwise it can't be the replication for an H016b pass.\n- Both tests pass on their own family terms (H016b by Holm in F1, H017 in F2). Both must also pass correct-side cost, with a non-flipping fill-fragility co-report.\n- Both passing counts as **one** finding: \"REV, forward and historical holdout\". It is not two discoveries.\n- CASSANDRA gives written sign-off on independence. The concern is the same broker feed or regime overlap.\nIf any one of these fails, the H016b pass still needs a separate new-ID replication.",
+  "9": "- ORION runs it **once**, from a frozen worktree at the H017 harness tag. This happens only after DATA_CERTIFIED and CASSANDRA_CLEARED exist for that tag.\n- The run's start and end times, the commit and the tape digest are logged. Outputs are written sealed.\n- Unsealing happens once, with CASSANDRA notified, and the results are recorded as-is. No reruns: a crash before outputs counts as no-run, and any rerun needs CASSANDRA's written approval.\n- No waiting for H016b. H016b's kill and futility rules are mechanical and frozen. Stopping H016b early only enters it into Holm at p=1, which is conservative."
+ },
+ "replication_conditions": {
+  "ruling": "ORION #6; ALL must hold, otherwise H017 is not H016b's replication (and vice versa)",
+  "R1_identical_rules": "same frozen REV version, entry and exit logic and cost model (incl. the correct-side co-report) - here: the 111 prereg-H016b pins byte-identical and the harness-H016b-v1 scoring path imported unchanged (relation_to_H016b); checked again at harness-H017-v1",
+  "R2_no_overlap": "no bar or session overlap with H016b's counted window (H016b counts sessions from 2026-10-05; H017's latest bar is 2025-06-01 18:00 NY; H017 context is also inside the certified ranges) AND DATA certifies H017's tape as untouched (DATA_CERTIFIED for harness-H017-v1, run_access_protocol.preconditions)",
+  "R3_tag_before_first_counted_row": "H017 pre-registered with tag prereg-H017 SET (pushed to origin) BEFORE H016b's first counted row - see replication_deadline",
+  "R4_both_pass_own_terms": "H016b PASSES and SURVIVES Holm in F1; H017 PASSES (P1-P6) and clears F2; both under correct-side costs with a non-flipping fill-fragility co-report (H017: binding P6; H016b: no 'fill-fragile' label)",
+  "R5_independence_signoff": "CASSANDRA's written sign-off on independence (same Dukascopy feed; regime overlap), filed before either result is used as the other's replication",
+  "consequence": "both passing = ONE finding, 'REV, forward and historical holdout'; any condition failing -> H016b needs a separate new-ID replication; H017 still stands or falls on its own in F2"
+ },
+ "replication_deadline": {
+  "meaning": "ORION #6 wording: 'pre-registered, with its tag set, before H016b's first counted row'. In harness-H016b-v1 a 'row' is the sealed log row written by `h016b.py final` (LOG_COLS: computed_at_utc / computed_at_sast are stamped at write time) and the column `counted` is True only for status 'trade' rows with no not-counted reason. So the moment meant is the COMPUTE (write) time of H016b's first row with counted = True - not the start of the session it describes",
+  "earliest_possible": "first eligible session = London 2026-10-05 02:00 NY (08:00 SAST). A row for it can only be written once its BID+ASK day files are final, i.e. at >= 2026-10-06 01:00 UTC (03:00 SAST). ORION's runner is scheduled 01:07 UTC Tue-Sat, so the earliest expected counted row is 2026-10-06 ~01:07 UTC = ~03:07 SAST (Tuesday), if London or NY AM of 2026-10-05 yields a counted trade on either instrument; otherwise the first counted row comes on a later run (it can only move later)",
+  "binding_deadline": "prereg-H017 must be tagged and visible on origin before 2026-10-06 01:00 UTC (03:00 SAST), the earliest moment any H016b row for a counted session can exist; this needs no reading of H016b's log. If that is missed, it still qualifies iff its tagger time and its logged origin appearance (git ls-remote) both precede computed_at_utc of H016b's first counted = True row, checked afterwards by reading only that row's timestamp and status columns (no R)",
+  "conservative_target": "tag before the first counted SESSION starts, 2026-10-05 02:00 NY = 08:00 SAST, so no 'row vs session' dispute can arise",
+  "if_missed": "H017 remains a valid stand-alone F2 holdout test (nothing else changes), but it cannot be H016b's replication; an H016b pass would need a separate new-ID replication"
  },
  "fx_arm": {
   "status": "FUTURE ARM - not included",
@@ -802,14 +825,20 @@
   "to_add": "DATA certifies an FX range; a pinned FX friction config is registered under a new rule commit; H017-FX prereg registered before H017's member list closes"
  },
  "run_access_protocol": {
-  "runner": "ORION executes once from a clean detached worktree at tag harness-H017-v1 with /workspace/mmxm/.venv/bin/python; nobody else runs H017 code on the certified ranges",
+  "ruling": "ORION #9, 2026-10-04 (quoted in orion_rulings.9)",
+  "runner": "ORION runs it ONCE from a frozen (clean, detached) worktree at the H017 harness tag harness-H017-v1, with /workspace/mmxm/.venv/bin/python; nobody else runs H017 code on the certified ranges",
+  "preconditions": "ONLY after DATA_CERTIFIED.json and CASSANDRA_CLEARED.json both exist for that harness tag (each carrying the harness digest); the harness refuses to start otherwise",
+  "run_log": "start and end times (UTC + SAST), the commit (tag object and commit hash), the harness digest and the tape digest (DATA's frozen manifest sha256) are logged into the sealed outputs and committed",
+  "unseal": "a SINGLE unseal, with CASSANDRA notified; results recorded as they are (no edits, no re-analysis before recording)",
+  "reruns": "none; a crash before outputs = no-run; any rerun needs CASSANDRA's written approval",
+  "no_waiting_on_H016b": "H017 does not wait for H016b (ORION #9: H016b's kill/futility are mechanical and frozen; an early H016b stop only enters it into Holm at p = 1, which is conservative)",
   "pre_run_attestations": [
    "DATA, immediately before the run (same session, timestamped): sha256 of every BID and ASK bi5 in the frozen manifest, equality with the registered manifest, backfill/rebuild stopped, no foreign files",
    "DATA: no outcome-bearing computation was run on the ranges by anyone (QC disclosure)",
    "CASSANDRA: harness-H017-v1 reproduces the burned H016b trades 258/258 and passes synthetic tests at its digest"
   ],
-  "sealing": "outputs written to a fresh write-once directory (sealed/), sha256 of every output committed immediately; the verdict JSON is produced by the harness (no human/agent computation); per-trade rows are opened only after the sealed verdict commit",
-  "audience": "verdict first to CASSANDRA, DATA, ORION and the user simultaneously; no partial results to anyone",
+  "sealing": "outputs written sealed to a fresh write-once directory (sealed/), sha256 of every output committed immediately; the verdict JSON is produced by the harness (no human/agent computation); nothing is read before the single unseal",
+  "audience": "at the single unseal: CASSANDRA notified (ORION #9); DATA, ORION and the user at the same time; no partial results to anyone",
   "logging": "run log, environment, manifest hash, start/end time (SAST) committed with the outputs"
  },
  "harness_to_build": {
@@ -823,10 +852,11 @@
   "Q3 (DATA): REV reads daily context (PDH/PDL, daily FVG); does the US100 HTF end 2021-09-12 apply? Draft uses 2022-12-23 (intraday estimand)",
   "Q4 (CASSANDRA/ORION): pass rule = P1-P6 (user spec + H016b robustness criteria); should H016b's 'pooled mean >= +0.10' be binding (power at +0.10 ~0.60 -> ~0.51)?",
   "Q5 (CASSANDRA): INCONCLUSIVE floor at pooled N < 400 - keep, change, or drop?",
-  "Q6 (ORION): can an H017 PASS count as the new-ID replication required by family rule (b) for H016b, or vice versa?",
+  "Q6 RESOLVED by ORION #6 (replication_conditions, replication_deadline)",
   "Q7 (DATA): certify the 2019-2021 Dukascopy ASK for binding fills and freeze the era p90/p99 spread schedule; confirm the rebuild/QC processes did no outcome-bearing computation",
   "Q8 (CASSANDRA): fixed-point constants at 1/3 the price level make costs per R higher; accept as 'same rule' (draft) or pre-register a co-report only (no rule change possible under the pins)?",
-  "Q9 (ORION): runner identity and timing of the single run (after harness-H017-v1, attestations and registration; independent of H016b's forward schedule)"
+  "Q9 RESOLVED by ORION #9 (run_access_protocol)",
+  "Q10 (all reviewers): ORION #6 R3 needs prereg-H017 set before ~2026-10-06 03:07 SAST (target 2026-10-05 08:00 SAST). Can Q1-Q5, Q7, Q8 be settled in time, or should they be fixed in the prereg as pre-declared conditional rules (window by DATA's frozen manifest; spread schedule frozen at harness registration) so the prereg can be tagged first?"
  ],
  "untouched_attestation_by_drafter": "For this draft no bar data inside the certified ranges was opened, loaded, decoded, content-hashed or computed on. Used: DATA's rulings and untouched_certified.json (metadata), marketdata manifest/ calendar (dates, status, row counts), os.listdir/os.stat names and sizes of the raw bi5 files, burned-window trade CSVs and score JSON, pinned code, and approximate public index levels"
 }

@@ -57,19 +57,36 @@ Verdicts:
 - P6 flip → `FAILS (holdout, fill-fragile)`.
 - Pooled N < 400 → `INCONCLUSIVE`.
 
-## One-shot rules
-- **One run** by ORION from the frozen harness-H017-v1 worktree. There are no interim looks and no kill or futility rules.
-- **No re-runs.** The only exception is a crash that produced no R: it may be re-run once at the same digest.
-- **Changes** of any kind need a new ID and fresh data.
-- **DATA attests** the per-file sha256 of the frozen manifest immediately before the run.
-- **Sealing:** outputs are written to a write-once `sealed/` directory and their hashes committed at once.
-- **Release:** the verdict goes to all reviewers and the user simultaneously.
+## One-shot run (ORION ruling #9, quoted in the JSON `orion_rulings.9`)
+- **One run.** ORION runs it **once**, from a frozen worktree at the H017 harness tag.
+- **Preconditions.** It runs only after `DATA_CERTIFIED` and `CASSANDRA_CLEARED` exist for that tag, and DATA has attested the per-file sha256 of the frozen manifest immediately beforehand.
+- **Logging and sealing.** Start and end times, the commit and the tape digest are logged, and outputs are written sealed.
+- **Unseal.** There is a single unseal, with CASSANDRA notified, and results are recorded as they are.
+- **No reruns.** A crash before outputs counts as no-run. Any rerun needs CASSANDRA's written approval. This replaces the earlier crash-rerun exception.
+- **No waiting on H016b.** Its kill and futility rules are mechanical; an early stop enters Holm at p = 1.
+- **Changes.** Any change needs a new ID and fresh data.
 
-## Family
+## Family and replication (ORION ruling #6, quoted in the JSON `orion_rulings.6`)
 - H017 opens **family F2**, because F1 is closed under ORION's rule.
 - Alpha is one-sided 0.05 with Holm across F2. H017 is the only member, so p < 0.05.
 - The member list closes at registration.
 - H017 is never pooled with H016b.
+
+H017 may be the new-ID replication for H016b, in either direction, **only if all of the following hold**:
+- **R1:** identical frozen REV, entry/exit logic and cost model.
+- **R2:** no bar or session overlap with H016b's counted window, and DATA certifies the H017 tape as untouched.
+- **R3:** `prereg-H017` is tagged before H016b's first counted row.
+- **R4:** both pass on their own terms (H016b via Holm in F1, H017 in F2), under correct-side costs and a non-flipping fill-fragility co-report.
+- **R5:** CASSANDRA gives written sign-off on independence (same feed, regime overlap).
+
+If both pass, that is **one** finding: "REV, forward and historical holdout". If any condition fails, an H016b pass needs a separate new-ID replication.
+
+**R3 deadline.** In harness-H016b-v1 a "row" is the log row written by `h016b.py final`; it carries its compute time, and `counted` is True only for counted trades. So the moment meant is that row's **compute time**, not the start of the session.
+- H016b's first eligible session is London 2026-10-05 02:00 NY (08:00 SAST). A row for it can exist only once that day's files are final, at ≥ 2026-10-06 01:00 UTC.
+- The scheduled run is at about 01:07 UTC, i.e. **~03:07 SAST Tue 2026-10-06**. If 2026-10-05 produces no counted trade, the first counted row comes later.
+- **Binding:** `prereg-H017` must be tagged and visible on origin before **2026-10-06 01:00 UTC (03:00 SAST)**. Failing that, it must be tagged before the first counted row's `computed_at_utc`, checked afterwards from timestamp and status columns only.
+- **Conservative target:** 2026-10-05 08:00 SAST.
+- **If missed:** H017 is still a valid stand-alone F2 test, but it cannot be H016b's replication.
 
 **FX arm:** listed as a future arm. DATA has not certified EURUSD/GBPUSD/XAUUSD, and the pinned REV instrument config has no FX frictions or min-stop.
 
@@ -85,10 +102,11 @@ Verdicts:
 - **Q3:** does the US100 HTF end (2021-09-12) apply to REV's daily context?
 - **Q4:** should "mean ≥ +0.10" be binding?
 - **Q5:** keep the N < 400 INCONCLUSIVE floor?
-- **Q6:** can H017 count as the new-ID replication for H016b?
+- **Q6:** RESOLVED by ORION #6 (see above).
 - **Q7 (DATA):** certify the 2019–2021 ASK for fills and freeze the era spread schedule; confirm QC and rebuild did no outcome-bearing computation.
 - **Q8:** do the fixed-point constants count as the "same rule"?
-- **Q9:** runner identity and timing.
+- **Q9:** RESOLVED by ORION #9 (see above).
+- **Q10:** can Q1–Q5, Q7 and Q8 be settled before the R3 deadline? Or should they be fixed as pre-declared conditional rules (window from DATA's frozen manifest; spread schedule frozen at harness registration), so that `prereg-H017` can be tagged first?
 
 ## Drafter attestation
 No bar data inside the certified ranges was opened, loaded, decoded, content-hashed or computed on for this draft. The only inputs were:
