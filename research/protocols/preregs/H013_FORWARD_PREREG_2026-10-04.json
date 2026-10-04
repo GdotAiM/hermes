@@ -1,0 +1,69 @@
+{
+  "id": "H013",
+  "title": "Model U v1 base, US100 CFD, frozen forward-only test",
+  "status_at_registration": "OPEN - NEEDS MORE DATA, frozen forward-only test",
+  "registered_by": "ORION",
+  "registered_at": "2026-10-04 (SAST); this file's git commit on main is the registration timestamp, not any script-written field",
+  "lock_file": "research/summaries/2026-10-04_H013_BOARD_LOCK.md",
+  "reviews": {
+    "CASSANDRA": "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_MODELU_MMXM_REDTEAM_2026-10-04.md (NEEDS MORE DATA)",
+    "DATA": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/DATA_GATE_MODEL_U_V1_US100_2026-10-04.md (PASS WITH CONDITIONS, exploratory only)"
+  },
+  "rule_object_root": "/workspace/ict-blueprint (not a git repo; files pinned by sha256)",
+  "rule_object_sha256": {
+    "research/model-u-longrun/scripts/v1/u_engine.py": "5e98e99e47133905c6662afcdea9d9df4ef74e7afefa49f17e7798925613fe4e",
+    "research/model-u-longrun/scripts/v1/run_u_lib.py": "8d00223c1f326bd386c1f924f05dc92fd38a3674639b57cd96df12194cdddad2",
+    "research/model-u-longrun/scripts/longrun.py": "bf88f0ad0b1d097a483f6cd02f4adba9e5072ffbb533d921d1956d65ef743fc4",
+    "research/model-u-longrun/data/costs.json": "a1df6f5b59122ae91bd9673911dbab1f3560737c14515234b3dd78bddd07062d"
+  },
+  "invocation": "best_trade(ctx, \"11:00\", False, False, True)",
+  "engine_settings": {"FILL_THRU_ticks": 1, "SLIP_ticks": 3.2, "cost_per_side_pts": 0.8, "tick": 0.25},
+  "decision_series": "US100 only (CAPITALCOM:US100), first trade per day (variant v1); v1_reentry rows never count",
+  "disclosure_series": "US500 (CAPITALCOM:US500) logged and reported separately; never pooled, never gating",
+  "forward_feed": {
+    "symbol": "TradingView CAPITALCOM:US100",
+    "fallback_feeds_allowed_for_counted_rows": false,
+    "note": "Forward feed is TradingView CAPITALCOM, NOT Dukascopy. Rows from PEPPERSTONE/OANDA/Yahoo fallbacks are logged but never counted."
+  },
+  "counting_rules": {
+    "first_eligible_session": "first NY session that starts after BOTH this file and the patched forward-harness sha256 (harness_sha256 below) are committed on main; earliest possible 2026-10-05",
+    "pre_registration_rows_excluded": "every row dated before first_eligible_session, incl. 2026-09-28..2026-10-02",
+    "live_alerted_only": "a row counts only if the harness logged the fill alert live, before the trade's exit time; backfilled rows are logged (note=BACKFILLED) and reported separately, never counted",
+    "raw_bars_required": "every session (live or backfill) must persist the raw 1m bars it consumed to raw/forward/<inst>_<YYYY-MM-DD>.csv with sha256 in the log row; a row without raw bars does not count",
+    "holiday_filter": "exclude NYSE full closures and NYSE early-close days (see holidays below); 2025-12-24 added to the historical exclusion list",
+    "min_bar_filter": "session counts only if >= 285 of 300 1m bars present in 07:00-11:59 NY on the forward feed; ex-gap-day (any missing bar 07:00-11:59) results co-reported",
+    "timezone": "all rule times America/New_York wall clock"
+  },
+  "holidays_excluded": {
+    "full_closures": ["2026-11-26", "2026-12-25", "2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26", "2027-05-31", "2027-06-18", "2027-07-05", "2027-09-06", "2027-11-25", "2027-12-24"],
+    "early_closes": ["2026-11-27", "2026-12-24", "2027-11-26"],
+    "historical_additions": ["2025-12-24"],
+    "maintenance": "ORION-compiled from NYSE rules; DATA to verify against the published NYSE calendar and extend for each new year before that year's first session"
+  },
+  "binding_N": {"decision": 550, "provisional_read": 250, "no_verdict_language_before": 100},
+  "binding_pass_at_N_550": [
+    "mean R_5050 after costs >= +0.15",
+    "one-sided 95% lower bound > 0 (percentile bootstrap, 10,000 resamples, seed 20261004)",
+    "random-entry foil F1 (random minute 09:00-10:59, random side, same day/risk/targets/costs, exit by 11:29 close; research/scripts/post_wave1/h013_foil_rebuild.py method) >= 95th percentile",
+    "mean with top 1% of trades by R dropped > 0",
+    "mean with small-stop trades (risk_pts < sample p25) excluded > 0",
+    ">= 60% of calendar quarters positive",
+    "US500 cross-market failure disclosed in any result prose"
+  ],
+  "binding_fail": "at N=550, failing any pass criterion = FAILS. CASSANDRA ruled no interim kill; none is binding.",
+  "non_binding_orion_gates": [
+    "mean at 2x costs (1.6 pt/side) > 0",
+    "max DD (R) <= bootstrap p95 at realized N (100: 25.1R, 250: 35.7R, 550: 43.7R) and longest losing streak <= p99 (100: 16, 250: 19, 550: 21)",
+    "futility read at N>=100: one-sided 97.5% upper bound < +0.15 -> recommend FAILS to CASSANDRA",
+    "Holm alpha split across H013+H014 (one-sided 0.025, N 720) reported alongside"
+  ],
+  "required_co_reports": [
+    "stream label FWD-TV-CAPITALCOM-US100 on every forward result; DUKASCOPY-CFD-USATECHIDXUSD-BID1M on every historical citation",
+    "cost ladder 1x/1.5x/2x/3x",
+    "CAPITALCOM measured spread and price side (bid vs mid) before any forward R is read",
+    "1-pt trade-through on entries and stops; R capped at +5; long/short split",
+    "ex-gap-days and ex-holiday results"
+  ],
+  "harness_sha256": "PENDING - patched forward harness (FILL_THRU=1, CAPITALCOM only, holiday + min-bar filters, raw-bar persistence, docs corrected) must be hashed and committed here before first_eligible_session",
+  "changes_after_registration": "any change to a pinned hash, feed, window, exit or filter voids counting from that point and requires a new ID (H013b)"
+}

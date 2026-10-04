@@ -1,0 +1,69 @@
+{
+  "id": "H014",
+  "title": "MMXM v5 A_overnight_5mFVG_ce_c12_none, US100 + US500 CFD, frozen forward-only test",
+  "status_at_registration": "FAILS (historical) / frozen forward-only test OPEN",
+  "registered_by": "ORION",
+  "registered_at": "2026-10-04 (SAST); this file's git commit on main is the registration timestamp, not any script-written field",
+  "lock_file": "research/summaries/2026-10-04_H014_BOARD_LOCK.md",
+  "reviews": {
+    "CASSANDRA": "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_MODELU_MMXM_REDTEAM_2026-10-04.md (FAIL as historical finding; forward-only)",
+    "DATA": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/DATA_GATE_MMXM_V5_2026-10-04.md (FAIL as edge evidence; 2026-05-25+ burned)"
+  },
+  "rule_object_root": "/workspace/mmxm (not a git repo; files pinned by sha256)",
+  "rule_object_sha256": {
+    "configs/v5_A_overnight_5mFVG_ce_c12_none.yaml": "3414c77c4693a2ad0557a3f77513118ad292821e6d18f6713b901c7451b67968",
+    "mmxm/engine.py": "86e7180980517e20b03a9bf4668dea28329fa203151fe56fa872e02a51f6c67f",
+    "mmxm/data.py": "fa2ebee1e25c87507f9faf26fed99f7c7a9edf7a234dcfda198ad163bd255fcd",
+    "mmxm/config.py": "4614c85b38c52f60018bd1b174368b4be221c47d645960a0cb89e6de16988f65",
+    "mmxm/baseline.py": "8298952b8dcd2903e1783bb70a97ed257c255d2b613609c5c0373f72778516ed"
+  },
+  "selection": "single frozen variant A_overnight_5mFVG_ce_c12_none; no sibling variant may be swapped in; no HTF bias",
+  "engine_settings": {"cost_round_trip_pts": {"US100": 0.8, "US500": 0.5}, "fill_through_ticks": 1, "stop_slippage_ticks": 0, "touch_both_same_bar": "stop"},
+  "symbols": "US100 and US500, each reported separately as primary; pooled numbers secondary",
+  "forward_feed": {
+    "symbols": ["TradingView CAPITALCOM:US100", "TradingView CAPITALCOM:US500"],
+    "fallback_feeds_allowed_for_counted_rows": false,
+    "note": "Forward feed is TradingView CAPITALCOM, NOT Dukascopy. Historical series is Dukascopy BID (mislabelled 'mid' in mmxm docs)."
+  },
+  "counting_rules": {
+    "first_eligible_session": "first NY session that starts after BOTH this file and the MMXM forward-harness sha256 (harness_sha256 below) are committed on main; earliest possible 2026-10-05",
+    "burned_windows": "nothing before first_eligible_session counts; 2026-05-25..2026-09-25 is burned for MMXM (DATA fix 4)",
+    "raw_bars_required": "every session (live or backfill) must persist the raw 1m bars it consumed (overnight 18:00 prior day -> 11:00 NY plus 1H context history) to raw/forward/<inst>_<YYYY-MM-DD>.csv with sha256 in the log row; a row without raw bars does not count",
+    "backfill": "sessions after first_eligible_session may be backfilled only if raw bars are saved; backfilled rows carry note=BACKFILLED and are reported both with and without them",
+    "holiday_filter": "exclude NYSE full closures and early-close days (see holidays below); historical re-report excludes 2025-11-27, 2025-12-24, 2026-07-03",
+    "min_bar_filter": "session counts per symbol only if >= 86 of 90 1m bars in 09:30-10:59 NY and >= 791 of 930 1m bars in the 18:00->09:30 overnight range on the forward feed",
+    "timezone": "all rule times America/New_York wall clock"
+  },
+  "holidays_excluded": {
+    "full_closures": ["2026-11-26", "2026-12-25", "2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26", "2027-05-31", "2027-06-18", "2027-07-05", "2027-09-06", "2027-11-25", "2027-12-24"],
+    "early_closes": ["2026-11-27", "2026-12-24", "2027-11-26"],
+    "historical_additions": ["2025-11-27", "2025-12-24", "2026-07-03"],
+    "maintenance": "ORION-compiled from NYSE rules; DATA to verify against the published NYSE calendar and extend for each new year before that year's first session"
+  },
+  "binding_N": {"decision": 180, "no_verdict_language_before": 100, "kill_active_from_trade": 1},
+  "binding_kill": "cumulative pooled R <= -5R at any point from the first counted trade -> FAILS, stop",
+  "binding_pass_at_N_180": [
+    "pooled mean R after costs >= +0.10",
+    "one-sided 95% lower bound > 0 (percentile bootstrap, 10,000 resamples, seed 20261004)",
+    "random-entry foil (same day/side/stop/R-targets, market entry at a random 1m bar 09:30-10:58, mmxm/baseline.py method) >= 95th percentile",
+    "total R positive on BOTH US100 and US500 separately",
+    "pooled total R with top 3 trades dropped > 0"
+  ],
+  "binding_fail": "kill line above at any time, or failing any pass criterion at N=180 = FAILS",
+  "non_binding_orion_gates": [
+    "mean > 0 at 2x costs and under DATA measured-cost model (US100 1.617 / US500 1.01 RT)",
+    "max DD (R) <= bootstrap p95 at realized N (100: 6.5R, 180: 7.4R) and longest losing streak <= p99 (100: 8, 180: 8)",
+    "per-symbol kill: either symbol with N_sym >= 80 and 95% CI upper bound < 0 -> recommend FAILS",
+    "Holm alpha split across H013+H014 (one-sided 0.025, N 230) reported alongside"
+  ],
+  "required_co_reports": [
+    "US100 and US500 separately in every headline; pooled secondary",
+    "stream label FWD-TV-CAPITALCOM-US100 / FWD-TV-CAPITALCOM-US500 on forward results; DUKASCOPY-CFD-BID1M on historical citations",
+    "DATA measured-cost and fill-realism proxy (spread + 1 tick trade-through, stop slip 1 spread) alongside frozen-cost results",
+    "CAPITALCOM measured spread and price side (bid vs mid) before any forward R is read",
+    "exit-reason breakdown; no exit tuning",
+    "random-entry baseline on the same days"
+  ],
+  "harness_sha256": "PENDING - an MMXM forward harness (CAPITALCOM only, raw-bar persistence, holiday + min-bar filters, frozen hashes above) does not exist yet; it must be built, hashed and committed here before first_eligible_session",
+  "changes_after_registration": "any change to a pinned hash, feed, window, cost, exit or filter voids counting from that point and requires a new ID (H014b)"
+}
