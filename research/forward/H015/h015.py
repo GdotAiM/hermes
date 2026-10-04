@@ -37,7 +37,8 @@ import duka  # noqa: E402
 LEAD = "H015b"
 PREREG_REL = "research/protocols/preregs/H015b_FORWARD_PREREG_2026-10-04.json"
 APPENDIX_REL = "research/protocols/preregs/H015b_DATA_APPENDIX_2026-10-04.md"
-REG_NOTE_REL = "research/protocols/preregs/H015b_HARNESS_REGISTRATION_2026-10-04.json"
+REG_NOTE_REL = "research/protocols/preregs/H015b_HARNESS_REGISTRATION_V2_2026-10-04.json"   # v2 addendum (ORION ruling); v1 note no longer counts
+HARNESS_VERSION = "v2"
 TAG = "prereg-H015b"
 TAG_COMMIT = "49be2d6c47878ea48da15fadd969a0af3ef94e5a"
 REG_REFS = ("origin/main", "origin/feat/ftn-research-bridge", "origin/forward/h015-harness")
@@ -67,6 +68,9 @@ COST_PER_SIDE = {"US100": 0.8, "US500": 0.5}       # binding (prereg costs)
 DATA_COST_RT = {"US100": 1.617, "US500": 1.01}     # co-report only
 SPREAD_FLAG = {"US100": 1.1, "US500": 0.5}         # appendix A9: monthly killzone median spread flag
 STOP_SLIP = (0.0, 0.25, 1.0)
+HOLIDAYS_PRE_WINDOW = {"full_closures": ["2025-09-01", "2025-11-27", "2025-12-25", "2026-01-01", "2026-01-19", "2026-02-16",
+                                         "2026-04-03", "2026-05-25", "2026-06-19", "2026-07-03", "2026-09-07"],
+                       "early_closes": ["2025-11-28", "2025-12-24"]}   # NYSE, context calendar only (DATA cert B4)
 HOLIDAYS_2028 = {"full_closures": ["2028-01-17", "2028-02-21", "2028-04-14", "2028-05-29", "2028-06-19", "2028-07-04",
                                    "2028-09-04", "2028-11-23", "2028-12-25"],
                  "early_closes": ["2028-07-03", "2028-11-24"]}           # appendix A10 (DATA F8)
@@ -76,8 +80,9 @@ LOG_COLS = ["run_id", "computed_at_utc", "computed_at_sast", "date", "instrument
             "not_counted_reasons", "ticket", "module", "side", "entry_time", "entry", "stop", "stop_source", "risk_pts",
             "gates", "reason", "kz_bars", "rth_bars", "last_bar_ny", "context_sessions", "session_raw_sha256",
             "context_manifest_sha256", "manifest_file", "filler_dropped_session", "pins_ok", "harness_sha256",
-            "registration_commit", "registration_time_utc", "harness_matches_registered", "dst_mismatch_week", "error"]
-OUT_COLS = ["date", "instrument", "session", "R", "R_gross", "exit", "risk_pts", "cost_R", "exit_time_rule_ok",
+            "registration_commit", "registration_time_utc", "harness_matches_registered", "dst_mismatch_week",
+            "exit_bar_1545_ok", "gap_flag", "context_missing_days", "context_frozen_incomplete", "harness_version", "error"]
+OUT_COLS = ["date", "instrument", "session", "R", "R_gross", "exit", "risk_pts", "cost_R", "exit_time_rule_ok", "gap_flag",
             "session_raw_sha256", "context_manifest_sha256"]
 TERMINAL = {"trade", "no_trade", "feed_gap", "holiday", "short_session", "context_gap", "feed_suspended",
             "calendar_not_covered", "not_trading_day"}
@@ -160,8 +165,11 @@ def registration_status(fetch: bool = False) -> dict:
             for line in reversed(lines):
                 sha, when = line.split()
                 try:
-                    hs = json.loads(_git("show", f"{sha}:{REG_NOTE_REL}")).get("harness_sha256")
+                    note = json.loads(_git("show", f"{sha}:{REG_NOTE_REL}"))
+                    hs = note.get("harness_sha256")
                 except Exception:
+                    continue
+                if not str(note.get("status", "")).startswith("REGISTERED"):
                     continue
                 if isinstance(hs, dict) and hs.get("repo_root") == "GdotAiM/hermes" and hs.get("files"):
                     t = dt.datetime.fromisoformat(when).astimezone(duka.UTC)
@@ -202,8 +210,8 @@ def ftn():
 # ------------------------------------------------------------------ calendar
 def holidays() -> dict:
     h = deepcopy(prereg()["counting_rules"]["holidays_excluded"])
-    h["full_closures"] = sorted(set(h["full_closures"]) | set(HOLIDAYS_2028["full_closures"]))
-    h["early_closes"] = sorted(set(h["early_closes"]) | set(HOLIDAYS_2028["early_closes"]))
+    h["full_closures"] = sorted(set(h["full_closures"]) | set(HOLIDAYS_2028["full_closures"]) | set(HOLIDAYS_PRE_WINDOW["full_closures"]))
+    h["early_closes"] = sorted(set(h["early_closes"]) | set(HOLIDAYS_2028["early_closes"]) | set(HOLIDAYS_PRE_WINDOW["early_closes"]))
     return h
 
 
@@ -282,14 +290,17 @@ def score_sessions(series, d: dt.date) -> list[dict]:
     return out
 
 
-def exit_bars_ok(series, entry_time: dt.datetime) -> bool:
-    """Appendix A4 'bars to 16:00 exist': >= 1 bar in [15:45, 16:00) and no gap > 5 min between entry and 16:00."""
-    d = entry_time.date(); end = ny(d, 16)
-    idx = list(series.window(entry_time, end))
-    if not idx or not any(series.t[i] >= ny(d, 15, 45) for i in idx):
-        return False
-    ts = [entry_time] + [series.t[i] for i in idx]
-    return all((b - a) <= dt.timedelta(minutes=5) for a, b in zip(ts, ts[1:]))
+def exit_bars_ok(series, d: dt.date) -> bool:
+    """BINDING (appendix A4 v2): 'the 1m bars to 16:00 NY exist' = at least one bar in [15:45, 16:00) NY on date d.
+    Evaluated for EVERY session of the day, trade or no_trade, so session validity never depends on the entry."""
+    return len(series.window(ny(d, 15, 45), ny(d, 16))) > 0
+
+
+def gap_flag(series, entry_time: dt.datetime) -> bool:
+    """NON-BINDING co-report flag (v1's withdrawn rule): a gap > 5 min between the entry and 16:00 NY."""
+    end = ny(entry_time.date(), 16)
+    ts = [entry_time] + [series.t[i] for i in series.window(entry_time, end)]
+    return any((b - a) > dt.timedelta(minutes=5) for a, b in zip(ts, ts[1:]))
 
 
 # ------------------------------------------------------------------ forward session rows
@@ -365,7 +376,8 @@ def session_rows_for(store: duka.Store, inst: str, d: dt.date, reg: dict, pins_o
                 computed_at_sast=at.astimezone(__import__("zoneinfo").ZoneInfo("Africa/Johannesburg")).strftime("%Y-%m-%d %H:%M:%S"),
                 date=d.isoformat(), instrument=inst, pins_ok=pins_ok, harness_sha256=harness_digest(),
                 registration_commit=reg.get("registration_commit"), registration_time_utc=reg.get("registration_time_utc"),
-                harness_matches_registered=reg.get("harness_matches_registered"), dst_mismatch_week=dst_mismatch_week(d))
+                harness_matches_registered=reg.get("harness_matches_registered"), dst_mismatch_week=dst_mismatch_week(d),
+                harness_version=HARNESS_VERSION)
     mk = lambda status, extra=None: [({**base, "session": s, "status": status, "counted": False,
                                        "not_counted_reasons": status, **(extra or {})}, None) for s in SESSIONS]
     cal = calendar_status(d)
@@ -383,9 +395,13 @@ def session_rows_for(store: duka.Store, inst: str, d: dt.date, reg: dict, pins_o
     series = series_from_csv_texts(texts, inst, ny(d, 17))
     sess_idx = series.window(ny(d - dt.timedelta(days=1), 18), ny(d, 17))
     last = series.t[sess_idx[-1]] if len(sess_idx) else None
-    complete = (not g["not_final"]) and not [p for p in g["problems"] if p[0] == "feed_error"] and last is not None \
-        and last.time() >= LAST_BAR
+    feed_err = [p for p in g["problems"] if p[0] == "feed_error"]
+    files_ok = not g["not_final"] and not feed_err
+    complete = files_ok and last is not None and last >= dt.datetime.combine(d, LAST_BAR)   # full datetime (DATA cert B2)
     if not complete:
+        if files_ok:                          # every file FINAL (frozen after retries) and still short: terminal gap
+            return mk("feed_gap", dict(error=f"session bars end {last} < {d} {LAST_BAR}; files final",
+                                       session_raw_sha256=sraw, context_manifest_sha256=cman))
         if age > RETRY_TRADING_DAYS:
             return mk("feed_gap", dict(error=f"incomplete after {RETRY_TRADING_DAYS} trading days; last bar {last}; "
                                              f"not_final={g['not_final'][:3]} problems={g['problems'][:2]}",
@@ -399,14 +415,21 @@ def session_rows_for(store: duka.Store, inst: str, d: dt.date, reg: dict, pins_o
                   for x in (lst[-2][0], lst[-1][0]))
     base.update(session_raw_sha256=sraw, context_manifest_sha256=cman, manifest_file=mf, rth_bars=rth,
                 last_bar_ny=str(last), filler_dropped_session=dropped)
-    # context completeness (appendix A4): the CONTEXT_SESSIONS expected trading days before d all present
+    # context (appendix A4 v2, DATA cert B3/B4): every file is FINAL here (non-final -> provisional above). Expected
+    # trading days (full NYSE calendar incl. pre-window holidays) that are absent from trading_days are SKIPPED exactly as
+    # the build's History would skip them, and disclosed per row; context_gap only if < 22 prior sessions exist.
     exp = [x for x in expected_trading_days(d - dt.timedelta(days=CONTEXT_DAYS), d - dt.timedelta(days=1))][-CONTEXT_SESSIONS:]
     miss = [x.isoformat() for x in exp if x not in set(tdays)]
-    base["context_sessions"] = len([x for x in tdays if x < d])
-    if miss or len(exp) < CONTEXT_SESSIONS:
-        return mk("context_gap", dict(error=f"missing context sessions {miss}"))
+    frozen = [m["day"] for m in g["metas"] if m.get("frozen_incomplete")]
+    prior = [x for x in tdays if x < d]
+    base.update(context_sessions=len(prior), context_missing_days=";".join(miss) or None,
+                context_frozen_incomplete=";".join(frozen) or None)
+    if len(prior) < CONTEXT_SESSIONS:
+        return mk("context_gap", dict(error=f"only {len(prior)} prior sessions < {CONTEXT_SESSIONS}; missing {miss}"))
     if d not in tdays:
         return mk("not_trading_day", dict(error=f"{rth} RTH bars < {RTH_MIN}"))
+    exit_ok = exit_bars_ok(series, d)
+    base["exit_bar_1545_ok"] = exit_ok
     res = []
     for r in score_sessions(series, d):
         s = r["session"]; a, b = {"london": (2, 5), "ny_am": (7, 10)}[s]
@@ -419,15 +442,15 @@ def session_rows_for(store: duka.Store, inst: str, d: dt.date, reg: dict, pins_o
         status = "trade" if r["outcome"] is not None else "no_trade"
         if kz < KZ_MIN:
             status = "short_session"; reasons.append(f"kz_bars {kz}/{KZ_N}")
+        if not exit_ok:
+            status = "short_session"; reasons.append("no_bar_1545_1600")
         o = r["outcome"]
-        if o is not None and status == "trade":
-            ok = exit_bars_ok(series, dt.datetime.fromisoformat(r["entry_time"]))
-            if not ok:
-                status = "short_session"; reasons.append("exit_bars_missing_or_gap>5min")
-            row["risk_pts"] = o["risk_pts"]
+        if o is not None:
+            gf = gap_flag(series, dt.datetime.fromisoformat(r["entry_time"]))
+            row["risk_pts"] = o["risk_pts"]; row["gap_flag"] = gf
             o = dict(date=d.isoformat(), instrument=inst, session=s, R=repr(o["R"]), R_gross=repr(o["R_gross"]),
-                     exit=o["exit"], risk_pts=repr(o["risk_pts"]), cost_R=repr(o["cost_R"]), exit_time_rule_ok=ok,
-                     session_raw_sha256=sraw, context_manifest_sha256=cman)
+                     exit=o["exit"], risk_pts=repr(o["risk_pts"]), cost_R=repr(o["cost_R"]), exit_time_rule_ok=exit_ok,
+                     gap_flag=gf, session_raw_sha256=sraw, context_manifest_sha256=cman)
         if status == "trade":
             if d < FIRST_DATE: reasons.append("before_first_eligible_session")
             if not pins_ok: reasons.append("harness_hash_mismatch")
@@ -469,7 +492,8 @@ def cmd_final(root=None, at: dt.datetime | None = None, get=None, fetch_remote: 
     bad = verify_pins()
     if bad:
         raise SystemExit(f"harness_hash_mismatch, refusing to run: {bad}")
-    led = Ledger(root); store = duka.Store(led.root, now=lambda: at, get=get)
+    led = Ledger(root)
+    store = duka.Store(led.root, now=lambda: at, get=get, short_ok=lambda day: calendar_status(day) == "holiday")
     reg = registration_status(fetch=fetch_remote)
     run_id = uuid.uuid4().hex[:12]; out = []
     for d in pending_dates(led, at):
@@ -547,12 +571,40 @@ def futility(trades: list[dict]) -> dict | None:
 
 
 def kill_walk(trades: list[dict]) -> dict:
-    cum, hit = 0.0, None
+    cum, hit, lo = 0.0, None, 0.0
     for i, t in enumerate(canonical(trades), 1):
-        cum += float(t["R"])
+        cum += float(t["R"]); lo = min(lo, cum)
         if cum <= KILL_R and hit is None:
             hit = i
-    return dict(kill=hit is not None, kill_at_trade=hit, min_cum=None)
+    return dict(kill=hit is not None, kill_at_trade=hit, min_cum=lo)
+
+
+def key(t: dict) -> str:
+    return f"{t['date']}|{t['instrument']}|{t['session']}"
+
+
+def futility_frozen(trades: list[dict], root: pathlib.Path) -> dict | None:
+    """CASSANDRA condition 4: the first time counted N reaches FUTILITY_AT, the 200 row keys are written once to
+    FUTILITY_SET.json (never overwritten) and futility is evaluated on exactly that set from then on. A later backfill that
+    would change the canonical first 200 is reported as a reshuffle, never used."""
+    c = canonical(trades)
+    if len(c) < FUTILITY_AT:
+        return None
+    p = root / "FUTILITY_SET.json"
+    cur = [key(t) for t in c[:FUTILITY_AT]]
+    if not p.exists():
+        f = futility(c)
+        p.write_text(json.dumps(dict(frozen_at_utc=now_utc().isoformat(timespec="seconds"), keys=cur,
+                                     ub_one_sided_975=f["ub_one_sided_975"], fails=f["fails"]), indent=1) + "\n")
+    fz = json.loads(p.read_text())
+    by = {key(t): t for t in c}
+    missing = [k for k in fz["keys"] if k not in by]
+    if missing:
+        return dict(n=FUTILITY_AT, frozen_keys_missing=missing, fails=fz["fails"], ub_one_sided_975=fz["ub_one_sided_975"],
+                    reshuffle=sorted(set(cur) ^ set(fz["keys"])), note="evaluated result frozen at first N=200")
+    v = cluster_boot([by[k] for k in fz["keys"]])
+    return dict(n=FUTILITY_AT, ub_one_sided_975=v[UB975_INDEX], fails=v[UB975_INDEX] < FUTILITY_BAR, frozen_set=str(p),
+                reshuffle=sorted(set(cur) ^ set(fz["keys"])))
 
 
 def foil_with_n(series, trades: list[dict], cost: float, n: int = N_FOIL, seed: int = SEED) -> list[tuple]:
@@ -627,7 +679,11 @@ def cmd_report(root=None, foil_n: int = N_FOIL) -> dict:
                binding_N=N_DECISION, kill_R=KILL_R, futility_at=FUTILITY_AT,
                dropped_sessions=sorted((r["date"], r["instrument"], r["session"], r["status"]) for r in lat.values()
                                        if r["status"] not in ("trade", "no_trade")),
-               registration=registration_status(), clearance=cleared(led.root), feed_suspension=susp)
+               registration=registration_status(), clearance=cleared(led.root), feed_suspension=susp,
+               harness_version=HARNESS_VERSION)
+    mon_store = duka.Store(led.root, get=lambda u: (_ for _ in ()).throw(RuntimeError("report never downloads")))
+    rep["data_monitor_monthly"] = spread_report(mon_store, [r for r in lat.values()
+                                                           if r["status"] in ("trade", "no_trade", "short_session")])
     if not all(rep["clearance"].values()):
         rep["R"] = "SEALED: DATA_CERTIFIED.json and CASSANDRA_CLEARED.json with this harness_sha256 are required before any R is shown"
         return rep
@@ -642,8 +698,19 @@ def cmd_report(root=None, foil_n: int = N_FOIL) -> dict:
     else:
         tr_eval = tr[:N_DECISION]
     rep["kill"] = k
-    fu = futility(tr_eval)
+    fu = futility_frozen(tr_eval, led.root)
     rep["futility"] = fu
+    if fu:
+        rep["futility_note"] = ("futility catches a zero edge only ~8.9% of the time (simulation); passing it is NOT evidence "
+                                "(CASSANDRA note 1)")
+    # CASSANDRA conditions 2 + note 4: gap-flagged trades (non-binding) and short_session-dropped trades next to the headline
+    gf = [t for t in tr_eval if str(t.get("gap_flag")) == "True"]
+    rep["gap_flag_co_report"] = dict(flagged_n=len(gf), flagged_sum_R=sum(t["R"] for t in gf),
+                                     headline_excl_flagged_non_binding=dict(
+                                         n=len(tr_eval) - len(gf),
+                                         mean_R=mean([t["R"] for t in tr_eval if t not in gf]) if len(tr_eval) > len(gf) else None))
+    ss = [o for (k2, o) in outs.items() if lat.get(k2, {}).get("status") == "short_session"]
+    rep["short_session_dropped_trades"] = dict(n=len(ss), sum_R=sum(float(o["R"]) for o in ss))
     per = {i: [t for t in tr_eval if t["instrument"] == i] for i in INSTS}
     rep["per_instrument"] = {i: dict(n=len(x), mean_R=mean([t["R"] for t in x]) if x else None) for i, x in per.items()}
     rs = [t["R"] for t in tr_eval]
@@ -681,7 +748,6 @@ def cmd_report(root=None, foil_n: int = N_FOIL) -> dict:
         rep["foil"] = dict(pct=100.0 * sum(1 for m in pm if m < mean(rs)) / len(pm), median=sorted(pm)[len(pm) // 2],
                            n_per_replicate=dict(min=ns[0], median=ns[len(ns) // 2], max=ns[-1], trades=n))
         # spread + ASK co-reports
-        rep["spread_monthly"] = spread_report(store, tr_eval)
         rep["ask_resim"] = ask_report(store, tr_eval)
         if n >= NO_VERDICT_BELOW:
             rep["ask_spot_check_short_stopouts"] = [x for x in rep["ask_resim"].pop("_rows") if x["side"] == "sell" and x["exit"] == "stop"]
@@ -738,7 +804,9 @@ def verdict(rep, n, k, fu) -> str:
 
 
 def spread_report(store, trades) -> dict:
-    by = {}
+    """DATA monthly monitor (cert condition a): killzone ASK-BID close spread per instrument-month over every scored session
+    (trade or not; no R involved), with the 1.1 / 0.5 median flag and the crossed-bar count (any of O/H/L/C with BID > ASK)."""
+    by, crossed = {}, {}
     for t in trades:
         d = dt.date.fromisoformat(t["date"]); inst = t["instrument"]
         a, b = {"london": (2, 5), "ny_am": (7, 10)}[t["session"]]
@@ -747,11 +815,15 @@ def spread_report(store, trades) -> dict:
             continue
         bid = series_from_csv_texts([store.csv_text(inst, "BID", x) for x in days], inst, ny(d, 17))
         ask = series_from_csv_texts([store.csv_text(inst, "ASK", x) for x in days], inst, ny(d, 17))
-        bm = {bid.t[i]: bid.c[i] for i in bid.window(ny(d, a), ny(d, b))}
+        bm = {bid.t[i]: i for i in bid.window(ny(d, a), ny(d, b))}
+        mk_ = (inst, t["date"][:7])
         for i in ask.window(ny(d, a), ny(d, b)):
-            if ask.t[i] in bm:
-                by.setdefault((inst, t["date"][:7]), []).append(ask.c[i] - bm[ask.t[i]])
-    return {f"{i} {m}": dict(median=median(v), n=len(v), crossed=sum(1 for x in v if x < 0), flag=median(v) > SPREAD_FLAG[i])
+            j = bm.get(ask.t[i])
+            if j is not None:
+                by.setdefault(mk_, []).append(ask.c[i] - bid.c[j])
+                crossed[mk_] = crossed.get(mk_, 0) + int(bid.o[j] > ask.o[i] or bid.h[j] > ask.h[i] or bid.l[j] > ask.l[i]
+                                                         or bid.c[j] > ask.c[i])
+    return {f"{i} {m}": dict(median=median(v), n=len(v), crossed_bars=crossed.get((i, m), 0), flag=median(v) > SPREAD_FLAG[i])
             for (i, m), v in sorted(by.items())}
 
 

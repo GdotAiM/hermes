@@ -9,8 +9,12 @@ synthesise, interpolate or forward-fill a bar; convert UTC -> America/New_York w
 `Datetime,Open,High,Low,Close,Volume` with the NY offset so `ftn.research.bars.load_series` reads it unchanged.
 
 Storage (DATA C10, appendix A5): <DATA_ROOT>/H015b/raw/<inst>/<SIDE>/<YYYY-MM-DD>.bi5 (+ .csv, + .json meta with both sha256).
-A day file is FINAL when it was pulled at or after 01:00 UTC on the following UTC day; FINAL files are never overwritten or
-re-downloaded. A non-final copy may be replaced by a later pull (the pull log records why: completeness only)."""
+Finality (harness v2, DATA cert B1): a day file is FINAL only when it was pulled at or after 01:00 UTC on the following UTC
+day AND it is COMPLETE by content (`complete()` below). A 404 / empty / cut-off file stays non-final and is re-pulled on every
+run (reason "incomplete") for up to RETRY_DAYS weekdays after its date; after that it is frozen FINAL with
+`frozen_incomplete: true` (disclosed, never silently used as complete). FINAL files are never overwritten or re-downloaded.
+A non-final copy that is replaced keeps its old bytes under raw/.../superseded/ (nothing is deleted). Metas written by v1
+(no `finality_rule`) are treated as non-final and re-checked."""
 from __future__ import annotations
 
 import datetime as dt, hashlib, json, lzma, pathlib, struct, time, urllib.error, urllib.request
@@ -23,6 +27,10 @@ SIDES = ("BID", "ASK")
 URL = "https://datafeed.dukascopy.com/datafeed/{sym}/{y:04d}/{m0:02d}/{d:02d}/{side}_candles_min_1.bi5"
 REC = struct.Struct(">5if")
 FINAL_AFTER = dt.timedelta(days=1, hours=1)          # 01:00 UTC on the next UTC day
+FINALITY_RULE = "v2_completeness"
+RETRY_DAYS = 5                                        # weekdays after the file's date before an incomplete file is frozen
+WEEKDAY_LAST_BAR = dt.time(16, 14)                    # NY halt: a Mon-Fri UTC file must reach 16:14 NY on that date
+SUNDAY_LAST_UTC = dt.time(23, 50)                     # a Sunday UTC file (CFD reopen 18:00 NY) must reach 23:50 UTC
 UA = {"User-Agent": "Mozilla/5.0"}
 
 
@@ -83,6 +91,32 @@ def decode(raw: bytes, day: dt.date) -> list[tuple]:
     return out
 
 
+def complete(recs: list[tuple], day: dt.date) -> tuple[bool, str]:
+    """Content completeness of one UTC day file (filler bars excluded).
+    Mon-Fri: the last real bar is at or after 16:14 NY on that same NY date (full datetime, DATA cert B2).
+    Sunday: the last real bar is at or after 23:50 UTC (the session reopens 18:00 NY). Saturday: always complete (closed)."""
+    real = [r for r in recs if not (r[5] == 0 and r[2] == r[3])]
+    if day.weekday() == 5:
+        return True, "saturday"
+    if not real:
+        return False, "empty_or_404"
+    last = real[-1][0]
+    if day.weekday() == 6:
+        ok = last.time() >= SUNDAY_LAST_UTC
+        return ok, "ok" if ok else f"cut_off_last_bar_utc_{last:%H:%M}"
+    want = dt.datetime.combine(day, WEEKDAY_LAST_BAR, tzinfo=NY)
+    ok = last >= want
+    return ok, "ok" if ok else f"cut_off_last_bar_ny_{last.astimezone(NY):%Y-%m-%d %H:%M}"
+
+
+def weekdays_after(day: dt.date, upto: dt.date) -> int:
+    n, d = 0, day + dt.timedelta(days=1)
+    while d <= upto:
+        n += d.weekday() < 5
+        d += dt.timedelta(days=1)
+    return n
+
+
 def px(i: int) -> str:
     """Exact decimal text of price*1000 integers (float(px(i)) == i / 1000)."""
     return f"{i // 1000}.{i % 1000:03d}"
@@ -109,7 +143,9 @@ def normalise(recs: list[tuple]) -> tuple[bytes, dict]:
 class Store:
     """Immutable per-day raw store. meta json: url, pulled_at_utc, final, bi5_sha256, csv_sha256, rows, filler_dropped."""
 
-    def __init__(self, root: pathlib.Path, now=None, get=None):
+    def __init__(self, root: pathlib.Path, now=None, get=None, short_ok=None):
+        """short_ok(day) -> True for listed NYSE holidays / early closes, whose short CFD file is expected (no retries)."""
+        self.short_ok = short_ok or (lambda day: False)
         self.root = pathlib.Path(root)
         self.now = now or (lambda: dt.datetime.now(UTC))
         self.get = get or http_get
@@ -127,27 +163,39 @@ class Store:
         return at >= dt.datetime(day.year, day.month, day.day, tzinfo=UTC) + FINAL_AFTER
 
     def ensure(self, inst: str, side: str, day: dt.date, reason: str = "missing") -> dict:
-        """Return the day's meta, downloading only if no FINAL copy exists. Logs every pull to pulls.jsonl."""
+        """Return the day's meta, downloading unless a FINAL (v2) copy exists. Logs every pull to pulls.jsonl."""
         m = self.meta(inst, side, day)
-        if m and m["final"]:
+        if m and m.get("final") and m.get("finality_rule") == FINALITY_RULE:
             return m
         now = self.now()
         if now < dt.datetime(day.year, day.month, day.day, tzinfo=UTC) + dt.timedelta(days=1):
             return dict(day=day.isoformat(), inst=inst, side=side, final=False, status="not_published_yet")
+        if m:
+            reason = "incomplete_repull" if m.get("finality_rule") == FINALITY_RULE else "v1_meta_recheck"
         u = url(inst, side, day)
         raw = self.get(u)                                   # FeedError propagates: day stays provisional
         present = raw is not None and len(raw) > 0
         recs = decode(raw, day) if present else []
         csvb, st = normalise(recs)
-        final = self.is_final_time(day, now)
+        is_complete, why = complete(recs, day)
+        if not is_complete and recs and self.short_ok(day):
+            is_complete, why = True, "listed_holiday_or_early_close"
+        age = weekdays_after(day, (now - dt.timedelta(hours=1)).date() - dt.timedelta(days=1))
+        timely = self.is_final_time(day, now)
+        final = timely and (is_complete or age >= RETRY_DAYS)
         bi5, csvp, metap = self.paths(inst, side, day)
         bi5.parent.mkdir(parents=True, exist_ok=True)
-        if m and m.get("final"):
-            raise RuntimeError("refusing to overwrite a FINAL day file")
+        if bi5.exists() and bi5.read_bytes() != (raw or b""):
+            sup = bi5.parent / "superseded"; sup.mkdir(exist_ok=True)
+            tag = now.strftime("%Y%m%dT%H%M%SZ")
+            for p in (bi5, csvp, metap):
+                if p.exists():
+                    p.rename(sup / f"{p.stem}__{tag}{p.suffix}")
         bi5.write_bytes(raw or b""); csvp.write_bytes(csvb)
         m = dict(day=day.isoformat(), inst=inst, side=side, source="dukascopy_datafeed", url=u,
-                 pulled_at_utc=now.isoformat(timespec="seconds"), final=final, http_404=raw is None,
-                 bi5_bytes=len(raw or b""), bi5_sha256=sha256(raw or b""), csv_sha256=sha256(csvb), **st)
+                 pulled_at_utc=now.isoformat(timespec="seconds"), final=final, finality_rule=FINALITY_RULE,
+                 complete=is_complete, completeness=why, frozen_incomplete=bool(final and not is_complete),
+                 http_404=raw is None, bi5_bytes=len(raw or b""), bi5_sha256=sha256(raw or b""), csv_sha256=sha256(csvb), **st)
         metap.write_text(json.dumps(m, indent=1, sort_keys=True) + "\n")
         with open(self.root / "pulls.jsonl", "a") as f:
             f.write(json.dumps(dict(m, reason=reason)) + "\n")

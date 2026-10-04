@@ -110,22 +110,51 @@ def test_decode_rejects_duplicates_out_of_order_and_bad_schema():
     assert D.url("US100", "BID", dt.date(2026, 10, 5)).endswith("/USATECHIDXUSD/2026/09/05/BID_candles_min_1.bi5")
 
 
-def test_store_finality_and_immutability(tmp_path):
-    day = dt.date(2026, 10, 5)
-    raw = bi5([(0, 100000, 100500, 99000, 101000, 1.5)])
-    calls = []
-    clock = [dt.datetime(2026, 10, 6, 0, 30, tzinfo=D.UTC)]
-    s = D.Store(tmp_path, now=lambda: clock[0], get=lambda u: calls.append(u) or raw)
+def test_store_finality_by_completeness_v2(tmp_path):
+    """DATA cert B1: FINAL = timely AND complete by content; cut-off files are re-pulled; old bytes kept in superseded/."""
+    day = dt.date(2026, 10, 5)                                    # Monday, EDT: 16:14 NY = 20:14 UTC = sec 72840
+    full = bi5([(0, 100000, 100500, 99000, 101000, 1.5), (72840, 100000, 100500, 99000, 101000, 1.5)])
+    cut = bi5([(0, 100000, 100500, 99000, 101000, 1.5), (52140, 100000, 100500, 99000, 101000, 1.5)])   # 14:29 NY
+    srv = {"b": None}; calls = []
+    clock = [dt.datetime(2026, 10, 6, 1, 5, tzinfo=D.UTC)]
+    s = D.Store(tmp_path, now=lambda: clock[0], get=lambda u: calls.append(u) or srv["b"])
+    m = s.ensure("US100", "BID", day)                              # 404 at the pull
+    assert m["final"] is False and m["completeness"] == "empty_or_404"
+    srv["b"] = cut; clock[0] += dt.timedelta(days=1)
+    m = s.ensure("US100", "BID", day)                              # cut-off file: still not final, re-pulled
+    assert m["final"] is False and m["completeness"].startswith("cut_off") and len(calls) == 2
+    srv["b"] = full; clock[0] += dt.timedelta(days=1)
     m = s.ensure("US100", "BID", day)
-    assert m["final"] is False and len(calls) == 1                   # pulled before 01:00 UTC next day: provisional
-    clock[0] = dt.datetime(2026, 10, 6, 1, 0, tzinfo=D.UTC)
-    m = s.ensure("US100", "BID", day)
-    assert m["final"] is True and len(calls) == 2
+    assert m["final"] is True and m["complete"] and not m["frozen_incomplete"] and len(calls) == 3
+    assert list((tmp_path / "raw/US100/BID/superseded").glob("*.bi5"))            # earlier bytes kept, nothing deleted
     s.ensure("US100", "BID", day)
-    assert len(calls) == 2 and s.verify("US100", "BID", day)          # FINAL: never re-downloaded
-    assert s.ensure("US100", "BID", dt.date(2026, 10, 6))["status"] == "not_published_yet"
+    assert len(calls) == 3 and s.verify("US100", "BID", day)                      # FINAL: never re-downloaded
     s.paths("US100", "BID", day)[1].write_text("tampered")
     assert not s.verify("US100", "BID", day)
+    # a file that stays cut off is frozen (disclosed) after 5 weekdays
+    d2 = dt.date(2026, 10, 6); srv["b"] = cut
+    clock[0] = dt.datetime(2026, 10, 7, 1, 5, tzinfo=D.UTC)
+    cutd2 = bi5([(0, 100000, 100500, 99000, 101000, 1.5), (52140, 100000, 100500, 99000, 101000, 1.5)])
+    s.get = lambda u: cutd2
+    assert s.ensure("US100", "BID", d2)["final"] is False
+    clock[0] = dt.datetime(2026, 10, 14, 1, 5, tzinfo=D.UTC)
+    m = s.ensure("US100", "BID", d2)
+    assert m["final"] is True and m["frozen_incomplete"] is True
+    assert s.ensure("US100", "BID", dt.date(2026, 10, 15))["status"] == "not_published_yet"
+    # v1 metas (no finality_rule) are re-checked
+    mp = s.paths("US100", "BID", day)[2]; mm = json.loads(mp.read_text()); mm.pop("finality_rule"); mp.write_text(json.dumps(mm))
+    s.get = lambda u: full
+    assert s.ensure("US100", "BID", day)["finality_rule"] == D.FINALITY_RULE
+
+
+def test_complete_uses_full_datetime_and_weekday_rules():
+    mon = dt.date(2026, 10, 5)
+    rec = lambda sec: (dt.datetime(2026, 10, 5, tzinfo=D.UTC) + dt.timedelta(seconds=sec), 1, 2, 1, 2, 1.0)
+    assert D.complete([rec(72840)], mon)[0] and not D.complete([rec(72780)], mon)[0]
+    assert D.complete([], dt.date(2026, 10, 10))[0]                     # Saturday: closed
+    sun = dt.date(2026, 10, 4)
+    r2 = lambda sec: (dt.datetime(2026, 10, 4, tzinfo=D.UTC) + dt.timedelta(seconds=sec), 1, 2, 1, 2, 1.0)
+    assert D.complete([r2(86340)], sun)[0] and not D.complete([r2(79200)], sun)[0]
 
 
 def test_http_404_is_gap_and_errors_raise(monkeypatch):
@@ -163,13 +192,32 @@ def test_foil_with_n_equals_ftn_foil():
 
 
 # ------------------------------------------------------------------ end-to-end forward path (sandbox, native Dukascopy bi5)
-def md_get(u):
-    """Serve marketdata's raw NATIVE Dukascopy bi5 files for a datafeed URL (fake network)."""
+def md_get(u, drop=(), truncate=None, strip=None):
+    """Serve marketdata's raw NATIVE Dukascopy bi5 files for a datafeed URL (fake network). DATA cert scenarios:
+    drop = {(side, day)} -> 404; truncate = {(side, day): n_records}; strip = {(side, day): (sec_from, sec_to)}."""
     p = u.split("/datafeed/")[1].split("/")
     sym, y, m0, d, f = p[0], int(p[1]), int(p[2]), int(p[3]), p[4]
-    side = f.split("_")[0]
+    side = f.split("_")[0]; day = dt.date(y, m0 + 1, d)
+    if (side, day) in set(drop):
+        return None
     q = MD_RAW / sym / str(y) / f"{y:04d}{m0 + 1:02d}{d:02d}_{side}.bi5"
-    return q.read_bytes() if q.exists() else None
+    if not q.exists():
+        return None
+    raw = q.read_bytes()
+    if truncate and (side, day) in truncate:
+        x = lzma.decompress(raw)[:24 * truncate[(side, day)]]
+        raw = lzma.compress(x, format=lzma.FORMAT_ALONE)
+    if strip and (side, day) in strip:
+        a, b = strip[(side, day)]
+        x = lzma.decompress(raw)
+        recs = [x[i:i + 24] for i in range(0, len(x), 24)]
+        recs = [r for r in recs if not (a <= struct.unpack(">5if", r)[0] < b)]
+        raw = lzma.compress(b"".join(recs), format=lzma.FORMAT_ALONE)
+    return raw
+
+
+def getter(**kw):
+    return lambda u: md_get(u, **kw)
 
 
 @needs_md
@@ -249,7 +297,10 @@ def test_report_after_clearance_runs_all_co_reports(tmp_path, monkeypatch):
     assert n >= 2 and rep["pooled"]["n"] == n
     assert rep["verdict"].startswith("OPEN (N=") and "no verdict" in rep["verdict"]
     assert rep["foil"]["n_per_replicate"]["max"] <= n
-    assert rep["ask_resim"]["n"] == n and rep["spread_monthly"]
+    assert rep["ask_resim"]["n"] == n and rep["data_monitor_monthly"]
+    assert all("crossed_bars" in v for v in rep["data_monitor_monthly"].values())
+    assert rep["gap_flag_co_report"]["flagged_n"] >= 0 and "short_session_dropped_trades" in rep
+    assert rep["kill"]["min_cum"] is not None
     assert "lb_one_sided_95" in rep["pooled"]["binding_cluster_bound"]
 
 
@@ -267,3 +318,118 @@ def test_feed_suspension_after_more_than_10_gap_days(tmp_path):
     assert not H.suspension(lat2, tmp_path)["suspended"]     # exactly 10 gap days: not suspended
     (tmp_path / "FEED_RESUMED.json").write_text(json.dumps({"resume_from": days[15].isoformat()}))
     assert not H.suspension(lat, tmp_path)["suspended"]
+
+
+
+# ------------------------------------------------------------------ DATA cert scenarios (B1-B5), native Dukascopy bi5
+REG = dict(registered=True, registration_commit="x", registration_time_utc="2026-10-04T07:37:41+00:00", harness_matches_registered=True)
+
+
+def run_rows(root, d, at, get, inst="US100"):
+    st = D.Store(root, now=lambda: at, get=get, short_ok=lambda day: H.calendar_status(day) == "holiday")
+    return {r["session"]: (r, o) for r, o in H.session_rows_for(st, inst, d, REG, True, "t", at)}
+
+
+def utc(y, m, d, h=2, mi=0):
+    return dt.datetime(y, m, d, h, mi, tzinfo=D.UTC)
+
+
+@needs_md
+def test_S1_memorial_day_in_context_is_not_context_gap(tmp_path):
+    rows = run_rows(tmp_path, dt.date(2026, 6, 1), utc(2026, 6, 2), getter())
+    assert {r["status"] for r, _ in rows.values()} <= {"trade", "no_trade"}
+    assert all(r["context_missing_days"] is None for r, _ in rows.values())
+
+
+@needs_md
+def test_B4_labor_day_context_for_first_sessions(tmp_path):
+    assert dt.date(2026, 9, 7) not in H.expected_trading_days(dt.date(2026, 9, 1), dt.date(2026, 9, 30))
+    assert H.calendar_status(dt.date(2026, 9, 7)) == "holiday"
+    rows = run_rows(tmp_path, dt.date(2026, 9, 15), utc(2026, 9, 16), getter())   # context contains Labor Day 2026-09-07
+    assert {r["status"] for r, _ in rows.values()} <= {"trade", "no_trade"}
+    assert all(r["context_missing_days"] is None for r, _ in rows.values())
+
+
+@needs_md
+def test_S2_session_file_404_then_recovers(tmp_path):
+    d = dt.date(2026, 8, 20)
+    clean = run_rows(tmp_path / "clean", d, utc(2026, 8, 21), getter())
+    rows = run_rows(tmp_path / "s2", d, utc(2026, 8, 21, 1, 5), getter(drop={("BID", d)}))
+    assert {r["status"] for r, _ in rows.values()} == {"provisional"}                  # B2: was not_trading_day in v1
+    assert all(o is None for _, o in rows.values())
+    rows = run_rows(tmp_path / "s2", d, utc(2026, 8, 22), getter())                    # B1: re-pulled, now complete
+    for s in H.SESSIONS:
+        assert rows[s][0]["status"] == clean[s][0]["status"] in ("trade", "no_trade")
+        assert rows[s][0]["entry_time"] == clean[s][0]["entry_time"]
+        assert (rows[s][1] or {}).get("R") == (clean[s][1] or {}).get("R")
+    nxt = run_rows(tmp_path / "s2", dt.date(2026, 8, 21), utc(2026, 8, 22, 3), getter())   # B3: next session not poisoned
+    assert {r["status"] for r, _ in nxt.values()} <= {"trade", "no_trade"}
+
+
+@needs_md
+def test_S3_truncated_then_full_and_persistent_truncation_feed_gap(tmp_path):
+    d = dt.date(2026, 8, 20)
+    clean = run_rows(tmp_path / "clean", d, utc(2026, 8, 21), getter())
+    tr = getter(truncate={("BID", d): 1110})
+    assert {r["status"] for r, _ in run_rows(tmp_path / "s3", d, utc(2026, 8, 21, 1, 5), tr).values()} == {"provisional"}
+    rows = run_rows(tmp_path / "s3", d, utc(2026, 8, 24), getter())
+    assert {s: rows[s][0]["status"] for s in H.SESSIONS} == {s: clean[s][0]["status"] for s in H.SESSIONS}
+    # persistent cut-off: provisional while retrying, feed_gap once the 5-trading-day window is over
+    assert {r["status"] for r, _ in run_rows(tmp_path / "s3b", d, utc(2026, 8, 24), tr).values()} == {"provisional"}
+    rows = run_rows(tmp_path / "s3b", d, utc(2026, 8, 31), tr)
+    assert {r["status"] for r, _ in rows.values()} == {"feed_gap"}
+
+
+@needs_md
+def test_B3_frozen_bad_context_day_is_skipped_with_disclosure(tmp_path):
+    bad = dt.date(2026, 8, 20)
+    tr = getter(truncate={("BID", bad): 900})            # cut at ~11:00 NY: < 300 RTH bars, so not a trading day
+    run_rows(tmp_path, bad, utc(2026, 8, 31), tr)                       # frozen incomplete after the retry window
+    rows = run_rows(tmp_path, dt.date(2026, 9, 1), utc(2026, 9, 2), tr)
+    for r, _ in rows.values():
+        assert r["status"] in ("trade", "no_trade")
+        assert "2026-08-20" in (r["context_frozen_incomplete"] or "") and "2026-08-20" in (r["context_missing_days"] or "")
+
+
+@needs_md
+@needs_tape
+def test_B5_gap_trades_stay_counted_rows_with_flag(tmp_path):
+    """DATA ruling: 2026-03-12 US100 (61-min gap) london target + ny_am target were dropped by v1; v2 keeps them, flagged."""
+    want = {t["session"]: t for t in trades_csv("US100") if t["date"] == "2026-03-12"}
+    assert set(want) == {"london", "ny_am"}
+    rows = run_rows(tmp_path, dt.date(2026, 3, 12), utc(2026, 10, 5), getter())
+    for s, t in want.items():
+        r, o = rows[s]
+        assert r["status"] == "trade" and r["exit_bar_1545_ok"] is True
+        assert o["R"] == t["R"] and o["exit"] == t["exit"]
+    # the 61-min gap DATA found is in the burned (HistData-merged) tape, not in native Dukascopy: flag it on the tape
+    F = H.ftn(); tape = F["bars"].load_series(TAPE / "US100_1m.csv.gz", "US100")
+    d = dt.date(2026, 3, 12)
+    assert H.exit_bars_ok(tape, d)                                        # binding rule: kept (v1 dropped both)
+    assert all(H.gap_flag(tape, dt.datetime.fromisoformat(t["entry_time"])) for t in want.values())
+    assert not any(rows[s][0]["gap_flag"] for s in want)                   # native file has no gap
+
+
+@needs_md
+def test_B5_exit_bar_rule_applies_to_every_session(tmp_path):
+    d = dt.date(2026, 8, 20)                             # EDT: 15:45-16:00 NY = 19:45-20:00 UTC
+    rows = run_rows(tmp_path, d, utc(2026, 8, 21), getter(strip={("BID", d): (71100, 72000)}))
+    assert {r["status"] for r, _ in rows.values()} == {"short_session"}
+    assert all("no_bar_1545_1600" in r["not_counted_reasons"] and r["exit_bar_1545_ok"] is False for r, _ in rows.values())
+
+
+def test_futility_set_frozen_once_and_reshuffle_reported(tmp_path):
+    tr = [dict(date=f"2027-03-{i:04d}", session="london", instrument="US100", R=-0.5) for i in range(1, 251)]
+    f = H.futility_frozen(tr, tmp_path)
+    keys = json.loads((tmp_path / "FUTILITY_SET.json").read_text())["keys"]
+    assert len(keys) == 200 and f["fails"] and f["reshuffle"] == []
+    early = [dict(date="2027-01-01", session="london", instrument="US100", R=5.0)]   # a later backfill of an earlier date
+    f2 = H.futility_frozen(early + tr, tmp_path)
+    assert json.loads((tmp_path / "FUTILITY_SET.json").read_text())["keys"] == keys          # never overwritten
+    assert f2["fails"] == f["fails"] and f2["ub_one_sided_975"] == f["ub_one_sided_975"]
+    assert "2027-01-01|US100|london" in f2["reshuffle"]
+
+
+def test_kill_walk_min_cum():
+    tr = [dict(date=f"2027-01-{i:03d}", session="london", instrument="US100", R=r) for i, r in enumerate([-1, -2, 1], 1)]
+    assert H.kill_walk(tr)["min_cum"] == -3
