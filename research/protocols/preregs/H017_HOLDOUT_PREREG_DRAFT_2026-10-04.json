@@ -1,7 +1,7 @@
 {
  "id": "H017",
  "title": "H017 (holdout): one-shot pre-registered test of the fixed FTN REV (H016b rules, unchanged) on DATA's certified-untouched US100 / US500 history",
- "status": "DRAFT - NOT REGISTERED, NOT TAGGED. ORION ACCEPTS H017 at a531580 with the rulings in orion_rulings (acceptance relayed by ORION 2026-10-04 ~14:00 SAST; ruling file sha256 5a0b2a6063d6a30ebfa1c70d4db231a4bcdcd4ac16950ca81354c9f1c8d10649). Tag prereg-H017 only after CASSANDRA and DATA also accept; no R exists",
+ "status": "DRAFT BASELINE - NOT REGISTERED, NOT TAGGED, NOT TO BE LOCKED AS REVIEWED. Reviews: ORION ACCEPTS (a531580, rulings sha256 5a0b2a6063d6a30ebfa1c70d4db231a4bcdcd4ac16950ca81354c9f1c8d10649); DATA PASS WITH CONDITIONS -> ACCEPT once E1-E12 are in (applied here); CASSANDRA ACCEPT conditional on A1-A6 (applied here). USER DECISION 2026-10-04 ~13:57 SAST: do not lock this design; redesign first (H017_REDESIGN_OPTIONS_2026-10-04.md) because US100 era costs would decide it. No R exists",
  "drafted_by": "QUANT agent for ntloso ngubeni (user approved DRAFTING only), 2026-10-04 SAST",
  "draft_base": "branch research/h017-holdout-draft off origin/main 0df97e3",
  "paper_only": true,
@@ -135,126 +135,109 @@
    "source": "DATA_RULINGS_MARKETDATA_2026-10-04.md s.4 (/home/box/hermes-x/investigations/POST-WAVE1-LEADS/) - authoritative; loader copy /workspace/marketdata/data/untouched_certified.json",
    "untouched_certified_json_sha256": "747b679048511fc33db998a63482502171a75c2d2c74c8082effe9741dd32e12",
    "ranges_ny": {
-    "US100": "[2019-01-01 00:00, 2022-12-23 17:00) NY (HTF end 2021-09-13 for tf >= 1d hypotheses)",
-    "US500": "[2019-01-01 00:00, 2025-06-01 18:00) NY"
+    "US100": "[2019-01-01 00:00, 2022-12-23 17:00) NY. end_htf [.., 2021-09-13 00:00) (last day 2021-09-12) applies to tf >= 1d estimands; NOT applicable to H017 (intraday; HTF context from in-window CFD bars only; DATA Q3)",
+    "US500": "[2019-01-01 00:00, 2025-06-01 18:00) NY certified; H017 manifest ends with file 20250530 (DATA E7); confirmatory part ends 2022-12-23"
    },
    "disclosures_from_DATA": [
     "US500 correlated-path overlap: NQ/QQQ intraday 2022-12-26 -> 2025-05-31 was used by INV-002 (RTH-open CE, 07-09 range sweeps, first-hour FVG, weekly DOL). REV (raid of a prior extreme then reversal inside the killzone) is plausibly an INV-002-family estimand on that overlap: disclosed; sub-window reporting below; reviewers rule whether it is confirmatory (open question Q2)",
-    "US100 weekly/HTF end 2021-09-12 applies to tf >= 1d hypotheses; REV is an intraday 15m/1m rule that reads daily context (PDH/PDL, daily FVG). Q3",
+    "US100 end_htf 2021-09-12 (tf >= 1d estimands, NQ=F weekly from 2021-09-13 on file) does NOT apply to H017: REV is intraday and its HTF context (pdh/pdl, week_so_far high/low, ith/itl) comes only from in-window US100 CFD 1m bars (daycontext.py L71-76; rev.py L8); US100 runs to 2022-12-23; non-binding split co-report at 2021-09-13 (DATA Q3 / E5; CASSANDRA Q3 concurs: no Kaggle NQ overlap)",
     "DATA / marketdata QC ran integrity statistics only (spread, correlations, diffs) on 2019-2026; no outcome-bearing test (DATA s.4 table, last row). The Dukascopy downloader and rebuild_loop.sh decode bi5 into parquet as plumbing; DATA attests no outcome computation (run_access.attestations)"
    ]
   },
   "counted_windows": {
-   "US100": {
-    "first_counted": "2019-02-04",
-    "last": "2022-12-23",
-    "full_trading_days": 975
+   "confirmatory_pool": {
+    "US100": "[S*, 2022-12-23] (last session 2022-12-23, file 20221223)",
+    "US500": "[S*, 2022-12-23] (sub-window A)",
+    "S_star": "common counted start S* (>= 2019-02-04) from DATA's frozen manifest (data.data_ready_condition)",
+    "sessions_if_S_star_2019_02_04": "975 NYSE full sessions per instrument (DATA verified), 1,950 killzone slots each",
+    "ruling": "DATA Q2 + CASSANDRA Q2 + ORION Q2 (all agree): US100 + US500 A only"
    },
-   "US500": {
-    "first_counted": "2019-02-04",
-    "last": "2025-05-30",
-    "full_trading_days": 1578,
-    "sub_windows_reported": {
-     "A_clean": "2019-02-04 -> 2022-12-23 (no correlated-path overlap)",
-     "B_overlap": "2022-12-27 -> 2025-05-30 (INV-002 NQ path overlap, disclosed)"
-    }
-   },
-   "confirmatory_pool": "US100 + US500 sub-window A (2019-02-04 -> 2022-12-23); US500 sub-window B exploratory (ORION Q2, provisional pending CASSANDRA)"
+   "exploratory_windows": {
+    "US500_B": {
+     "window": "2022-12-27 -> 2025-05-30 (2022-12-26 NYSE holiday; manifest last file 20250530)",
+     "status": "EXPLORATORY, non-binding, reported only, label 'correlated-path overlap (INV-002 NQ)'; never in P1-P6, the N floor, the F2 p-value, Holm or replication eligibility; computed in the same single run"
+    },
+    "US100_split_2021_09_13": "non-binding US100 split co-report: [S*, 2021-09-10] vs [2021-09-13, 2022-12-23] (DATA E5)"
+   }
   },
   "context_only": "the first 22 NYSE sessions of each range (2019-01-02 -> 2019-02-01) are kernel context only (H016b rule.context_history >= 22 sessions); nothing before 2019-01-01 is used (none exists in the library)",
-  "binding_feed": "Dukascopy CFD 1m BID (BID_candles_min_1.bi5) AND ASK (ASK_candles_min_1.bi5) day files for USATECHIDXUSD / USA500IDXUSD, read from the raw bi5 files only (H016b K9: no marketdata.load(), no parquet, no HistData). Both sides binding exactly as H016b data_source. No fallback feed, no filled gaps, no synthetic ASK; a missing side = session not counted (feed_gap_bid / feed_gap_ask)",
-  "histdata": "HistData BID 2019-2025 exists in the library but is NOT a binding or fallback source (H016b fallback_feeds_allowed = false; HistData duplicate/flat-print defects per DATA s.1). Q1 if the Dukascopy BID backfill cannot be completed",
+  "binding_feed": "Dukascopy CFD 1m BID (BID_candles_min_1.bi5) AND ASK (ASK_candles_min_1.bi5) day files for USATECHIDXUSD / USA500IDXUSD, read from the raw bi5 files only (H016b K9: no marketdata.load(), no parquet, no HistData). Both sides binding exactly as H016b data_source. No fallback feed, no filled gaps, no synthetic ASK; a missing side = session not counted (feed_gap_bid / feed_gap_ask). Manifest bounds (DATA E7): US100 files 20190101..20221223; US500 files 20190101..20250530 (20250601_{BID,ASK} dropped: its Sunday 18:00+ NY bars lie at/after the exclusive end, in the touched range); the H017 source REFUSES any file outside these bounds, incl. the 2018-12 days H016b's 45-day utc_days_for requests for early-2019 sessions",
+  "histdata": "HistData BID 2019-2025 exists in the library but is NOT a binding or fallback source, ever (H016b fallback_feeds_allowed = false; DATA s.2 rule 4)",
   "file_inventory_filenames_and_sizes_only": {
    "US100": {
     "BID": {
-     "n_files": 772,
-     "bytes": 11179491,
+     "n_files": 800,
+     "bytes": 11554262,
      "zero_byte": 0,
-     "first": "20200707",
-     "last": "20221223"
+     "saturday_files": 0,
+     "first": "20200604",
+     "last": "20221223",
+     "expected_sun_fri": 1246,
+     "missing": 446,
+     "missing_first_last": [
+      "20190101",
+      "20200603"
+     ]
     },
     "ASK": {
      "n_files": 1246,
      "bytes": 17102958,
      "zero_byte": 0,
+     "saturday_files": 0,
      "first": "20190101",
-     "last": "20221223"
-    },
-    "BID_missing_vs_ASK": {
-     "n": 474,
-     "first": "20190101",
-     "last": "20200706"
-    },
-    "ASK_missing_vs_BID": 0
+     "last": "20221223",
+     "expected_sun_fri": 1246,
+     "missing": 0,
+     "missing_first_last": null
+    }
    },
    "US500": {
     "BID": {
-     "n_files": 1535,
-     "bytes": 18188517,
+     "n_files": 1561,
+     "bytes": 18537865,
      "zero_byte": 0,
-     "first": "20200707",
-     "last": "20250601"
+     "saturday_files": 0,
+     "first": "20200605",
+     "last": "20250530",
+     "expected_sun_fri": 2008,
+     "missing": 447,
+     "missing_first_last": [
+      "20190101",
+      "20200604"
+     ]
     },
     "ASK": {
-     "n_files": 2009,
-     "bytes": 23324094,
+     "n_files": 2008,
+     "bytes": 23320943,
      "zero_byte": 0,
+     "saturday_files": 0,
      "first": "20190101",
-     "last": "20250601"
-    },
-    "BID_missing_vs_ASK": {
-     "n": 474,
-     "first": "20190101",
-     "last": "20200706"
-    },
-    "ASK_missing_vs_BID": 0
+     "last": "20250530",
+     "expected_sun_fri": 2008,
+     "missing": 0,
+     "missing_first_last": null
+    }
    },
-   "parquet_years_present (stat only)": {
-    "US100/bid": [
-     "2020.parquet",
-     "2021.parquet",
-     "2022.parquet",
-     "2023.parquet",
-     "2024.parquet",
-     "2025.parquet",
-     "2026.parquet"
-    ],
-    "US100/ask": [
-     "2019.parquet",
-     "2020.parquet",
-     "2021.parquet",
-     "2022.parquet",
-     "2023.parquet",
-     "2024.parquet",
-     "2025.parquet",
-     "2026.parquet"
-    ],
-    "US500/bid": [
-     "2020.parquet",
-     "2021.parquet",
-     "2022.parquet",
-     "2023.parquet",
-     "2024.parquet",
-     "2025.parquet",
-     "2026.parquet"
-    ],
-    "US500/ask": [
-     "2019.parquet",
-     "2020.parquet",
-     "2021.parquet",
-     "2022.parquet",
-     "2023.parquet",
-     "2024.parquet",
-     "2025.parquet",
-     "2026.parquet"
-    ]
+   "manifest_bounds": {
+    "US100": "20190101..20221223",
+    "US500": "20190101..20250530 (20250601 excluded, DATA E7)"
    },
-   "downloader": "dl_dukascopy.py --plan default (pid 1874367, started 11:55 SAST) and rebuild_loop.sh (pid 1668590) running; dl_state.json 13:22 SAST: done 800 / todo 16347, last job USA500IDXUSD 2020-09-03 BID",
-   "taken_at_sast": "2026-10-04 13:39",
-   "method": "os.listdir + os.stat sizes of /workspace/marketdata/raw/dukascopy/{USATECHIDXUSD,USA500IDXUSD}/<year>/<yyyymmdd>_<SIDE>.bi5 within the ranges; no file opened, decoded or content-hashed"
+   "downloader": "dl_dukascopy.py (pid 1874367) and rebuild_loop.sh (pid 1668590) still running at inventory time",
+   "taken_at_sast": "2026-10-04 13:55",
+   "method": "os.listdir + os.stat (names, sizes) within the E7 bounds; Sun-Fri expected; no file opened, decoded or content-hashed"
   },
-  "inventory_reading": "ASK complete for both ranges (US100 1,246 day files 2019-01-01 -> 2022-12-23; US500 2,009 2019-01-01 -> 2025-06-01). BID present from 2020-07-07 only: 474 BID day files per instrument (2019-01-01 -> 2020-07-06) still to be downloaded by DATA's running backfill (it walks backwards; 13:22 SAST state at 2020-09-03, 13:39 SAST BID first file 2020-07-07)",
-  "data_ready_condition": "BINDING: H017 cannot be registered for running until DATA attests that every BID and ASK day file in both ranges is present and final (or listed as a genuine Dukascopy 404 / gap), the backfill and rebuild processes are stopped, and the file manifest (names, sizes, sha256 by DATA) is frozen. If BID for 2019-01-01 -> 2020-07-06 cannot be obtained, the counted window starts at the first session with 22 prior sessions of Dukascopy BID+ASK and this is fixed BEFORE registration from the inventory alone (Q1)",
+  "inventory_reading": "at 2026-10-04 13:55 SAST: ASK complete (US100 1246/1246, US500 2008/2008 incl. 20250530); BID US100 800/1246 (missing ['20190101', '20200603']), US500 1561/2008 (missing ['20190101', '20200604']); backfill running backwards",
+  "data_ready_condition": {
+   "ruling": "DATA s.2 rules 1-5 (verbatim terms) + CASSANDRA Q10",
+   "1_window_start": "the common counted start S* is the earliest NYSE session d >= 2019-02-04 for which the 22 NYSE sessions immediately before d are all COMPLETE on BID and ASK for BOTH instruments; complete = UTC day files d-1 and d present, pass complete() and the procedure-S integrity criteria (costs.era_spread_procedure_S S4)",
+   "2_freeze": "the manifest freezes at the EARLIER of (i) backfill finished its 2019-01-01 -> 2020-07-06 BID jobs for both instruments AND procedure S passed, or (ii) 2026-10-18 23:59 SAST; no DATA discretion; a file missing at the freeze is a genuine gap",
+   "3_gaps_after_S_star": "gaps after S* follow the unchanged H016b per-session rules (feed_gap_bid / feed_gap_ask, context_gap, context disclosure); they never shift the window",
+   "4_no_substitution": "no HistData BID substitution, ever; no extension of the freeze deadline",
+   "5_disclosed_range": "S* depends only on file presence and integrity, never on outcomes; S* range 2019-02-04 (backfill complete) to ~2020-08-06 (backfill fails entirely)",
+   "first_counted": "S* (>= 2019-02-04), from DATA's frozen manifest",
+   "no_post_decode_choice": "CASSANDRA Q10(iii): no choice may be made after any holdout file has been decoded by the harness",
+   "conflict_flag": "DATA rule 1 fixes ONE common S* for both instruments; CASSANDRA Q10(i) says 'the counted start per instrument'. Not resolved here (reviewer_conflicts K1)"
+  },
   "holidays": {
    "full_closures": [
     "2019-01-01",
@@ -336,13 +319,24 @@
    ],
    "source": "NYSE (marketdata exchange_calendar.parquet, pandas_market_calendars rule-based; manifest sha256 e4ebad58...; status/date columns only); binding source = NYSE published calendars; full closures and early closes are not counted (as H016b)"
   },
-  "conditional_rules_pre_declared": {
-   "ruling": "ORION Q10: tag with pre-declared conditional rules, so the R3 deadline does not hinge on the BID backfill",
-   "window": "the counted window is fixed mechanically from DATA's FROZEN manifest (names, sizes, sha256, genuine-404 list; no bar content is read to decide it): it starts at the first NYSE full trading day d >= 2019-02-04 such that every NYSE session in the 22 sessions before d and from d to the window end has BID and ASK day files present and final for its UTC days (d-1, d) or is listed by DATA as a genuine Dukascopy gap (such sessions are then simply not counted by the feed_gap rules); ends 2022-12-23 (confirmatory) / 2025-05-30 (US500 B, exploratory). Later missing files inside the window are feed_gap sessions, not a window change",
-   "if_backfill_never_reaches_2019": "e.g. BID only from 2020-07-07 -> counting starts at the 23rd session after it (expected confirmatory N ~432, power below); decided by the rule above, never by results",
-   "spread_schedule": "DATA's era p90 / p99 spread schedule (sensitivity co-report only; binding fills use the measured ASK) is frozen at harness-H017-v1 registration, before DATA_CERTIFIED, and committed with its sha256",
-   "Q1": "superseded by this rule (wait for the backfill as long as DATA wishes before freezing the manifest; the window follows mechanically)"
-  }
+  "counted_windows_detail_superseded": {
+   "US100": {
+    "first_counted": "2019-02-04",
+    "last": "2022-12-23",
+    "full_trading_days": 975
+   },
+   "US500": {
+    "first_counted": "2019-02-04",
+    "last": "2025-05-30",
+    "full_trading_days": 1578,
+    "sub_windows_reported": {
+     "A_clean": "2019-02-04 -> 2022-12-23 (no correlated-path overlap)",
+     "B_overlap": "2022-12-27 -> 2025-05-30 (INV-002 NQ path overlap, disclosed)"
+    }
+   },
+   "confirmatory_pool": "US100 + US500 sub-window A (2019-02-04 -> 2022-12-23); US500 sub-window B exploratory (ORION Q2, provisional pending CASSANDRA)"
+  },
+  "saturdays": "DATA E8: marketdata never pulls Saturdays but H016b gather requests them; the H017 source treats a Saturday as a closed, EMPTY day; a burned-data test must show identical tickets and R with and without Saturday files"
  },
  "rule": {
   "summary": "one REV ticket per session from the FIXED FTN Month 9 kernel at 9bed235, evaluated on bar-derived DayContext (BID chart, ASK series attached for spread_measured) at every 15m close inside the killzone; direction from the raid; stop beyond the raid's own extreme plus the instrument buffer; minimum stop distance enforced",
@@ -375,13 +369,29 @@
    }
   },
   "spread": "per-minute MEASURED Dukascopy ASK - BID (correct-side fills on the ASK series as H016b). The pinned assumed spreads (US100 1.55, US500 0.72) enter only the rule's stop buffer max(spread_measured, assumed) and the min-stop gate, exactly as pinned",
-  "era_spread_schedule_required": "DATA must certify, before registration, an era-appropriate spread schedule for 2019-2025 (by year x session/RTH, US100 and US500) from the Dukascopy ASK/BID it already measures as integrity QC: (a) that 2019-2021 Dukascopy ASK is valid for fills (DATA's s.3 / A5 text predates the 2019-2021 ASK download and calls 2019-2021 'assumed'); (b) p90 and p99 values for the required sensitivity (A5 rule 4: US100 p99 3.57 / 1.57, US500 0.74 / 0.54 where ASK is missing); (c) regime breaks (e.g. US500 0.71 until 2022-09-29). The schedule is metadata only and must be frozen in the H017 registration",
   "co_reports": [
    "flat cost 0.8 / 0.5 pt per side (ftn.research.outcomes.simulate; H013/H014/H015b convention) - co-report ONLY (CASSANDRA)",
    "2x slippage floors (simulate_both slip_mult=2.0)",
    "measured spread at the signal (monthly median / p90 per instrument and killzone)",
-   "DATA era p90 and p99 spread schedule replacing the measured ASK (A5 rule 4 sensitivity)"
-  ]
+   "DATA era p90 and p99 spread schedule from procedure S (A5 rule 4 sensitivity)"
+  ],
+  "era_spread_procedure_S": {
+   "ruling": "DATA s.4 (sealed procedure S, DATA only, once, after the freeze and before harness registration); CASSANDRA Q10(ii)",
+   "S0_snapshot": "copy the manifest files into a read-only snapshot /home/box/hermes-x/holdout/H017/raw/; the manifest (name, size, raw sha256) is hashed and filed before S runs",
+   "S1_precommit": "code h017_integrity_seal.py and its output whitelist filed with sha256 before running; uses the H016b duka.py decoder; CASSANDRA may review the whitelist",
+   "S2_inputs": "snapshot files only, each sha256 checked before decode",
+   "S3_whitelist": {
+    "per_file": "raw sha256, lzma-decompressed content sha256, records, real bars, filler bars, complete() flag + reason, last real bar time",
+    "per_instrument_year_session": "sessions London 02-05, NY AM 07-10, RTH 09:30-16:00, off-RTH: two-sided / BID-only / ASK-only minutes; crossed minutes (any O/H/L/C BID > ASK); zero-spread minutes; spread (ASK close - BID close) p50, p90, p95, p99, max",
+    "regime_breaks": "dates and level only",
+    "nothing_else": "nothing else is written or printed"
+   },
+   "S4_pass_criteria": "per instrument-year and side: >= 99% of expected non-holiday weekdays pass complete(); crossed minutes <= 0.1% of two-sided minutes; one-sided minutes <= 1% of the union; spread p50 > 0. A failing year-side is NOT certified and its sessions are not counted (mechanically)",
+   "S5_output": "written once to /home/box/hermes-x/holdout/H017/DATA_SEAL/; its sha256 goes into the harness-H017-v1 registration; era p90/p99 schedule = S3 p90/p99 by instrument x year x session",
+   "S6_commitment": "H017 runs whatever the spread values are; S is re-run only after a crash that wrote no output",
+   "fills": "Dukascopy ASK and BID 2019-2022 are certified for fills only on S pass; the schedule feeds only the p90/p99 sensitivity co-report (A5 rule 4); binding fills use measured per-minute ASK/BID",
+   "not_qc_spreads": "H017 must NOT use marketdata qc.py 2019-2020 spreads (they pair HistData BID with Dukascopy ASK; DATA s.4)"
+  }
  },
  "counting_rules": {
   "trading_day_filter": "weekday with >= 300 1m bars in 09:30-15:59 NY on the feed (ftn.research.bars.trading_days), per instrument (BID)",
@@ -404,7 +414,7 @@
  },
  "one_shot": {
   "single_run": "exactly ONE binding execution of harness-H017-v1 over the whole frozen manifest; no interim looks, no kill/futility (nothing sequential), no partial windows, no per-year or per-instrument early reads",
-  "no_peeking": "no process may open, load, decode, content-hash or compute on any bar inside the certified ranges for research before the run, except DATA's integrity QC and pre-run hash attestation (outcome-free)",
+  "no_peeking": "no process may open, load, decode, content-hash or compute on any bar inside the certified ranges before the run, EXCEPT (1) DATA's sealed procedure S and (2) DATA's pre-run snapshot attestation - the only permitted decodes (DATA E11). The chained marketdata qc.py / rebuild_loop.sh are integrity-only, disclosed and non-binding (DATA s.4). CASSANDRA Q10(iii): no choice after any harness decode",
   "no_reruns": "ORION #9 (quoted in orion_rulings): NO reruns. A crash before outputs counts as NO-RUN (no verdict; nothing unsealed). Any rerun - after a crash or otherwise - needs CASSANDRA's WRITTEN approval, filed in the repo before the rerun starts. (Replaces the draft's earlier automatic crash-rerun exception.)",
   "changes": "any change of rule, cost, window, criterion or code after the run needs a new ID and fresh (certified-untouched or forward) data; this holdout cannot be reused",
   "N": "ORION Q5 (KEEP): INCONCLUSIVE (underpowered) - never PASSES or FAILS - if the CONFIRMATORY pool has pooled N < 400 counted trades; applied to the confirmatory pool only (N is outcome-free)"
@@ -506,6 +516,20 @@
    "US100": 516,
    "US500": 394,
    "pooled": 910
+  },
+  "PRIMARY_confirmatory_pool": {
+   "central": {
+    "US100": 433,
+    "US500": 220,
+    "pooled": 653
+   },
+   "naive": {
+    "US100": 516,
+    "US500": 394,
+    "pooled": 910
+   },
+   "fallback_disclosure": "DATA E3: if S* slips to ~2020-08-06 (598 sessions; BID backfill fails), central confirmatory N ~433 (draft model 432): INCONCLUSIVE (N < 400) becomes a realistic outcome, and the CASSANDRA Q5 pre-run check (< 450 -> postpone) would POSTPONE the run",
+   "note": "the full-pool figures above include US500 B and are not the confirmatory numbers"
   }
  },
  "power": {
@@ -696,8 +720,8 @@
     "joint_h016b_style": 0.984
    }
   },
-  "reading": "joint P(pass) at the central N ~847: +0.10 -> ~0.60, +0.15 -> ~0.89, +0.20 -> ~0.99; size at mu = 0 ~0.05. Adding H016b's 'mean >= +0.10' criterion would cut +0.10 power to ~0.51 (Q4)",
-  "superseded_note": "full-pool figures (US500 incl. sub-window B) kept for the record; the confirmatory pool is power_confirmatory_pool (ORION Q2, provisional)"
+  "reading": "FULL POOL incl. US500 B (superseded, not confirmatory): joint P(pass) at N ~847: +0.10 -> ~0.60, +0.15 -> ~0.89, +0.20 -> ~0.99; size at mu = 0 ~0.05",
+  "superseded_note": "full-pool figures (US500 incl. sub-window B) kept for the record; the confirmatory pool is power_confirmatory_pool (ORION Q2, provisional); equal per-instrument edges assumed (see power_realistic_A2)"
  },
  "power_sub_window_A_only": {
   "how": "same script with US500 ending 2022-12-23 (Q2 'sub-window A only'); research/evidence/quant/H017_HOLDOUT_POWER_SIM_SUBWINDOW_A_2026-10-04.out",
@@ -786,10 +810,10 @@
    "fail": "FAILS (holdout) - any of P1-P5 false",
    "fragile": "FAILS (holdout, fill-fragile) - P1-P5 true at baseline but flipped under some P6 perturbation",
    "inconclusive": "ORION Q5 (KEEP): INCONCLUSIVE (underpowered) - never PASSES or FAILS - if the CONFIRMATORY pool has pooled N < 400 counted trades; applied to the confirmatory pool only (N is outcome-free)",
-   "sub_window": "ORION Q2 (ADVISORY, PROVISIONAL pending CASSANDRA, who may overrule): confirmatory pool = US100 2019-02-04 -> 2022-12-23 + US500 sub-window A 2019-02-04 -> 2022-12-23; US500 sub-window B 2022-12-27 -> 2025-05-30 overlaps INV-002's NQ path and is EXPLORATORY, report-only (never enters P1-P6, Holm or the N floor). If CASSANDRA overrules before the tag, the confirmatory pool reverts to all US500 and the prereg is amended before tagging"
+   "sub_window": "confirmatory pool = US100 + US500 sub-window A, both [S*, 2022-12-23]; US500 sub-window B (2022-12-27 -> 2025-05-30) exploratory only (DATA Q2, CASSANDRA Q2, ORION Q2)"
   },
   "criteria_all_required_note": "ORION Q4: the pass rule stays P1-P6, mirroring H016b; 'mean >= +0.10R' is NOT binding",
-  "small_effect_flag": "ORION Q4: if the confirmatory pooled mean R < +0.10, the verdict carries the flag 'small-effect' (e.g. 'PASSES (holdout, unadjusted, small-effect)'); MINT may not size above its minimum on a small-effect result"
+  "small_effect_flag": "ORION Q4: if the confirmatory pooled mean R < +0.10, the verdict carries the flag 'small-effect' (e.g. 'PASSES (holdout, unadjusted, small-effect)'); MINT may not size above its minimum on a small-effect result; replication eligibility needs mean >= +0.10R (CASSANDRA Q4)"
  },
  "conservative_exit_and_fragility": {
   "one_sided_exit_leg": "DATA's conservative-exit v2 (one_sided_exit.py sha256 691a102f208e2e4c1f44748c27288d130843eb46b557ae329f862243e2d501dd; stop_proxy spread = max(last two-sided spread, p95 over the prior 20 sessions)) via harness-H016b-v1 one_sided.py, unchanged; per-trade one_sided_exit_minutes, R_conservative, exit_conservative, proxy_events sealed; conservative pooled R reported next to the headline",
@@ -800,9 +824,11 @@
   "2019-2022 includes the COVID crash and recovery (Feb-Apr 2020), the 2021 melt-up and the 2022 bear market: volatility regimes absent from the 2025-26 burned window",
   "price levels ~1/3-1/2 of 2026: fixed-point min-stop, stop buffer, slippage floors and spreads are relatively LARGER per R, so costs per R are higher than in the burned window (an intrinsically harder test of the same pinned rule)",
   "CFD spreads/costs differ by era (DATA s.3/A5 schedules: US100 off-RTH ~3.46 until 2025-08-28; US500 0.71 until 2022-09-29 then 0.51); fills use measured ASK, sensitivity uses DATA's era p90/p99 schedule (required)",
-  "Dukascopy BID 2019-2020 is being downloaded now; its quality is not yet certified by DATA",
   "H017 tests the rule as pinned for 2026; a negative holdout result may reflect era/point-scaling, and a positive one does not validate 2026 costs; it is disclosed beside any H016b verdict",
-  "ORION Q8: same rule = pins byte-identical incl. the point constants (min-stop 10.2 / 4.88 pt); rescaling to era index levels would be a post-data choice and needs a new ID. The heavier small-stop gating at low index levels (expected confirmatory N ~653 vs ~910 naive) is a DISCLOSED regime caveat, not a defect"
+  "ORION Q8: same rule = pins byte-identical incl. the point constants (min-stop 10.2 / 4.88 pt); rescaling to era index levels would be a post-data choice and needs a new ID. The heavier small-stop gating at low index levels (expected confirmatory N ~653 vs ~910 naive) is a DISCLOSED regime caveat, not a defect",
+  "Dukascopy BID and ASK 2019-2022: certified by DATA procedure S or not counted (DATA E10)",
+  "2020-03-09 / 03-12 / 03-16 / 03-18 market-wide circuit-breaker halts are NOT closures; those sessions follow the ordinary min-bar / exit-bar rules (DATA s.6, E10)",
+  "CASSANDRA Q8 pre-data expectation (verbatim in cassandra_rulings.Q8): US100 era off-RTH spread ~3.46 pt vs burned 1.18 -> implied holdout US100 mean ~ -0.10R (US500 ~ +0.23R); P2 (US100 > 0) is the expected binding failure for cost reasons alone; a FAIL driven by US100 costs is a valid FAIL of the pinned rule and must NOT be reworded afterwards as 'era costs, not edge'"
  ],
  "family": {
   "family": "F2 (new; ORION closed-family rule: F1 = H013, H014, H016b is CLOSED; research/summaries/2026-10-04_H015b_WITHDRAWAL.md addendum)",
@@ -826,11 +852,11 @@
  },
  "replication_conditions": {
   "ruling": "ORION #6; ALL must hold, otherwise H017 is not H016b's replication (and vice versa)",
-  "R1_identical_rules": "same frozen REV version, entry and exit logic and cost model (incl. the correct-side co-report) - here: the 111 prereg-H016b pins byte-identical and the harness-H016b-v1 scoring path imported unchanged (relation_to_H016b); checked again at harness-H017-v1",
+  "R1_identical_rules": "same frozen REV version, entry and exit logic and cost model (incl. the correct-side co-report) - here: the 111 prereg-H016b pins byte-identical and the harness-H016b-v1 scoring path imported unchanged (relation_to_H016b); checked again at harness-H017-v1. CASSANDRA Q4 (A1): the decision rule must also be identical: H017 counts as H016b's replication (or the reverse) only if its confirmatory pool ALSO meets pooled mean >= +0.10R; an H017 PASS with mean < +0.10R is a valid F2 result but NOT a replication",
   "R2_no_overlap": "no bar or session overlap with H016b's counted window (H016b counts sessions from 2026-10-05; H017's latest bar is 2025-06-01 18:00 NY; H017 context is also inside the certified ranges) AND DATA certifies H017's tape as untouched (DATA_CERTIFIED for harness-H017-v1, run_access_protocol.preconditions)",
   "R3_tag_before_first_counted_row": "H017 pre-registered with tag prereg-H017 SET (pushed to origin) BEFORE H016b's first counted row - see replication_deadline",
-  "R4_both_pass_own_terms": "H016b PASSES and SURVIVES Holm in F1; H017 PASSES (P1-P6) and clears F2; both under correct-side costs with a non-flipping fill-fragility co-report (H017: binding P6; H016b: no 'fill-fragile' label)",
-  "R5_independence_signoff": "CASSANDRA's written sign-off on independence (same Dukascopy feed; regime overlap), filed before either result is used as the other's replication",
+  "R4_both_pass_own_terms": "H016b PASSES and SURVIVES Holm in F1; H017 PASSES (P1-P6) and clears F2; both under correct-side costs with a non-flipping fill-fragility co-report (H017: binding P6; H016b: no 'fill-fragile' label); for replication additionally confirmatory pooled mean >= +0.10R (CASSANDRA Q4)",
+  "R5_independence_signoff": "CONDITIONAL (CASSANDRA draft R5, verbatim in cassandra_rulings.R5): final only when (1) A1-A5 are in the tagged prereg, (2) prereg-H017 is on origin before 2026-10-06 01:00 UTC (R3), (3) DATA certifies the Dukascopy BID+ASK feed for the confirmatory window with the F4 reads attested outcome-free, (4) the A5 independent scorer agrees with the sealed results, (5) no holdout bar is decoded before the single run except DATA's attested integrity QC. Missing today: (1), (3), (4)",
   "consequence": "both passing = ONE finding, 'REV, forward and historical holdout'; any condition failing -> H016b needs a separate new-ID replication; H017 still stands or falls on its own in F2"
  },
  "replication_deadline": {
@@ -857,32 +883,24 @@
   "reruns": "none; a crash before outputs = no-run; any rerun needs CASSANDRA's written approval",
   "no_waiting_on_H016b": "H017 does not wait for H016b (ORION #9: H016b's kill/futility are mechanical and frozen; an early H016b stop only enters it into Holm at p = 1, which is conservative)",
   "pre_run_attestations": [
-   "DATA, immediately before the run (same session, timestamped): sha256 of every BID and ASK bi5 in the frozen manifest, equality with the registered manifest, backfill/rebuild stopped, no foreign files",
+   "DATA, immediately before the run (timestamped): hash the READ-ONLY snapshot /home/box/hermes-x/holdout/H017/raw/ - both raw sha256 AND lzma-decompressed content sha256 of every BID and ASK file must equal the frozen manifest; backfill/rebuild cannot touch the snapshot; no foreign files (DATA E9)",
    "DATA: no outcome-bearing computation was run on the ranges by anyone (QC disclosure)",
-   "CASSANDRA: harness-H017-v1 reproduces the burned H016b trades 258/258 and passes synthetic tests at its digest"
+   "CASSANDRA: harness-H017-v1 reproduces the burned H016b trades 258/258 and passes synthetic tests at its digest",
+   "DATA attests the CASSANDRA F4 list of outcome-free holdout reads (outcome_free_reads_disclosed) - CASSANDRA A4"
   ],
   "sealing": "outputs written sealed to a fresh write-once directory (sealed/), sha256 of every output committed immediately; the verdict JSON is produced by the harness (no human/agent computation); nothing is read before the single unseal",
   "audience": "at the single unseal: CASSANDRA notified (ORION #9); DATA, ORION and the user at the same time; no partial results to anyone",
-  "logging": "run log, environment, manifest hash, start/end time (SAST) committed with the outputs"
+  "logging": "run log, environment, manifest hash, start/end time (SAST) committed with the outputs",
+  "pre_run_expected_N_check": "CASSANDRA Q5 (verbatim in cassandra_rulings.Q5): DATA counts from the frozen manifest alone the eligible killzone sessions with BID+ASK day files; ORION multiplies by the burned per-session rates (US100 0.2647, US500 0.2022) and the level-adjusted keep fractions; expected confirmatory N < 450 -> run POSTPONED, holdout stays sealed and unread",
+  "independent_scorer": "CASSANDRA A5: before unseal, a scorer written separately from `ftn.research.outcomes` and from harness-H016b-v1 recomputes R for every sealed H017 ticket from the raw bi5. It must also reproduce the 258 burned R values. Agreement must be ≤ 1e-9 R. The sealed verdict counts only if it agrees, and the scorer is registered with its own sha256 before the run.",
+  "harness_clearance_separate": "CASSANDRA A6: CASSANDRA_CLEARED for harness-H017 is a separate review. Prereg acceptance does not clear the harness.",
+  "certification_scope": "CASSANDRA Q10(iv) / A3: DATA_CERTIFIED for H017 must cover the Dukascopy BID+ASK bi5 feed for 2019-2022 (DATA s.4 table currently reads 'HistData BID; no ASK', not the H017 feed)"
  },
  "harness_to_build": {
   "name": "research/forward/H017/ (harness-H017-v1), registered with its own digest BEFORE the run",
   "content": "imports harness-H016b-v1 scoring unchanged; adds a read-only local bi5 source bound to DATA's frozen manifest (sha256 check per file before decode), the H017 windows, calendar and sub-window reporting, P1-P6 verdict logic, the INCONCLUSIVE floor and the one-shot guard (refuses to run twice: sealed/ must not exist)",
   "tests": "burned (2025-08-25 -> 2026-09-25) and synthetic data only; a guard test proves no path inside the certified ranges is read during tests"
  },
- "open_questions": [
-  "Q1 SUPERSEDED by data.conditional_rules_pre_declared (ORION Q10)",
-  "Q2 PROVISIONAL: ORION advisory - US500 sub-window B exploratory; CASSANDRA may overrule before the tag",
-  "Q3 (DATA): REV reads daily context; does the US100 HTF end 2021-09-12 apply? Draft uses 2022-12-23 (intraday estimand)",
-  "Q4 RESOLVED (ORION): mean >= +0.10 not binding; mandatory mean + CI co-report; small-effect flag",
-  "Q5 RESOLVED (ORION): keep the N < 400 INCONCLUSIVE floor on the confirmatory pool",
-  "Q6 RESOLVED by ORION #6 (replication_conditions, replication_deadline)",
-  "Q7 (DATA): certify the 2019-2022 Dukascopy ASK for binding fills; freeze the era p90/p99 schedule at harness registration; confirm QC/rebuild did no outcome-bearing computation",
-  "Q8 RESOLVED (ORION): same rule, pins byte-identical; level rescale = new ID",
-  "Q9 RESOLVED by ORION #9 (run_access_protocol)",
-  "Q10 RESOLVED (ORION): tag with pre-declared conditional rules (data.conditional_rules_pre_declared)",
-  "C1 (for CASSANDRA/ORION, conflict): ORION's Q4 rationale says 'mean >= +0.10R' is 'a criterion H016b doesn't have', but H016b's registered binding_pass_at_N criterion 1 IS 'pooled mean R after correct-side costs >= +0.10'. So P1-P6 does NOT mirror H016b's decision rule exactly: H017 drops H016b's mean >= +0.10 and makes fill-fragility a binding fail (P6) where H016b only labels it 'fill-fragile'. If R1 (#6) requires the same decision rule, either H017 adds mean >= +0.10 as binding (confirmatory joint power at +0.10 ~0.47 -> ~0.47, at +0.15 ~0.78 -> ~0.78: in the simulation the mean criterion barely changes joint power at N~653) or ORION confirms R1 covers rules/entry-exit/costs only (as #6's text says). Needs a decision before the tag"
- ],
  "untouched_attestation_by_drafter": "For this draft no bar data inside the certified ranges was opened, loaded, decoded, content-hashed or computed on. Used: DATA's rulings and untouched_certified.json (metadata), marketdata manifest/ calendar (dates, status, row counts), os.listdir/os.stat names and sizes of the raw bi5 files, burned-window trade CSVs and score JSON, pinned code, and approximate public index levels",
  "acceptances": {
   "ORION": {
@@ -893,8 +911,17 @@
    "when": "2026-10-04 ~14:00 SAST",
    "note": "the ruling file records the Q2/Q4/Q5/Q8/Q10 rulings 'on draft a531580'; the word ACCEPTS was relayed with them (it is not itself in the file)"
   },
-  "CASSANDRA": "PENDING (incl. Q2, which she may overrule)",
-  "DATA": "PENDING"
+  "CASSANDRA": {
+   "status": "ACCEPT for tagging, conditional on A1-A6",
+   "file": "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H017_HOLDOUT_PREREG_REDTEAM_2026-10-04.md",
+   "sha256": "ab3b95e6f2efd3743be7e3e2794567427cf32cb4061627985da16a61b2af7499",
+   "R5": "CONDITIONAL (draft) - see cassandra_rulings.R5"
+  },
+  "DATA": {
+   "status": "PASS WITH CONDITIONS; HOLD at a531580 -> ACCEPT once E1-E12 are in the tagged text",
+   "file": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/DATA_REVIEW_H017_HOLDOUT_PREREG_2026-10-04.md",
+   "sha256": "0ebb61594f64342951b105a61f258d8ed2e45092a8ad7d2d86ac6e8fb56bff1d"
+  }
  },
  "power_confirmatory_pool": {
   "how": "research/evidence/quant/H017_HOLDOUT_POWER_CONFIRMATORY_2026-10-04.{py,out}: same method as H017_HOLDOUT_POWER_SIM (burned session-slot resampling, per-instrument re-centring, min-stop level thinning, normal-approx cluster bound), 2,000 replicates; joint = P1-P5 (P6 not simulable, can only lower it)",
@@ -1065,6 +1092,85 @@
     "p_N_below_400": 0.0
    }
   ],
-  "floor_reading": "with the full window P(N < 400) is ~0 unless point volatility is ~0.6x the level-scaled assumption (0.028); with the conditional late window (BID from 2020-07-07) it is ~0.07 at the central assumption and ~0.90 at vol 0.8. The resampling spread understates true trade-rate uncertainty (the holdout rate is unknown)"
+  "floor_reading": "with the full window P(N < 400) is ~0 unless point volatility is ~0.6x the level-scaled assumption (0.028); with the conditional late window (BID from 2020-07-07) it is ~0.07 at the central assumption and ~0.90 at vol 0.8. The resampling spread understates true trade-rate uncertainty (the holdout rate is unknown)",
+  "PRIMARY": {
+   "equal_+0.15": 0.778,
+   "equal_+0.10": 0.469,
+   "equal_+0.20": 0.944
+  }
+ },
+ "cassandra_rulings": {
+  "file": "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H017_HOLDOUT_PREREG_REDTEAM_2026-10-04.md",
+  "sha256": "ab3b95e6f2efd3743be7e3e2794567427cf32cb4061627985da16a61b2af7499",
+  "attribution": "CASSANDRA, 2026-10-04 ~14:10 SAST (verbatim)",
+  "Q2": "CASSANDRA ruling Q2: US500 2022-12-27 → 2025-05-30 (sub-window B) is EXPLORATORY and reported only. It is never part of P1–P6, the N floor, the family F2 p-value, or replication eligibility.\nThe confirmatory pool is US100 2019-02-04 → 2022-12-23 plus US500 2019-02-04 → 2022-12-23 (sub-window A). Both end at the same date.\nReason: INV-002 tested sweep, range and FVG concept families (H001b–H004b, H009b) on Kaggle NQ 1m from 2022-12-26 18:01 ET. US100 tracks NQ at 0.98–0.99 and US500 is strongly correlated, so B's path has been seen. Also, the burned-export and QUANT-canon pipelines loaded the US500 2025.parquet (Jan–May 2025 lies in B) before filtering it out.",
+  "Q3": "CASSANDRA ruling Q3: REV is an intraday rule that reads daily context. The only touched HTF file that overlaps is NQ=F *weekly* from 2021-09-13. It is \"not primary\" in H009b, which used daily 2024-09-13+.\nNo HERMES analysis of US100/NQ intraday or daily bars before 2022-12-26 was found (see contamination). The US100 end of 2022-12-23 exists because Kaggle NQ starts 2022-12-26 18:01 ET. There is no overlap.",
+  "Q4": "CASSANDRA ruling Q4: ORION's premise \"mirroring H016b\" is factually wrong. harness-H016b-v1 `verdict()` has six criteria, and the first is `mean_R >= 0.10`. H017's P1–P5 therefore set a lower bar than H016b.\n- Standalone F2 verdict: P1–P6 as drafted, with the mean and CI co-reported and the small-effect flag as ORION ruled.\n- Replication eligibility (ORION #6, R1/R4): H017 counts as H016b's replication, or the reverse, only if its confirmatory pool ALSO meets pooled mean ≥ +0.10R. That makes the decision rule identical to H016b's.\n- An H017 PASS with mean < +0.10R is a valid F2 result but NOT a replication.",
+  "Q5": "CASSANDRA ruling Q5: Keep the pooled N < 400 → INCONCLUSIVE rule on the confirmatory pool.\nAn INCONCLUSIVE run still CONSUMES the holdout: no rerun, no extension.\nPre-run check (outcome-free): before the run, DATA counts, from the frozen manifest alone, the eligible killzone sessions that have BID and ASK day files. ORION multiplies that count by the burned per-session trade rates (US100 0.2647, US500 0.2022) and by the draft's level-adjusted keep fractions.\nIf that expected confirmatory N is < 450, the run is POSTPONED: the holdout stays sealed and unread. Without the 2019-01 → 2020-07-06 BID backfill, the central confirmatory N falls to about 450.",
+  "Q8": "CASSANDRA ruling Q8: Same rule, because the pins are byte-identical.\n- The min-stop (4 × (assumed spread + 2 × slip)) is friction-relative, not range-relative. Re-deriving it per era would be a different rule and needs a new ID.\n- The prereg MUST state before the run, as a pre-data expectation, what my burned-data and public-level estimate shows (scratch `h017_cost_scaling.py`). It assumes the gross edge in R is scale-invariant and uses DATA's published 2022–2025-08 US100 off-RTH spread of about 3.46 pt (burned 1.18).\n\n| | Burned mean R | Implied holdout mean R | Level-scaled keep rate |\n|---|---|---|---|\n| US100 | +0.006 | **−0.10** | 75–91% |\n| US500 | +0.18 | +0.23 | 38–88% |\n\n- P2 (US100 > 0) is therefore the expected binding failure point, for cost reasons alone.\n- A FAIL driven by US100 costs is a valid FAIL of the pinned rule. It must not be reworded afterwards as \"era costs, not edge\".",
+  "Q10": "CASSANDRA ruling Q10: Tag with conditional rules, provided each one is mechanical:\n(i) The counted start per instrument = the first NYSE full session preceded by 22 sessions with both BID and ASK day files in DATA's frozen manifest. Window ends as Q2/Q3.\n(ii) The era spread schedule is frozen at harness registration and used ONLY in co-reports. Binding fills use the measured ASK.\n(iii) No choice may be made after any holdout file has been decoded by the harness.\n(iv) DATA_CERTIFIED for H017 must cover the Dukascopy BID+ASK bi5 feed for 2019-2022. DATA's §4 currently certifies the range as \"HistData BID; no ASK\", which is not the feed H017 binds to (Q7).",
+  "R5": "CASSANDRA R5 (draft, 2026-10-04): I sign off that H017's confirmatory pool (US100 + US500, 2019-02-04 → 2022-12-23) is independent of H016b's counted window (sessions from 2026-10-05) for ORION #6 purposes, subject to the conditions below.\n- **Time and market path:** no session overlap. No HERMES analysis of these instruments' bars in this window was found. US500 sub-window B is excluded for its INV-002 path overlap.\n- **Regime:** 2019-2022 (COVID, 2021 melt-up, 2022 bear) is a different regime from 2026. That supports independence, but limits transfer.\n- **Constants:** the point constants were derived from 2025-26 data and fixed before H017 data. That is legitimate for a frozen-rule test. It means H017 tests the 2026-calibrated rule at different index levels, not the calibration itself.\n\n**Not independent:**\n(i) Same vendor (Dukascopy CFD construction and feed artifacts are shared).\n(ii) Same code. Mitigated only by A5.\n(iii) Same concept source (ICT).\nA joint pass is therefore ONE finding (as ORION ruled), not two.\n\n**Conditions:** this sign-off becomes final only when ALL of these hold:\n(1) A1–A5 are in the tagged prereg.\n(2) `prereg-H017` is on origin before 2026-10-06 01:00 UTC (R3).\n(3) DATA certifies the Dukascopy BID+ASK feed for the confirmatory window, with the F4 reads attested as outcome-free.\n(4) The A5 independent scorer agrees with the sealed results.\n(5) No holdout bar is decoded by anyone before the single run, except DATA's attested integrity QC.\n\n**Missing today:** (1), (3) and (4)."
+ },
+ "outcome_free_reads_disclosed": {
+  "source": "CASSANDRA F4 (verbatim)",
+  "text": "- PROBLEM: DATA's QC decoded holdout bars, and several pipelines loaded holdout-year parquet before filtering. None of this is listed:\n  - g4: full certified-range loads plus spread spots on 2021-06-01..03 and 2022-06-01..03;\n  - f3/f3b: spread by year and session;\n  - g5b: US500 off-RTH regime, Dec 2022;\n  - f1c/f1d: flat-bar and duplicate checks on HistData;\n  - rebuild_loop parquet decode (plumbing);\n  - burned-export and QUANT-canon loads of the 2025 parquet (sub-window B).\n- EVIDENCE: the POST-WAVE1-LEADS scripts and .out files listed.\n- TEST: grep of the scripts and outputs.\n- SEVERITY: LOW–MEDIUM. A4 lists them. None is outcome-bearing.",
+  "attestation": "DATA attests these as outcome-free before the run (A4, R5 condition 3)"
+ },
+ "power_realistic_A2": {
+  "ruling": "CASSANDRA A2: headline power is conditional on EQUAL per-instrument edges; realistic is ~0.27 (A, burned means)",
+  "cassandra_table_verbatim": "- PROBLEM: the draft re-centres both instruments to the same μ.\n- WHY: P2 requires each instrument > 0, and burned US100 is about 0.\n\n| Scenario (draft script, 400 reps) | Full pool (N≈847) | Sub-window A (N≈654) |\n|---|---|---|\n| Equal μ = +0.15 | 0.90 | **0.77** |\n| Equal μ = +0.10 | 0.58 | **0.47** |\n| Burned per-instrument means (US100 +0.006, US500 +0.183) | **0.44** | **0.27** |\n| Era-cost-adjusted (US100 −0.10, US500 +0.23) | 0.07 | **0.05** |\n\n- EVIDENCE: `/workspace/h017_power_perinst.out`, `h017_powA.py`.\n- TEST: the runs above.\n- SEVERITY: HIGH (disclosure). The holdout is spent once, and realistic power is about 0.3 or lower. A2 requires this table in the prereg. Whether to spend the holdout anyway is the user's and ORION's call.",
+  "drafter_reproduction_2000_reps": {
+   "equal +0.15": {
+    "mus": {
+     "US100": 0.15,
+     "US500": 0.15
+    },
+    "N_median": 653,
+    "joint_P1_P5": 0.778
+   },
+   "equal +0.10": {
+    "mus": {
+     "US100": 0.1,
+     "US500": 0.1
+    },
+    "N_median": 653,
+    "joint_P1_P5": 0.469
+   },
+   "burned per-instrument means": {
+    "mus": {
+     "US100": 0.006,
+     "US500": 0.183
+    },
+    "N_median": 653,
+    "joint_P1_P5": 0.27
+   },
+   "era-cost adjusted (CASSANDRA Q8)": {
+    "mus": {
+     "US100": -0.1,
+     "US500": 0.23
+    },
+    "N_median": 653,
+    "joint_P1_P5": 0.051
+   }
+  },
+  "file": "research/evidence/quant/H017_HOLDOUT_POWER_PERINSTRUMENT_2026-10-04.{py,out}"
+ },
+ "resolved_questions": {
+  "Q1": "RESOLVED (DATA s.2, ORION Q10, CASSANDRA Q10): window start S* from DATA's frozen manifest (data.data_ready_condition rules 1-5); no HistData; freeze at backfill+S or 2026-10-18 23:59 SAST",
+  "Q2": "RESOLVED (ORION advisory, DATA Q2, CASSANDRA Q2 all agree): US500 sub-window B exploratory; confirmatory pool US100 + US500 A",
+  "Q3": "RESOLVED (DATA Q3, CASSANDRA Q3): HTF end 2021-09-12 does not apply; US100 runs to 2022-12-23; non-binding split co-report at 2021-09-13",
+  "Q4": "RESOLVED (ORION Q4 as amended by CASSANDRA Q4): standalone P1-P6, mean + CI mandatory co-report, small-effect flag; replication additionally needs confirmatory mean >= +0.10R",
+  "Q5": "RESOLVED (ORION Q5, CASSANDRA Q5): N < 400 on the confirmatory pool -> INCONCLUSIVE (consumes the holdout); pre-run expected-N check < 450 -> postpone",
+  "Q6": "RESOLVED (ORION #6, CASSANDRA Q4/R5): replication_conditions",
+  "Q7": "RESOLVED (DATA s.4): ASK/BID 2019-2022 certified for fills only on procedure-S pass; QC/rebuild integrity-only; no qc.py 2019-20 spreads",
+  "Q8": "RESOLVED (ORION Q8, CASSANDRA Q8): same rule (pins byte-identical); level rescale = new ID; pre-data cost expectation disclosed",
+  "Q9": "RESOLVED (ORION #9): run_access_protocol",
+  "Q10": "RESOLVED (ORION Q10, DATA s.2/s.4, CASSANDRA Q10): pre-declared mechanical rules"
+ },
+ "reviewer_conflicts": {
+  "K1_window_start": "DATA s.2 rule 1: ONE common S* for both instruments; CASSANDRA Q10(i): counted start PER instrument. Flagged, not chosen",
+  "K2_fallback_vs_postpone": "DATA: freeze no later than 2026-10-18, no extension, fallback central N ~433 disclosed as a run with INCONCLUSIVE risk; CASSANDRA Q5: expected N < 450 -> postpone, holdout sealed. Under the fallback both apply: the run would be postponed indefinitely with the window frozen. Flagged, not chosen",
+  "K3_fallback_N_value": "CASSANDRA Q5 text says the no-backfill central N 'falls to about 450'; DATA E3 and the draft model give ~433 (432). Flagged",
+  "K4_ORION_Q4_premise": "ORION's Q4 premise ('a criterion H016b doesn't have') is wrong per CASSANDRA F1 and the drafter's earlier C1; resolved by CASSANDRA's amendment (replication needs mean >= +0.10R); ORION has not yet confirmed the amendment"
  }
 }
