@@ -1,0 +1,54 @@
+tf_model: 5min
+tf_bias: 1h
+swing_strength: 2
+swing_filter_mode: points
+min_swing_dist_points:
+  NQ: 3.0
+  ES: 1.0
+min_swing_dist_atr_mult: 0.5
+tick_size:
+  NQ: 0.25
+  ES: 0.25
+atr_period: 14
+atr_method: wilder
+draw_max_atr_mult: 1.5
+draw_use_fvg: true
+draw_use_swings: true
+draw_fvg_level: proximal
+fvg_filled_mode: full
+h1_lookback_bars: 500
+require_discount: true
+cons_min_bars: 12
+cons_max_range_atr_mult: 1.0
+cons_atr_ref: end
+cons_breakout_max_bars: 6
+curve_min_swings: 2
+curve_max_bars: 144
+sweep_reclaim_bars: 3
+sweep_use_swing: true
+sweep_use_h1_fvg: true
+mss_timeout_bars: 60
+mss_require_lower_high: true
+fvg_after_mss_bars: 1
+entry_cancel_bars: 15
+fill_through_ticks: 1
+stop_offset_ticks: 1
+stop_slippage_ticks: 0
+tp1_r: 2.0
+tp1_fraction: 0.5
+tp1_use_5m_swing: true
+move_stop_to_be_after_tp1: false
+cost_points_round_trip: 0.0
+timezone: America/New_York
+entry_start: 09:30
+entry_end: '11:00'
+flat_time: '11:00'
+session_buckets:
+- 09:30
+- '10:00'
+- '10:30'
+- '11:00'
+one_position_at_a_time: true
+directions:
+- long
+- short
