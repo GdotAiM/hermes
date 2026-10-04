@@ -38,7 +38,8 @@ See `claims/FTN_CANDIDATE_HYPOTHESES.md` — candidates for QUANT and CASSANDRA,
   2017–2018. They are **not a sample**; they cannot support any frequency or edge claim.
 - No EURUSD / XAUUSD intraday tape is filed in `research/evidence/tape/` yet. Wave 1 tape is
   NQ (CONTINUOUS-KAGGLE). FTN is forex-first; the Desk and Wave 1 are index-first.
-- FTN `fingerprint` is non-reproducible across processes (salted `hash()`); use sha256.
+- FTN `fingerprint` is now deterministic (`sha256:` over canonical DayContext JSON); the two
+  first filed rows predate that and carry the old salted `hash()` value. File sha256 stays the identity.
 
 ## Links
 - STATUS: `STATUS.md`

@@ -140,11 +140,30 @@ def test_jsonschema_agrees_on_samples():
 )
 def test_committed_samples_match_regeneration(fixture, sample):
     """Samples are real FTN output, not hand-edited: regenerating gives the same
-    payload (fingerprint excluded — it is a salted hash(), see samples/README.md)."""
+    payload, fingerprint included (sha256 over canonical JSON — deterministic)."""
     fresh = json.loads(json.dumps(_built(ROOT / "fixtures" / fixture), default=str))
     committed = json.loads((ROOT / "dispatch" / "samples" / sample).read_text())
-    fresh.pop("fingerprint"); committed.pop("fingerprint")
+    assert committed["fingerprint"].startswith("sha256:")
     assert fresh == committed
+
+
+def test_fingerprint_independent_of_pythonhashseed(tmp_path):
+    """Two fresh interpreters with different PYTHONHASHSEED give the same fingerprint."""
+    import os
+    import subprocess
+    import sys
+
+    code = (
+        "from ftn.os.briefing import brief_from_fixture;"
+        "print(brief_from_fixture('fixtures/m9_reconstruction_eurusd.json')[0].fingerprint)"
+    )
+    fps = set()
+    for seed in ("0", "1", "987654"):
+        env = dict(os.environ, PYTHONHASHSEED=seed, PYTHONPATH=str(ROOT / "src"),
+                   FTN_OUT_DIR=str(tmp_path / f"out{seed}"), FTN_JOURNAL_DIR=str(tmp_path / "j"))
+        fps.add(subprocess.run([sys.executable, "-c", code], cwd=ROOT, env=env,
+                               capture_output=True, text=True, check=True).stdout.strip())
+    assert len(fps) == 1 and next(iter(fps)).startswith("sha256:"), fps
 
 
 def test_brief_writes_no_mint_draft_by_default(monkeypatch):

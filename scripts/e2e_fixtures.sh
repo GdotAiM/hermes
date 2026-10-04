@@ -12,7 +12,6 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PY="${PYTHON:-python3}"
 FIXTURE="${FIXTURE:-fixtures/m9_reconstruction_eurusd.json}"
-export PYTHONHASHSEED="${PYTHONHASHSEED:-0}"   # FTN fingerprint = salted hash(); pin it
 step() { printf '\n== %s ==\n' "$*"; }
 
 step "0. environment"

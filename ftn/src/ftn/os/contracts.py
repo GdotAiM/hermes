@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import asdict, dataclass, field, is_dataclass
 from pathlib import Path
@@ -164,10 +165,31 @@ class MarketState:
     fingerprint: str = ""
 
 
+def _canonical(obj: Any) -> Any:
+    """JSON-ready, order-stable view (sets/frozensets sorted, tuples → lists)."""
+    if isinstance(obj, dict):
+        return {str(k): _canonical(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_canonical(v) for v in obj]
+    if isinstance(obj, (set, frozenset)):
+        return sorted((_canonical(v) for v in obj), key=lambda v: json.dumps(v, sort_keys=True, default=str))
+    return obj
+
+
+def context_fingerprint(ctx: DayContext) -> str:
+    """Deterministic DayContext fingerprint: sha256 over canonical JSON.
+
+    Same DayContext → same fingerprint in every process, regardless of
+    PYTHONHASHSEED (the old ``str(abs(hash(blob)))`` was salted per process).
+    """
+    blob = json.dumps(
+        _canonical(asdict(ctx)), sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str
+    )
+    return "sha256:" + hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
+
+
 def freeze_market_state(ctx: DayContext) -> MarketState:
-    blob = json.dumps(asdict(ctx), sort_keys=True, default=str)
-    fp = str(abs(hash(blob)))
-    return MarketState(context=ctx, fingerprint=fp)
+    return MarketState(context=ctx, fingerprint=context_fingerprint(ctx))
 
 
 def _inst(d: dict | None) -> InstitutionalContext:

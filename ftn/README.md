@@ -52,8 +52,9 @@ handoff.v1 crosses part boundaries.
 - Forex-first: fixtures are EURUSD (56) and XAUUSD (2), hand-labelled single days
   (mostly 2017–2018). The Desk / Wave-1 research are index-first (NQ). Fixtures are not a
   sample — tests prove the engine reproduces the labelled reconstructions, not an edge.
-- `fingerprint` = `abs(hash(json))` — salted per process, so it is not reproducible unless
-  `PYTHONHASHSEED` is pinned (samples were generated with `PYTHONHASHSEED=0`).
+- `fingerprint` is `sha256:` + 16 hex of SHA-256 over the canonical JSON of the DayContext
+  (`ftn.os.contracts.context_fingerprint`) — deterministic across processes and
+  `PYTHONHASHSEED` values. (Before ftn-fixes it was a salted `abs(hash(json))`.)
 - The test suite persists session/swing tickets in `dispatch/out/` and is **not idempotent**:
   a second run fails `test_month7_slice7_swing` until `dispatch/out/*.json` is removed.
   CI and the E2E script start clean. (Pre-existing; not changed.)
