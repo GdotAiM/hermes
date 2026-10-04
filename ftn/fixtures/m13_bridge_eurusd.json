@@ -1,0 +1,26 @@
+{
+  "symbol": "EURUSD",
+  "date": "2022-10-04",
+  "focus_pair": "EURUSD",
+  "last": 0.985,
+  "timezone": "America/New_York",
+  "watchlist": ["EURUSD"],
+  "evidence": {
+    "notes": "MODEL 13 bridge evidence. Hand-labeled research card from user-supplied notes on kNlySn81dmo. Not a detector output. Synthetic date/price; no bars.",
+    "session": "ny_am",
+    "model13_bridge": "present",
+    "model13_context": {
+      "direction": "bearish",
+      "opposing_pd_objective_note": "present",
+      "time_window_note": "present",
+      "liquidity_raid_note": "present",
+      "short_term_mss_note": "present",
+      "fvg_entry_note": "present",
+      "risk_frame_note": "present",
+      "fvg_eq_side_note": "present",
+      "ltf_refinement_note": "none",
+      "target_ladder_note": "present",
+      "index_timing_note": "none"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 # Month-9 Day-Trade OS — Engineering Blueprint v2.1
 
 **Status:** signed design **v2.1 freeze** (2026-09-16) — no modules implemented yet  
+**Review note (2026-10-04):** the status line above is stale. M9 is implemented as `src/ftn/os/{contracts,dtr,sentiment,institutional,profile,candidates,session_ticket,...}.py` + `src/ftn/models/{rev,conso,bb,pip20,ftn}.py`; see `docs/SLICES.md`. §9 names `pd_matrix.py` / `arbiter.py`, which do not exist: the PD matrix is `contracts.PdMatrix` and the arbiter lives in `os/candidates.py`.  
 **Existing code:** FTN engine + desk only  
 **Style:** mint-agent — paper default, tickets ≠ orders  
 **Source:** ICT Mentorship Core Content Month 09 (8 lessons)

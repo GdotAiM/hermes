@@ -36,6 +36,16 @@ def write_journal(payload: dict[str, Any]) -> Path:
         .replace("{{SETUP}}", setup_txt)
         .replace("{{REASONS}}", reason_txt)
     )
+    if "authority" in t:
+        st = t.get("session_ticket") or {}
+        body += (
+            "\n## Ticket authority\n\n"
+            f"- Authority: `{t.get('authority')}` (Month-9 kernel is the sole ticket authority)\n"
+            f"- Selected: `{t.get('selected_module')}`  Session ticket: `{st.get('id')}`\n"
+            f"- actionable_for_mint: {t.get('actionable_for_mint')}\n"
+            f"- blocked_by: {t.get('blocked_by')}\n"
+            f"- Legacy fixture gate (research only): {t.get('legacy_gate_ok')}\n"
+        )
     out = journal_dir()
     path = out / f"{payload['scanned_at']}_DECISION.md"
     n = 1

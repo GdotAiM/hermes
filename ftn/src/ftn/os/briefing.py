@@ -57,6 +57,16 @@ def _charter_lines(c: DayContext) -> list:
         ]
     if ch.recognized_pams:
         lines.append("")
+    m13 = getattr(ch, "model13", None)
+    if m13 is not None:
+        lines += [
+            f"- **Model 13 card** (lecture notes `{m13.reference}`, not a detector): "
+            f"direction={m13.direction}, {m13.reason}, "
+            f"missing={list(m13.required_missing) or 'none'}, "
+            f"confirming={list(m13.confirming_present) or 'none'}",
+            "- Model 13 is a Charter bridge/reference. It is not a PAM, a candidate or a ticket.",
+            "",
+        ]
     return lines
 
 
@@ -391,6 +401,11 @@ def render_briefing(state: MarketState, candidates, ftn=None) -> str:
             lines.append(f"- L{lv['index']} {lv['name']} `{lv['price']:.5f}`")
         lines.append("")
         lines.append("These are projections/targets. They do not create an entry ticket.")
+    elif ftn.get("four_reason") == "bias_undetermined":
+        lines.append(
+            "- No four-count: bias undetermined (daytrade IOF is not bullish/bearish). "
+            "Directional targets are withheld rather than assumed."
+        )
     else:
         lines.append("- No four-count (missing previous_day or last).")
     lines += [
@@ -456,7 +471,7 @@ def render_briefing(state: MarketState, candidates, ftn=None) -> str:
     return "\n".join(lines)
 
 
-def brief_from_fixture(path: str | Path) -> tuple[MarketState, tuple, str]:
+def brief_from_fixture(path: str | Path) -> tuple[MarketState, tuple, str, dict]:
     ctx = attach_ticket(build_context(path))
     prior = ctx.session_ticket
     state = freeze_market_state(ctx)
@@ -469,5 +484,37 @@ def brief_from_fixture(path: str | Path) -> tuple[MarketState, tuple, str]:
         state = freeze_market_state(ctx)
     md = render_briefing(state, cands, ftn)
     write_handoff(state, cands, ftn)
-    write_draft(build_handoff(state, cands, ftn))
+    from ftn.os.mint_draft import gate_input
+    gin = gate_input(state, build_handoff(state, cands, ftn))
+    write_draft(gin)
+    md += render_mint_status(draft_status(gin))
     return state, cands, md, ftn
+
+
+def draft_status(gin: dict) -> dict:
+    """Single gate-chain status shown by brief, the desk snapshot and the scorer.
+
+    ``gin`` = ``mint_draft.gate_input(state, handoff)`` (handoff.v1 + execution context).
+    """
+    from ftn.os.mint_draft import draft_from_handoff
+
+    d = draft_from_handoff(gin)
+    if d is None:
+        return {"draft": False, "actionable_for_mint": False,
+                "blocked_by": "kernel_ticket:no_selected_candidate",
+                "direction_hypothesis": None, "module": None, "gates": []}
+    return {"draft": True, "actionable_for_mint": d["actionable_for_mint"],
+            "blocked_by": d["blocked_by"], "gates_before_contract_pass": d["gates_before_contract_pass"],
+            "direction_hypothesis": d["direction_hypothesis"], "module": d["module"],
+            "risk_usd": d["risk_usd"], "stop_reference": d["stop_reference"],
+            "gates": [f"{g['gate']}:{'pass' if g['pass'] else 'FAIL'}:{g['reason']}" for g in d["gates"]]}
+
+
+def render_mint_status(st: dict) -> str:
+    lines = ["", "## Research draft (gate chain)", ""]
+    lines.append(f"- **actionable_for_mint:** {st['actionable_for_mint']} (HERMES_INTEGRATION_I0: FTN is never MINT-actionable)")
+    lines.append(f"- **blocked_by:** {st['blocked_by']}")
+    for g in st.get("gates") or []:
+        lines.append(f"- {g}")
+    lines += ["", "Gates: kernel_ticket → direction → risk → allowlist → mode (paper) → contract (I0). No broker routing.", ""]
+    return "\n".join(lines)

@@ -52,6 +52,23 @@ confluence:
   require_pd_overlap: true
   overlap_tolerance_pips: 8
 
+# Model 13 (Charter bridge to the 2022 YouTube model, kNlySn81dmo).
+# Annotation only — never a PAM, candidate, session_ticket or paper_swing.
+# Off by default for the legacy `ftn run` payload; `ftn brief` always reads an
+# explicit model13_bridge label when a fixture provides one.
+model13_bridge_enabled: false
+
+# MINT allowlist for M9 entry models (mirrors HERMES trading/ALLOWLIST.md).
+# Gate 4 of the FTN research-draft chain. Passing it is necessary but NOT sufficient:
+# gate 6 (contract, HERMES_INTEGRATION_I0) keeps actionable_for_mint false regardless.
+# Entry requires ONE of:
+#   Path A: { id: REV, kind: survives, board_ref: "research/summaries/<...>_BOARD_LOCK.md" }
+#   Path B: { id: REV, kind: paper_pilot, stamp: "<path to human paper-pilot stamp>",
+#             expires: "YYYY-MM-DD", kill: "<kill criteria>" }
+# The stamp/board_ref file must exist (path relative to this repo). Only a human adds entries.
+# Today: EMPTY — HERMES Wave 1 has zero SURVIVES and no human paper-pilot stamp exists.
+mint_allowlist: []
+
 journal:
   template: src/ftn/journal/_TEMPLATE_DECISION.md
 
