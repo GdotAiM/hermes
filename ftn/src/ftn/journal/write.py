@@ -46,6 +46,17 @@ def write_journal(payload: dict[str, Any]) -> Path:
             f"- blocked_by: {t.get('blocked_by')}\n"
             f"- Legacy fixture gate (research only): {t.get('legacy_gate_ok')}\n"
         )
+        tr = payload.get("trace") or {}
+        if tr:
+            body += "\n## Pipeline trace (ftn.trace.v1; context layers are annotation only)\n\n"
+            body += "".join(f"- gate {g}\n" for g in (tr.get("gates") or {}).get("chain") or [])
+            for stage in ("bias", "context"):
+                for name, lay in (tr.get(stage) or {}).items():
+                    if isinstance(lay, dict):
+                        body += (f"- {stage}.{name}: role={lay.get('role')} feeds_rev={lay.get('feeds_rev')} "
+                                 f"available={lay.get('available', True)}\n")
+            res = tr.get("result") or {}
+            body += f"- result: {res.get('status')} R={res.get('R')} (see `ftn results`; H016 forward R sealed)\n"
     out = journal_dir()
     path = out / f"{payload['scanned_at']}_DECISION.md"
     n = 1
