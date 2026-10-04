@@ -58,7 +58,8 @@ handoff.v1 crosses part boundaries.
 - The test suite persists session/swing tickets in `dispatch/out/` and is **not idempotent**:
   a second run fails `test_month7_slice7_swing` until `dispatch/out/*.json` is removed.
   CI and the E2E script start clean. (Pre-existing; not changed.)
-- `fixtures/sample_eurusd.json` is for `ftn run/prep`; `ftn brief` on it fails (`KeyError: 'date'`).
+- `fixtures/sample_eurusd.json` is for `ftn run/prep`. `ftn brief` refuses it, the `*.expected.json`
+  gold oracles and handoff.v1 outputs with a one-line reason and exit code 2 (no traceback).
 
 ## Old desk (reference only)
 

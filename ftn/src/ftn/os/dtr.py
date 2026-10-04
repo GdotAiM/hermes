@@ -7,7 +7,7 @@ import json
 from dataclasses import replace
 from pathlib import Path
 
-from ftn.os.contracts import load_day_context
+from ftn.os.contracts import check_brief_fixture, load_day_context
 from ftn.os.institutional import build_institutional
 from ftn.os.mss import detect_mss
 from ftn.os.profile import derive_profile
@@ -36,7 +36,7 @@ from ftn.os.pam1_complete import annotate_pam1_completeness
 
 def build_context(path: str | Path):
     path = Path(path)
-    raw = json.loads(path.read_text())
+    raw = check_brief_fixture(json.loads(path.read_text()), path)
     ctx = load_day_context(path)
     inst = build_institutional(raw)
     ev = dict(raw.get("evidence") or {})

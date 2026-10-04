@@ -185,3 +185,36 @@ def test_opt_in_draft_goes_to_drafts_not_out(monkeypatch):
     assert "side" not in d and d["actionable_for_mint"] is False
     assert d["direction_hypothesis"] in {"bullish", "bearish", "unclear"}
     assert find_ban_violations(d) == []
+
+
+@pytest.mark.parametrize(
+    "name,needle",
+    [
+        ("sample_eurusd.json", "ftn run"),
+        ("m9_bb_offset.expected.json", "gold oracle"),
+    ],
+)
+def test_brief_refuses_non_fixtures_clearly(name, needle, capsys):
+    from ftn.__main__ import main
+
+    assert main(["brief", "--fixture", str(ROOT / "fixtures" / name)]) == 2
+    err = capsys.readouterr().err
+    assert "KeyError" not in err and needle in err
+
+
+def test_brief_refuses_handoff_sample(capsys):
+    from ftn.__main__ import main
+
+    sample = next((ROOT / "dispatch" / "samples").glob("handoff_v1_*.json"))
+    assert main(["brief", "--fixture", str(sample)]) == 2
+    assert "handoff.v1 output" in capsys.readouterr().err
+
+
+def test_brief_runs_on_every_input_fixture(tmp_path):
+    from ftn.__main__ import main
+
+    fixtures = [p for p in sorted((ROOT / "fixtures").glob("*.json"))
+                if not p.name.endswith(".expected.json") and p.name != "sample_eurusd.json"]
+    assert len(fixtures) >= 40
+    for p in fixtures:
+        assert main(["brief", "--fixture", str(p), "--out", str(tmp_path / "b.md")]) == 0, p.name

@@ -305,8 +305,34 @@ def _pam1_completeness(raw: dict):
     return derive_pam1_completeness(raw)
 
 
+class FixtureError(ValueError):
+    """The file is not a DTR/brief fixture (clear, user-facing message)."""
+
+
+def check_brief_fixture(raw: Any, path: str | Path = "<fixture>") -> dict:
+    """Refuse files `ftn brief` cannot read, with a reason instead of a KeyError."""
+    name = Path(str(path)).name
+    if not isinstance(raw, dict):
+        raise FixtureError(f"{name}: not a DTR fixture (top-level JSON must be an object)")
+    if raw.get("kind") == "day_context_handoff":
+        raise FixtureError(
+            f"{name}: this is a handoff.v1 output, not an input fixture; "
+            "check it with `python -m ftn.os.handoff_contract` (ftn brief reads fixtures/*.json)"
+        )
+    if name.endswith(".expected.json") or "expected_candidate_states" in raw:
+        raise FixtureError(f"{name}: this is a gold oracle (*.expected.json); the engine must not read it")
+    missing = [k for k in ("date", "symbol") if not raw.get(k)]
+    if missing:
+        hint = (
+            " It looks like an `ftn run`/`ftn prep` fixture: use `python -m ftn run --fixture ...`."
+            if "setup" in raw or "previous_day" in raw else ""
+        )
+        raise FixtureError(f"{name}: not a DTR fixture for `ftn brief`: missing {', '.join(missing)}.{hint}")
+    return raw
+
+
 def load_day_context(path: str | Path) -> DayContext:
-    raw = json.loads(Path(path).read_text())
+    raw = check_brief_fixture(json.loads(Path(path).read_text()), path)
     if "expected_winner" in raw or "pick" in raw:
         raise ValueError("fixture must not name a winning model")
     pair_ic = _inst(raw.get("pair_institutional") or raw.get("institutional"))

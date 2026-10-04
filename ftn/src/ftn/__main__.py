@@ -56,7 +56,15 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(payload, indent=2))
         return 0
     if args.command == "brief":
-        state, cands, md, ftn = brief_from_fixture(args.fixture)
+        from ftn.os.contracts import FixtureError
+        try:
+            state, cands, md, ftn = brief_from_fixture(args.fixture)
+        except FixtureError as exc:
+            print(f"ftn brief: {exc}", file=sys.stderr)
+            return 2
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"ftn brief: cannot read {args.fixture}: {exc}", file=sys.stderr)
+            return 2
         from ftn.paths import journal_dir
         out = args.out or journal_dir() / f"{state.context.date}_{state.context.symbol}_BRIEFING.md"
         out.parent.mkdir(parents=True, exist_ok=True)
