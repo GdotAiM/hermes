@@ -1,0 +1,160 @@
+{
+ "burned": {
+  "trades": 254,
+  "sessions": 544,
+  "burned_median_entry": {
+   "US100": 25764.287,
+   "US500": 6931.2675
+  },
+  "sd_R": 1.401,
+  "per_instrument": {
+   "US100": 144,
+   "US500": 110
+  }
+ },
+ "counted_windows": {
+  "US100": {
+   "first_counted": "2019-02-04",
+   "last": "2022-12-23",
+   "full_trading_days": 975,
+   "by_year": {
+    "2019": 227,
+    "2020": 251,
+    "2021": 251,
+    "2022": 246
+   }
+  },
+  "US500": {
+   "first_counted": "2019-02-04",
+   "last": "2025-05-30",
+   "full_trading_days": 1578,
+   "by_year": {
+    "2019": 227,
+    "2020": 251,
+    "2021": 251,
+    "2022": 250,
+    "2023": 248,
+    "2024": 249,
+    "2025": 102
+   }
+  }
+ },
+ "expected_N": {
+  "naive_no_scaling": {
+   "US100": {
+    "per_session_rate_burned": 0.2647,
+    "expected": 516,
+    "by_year": {
+     "2019": 120.2,
+     "2020": 132.9,
+     "2021": 132.9,
+     "2022": 130.2
+    }
+   },
+   "US500": {
+    "per_session_rate_burned": 0.2022,
+    "expected": 638,
+    "by_year": {
+     "2019": 91.8,
+     "2020": 101.5,
+     "2021": 101.5,
+     "2022": 101.1,
+     "2023": 100.3,
+     "2024": 100.7,
+     "2025": 41.2
+    }
+   },
+   "pooled": 1154
+  },
+  "level_scaled_vol1": {
+   "US100": {
+    "per_session_rate_burned": 0.2647,
+    "expected": 433,
+    "by_year": {
+     "2019": 90.1,
+     "2020": 109.8,
+     "2021": 120.9,
+     "2022": 112.1
+    }
+   },
+   "US500": {
+    "per_session_rate_burned": 0.2022,
+    "expected": 414,
+    "by_year": {
+     "2019": 35.1,
+     "2020": 49.8,
+     "2021": 71.1,
+     "2022": 65.3,
+     "2023": 70.2,
+     "2024": 86.1,
+     "2025": 36.4
+    }
+   },
+   "pooled": 847
+  },
+  "level_scaled_vol1_25": {
+   "US100": {
+    "per_session_rate_burned": 0.2647,
+    "expected": 462,
+    "by_year": {
+     "2019": 98.5,
+     "2020": 116.3,
+     "2021": 127.3,
+     "2022": 120.3
+    }
+   },
+   "US500": {
+    "per_session_rate_burned": 0.2022,
+    "expected": 505,
+    "by_year": {
+     "2019": 50.1,
+     "2020": 63.7,
+     "2021": 84.0,
+     "2022": 83.6,
+     "2023": 83.0,
+     "2024": 99.8,
+     "2025": 41.2
+    }
+   },
+   "pooled": 967
+  },
+  "level_scaled_vol1_5": {
+   "US100": {
+    "per_session_rate_burned": 0.2647,
+    "expected": 478,
+    "by_year": {
+     "2019": 100.1,
+     "2020": 122.7,
+     "2021": 129.2,
+     "2022": 125.7
+    }
+   },
+   "US500": {
+    "per_session_rate_burned": 0.2022,
+    "expected": 582,
+    "by_year": {
+     "2019": 65.9,
+     "2020": 81.2,
+     "2021": 98.7,
+     "2022": 96.5,
+     "2023": 97.6,
+     "2024": 100.7,
+     "2025": 41.2
+    }
+   },
+   "pooled": 1060
+  }
+ }
+}
+{"mu": 0.0, "vol": 1.0, "reps": 2000, "N_median": 847, "N_min": 724, "N_max": 962, "p": {"lb": 0.05, "both": 0.304, "top1": 0.373, "small": 0.897, "foil": 0.447, "mean010": 0.03, "joint_user": 0.049, "joint_h016b_style": 0.03}}
+{"mu": 0.1, "vol": 1.0, "reps": 2000, "N_median": 847, "N_min": 724, "N_max": 962, "p": {"lb": 0.599, "both": 0.879, "top1": 0.946, "small": 0.999, "foil": 0.966, "mean010": 0.514, "joint_user": 0.596, "joint_h016b_style": 0.512}}
+{"mu": 0.15, "vol": 1.0, "reps": 2000, "N_median": 847, "N_min": 724, "N_max": 962, "p": {"lb": 0.894, "both": 0.975, "top1": 0.994, "small": 1.0, "foil": 0.996, "mean010": 0.834, "joint_user": 0.89, "joint_h016b_style": 0.832}}
+{"mu": 0.2, "vol": 1.0, "reps": 2000, "N_median": 847, "N_min": 724, "N_max": 962, "p": {"lb": 0.987, "both": 0.996, "top1": 1.0, "small": 1.0, "foil": 1.0, "mean010": 0.976, "joint_user": 0.986, "joint_h016b_style": 0.976}}
+{"mu": 0.0, "vol": null, "reps": 2000, "N_median": 1153, "N_min": 1017, "N_max": 1281, "p": {"lb": 0.05, "both": 0.309, "top1": 0.347, "small": 0.629, "foil": 0.523, "mean010": 0.017, "joint_user": 0.05, "joint_h016b_style": 0.017}}
+{"mu": 0.1, "vol": null, "reps": 2000, "N_median": 1153, "N_min": 1017, "N_max": 1281, "p": {"lb": 0.7, "both": 0.926, "top1": 0.961, "small": 0.985, "foil": 0.987, "mean010": 0.506, "joint_user": 0.696, "joint_h016b_style": 0.505}}
+{"mu": 0.15, "vol": null, "reps": 2000, "N_median": 1153, "N_min": 1017, "N_max": 1281, "p": {"lb": 0.942, "both": 0.991, "top1": 0.998, "small": 1.0, "foil": 0.999, "mean010": 0.873, "joint_user": 0.94, "joint_h016b_style": 0.873}}
+{"mu": 0.2, "vol": null, "reps": 2000, "N_median": 1153, "N_min": 1017, "N_max": 1281, "p": {"lb": 0.998, "both": 0.999, "top1": 1.0, "small": 1.0, "foil": 1.0, "mean010": 0.986, "joint_user": 0.998, "joint_h016b_style": 0.986}}
+{"mu": 0.0, "vol": 1.5, "reps": 2000, "N_median": 1059, "N_min": 937, "N_max": 1173, "p": {"lb": 0.052, "both": 0.305, "top1": 0.356, "small": 0.786, "foil": 0.493, "mean010": 0.018, "joint_user": 0.052, "joint_h016b_style": 0.018}}
+{"mu": 0.1, "vol": 1.5, "reps": 2000, "N_median": 1059, "N_min": 937, "N_max": 1173, "p": {"lb": 0.678, "both": 0.914, "top1": 0.954, "small": 0.992, "foil": 0.984, "mean010": 0.499, "joint_user": 0.672, "joint_h016b_style": 0.497}}
+{"mu": 0.15, "vol": 1.5, "reps": 2000, "N_median": 1059, "N_min": 937, "N_max": 1173, "p": {"lb": 0.927, "both": 0.987, "top1": 0.998, "small": 1.0, "foil": 0.999, "mean010": 0.863, "joint_user": 0.926, "joint_h016b_style": 0.863}}
+{"mu": 0.2, "vol": 1.5, "reps": 2000, "N_median": 1059, "N_min": 937, "N_max": 1173, "p": {"lb": 0.997, "both": 0.999, "top1": 1.0, "small": 1.0, "foil": 1.0, "mean010": 0.984, "joint_user": 0.997, "joint_h016b_style": 0.984}}
