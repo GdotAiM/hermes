@@ -11,16 +11,17 @@ from __future__ import annotations
 from ftn.os.m8_contracts import CbdrState, DailyExtremeProjection
 
 
-def _height(cbdr: CbdrState) -> float | None:
+def _height(cbdr: CbdrState, pip: float = 0.0001) -> float | None:
     if cbdr.body_high is not None and cbdr.body_low is not None:
         return float(cbdr.body_high) - float(cbdr.body_low)
     if cbdr.height_pips is not None:
-        return float(cbdr.height_pips) / 10000.0
+        return float(cbdr.height_pips) * float(pip)
     return None
 
 
-def project_daily_extreme(cbdr: CbdrState, iof: str) -> DailyExtremeProjection:
-    h = _height(cbdr)
+def project_daily_extreme(cbdr: CbdrState, iof: str, pip: float = 0.0001) -> DailyExtremeProjection:
+    """``pip``: the instrument's pip unit (``ftn.os.instruments``); FX default unchanged."""
+    h = _height(cbdr, pip)
     if h is None or h <= 0:
         return DailyExtremeProjection()
     if iof == "bearish":

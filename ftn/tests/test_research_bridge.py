@@ -241,11 +241,11 @@ def test_score_writes_exploratory_reports(synth, tmp_path, monkeypatch):
     monkeypatch.setattr(stats, "N_BOOT", 200)
     monkeypatch.setattr(sc, "trading_days", lambda s: trading_days(s, min_rth_bars=100))
     res = sc.score(asof="2026-01-01", bars_us100=str(synth[0]), bars_us500=str(synth[1]),
-                   research_dir=tmp_path, with_interp=True, with_legacy=True)
+                   research_dir=tmp_path, with_interp=True, with_legacy=True, cost_model="flat")  # legacy cost model
     assert {"US100_base", "US100_base_legacy_side", "US500_base", "US100_interp"} <= set(res)
     before = tmp_path / "evidence/quant/FTN_M9_SCORE_2026-01-01.json"
     res2 = sc.score(asof="2026-01-01", bars_us100=str(synth[0]), bars_us500=str(synth[1]),
-                    research_dir=tmp_path, with_interp=False, tag="_after", before=before)
+                    research_dir=tmp_path, with_interp=False, tag="_after", before=before, cost_model="flat")
     assert "US100_base_legacy_side" not in res2 and res2["_before"]["US100_base"]["tickets"] == res["US100_base"]["tickets"]
     md2 = (tmp_path / "summaries/2026-01-01_FTN_M9_EXPLORATORY_SCORE_AFTER.md").read_text()
     assert "BEFORE vs AFTER" in md2 and "cannot confirm" in md2 and "EXPLORATORY" in md2

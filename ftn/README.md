@@ -99,7 +99,7 @@ rm -f dispatch/out/*.json && pytest                                     # clean 
 2. `direction` — `direction_hypothesis` (bullish/bearish) from evidence, never defaulted
    (REV: from the raid — low raided → bullish, high raided → bearish, both/neither → no ticket;
    BB/PIP20: daytrade IOF; CONSO: raided box edge). For REV the D18 direction-vs-raid check stays as a safety net.
-3. `risk` — `config.yaml` caps: 0.5% per trade, 2% daily loss, 5% drawdown, valid protective stop.
+3. `risk` — `config.yaml` caps: 0.5% per trade, 2% daily loss, 5% drawdown, valid protective stop, and (post-H015b, `ftn/demo-fixes`) a per-instrument minimum stop distance (`docs/POST_H015B_DEMO_FIXES.md`).
 4. `allowlist` — the model is on `config.yaml mint_allowlist` (see `docs/MINT_ALLOWLIST.md`); stamps must be signed.
 5. `mode` — paper only. Live stays dual-locked and refused; no broker routing.
 6. `contract` — **always FAIL** (`hermes_integration_i0_ftn_never_actionable`): under the frozen

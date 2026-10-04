@@ -28,13 +28,23 @@ Months 1–8, 10–12, Model 13  ──(context + typed Hypothesis records, neve
 | Interpretation triggers | `src/ftn/models/triggers.py` | CONSO / BB / PIP20; `config.yaml interpretation_triggers.*` all **false** by default (D15). |
 | MINT consumer | `trading/src/mint/dispatch/ftn_gate.py` | Strictly read-only and log-only: reads the opt-in research draft `ftn/dispatch/drafts/ftn_draft_latest.json`, flags inconsistencies (claims actionable, carries a side, contract gate not failing, gate order, blocked_by), and always returns `mint_decision: log_only`. It can never produce an `entry_candidate`. `scan_clears` embeds it as `ftn_gate_chain`. The DayContext itself is read by main's `mint.dispatch.ftn_context`. |
 
+## Post-H015b fixes (branch `ftn/demo-fixes`; NOT part of H015b)
+
+* **Cost model:** `correct_side` is the default (bid/ask fills + DATA slippage floors; CASSANDRA: binding for any H016).
+  It needs `--asks-us100/--asks-us500`. `--cost-model flat` gives the legacy 0.8 / 0.5 pt per side, which is also
+  reported as `*_flatcost` next to the default.
+* **Book:** `--book flat` (default; every ticket gated against a flat book), `running` or `both` (`*_runningbook`:
+  the 2% daily / 5% drawdown caps bind; reset rule `risk_caps.drawdown_reset`, a human decision).
+* Month 8 units, REV min stop / buffer and the calendar: see `docs/POST_H015B_DEMO_FIXES.md` and `docs/BAR_DATA_LAYERS.md`.
+
 ## Run
 
 ```bash
 cd ftn
 PYTHONPATH=src python3 -m ftn hypotheses
 PYTHONPATH=src python3 -m ftn score --asof 2026-10-04           # ~1 min; writes into ../research
-PYTHONPATH=src python3 -m ftn score --no-write --bars-us100 PATH --bars-us500 PATH
+PYTHONPATH=src python3 -m ftn score --no-write --bars-us100 PATH --bars-us500 PATH --cost-model flat
+PYTHONPATH=src python3 -m ftn score --bars-us100 BID --bars-us500 BID --asks-us100 ASK --asks-us500 ASK --book both
 ```
 
 The default bars are `/workspace/ict-blueprint/research/model-u-longrun/data/US{100,500}_1m.csv.gz`

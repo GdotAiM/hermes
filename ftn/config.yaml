@@ -26,6 +26,10 @@ risk_caps:
   scale_out_after_levels: 4
   runner_pct: 0.25
   raise_requires: human
+  # 5% drawdown cap reset (post-H015b fix 4; used by the ftn score running book). HUMAN DECISION — proposed:
+  # next_calendar_month = after the cap blocks a ticket, stay halted for the rest of that calendar month, then reset
+  # the high-water mark to current equity (stands in for a month-end human review). none = never reset.
+  drawdown_reset: next_calendar_month
 
 volatility:
   min_atr_pips: 20

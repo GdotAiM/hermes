@@ -52,3 +52,13 @@ def holm(pvals: dict[str, float]) -> dict[str, float]:
         running = max(running, min(1.0, (m - i) * p))
         out[k] = running
     return out
+
+
+def max_drawdown(rs: list[float]) -> float:
+    """Peak-to-trough of cumulative R in the given (time) order."""
+    peak = cur = dd = 0.0
+    for r in rs:
+        cur += r
+        peak = max(peak, cur)
+        dd = max(dd, peak - cur)
+    return dd

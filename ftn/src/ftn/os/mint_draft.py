@@ -15,7 +15,8 @@ the scorer all read through ``draft_status``. Gates, in order:
 1. ``kernel_ticket`` — the Month 9 kernel selected a model AND holds its session ticket.
 2. ``direction``     — determined from evidence, never defaulted (REV must oppose the
                        raided extreme, REPORT D18; CONSO from the raided box edge).
-3. ``risk``          — config.yaml caps 0.5% / 2% / 5% with a protective stop reference.
+3. ``risk``          — config.yaml caps 0.5% / 2% / 5% with a protective stop reference; post-H015b:
+                       stop distance >= the per-instrument minimum (``ftn.os.instruments``).
 4. ``allowlist``     — config.yaml ``mint_allowlist`` (empty today; Path A board SURVIVES
                        or Path B *signed* human paper-pilot stamp, unexpired).
 5. ``mode``          — paper only; live stays dual-locked and refused.
@@ -34,6 +35,7 @@ from pathlib import Path
 from typing import Any
 
 from ftn.config_load import dispatch_out, load_config, repo_root
+from ftn.os.instruments import rev_stop_buffer, spec
 from ftn.paths import draft_dir
 
 DRAFT_KIND = "ftn_research_draft"
@@ -63,6 +65,9 @@ def execution_context(state) -> dict:
         "stop_reference": ev.get("stop_reference"),
         "raid_extreme": ev.get("raid_extreme"),
         "pip": float(ev.get("pip") or (0.01 if "JPY" in sym else 0.1 if "XAU" in sym else 0.0001)),
+        "symbol": sym,
+        # measured bid/ask spread at the signal (scorer with an ask series); None → assumed spread only
+        "spread_measured": ev.get("spread_measured"),
     }
 
 
@@ -117,8 +122,11 @@ def _stop(module: str, side: str | None, handoff: dict) -> tuple[float | None, s
         return None, "no_raided_box_edge"
     if module == "REV" and side and raid.get("taken") and raid.get("price") is not None:
         # FTN-D22 (prereg research/protocols/preregs/FTN_D22_REV_STOP_BEYOND_RAID_PREREG_2026-10-04.json):
-        # stop beyond the raid's own extreme by a 1-pip buffer; the raided level only without bars
-        buf = REV_STOP_BUFFER_PIPS * float(ctx.get("pip") or 0.0001)
+        # stop beyond the raid's own extreme; the raided level only without bars.
+        # Post-H015b fix (NOT part of H015b): on indices the buffer covers spread + stop slippage for shorts
+        # (stopped on the ASK) and the slippage floor for longs; FX keeps the 1-pip D22 buffer.
+        buf, _buf_src = rev_stop_buffer(ctx.get("symbol"), side, float(ctx.get("pip") or 0.0001),
+                                        ctx.get("spread_measured"))
         ext = ctx.get("raid_extreme") or {}
         want = "low" if side == "buy" else "high"
         if ext.get("price") is not None and ext.get("side") == want:
@@ -159,6 +167,12 @@ def risk_gate(module: str, side: str | None, handoff: dict, cfg: dict, book: dic
     dist = (float(entry) - stop) if side == "buy" else (stop - float(entry))
     if dist <= 0:
         return _gate("risk", False, "stop_not_protective", **base)
+    # Post-H015b fix: per-instrument minimum stop distance (friction <= 25% of 1R; ftn.os.instruments)
+    min_risk = spec(handoff.get("symbol") or (handoff.get("execution_context") or {}).get("symbol"),
+                    (handoff.get("execution_context") or {}).get("pip")).min_risk
+    base["min_risk"] = min_risk
+    if min_risk is not None and dist < min_risk:
+        return _gate("risk", False, "stop_below_min_risk", **base, stop_distance=dist)
     if book["daily_loss_pct"] + risk_pct > float(caps["max_daily_loss_pct"]):
         return _gate("risk", False, "daily_loss_cap", **base)
     if book["drawdown_pct"] + risk_pct > float(caps["max_portfolio_dd_pct"]):

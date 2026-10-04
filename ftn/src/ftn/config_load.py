@@ -189,6 +189,7 @@ SCHEMA: dict[str, Any] = {
         "scale_out_after_levels": ("int", 1, 20),
         "runner_pct": ("num", 0, 1),
         "raise_requires": ("enum", {"human"}),
+        "drawdown_reset": ("enum", {"none", "next_calendar_month"}),
     },
     "volatility": {"min_atr_pips": ("num", 0, None), "compress_blocks_trade": bool},
     "sessions": ("sessions",),
@@ -320,6 +321,7 @@ def load_config(path: str | Path | None = None) -> dict[str, Any]:
                 "scale_out_after_levels", "runner_pct"):
         if key in rc:
             cfg[key] = rc[key]
+    cfg["drawdown_reset"] = str(rc.get("drawdown_reset", "next_calendar_month"))
     cfg["mint_allowlist"] = list(doc.get("mint_allowlist") or [])
     trig = doc.get("interpretation_triggers") or {}
     cfg["interpretation_triggers"] = {k: bool(trig.get(k, False)) for k in ("conso", "bb", "pip20")}
