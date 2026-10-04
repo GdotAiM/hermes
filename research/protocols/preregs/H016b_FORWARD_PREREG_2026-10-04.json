@@ -1,0 +1,578 @@
+{
+ "id": "H016b",
+ "title": "FTN Month 9 REV, FIXED (post-H015b demo fixes, ftn/demo-fixes 9bed235): raid-side direction, stop beyond the raid's own extreme plus a spread/slippage buffer, minimum stop = 4x round-trip friction, Month-8 instrument units; US100 + US500 CFD; correct-side BID/ASK fills BINDING; frozen forward-only test; pre-data re-registration of H016 on CASSANDRA's HOLD",
+ "status_at_registration": "OPEN - NOT STARTED, frozen forward-only test (paper research only)",
+ "supersedes": {
+  "id": "H016",
+  "file": "research/protocols/preregs/H016_FORWARD_PREREG_2026-10-04.json",
+  "tag": "prereg-H016 -> cf83307 (annotated b906119)",
+  "reason": "CASSANDRA red-team HOLD (/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H016_PREREG_REDTEAM_2026-10-04.md, outside git): F1 stale-price entry when the signal minute is missing (binding text wrongly said 'no synthetic fills'), F2 no Holm timing rule; plus F3-F12. F1 is a counting-rule change, which by H016 changes_after_registration needs a new ID",
+  "h016_status": "SUPERSEDED with no R read and no forward bar read. The H016 file and its tag are left untouched as the superseded record and are never counted",
+  "registration_terms": "identical to H016 except changes_vs_H016"
+ },
+ "registered_by": "FTN research bridge (agent-generated) on the human's approval of H016 (2026-10-04, ntloso ngubeni) and CASSANDRA's HOLD with required amendments 1-7 (2026-10-04); ORION rulings (a) and (b) quoted below; CASSANDRA and DATA must clear H016b before the first R is read",
+ "registered_at": "2026-10-04 (SAST); this file's git commit, pushed to origin/ftn/demo-fixes (GdotAiM/hermes PR #4) and tagged prereg-H016b, is the registration timestamp, not any script-written field. Validity is checked by content against the tag: this file and every pinned file must be byte-identical to `git show prereg-H016b:<path>`, else the harness refuses to run (harness_hash_mismatch). If PR #4 merges, the same bytes must reach main",
+ "id_check": "H001..H016 (+ H011c/d, H013b, H014b, H015b) exist; H016b is unused in research/, trading/ and ftn/ on every origin branch and as a tag (checked 2026-10-04)",
+ "changes_vs_H016": [
+  "1 (F1) entry-minute rule: a ticket counts only if a BID bar AND an ASK bar exist with timestamp exactly t-1m (t = the 15m close at which the kernel selects); else status feed_gap_entry, not counted. Tickets whose binding outcome is R=None (no_entry_bar / no_bars / invalid_stop) are not counted and are reported. 'no synthetic fills' wording corrected",
+  "2 (F2) family timing: ORION ruling (a) - unfinished, killed or futile tests enter Holm at p=1; Holm re-run at each completion; a granted SURVIVES is never revoked",
+  "3 (F3) disagreement rule: ORION ruling (b) with CASSANDRA's two stricter points (H015b is now WITHDRAWN-PRE-DATA; the rule stays as the standing FTN-REV-variant rule)",
+  "4 (F4) exit-bar rule: >= 1 BID bar AND >= 1 ASK bar in [15:45, 16:00) NY, evaluated for EVERY session (trade or no_trade); gap_flag co-report; short_session-dropped n and sum R next to the headline",
+  "5 (F6) counting: a row counts only if computed after the H016b harness registration commit time on origin; no forward bar file is downloaded or opened before that commit; the harness must reproduce the burned H016 trades bit-for-bit at its digest before its first forward pull",
+  "6 (F7) fill-fragility co-report and the 'fill-fragile' verdict label",
+  "7 (F9-F11) power on FILTER-ELIGIBLE burned trades: N 747 (was 738); kill -40R unchanged; rho wording corrected; min-stop sweep disclosure",
+  "family: H015b WITHDRAWN-PRE-DATA (ORION record) -> active family H013, H014, H016b; Holm 0.0167 / 0.025 / 0.05",
+  "F5 futility set and kill-crossing log frozen and sealed; F12 harness items (no unpinned imports, feed suspension, per-session calendar identity, named holiday source)"
+ ],
+ "lineage": {
+  "parent_test": "H016 (research/protocols/preregs/H016_FORWARD_PREREG_2026-10-04.json, tag prereg-H016 -> cf83307), superseded pre-data. H015b (tag prereg-H015b -> 49be2d6) is WITHDRAWN-PRE-DATA (research/summaries/2026-10-04_H015b_WITHDRAWAL.md)",
+  "fixes": "ftn/docs/POST_H015B_DEMO_FIXES.md (commit 9bed235, PR #4). The fixes came from an EXPLORATORY end-to-end demo backtest on the burned window",
+  "exploratory_results": "burned window 2025-08-25 -> 2026-09-25, correct-side, flat book: US100 146 trades +0.033R [-0.193, +0.267] (foil 75.9 pct); US500 112 trades +0.188R [-0.078, +0.451] (foil 98.85 pct); pooled 258 trades +0.100R. Reproduced bit-for-bit at 9bed235 into research/evidence/quant/FTN_M9_*_h016_fixed_rev_burned.*. FOOTNOTE (CASSANDRA F9): 4 of the 258 burned trades come from sessions that fail H016b's own 171/180 BID+ASK killzone filter (US100 2026-03-23 ny_am +1.984 = the F1 stale-entry phantom fill, US100 2026-05-29 london +1.973, US500 2026-04-10 ny_am +1.973, US500 2026-05-29 london -1.062); on the 254 filter-eligible trades the pooled burned mean is +0.083R, not +0.100R. Neither number is evidence",
+  "burned": "All 2026-10-04 exploratory FTN scores (first score, REV raid-side, FTN-D22, the demo backtest and its after-fixes re-score) and the whole Dukascopy window they used (2025-08-25 -> 2026-09-25) are BURNED for H016. They motivated the fixes and set the power-calc variance only; they are never evidence for or against H016",
+  "power_sim": "research/evidence/quant/H016b_POWER_SIM_2026-10-04.py (+ .out): the H016 sim restricted to the 254 filter-eligible burned trades (variance only)",
+  "data_read_before_registration": "no bar data after 2026-09-25 and nothing from DATA's certified-untouched ranges was read to build, tune or power H016; the only bars read were the burned window 2025-08-24 18:00 -> 2026-09-25 17:00 NY",
+  "burned_bar_inputs_sha256": {
+   "note": "canonical Dukascopy BID/ASK export of the burned window made with marketdata.load (DATA canonical BID; exported 2026-10-04 10:09 SAST) from which the burned H016 trades were scored at 9bed235 (outside git, /workspace/ftn-demo-output/data). CASSANDRA F8",
+   "US100_1m_bid.csv.gz": "f7d2d2d38c0919d6c1436f0dca985b42228900e0bcb330d045f695c415a07301",
+   "US100_1m_ask.csv.gz": "d242f48cb4caa37eb5a560ced984f75908bfbbc49156fbbdae6f1d70b298df2e",
+   "US500_1m_bid.csv.gz": "140e89747c52b2db5108d039f3c7ae49aea9155f3f7721bee3dbdeee0668a86f",
+   "US500_1m_ask.csv.gz": "c5408e7ff81213a4cd8e317c5e3e5adef8f5fbf3f11e2b4fb1d59126df10bcb6"
+  }
+ },
+ "disclosures": {
+  "overlap_with_H015b": "H016b's burned trades are a ~73% SUBSET of H015b's burned tickets with slightly wider short stops (CASSANDRA rebuilt 256/258 H016 R values from the FTN-D22 tickets). H015b is WITHDRAWN-PRE-DATA (ORION, research/summaries/2026-10-04_H015b_WITHDRAWAL.md) and is not in the family. H015b and H016b are REV variants on the same instruments and sessions, so a pass in one is NOT independent replication of the other",
+  "family_rule_handling": "see family_rule. Holm controls the family-wise error rate under any dependence; H015b is withdrawn pre-data, so the H015b/H016b overlap no longer costs alpha",
+  "post_hoc_fix_choice": "the minimum-stop rule (4x round-trip friction), the ASK-side stop buffer and the index CBDR/Asian scaling were chosen AFTER seeing the burned window (the demo backtest showed small-stop REV shorts stopped by spread). The in-sample improvement (US100 and US500 after-fix numbers in lineage) is therefore NOT evidence of an edge; it is why H016 is forward-only. The median daily ranges (US100 414.7, US500 74.9, EURUSD 61.5 pips) and DATA's spread/slippage schedule used by the fixes were also measured on the burned window",
+  "not_wired": "DXY is unavailable (no EURUSD proxy is used); Months 5-7 and Williams %R are not wired into the kernel; interpretation triggers are off",
+  "rho": "rho(R) between same-killzone US100/US500 trades: 0.597 on 80 two-instrument clusters of the 254 filter-eligible trades (0.554 on all 258). Because H016b's trades are the same tickets as H015b's (a subset), a rho close to H015b's 0.554 is EXPECTED, not a coincidence (corrects H016 disclosures.rho_coincidence)",
+  "min_stop_sweep": "CASSANDRA F11 (burned rebuild, /workspace/h016_review/minstop_sweep_burned.out, not evidence): pooled burned mean R by min-stop multiple m of round-trip friction: m=0 -0.013, 1 +0.012, 2 +0.081, 3 +0.116, 3.5 +0.132, 4 +0.112, 4.5 +0.127, 5 +0.125, 6 +0.124, 8 +0.213. 4x is not the in-sample optimum (no knife-edge fit), but ANY min-stop of 2x or more adds about +0.10 to +0.13R in-sample, the same order as delta = +0.15. The burned window therefore carries no information about the fixed rule; no memo may quote the burned +0.10 / +0.083 as support",
+  "kill_level_mc_se": "the kill level -40R was chosen as the least negative level with simulated P(kill | +0.15) < 1%: 0.95% on 2,000 paths (Monte Carlo SE ~0.2%), so -40 vs -45 is within simulation noise; joint P(pass) is flat from -40 to -60 (CASSANDRA F12d)",
+  "power_N_choice": "N = 747 from the filter-eligible clustered power calc (CASSANDRA F9); at H016's N=738 the joint P(pass | +0.15) would be 0.7647"
+ },
+ "paper_only": {
+  "mint_actionability": "none: FTN's I0 contract gate keeps actionable_for_mint false; H016b rows are shadow R-unit logs",
+  "allowlist": "unchanged (empty); no stamp",
+  "orders": "none; no broker calls"
+ },
+ "rule": {
+  "summary": "one REV ticket per session from the FIXED FTN Month 9 kernel at 9bed235, evaluated on bar-derived DayContext (BID chart, ASK series attached for spread_measured) at every 15m close inside the killzone; direction from the raid; stop beyond the raid's own extreme plus the instrument buffer; minimum stop distance enforced",
+  "kernel": "ftn.research.kernel_log.session_ticket_log(..., book=None) with config interpretation_triggers all false (ftn/config.yaml as pinned) -> ftn.os.candidates.evaluate_candidates; first selection in the session is the ticket. DayContext from ftn.research.daycontext.History(bid, days, ask=ask, calendar=True)",
+  "sessions": "London killzone 02:00-05:00 and NY AM killzone 07:00-10:00, America/New_York wall clock; kernel evaluated at each 15m close from start+15m to end inclusive, using only bars up to that close",
+  "direction": "REV: high raided -> bearish (short), low raided -> bullish (long); both or neither raided -> no ticket (ftn.models.rev.rev_direction)",
+  "entry": "close of the 15m bar on which the kernel first selects REV",
+  "stop": "bearish: raid_extreme_high + buffer, buffer = max(1 pt, max(spread_measured, assumed spread) + stop slippage) (US100 assumed spread 1.55 + 0.50 -> >= 2.05 pt; US500 0.72 + 0.25 -> >= 1.0 pt); bullish: raid_extreme_low - max(1 pt, stop slippage) (= 1 pt for both). raid_extreme as in H015b (15m bars from the raid bar to the entry bar). spread_measured = ASK close - BID close at the signal time. ftn.os.instruments.rev_stop_buffer; ftn.os.mint_draft REV _stop",
+  "target_and_exit": "fixed 2R from the signal entry (BID close); else time exit at the last 1m close before 16:00 NY; stop first on an ambiguous bar. Fills per costs.binding (correct side)",
+  "tradeable": "every research-draft gate passes except allowlist and the I0 contract gate (ftn.research.kernel_log.tradeable); D18 direction gate, stop-side risk gate and the min-stop gate active; the risk gate sees a FLAT book (kernel_log.FLAT_BOOK) in the binding stream",
+  "context_history": "the kernel needs >= 22 prior sessions of 1m bars as context; context bars may come from before the counting window (never counted)",
+  "min_stop": "risk gate blocks a ticket whose |entry - stop| < min_risk = 4 x (assumed spread + 2 x stop/market slippage): US100 10.2 pt, US500 4.88 pt (risk:stop_below_min_risk). A blocked ticket is NOT a trade and is not counted (ex-ante rule, not outcome-dependent); blocks are counted and reported",
+  "month8_units": "Month-8 measurements in instrument units (1 pip = 1 index point); index CBDR/Asian thresholds = ICT FX thresholds x (median daily range / EURUSD median daily range): US100 x6.743 (CBDR ideal < 269.7, wide >= 337.2), US500 x1.218",
+  "calendar": "FOMC/CPI/NFP schedule (ftn/src/ftn/research/data/us_macro_events.csv, pinned) is attached as context. The Month 9 kernel does not read it (ftn.research.events docstring); checked at 9bed235 on the burned tape (2026-10-04): calendar on vs --no-calendar gives identical trades (date, killzone, direction, entry, stop, R; US100 146/146, US500 112/112), only the fingerprint, calendar and m8_london_gate log columns differ; the harness must repeat this assertion. The pinned file has CPI/NFP only to 2026-12 and FOMC to 2027-12; it is never extended in the binding run (FTN_EVENTS_CSV override forbidden); an extended DATA-certified calendar may be used only in a separate co-report run",
+  "entry_minute": "BINDING (CASSANDRA F1): the kernel's entry price is BID.close_at(t) and spread_measured is ASK.close_at(t) - entry, both 'last bar strictly before t' (ftn.research.bars.Series.close_at), and simulate_both fills the entry at ask.c[ask.idx(t)-1] / bid.c[bid.idx(t)-1]. A ticket therefore counts only if a BID bar AND an ASK bar exist with timestamp EXACTLY t - 1 minute; otherwise the row status is feed_gap_entry (not counted, reported with counts). Evaluated for every ticket before any outcome is computed. Burned example: 2026-03-23 US100 ny_am, BID and ASK missing 07:06-07:17 NY, the 07:15 long entered at the stale 07:05 close: phantom +1.984R",
+  "no_r_tickets": "a tradeable ticket whose binding outcome is R=None (no_entry_bar, no_bars, invalid_stop) is NOT counted; status no_r_ticket, reported with counts by reason"
+ },
+ "code": {
+  "repo": "GdotAiM/hermes",
+  "rule_commit": "9bed235 (ftn: post-H015b demo fixes, branch ftn/demo-fixes, PR #4); pinned files byte-identical at the registration commit (prereg-H016b)",
+  "kernel_and_dtr_sha256": {
+   "ftn/src/ftn/engine/__init__.py": "e61925efc5285f245e9ef8c0d049c519d1912d1c968dfa60287079582a01802d",
+   "ftn/src/ftn/engine/levels.py": "b95e99151a3efa58e9c368d60d5df3821de1687898e8a9ec71a5588799ac0b1a",
+   "ftn/src/ftn/engine/ohlc.py": "00211ef8747edf1382cac47d2bd2bdd7205e8f114febfd2dd8a3eb5715b0013d",
+   "ftn/src/ftn/models/__init__.py": "2d6c5e6ce1139e76a818ed329120832dfaef3a20bafffbcd0291ae9b53e507fd",
+   "ftn/src/ftn/models/bb.py": "f517bb8d0c0fe8ff1b668675bab3b0dd0db5e5f26d1fce969cfca9d4dda388d2",
+   "ftn/src/ftn/models/conso.py": "ca4f872d47bf25536765b73503c228046c9afad4f383f7c83644799b88159a8d",
+   "ftn/src/ftn/models/ftn.py": "096e77a49c7a0dd206454830e659982fa3a91481d7a28749180c660c358929c8",
+   "ftn/src/ftn/models/pip20.py": "30e358f52caf73484d88392909dff1122881eefd0a514fbb85fbf53df1e4f380",
+   "ftn/src/ftn/models/rev.py": "83b269ec6a1d18a1362e8e363cdf9de318472b0c7ad6e42bd431b25335572a43",
+   "ftn/src/ftn/models/triggers.py": "ddd81ae178c44edfccf12213166f922bbb13d6eaf0c55ba40799f32397647fca",
+   "ftn/src/ftn/os/__init__.py": "a1c1dd8bd9b7e252d45110818e5627b490aee502dea25360c119a22ac0b64a49",
+   "ftn/src/ftn/os/box.py": "7dcb4958a55514c097e25ae46130a307c0ebfead0b1771eb35019d07a425dd9c",
+   "ftn/src/ftn/os/briefing.py": "33a2be3145f9b7da810e7d0ef5e184d2c6cb1d0ce396f92e95be8f03b818538c",
+   "ftn/src/ftn/os/calendar.py": "3b71f3ace2946c3450b5b0db9fb2344b135e80fdf417d68a75ae9ab7b7cf6d4c",
+   "ftn/src/ftn/os/candidates.py": "cd594685ce9c8458c37362b01817811167bc224470ebb7a01f2abcc380ef8322",
+   "ftn/src/ftn/os/clocks.py": "b46ad55533a6ea9c99fa29ca8352c290906d87f6c8e4b4725f30403270a33024",
+   "ftn/src/ftn/os/contracts.py": "ad90bc764e05701d3501bb15f96130734253b133a8733d461afff119b91c3f4e",
+   "ftn/src/ftn/os/dtr.py": "d9fdee9cf22a9ac2ca0bfb7484b54e311eaa7afe45d92bdde3317a252a0ffd9e",
+   "ftn/src/ftn/os/dxy.py": "8847e371aef5e854f3b5a48b40a85ec6f9ea41bcbb0f2cbc150c51c40812c95f",
+   "ftn/src/ftn/os/handoff.py": "0312c3f759b035e8bff2d210a0e1e5f913f7df945c0fd44245ee6c28f1246d40",
+   "ftn/src/ftn/os/handoff_contract.py": "1c629b25a654e70330076e2336b9742420d2184db501b8380f0834583d65de02",
+   "ftn/src/ftn/os/institutional.py": "8dd9fa7820598de007526f38c239c0b62bb346a3b75b8a379104012d7bef4112",
+   "ftn/src/ftn/os/instruments.py": "85314124d4281e7703363715b64a6f2efdc13867b19d18aadad4edfe88ec20cf",
+   "ftn/src/ftn/os/m10_confluence.py": "ca800a11ec59b95f961b27e33a5b57f36a781774735fbe135151c678a359cb43",
+   "ftn/src/ftn/os/m10_context.py": "580b6fdd3b1be01c1010b64b6eb625277c40b6773b04341122b95f0fe7236fa7",
+   "ftn/src/ftn/os/m10_contracts.py": "740b29f53c8e9a7974e5f0aa35081c8bf09c38500c4b7dce6be9d0b94a40642e",
+   "ftn/src/ftn/os/m11_context.py": "a8a9bd12badaa88d7e79746b9c2d69a2b8fb38619a0a75169f47ebb7d30b6f64",
+   "ftn/src/ftn/os/m11_contracts.py": "38e5ac922a84ab33e0ae4601067fa00f0cfef886afc8670957b5d58969e69ade",
+   "ftn/src/ftn/os/m11_mega.py": "dbeddf64165ef3d064242abfb2ce13e6c8962ad05f06ce0e5756cb2a875fbc04",
+   "ftn/src/ftn/os/m12_context.py": "8e4efcbb8872e08062a8e755d204c5f5571e18f96a1d484d2385994b98d0a2eb",
+   "ftn/src/ftn/os/m12_contracts.py": "25fe85cc1b9579fae6553c260d3bae6a64653827cbd107f3495e6d93acf3822a",
+   "ftn/src/ftn/os/m12_topdown.py": "d56cd62f86b0d4bfa11de05925040c5a708214976d69e72a25a29430961ac682",
+   "ftn/src/ftn/os/m13_context.py": "bddd37d535fddb0fac872d768fb70afd1ac00ae712a73e172c944a3f1bb09aee",
+   "ftn/src/ftn/os/m13_contracts.py": "f57dd5a67fe5d4d8bc6c8e52550e5cb4516f394a617175e5689ff54374ca91b0",
+   "ftn/src/ftn/os/m1_context.py": "b0d3f903767e4e58649897159821057ce821e659b2ef98eebe84ec10694d8f1b",
+   "ftn/src/ftn/os/m1_contracts.py": "b6b90a584d09196afdae1129ff9e4792b5fbe458035312c409c0d1ebe28a9014",
+   "ftn/src/ftn/os/m1_setup.py": "0bd15eaecfe3dc4557ac94dcbd79d8b609bbad57f4d2524f12f1ac0d0359dc63",
+   "ftn/src/ftn/os/m2_context.py": "7f7a2601575771204de87b9f7d6d754bb623b09613c941c3edfe8a574252bef0",
+   "ftn/src/ftn/os/m2_contracts.py": "b35251d35c27a74e90e862202da618d5e8b0645deddb957e030bad8081888984",
+   "ftn/src/ftn/os/m2_frame.py": "37f3e832d90f4c2cebbabb724b0dd0c7115e504263178d6d359592a57ea8f325",
+   "ftn/src/ftn/os/m3_context.py": "ef7fb5009df69a8771067c3df5b635fc5704803a93bea5297942471d514646c3",
+   "ftn/src/ftn/os/m3_contracts.py": "e4e62c897ca2f22d01763c9d077ff85b0718f8c3a467a14d04a85db0d246d48c",
+   "ftn/src/ftn/os/m3_setup.py": "00d1756fdb01855d1d44250780cdc6c8b9b1c54d322b24b1f5930bca1172ffbc",
+   "ftn/src/ftn/os/m4_catalog.py": "d3555a31b6d0de2898dc651a3fb4a96b0f24ef0acf0ba96655a774b7fc5d608f",
+   "ftn/src/ftn/os/m4_contracts.py": "8b578879ec63f536631698043dd90835b993746914dbff5d3d24302fc2b8a02d",
+   "ftn/src/ftn/os/m4_opportunity.py": "d803745bb5a3d235d2a5c40786976914d82ebd1e6f4ec97e91015bb39a0dc724",
+   "ftn/src/ftn/os/m5_confirm.py": "8ca00ab63883bc31c45c94954855352706e4fdbc08dea2c413466565c9fe9371",
+   "ftn/src/ftn/os/m5_contracts.py": "15eeabb63c865acfad23ece3c19a748a36032c5fa8fe68982bd0952705b12875",
+   "ftn/src/ftn/os/m5_env.py": "12f373b348633827fcb88339ff83f273e4d3f0b0079f2e9e1dedca195bb2ebde",
+   "ftn/src/ftn/os/m5_float.py": "d01312bea98914fef90e0812354644ba07d8b94e47308f99a01742cacf31a67e",
+   "ftn/src/ftn/os/m5_opportunity.py": "de3870c1e732d2ef91e8833c8ebc976f546b5f03c2159f6e043a85c73281f278",
+   "ftn/src/ftn/os/m5_pd.py": "ae8b3fe820ef49997e4de59eda858cf6bac1f499a4511e19357c3e05d5ef0d04",
+   "ftn/src/ftn/os/m5_setup.py": "44d7dd3a64e21dc83824ec0ba967d661768a6fe3d321d30791708a32c197b056",
+   "ftn/src/ftn/os/m5_swing.py": "9ea0d3fdabca3abcca51d575c88eb563cd4e1f750db1f0a258475f03bd37c554",
+   "ftn/src/ftn/os/m6_contracts.py": "45391962076e8fd2a29c391d9a64614f9caf84ca5f27978066d2d04924ada391",
+   "ftn/src/ftn/os/m6_env.py": "184f27de0bcc5a4656b2b8158235d426d8e58ceaefd8f8f0e6387d55ce3132db",
+   "ftn/src/ftn/os/m6_evidence.py": "f1c26b5bb55d10b0444777dbd89cd14f0afb4c3c1303aca35f76e14e8d60d8d6",
+   "ftn/src/ftn/os/m6_family.py": "a9b3ff5c700bbb9c44cfc1699e11852ee50ad1ed0fe30d42845f93879b4cc8fe",
+   "ftn/src/ftn/os/m6_md.py": "727052f444af736dee6e5387cbc358b3da1116391fcb78b46e80665e3d7b46ad",
+   "ftn/src/ftn/os/m6_opportunity.py": "568f39ee75e47307a1aaa35063cbf91bdf7c05138609ab34975e8614e00cd18e",
+   "ftn/src/ftn/os/m6_risk.py": "770949efbd25efd21c361d693af013158bbaee18ffe2d1b3cde62512c4f18f70",
+   "ftn/src/ftn/os/m7_contracts.py": "97880f3bb7c2de83aad8a3afa2956a0ab8976c52f58299a70202105549050398",
+   "ftn/src/ftn/os/m7_lrlr.py": "ef4ba7849259d32af73a3cd5c0d599ac9d7309b6fa38c7f6a79fc61e4f3e2eb5",
+   "ftn/src/ftn/os/m7_osok.py": "246f2a4c993b68800b00506270cb73f3839b71a68d616ede381bb0fcc49e60a5",
+   "ftn/src/ftn/os/m7_profile.py": "3f97a79f69af93aa302861ad56b223dd4ab170fd695be657694ad7f53329926f",
+   "ftn/src/ftn/os/m7_range.py": "d2344e663fc87d8fcee02649efc8979550b6f451c59eeac4c64addfd461c0f94",
+   "ftn/src/ftn/os/m7_swing.py": "6c160f845bdbc616f7659d9c9108d222af64c30f7d661bb8e6553ba19e81c567",
+   "ftn/src/ftn/os/m7_template.py": "a9121a16304f1106a8034d6887289c114cdaa13bc4d8c6e682b2de6c383411fd",
+   "ftn/src/ftn/os/m8_contracts.py": "1f43849fbda153364d4f1822ba5b4eb2484302c98f3800addd1f6f9e3d1f12c8",
+   "ftn/src/ftn/os/m8_detect.py": "78e5f2a84bb9da5c43bc36ff8beb42497f8f9766d1a2182ee863d04a64488f53",
+   "ftn/src/ftn/os/m8_htf.py": "699c70b66cab31b38306f5b0ff85f31b226dd4cea75b7212e62a5e61166467f2",
+   "ftn/src/ftn/os/m8_profile.py": "e1df55a87b23c1ef733de05c0fa532ccc20944ac9024245a55d9047819703926",
+   "ftn/src/ftn/os/m8_project.py": "a67a1b0c4341b8eace2e26842bae4e35b138268c5aa79ccddc874ac73d1e50e3",
+   "ftn/src/ftn/os/mint_draft.py": "825cbac5befcadfddbb5a70997b69d17a64ba55743ce5591d8535cd7d89dd859",
+   "ftn/src/ftn/os/mss.py": "6be826ddd58282fc094ec8ee6f2f8d3f963fcf2c2af02a5e81711bd410b57b9d",
+   "ftn/src/ftn/os/pam1_complete.py": "c02b565317bbed3c819d5980ad4765fef12f9aea65b9b5306c7f115cb737f540",
+   "ftn/src/ftn/os/pam1_evidence.py": "6d025143b8aa74438d521c9a20878efd3a61a9dc877a351090913a6c559d921d",
+   "ftn/src/ftn/os/pam_context.py": "2258c8bb9af7a92529c03ea8127b5c4679885e2e966d8636563f1feeeabece44",
+   "ftn/src/ftn/os/pam_contracts.py": "9d073df04c58b5c598effdd317a2b4a25e296bc450449ac0260581e930b44007",
+   "ftn/src/ftn/os/pam_recognize.py": "b24e75a6f66f7ee9f4711f776a011bb5ee915e9eec73d375fa00d2c634c46b7c",
+   "ftn/src/ftn/os/pd_origin.py": "ac5df74479762c7bb5a0fd4ca4140ad4390c8c03364616edb8377b8272086690",
+   "ftn/src/ftn/os/profile.py": "87a144c8ae5bab723606cb3b0f8b15e919caf5fed6a5ece9de59fa5ee0fa58c6",
+   "ftn/src/ftn/os/raid.py": "b95b1ba0df691a52fd7909c12e309f9573451c7f8c9d80f8fd46088f39e4307e",
+   "ftn/src/ftn/os/sentiment.py": "ffe250932bbe1e66f29609ad3d62f26d610e8d4b91258de1637a514a714de7cb",
+   "ftn/src/ftn/os/session_ticket.py": "f44f458d353cdb798831d6120bb225d477b9ccb49c83ba3a72acd326d5d25c99",
+   "ftn/src/ftn/os/wr.py": "41e13f8eeea4b9bdfe15d0d30ac003d104360eea2c65082345d3dc352bb38b4a",
+   "ftn/src/ftn/os/x_ask.py": "ea78b1fa695592198de3b9a2ca1c305b0a3132f6951266c2c6bab2472d750200",
+   "ftn/src/ftn/__init__.py": "fd09d269350a45344b010d8f4c3704b02e5ee9febc17dfbd2835cf06120620c0",
+   "ftn/src/ftn/config_load.py": "e2dd6efccd92de554d68f9cbab1d5b56fe0167a662814257b5284da2384a65bc",
+   "ftn/src/ftn/paths.py": "3ce9cf33db533f71a4a012511e79a5e9588b0ff571ead37b7eebe5f2c765f9b4",
+   "ftn/config.yaml": "4f646976332703542894a7d790a34e0c5211c3d14329fe13229e1698015d0df9"
+  },
+  "risk_sha256": {
+   "ftn/src/ftn/os/instruments.py": "85314124d4281e7703363715b64a6f2efdc13867b19d18aadad4edfe88ec20cf",
+   "ftn/src/ftn/os/mint_draft.py": "825cbac5befcadfddbb5a70997b69d17a64ba55743ce5591d8535cd7d89dd859",
+   "ftn/src/ftn/os/m6_risk.py": "770949efbd25efd21c361d693af013158bbaee18ffe2d1b3cde62512c4f18f70",
+   "ftn/src/ftn/research/book.py": "e1cb3b2191568390c2b7cf6da6dc3768f140ff166a44e67158cb27834400526e",
+   "ftn/src/ftn/config_load.py": "e2dd6efccd92de554d68f9cbab1d5b56fe0167a662814257b5284da2384a65bc",
+   "ftn/config.yaml": "4f646976332703542894a7d790a34e0c5211c3d14329fe13229e1698015d0df9"
+  },
+  "scoring_sha256": {
+   "ftn/src/ftn/research/__init__.py": "35e53cd218a0deaac91cc138ac52f2fd906ba4f84c7cdf189b5eae5274d29c85",
+   "ftn/src/ftn/research/bars.py": "4e442714579edec8c7e2c3d8afb3b3eabf2facd2c24c8fcba973d53ee2a11266",
+   "ftn/src/ftn/research/book.py": "e1cb3b2191568390c2b7cf6da6dc3768f140ff166a44e67158cb27834400526e",
+   "ftn/src/ftn/research/compare.py": "c4c33939a6185e603f34c05f8fd7c29f0b1c3b6c1bb37b22d21f9750c1d44485",
+   "ftn/src/ftn/research/daycontext.py": "98199c72ba98e29156a0b7f872a150f05c81188826cbb1a2ab2abcafc2bf6ddd",
+   "ftn/src/ftn/research/events.py": "72643c5493c90204110c2128fe409cddb8fc6e061e4310a0d2d5c4f929473724",
+   "ftn/src/ftn/research/features.py": "c66ebd602b0f3b0a36a452b25a9bfcee2501fbec0fff42b13a03fc7ce669551d",
+   "ftn/src/ftn/research/hypotheses.py": "0dd653da4a0148dade96dfc09b0d590693433d179c4d6f3ac8d4087b7904a17c",
+   "ftn/src/ftn/research/kernel_log.py": "e1ae06c57321234387e561663af5b8542198c95302e120c1068d2d5f00fc6f27",
+   "ftn/src/ftn/research/outcomes.py": "9e8a563601d753745fcf6812b8d8808262ce53f2334f8ff95ae5b712c901a5a1",
+   "ftn/src/ftn/research/score.py": "393adfa4f69e7fb9bd09973d9172395f9ba36688d78c52cf72555efde3232de0",
+   "ftn/src/ftn/research/stats.py": "f08328b69cc23be885eb962a49ef268b8012db36e6bc279130ec040cf26f81f2",
+   "ftn/src/ftn/research/data/us_macro_events.csv": "96109b36b238fb593579ac75230c36c796ae5fcc5e091646d0519f50e7db03b7"
+  },
+  "registration_inputs_sha256": {
+   "research/evidence/quant/FTN_M9_TRADES_US100_base_2026-10-04_h016_fixed_rev_burned.csv": "cd44f2aead5e9601b36d18a1c375234d8339ef0442da406abcf71fd26c3916f8",
+   "research/evidence/quant/FTN_M9_TRADES_US500_base_2026-10-04_h016_fixed_rev_burned.csv": "6495363033278d45150bdf9982db3b4ddb95bfd16ba463206ff049db1fb8d3f3",
+   "research/evidence/quant/FTN_M9_SCORE_2026-10-04_h016_fixed_rev_burned.json": "cdcbad1ecf18ed4b3cf7ad92ffc904c6a389f06ff2453ecd8892a09f97b924ee",
+   "research/evidence/quant/H016_POWER_SIM_2026-10-04.py": "cd3eb23af6d6d561941e482f7afe8c2d7779555caae4f4399ec033234431a332",
+   "research/evidence/quant/H016_POWER_SIM_2026-10-04.out": "79c43746b352ad81149b74f66373c5fc759797ee59c9f742e925a7aa9a7619eb",
+   "research/evidence/quant/H016b_POWER_SIM_2026-10-04.py": "7ccf05fb37438bd27d39a9b1db57b7da39939b939f011c8675b030f28df3929b",
+   "research/evidence/quant/H016b_POWER_SIM_2026-10-04.out": "765b27e5b166996a47d877ed78e595caf3971655732a508a8a90b091a49b429f"
+  },
+  "runtime": "CPython 3.13, stdlib only for ftn/src (ftn.research has no third-party deps)",
+  "pin_note": "risk_sha256 repeats config_load.py / config.yaml from kernel_and_dtr_sha256 so the risk caps and drawdown reset are pinned in one place",
+  "unpinned_modules": "ftn/src/ftn/__main__.py, ftn/src/ftn/adapters/, journal/, workflow/ are NOT pinned and the harness must not import them; a harness test asserts sys.modules holds no unpinned ftn module after a run (CASSANDRA F12a)"
+ },
+ "instruments": {
+  "decision": "pooled US100 + US500 trades (each trade one row)",
+  "per_instrument": "US100 and US500 reported separately in every headline, and both must pass (see binding_pass_at_N)",
+  "series_labels": {
+   "US100": "DUKASCOPY-CFD-USATECHIDXUSD-BID1M+ASK1M (forward)",
+   "US500": "DUKASCOPY-CFD-USA500IDXUSD-BID1M+ASK1M (forward)"
+  }
+ },
+ "data_source": {
+  "feed": "canonical Dukascopy datafeed CFD 1m bars, BID (BID_candles_min_1.bi5) AND ASK (ASK_candles_min_1.bi5) day files for USATECHIDXUSD and USA500IDXUSD, downloaded after each session closes; context bars included. BID drives the kernel chart and levels; ASK drives the correct-side fills and spread_measured. Both sides are BINDING",
+  "both_sides_required": "a session counts per instrument only if BID and ASK day files are FINAL and complete for UTC days d-1 and d, BID and ASK each pass the killzone min-bar filter (>= 171/180) and the exit-bar rule; a ticket additionally needs the t-1m BID and ASK bars (rule.entry_minute)",
+  "why_not_capitalcom": "the kernel needs >= 22 sessions of 1m context and full RTH coverage for the trading-day filter; TradingView CAPITALCOM serves ~5 sessions (research/forward/README.md open issue 2). The rule is fully mechanical and causal on bars, so computing a session after it closes gives the same ticket as computing it live; no live alert is required",
+  "certification": "DATA must certify the forward BID+ASK download pipeline (H015b checklist C1-C13 incl. C3/C13 ASK items, adapted to H016b, with the C3/C13 ASK items covering the binding ASK use (CASSANDRA F8)) and write DATA_CERTIFIED.json with the H016b harness digest before any R is shown",
+  "raw_bars_required": "every counted session persists the raw BID and ASK 1m day files consumed (context + session) with sha256 per file; the log row carries both session hashes and a context manifest hash; no fallback feeds, no filled gaps. A row without raw bars does not count",
+  "feed_disclosure": "every H016b report states the feed is Dukascopy CFD BID+ASK, unlike H013/H014 (TradingView CAPITALCOM) and unlike H015b's binding BID-only stream",
+  "fallback_feeds_allowed": false,
+  "fallback_detail": "no HistData, marketdata-merged, TradingView, broker or synthetic ASK (BID + assumed spread) substitute, ever; a missing side = session not counted (status feed_gap_bid / feed_gap_ask)",
+  "ask_minutes_after_entry": "after the entry, BID minutes without an ASK print are skipped by simulate_both's exit loop (no exit is filled on a minute without a print on the exit side); their count is logged per trade (ask_gap_minutes). The ENTRY and spread_measured are never stale: rule.entry_minute. (Corrects H016 data_source.both_sides_required)",
+  "feed_suspension": "a schema failure (feed_suspended) or more than 10 consecutive expected trading days whose rows are all feed_gap suspends counting from the first such date until DATA writes FEED_RESUMED.json; the feed is never switched (CASSANDRA F12b)"
+ },
+ "costs": {
+  "binding": "correct-side fills, ftn.research.outcomes.simulate_both(slip_mult=1.0): long enters on ASK close + market slip, stopped when BID low <= stop (fill min(stop, BID open) - stop slip), target when BID high > target (fill target - limit slip); short enters on BID close - market slip, stopped when ASK high >= stop (fill max(stop, ASK open) + stop slip), target when ASK low < target (fill target + limit slip). R = (exit fill - entry fill) / planned risk |signal entry - stop|",
+  "slippage_floors_per_side_pts": {
+   "US100": {
+    "stop": 0.5,
+    "market": 0.5,
+    "limit": 0.25
+   },
+   "US500": {
+    "stop": 0.25,
+    "market": 0.25,
+    "limit": 0.1
+   }
+  },
+  "source": "DATA ruling 3 (/workspace/marketdata README), encoded in ftn/src/ftn/os/instruments.py (pinned)",
+  "co_reports": [
+   "flat cost 0.8 / 0.5 pt per side (ftn.research.outcomes.simulate; H013/H014/H015b convention) - co-report ONLY (CASSANDRA)",
+   "2x slippage floors (simulate_both slip_mult=2.0)",
+   "measured spread at the signal (monthly median / p90 per instrument and killzone)"
+  ]
+ },
+ "counting_rules": {
+  "first_eligible_session": "the first killzone session that starts after the prereg-H016b tag is pushed AND (rule 5) whose row is computed after the H016b harness registration commit: London 2026-10-05 02:00 NY (08:00 SAST) if both precede it",
+  "forward_only_why": "forward-only: the fixes were chosen after seeing the burned window, and 2026-09-26..2026-10-04 plus DATA's certified-untouched ranges must stay unread before registration. Forward-only means no one, human or agent, can have seen the outcome",
+  "excluded": "every session dated before 2026-10-05 is never counted (it may be used only as kernel context history)",
+  "trading_day_filter": "weekday with >= 300 1m bars in 09:30-15:59 NY on the feed (ftn.research.bars.trading_days), per instrument (BID)",
+  "min_bar_filter": "a session counts per instrument only if >= 171 of 180 1m bars are present in its killzone on BID and on ASK, and the exit-bar rule holds",
+  "holidays_excluded": {
+   "full_closures": [
+    "2026-11-26",
+    "2026-12-25",
+    "2027-01-01",
+    "2027-01-18",
+    "2027-02-15",
+    "2027-03-26",
+    "2027-05-31",
+    "2027-06-18",
+    "2027-07-05",
+    "2027-09-06",
+    "2027-11-25",
+    "2027-12-24"
+   ],
+   "early_closes": [
+    "2026-11-27",
+    "2026-12-24",
+    "2027-11-26"
+   ],
+   "historical_additions": [
+    "2025-12-24"
+   ],
+   "maintenance": "DATA extends the list from the NYSE published calendar (holiday_source) before each new year's first session"
+  },
+  "backfill": "all rows are computed after the session closes from saved raw bars; rows are flagged with compute time; recomputation must reproduce the stored row exactly",
+  "timezone": "America/New_York wall clock for all rule times",
+  "exit_bar_rule": "BINDING (CASSANDRA F4; = H015b v2 appendix A4): at least one BID bar AND at least one ASK bar in [15:45, 16:00) NY on date d, evaluated for EVERY session of the day before the trade/no_trade branch, so session validity never depends on the entry. Failing it -> short_session (not counted). A gap > 5 min between entry and 16:00 on either side is a NON-binding gap_flag",
+  "computed_after_harness_registration": "BINDING (CASSANDRA F6): a row counts only if its compute time is later than the commit time on origin of the first H016b harness registration note (status REGISTERED); no forward bar file (dated >= 2026-09-26) is downloaded or opened by anyone before that commit; the downloader is part of the registered harness; the harness must reproduce the burned H016 trades bit-for-bit at its digest before its first forward pull",
+  "holiday_source": "the binding holiday/early-close source is the NYSE published holiday calendar (nyse.com markets/hours-calendars); the listed dates are as registered; dates not yet listed are added by DATA from that source before each year's first session; a discrepancy with the NYSE publication is resolved in favour of the NYSE publication (CASSANDRA F12e)",
+  "calendar_identity": "per forward session the harness asserts the ticket (date, killzone, side, entry_time, entry, stop) is identical with the macro calendar on and off (fingerprint excluded); a difference refuses the row (CASSANDRA F12c)"
+ },
+ "primary_metric": "pooled mean R per ticket after correct-side costs, over ALL eligible tickets (flat-book gating; entry-minute, exit-bar and min-bar rules applied)",
+ "binding_metric_choice": {
+  "decision": "per-ticket R on all eligible tickets (risk gate sees a flat book) is BINDING; the running paper book is a required co-report",
+  "running_book_spec": "ftn.research.book.RunningBook: start equity 100, each taken trade risks 0.5% of current equity (max_trade_risk_pct), 2% daily loss cap (realised loss today vs start-of-day equity, NY date), 5% drawdown cap from the high-water mark; drawdown_reset next_calendar_month (after the 5% cap blocks a ticket, halted for the rest of that calendar month, HWM reset to current equity at the first ticket of a later month); P&L realised at exit time; the gate sees realised trades only",
+  "justification": [
+   "the book's freezes depend on earlier outcomes, so the running-book sample is an outcome-dependent selection of tickets: it is not the rule's ticket population and breaks the exchangeable-cluster assumption of the bootstrap",
+   "freezes shrink N and power: on the burned window the running book dropped 6/146 US100 and 12/112 US500 trades (max_drawdown_cap) - about 7% of trades, more under a true-zero edge, which would lengthen the test or lower power",
+   "the hypothesis is about the rule's per-ticket edge; the caps are a risk-management layer for MINT that must be judged on the same tickets, so the running book is co-reported (mean R, total R, equity, max DD %, freeze count, tickets lost) and never changes a verdict",
+   "the min-stop block is an ex-ante part of the rule (not outcome-dependent) and therefore applies in the binding stream"
+  ]
+ },
+ "statistical_test": {
+  "hypothesis": "one-sided: pooled mean R per ticket after correct-side costs > 0",
+  "binding_bound": "session-cluster percentile bootstrap. Clusters = (date, killzone) over counted trades pooled across US100 and US500, in canonical order (date, london before ny_am). rng = random.Random(20261004); 10,000 resamples; each resample draws k clusters with rng.randrange(k) (k = number of clusters) and computes sum(R)/count(trades). Sorted values v[0..9999]. Binding one-sided 95% lower bound = v[int(0.05*10000)] = v[500] (the 5th percentile; alpha = 0.05 one-sided). PASS needs v[500] > 0",
+  "p_value_for_family_rule": "one-sided p = (#{v <= 0} + 1) / 10,001 from the same cluster bootstrap",
+  "percentile_warning": "ftn.research.stats.boot_ci(alpha=0.05) returns v[250], the 2.5th percentile (a two-sided 95% / one-sided 97.5% bound). It is NOT the binding call. The harness implements the cluster bootstrap itself and a unit test asserts the binding index is 500",
+  "co_report_trade_level": "trade-level percentile bootstrap, same seed and resample count, one-sided 95% lower bound = ftn.research.stats.boot_ci(R, alpha=0.10)[0] (non-binding)",
+  "multiplicity": "H016b has one primary hypothesis. Promotion is governed by family_rule; FTN-H001..H013 conditioning reads are exploratory only",
+  "binding_call": "harness-implemented session-cluster percentile bootstrap (NOT ftn.research.stats.boot_ci): rng = random.Random(20261004); B = 10,000; v sorted; LB = v[int(0.05*B)] = v[500]; alpha = 0.05 one-sided; p = (#{v <= 0} + 1) / (B + 1)"
+ },
+ "power_calculation": {
+  "formula": "clusters k = ((z_alpha + z_beta) * sigma_c / delta)^2 with sigma_c^2 = var_c(sum_c R - mean * n_c) / mbar^2; N_trades = k * mbar",
+  "assumptions": {
+   "alpha_one_sided": 0.05,
+   "z_alpha": 1.6449,
+   "power": 0.8,
+   "z_beta": 0.8416,
+   "delta": "+0.15 R per ticket after correct-side costs (same bar as H013/H015b)"
+  },
+  "result": 747,
+  "sensitivity": {
+   "delta_0.10": 1680,
+   "delta_0.20": 420,
+   "all_258_trades_delta_0.15": 738
+  },
+  "design_effect": "DEFF 1.384: rho(R) = 0.597 on 80 two-instrument clusters; mean cluster size 1.46",
+  "rho_use": "rho is measured on the burned trades for variance (N, kill, futility simulation) only; it is never evidence",
+  "expected_duration": "burned window: 254 eligible trades in ~272 trading days (~0.93 per trading day) -> N=747 is ~800 trading days (~3.2 years, ~late 2029/early 2030); trade rate unverified forward",
+  "joint_power": {
+   "mu_+0.15": {
+    "p_pass_joint": 0.7577,
+    "p_kill": 0.0087,
+    "p_futility": 0.0093,
+    "p_each_criterion": {
+     "mean>=0.10": 0.79,
+     "cluster_lb>0": 0.798,
+     "foil>=p95": 0.974,
+     "both_instruments>0": 0.848,
+     "ex_top1pct>0": 0.973,
+     "ex_small_stop>0": 0.973
+    }
+   },
+   "mu_+0.10": {
+    "p_pass_joint": 0.475,
+    "p_kill": 0.0283,
+    "p_futility": 0.029,
+    "p_each_criterion": {
+     "mean>=0.10": 0.51,
+     "cluster_lb>0": 0.513,
+     "foil>=p95": 0.891,
+     "both_instruments>0": 0.612,
+     "ex_top1pct>0": 0.88,
+     "ex_small_stop>0": 0.901
+    }
+   },
+   "mu_+0.00": {
+    "p_pass_joint": 0.0387,
+    "p_kill": 0.3113,
+    "p_futility": 0.0823,
+    "p_each_criterion": {
+     "mean>=0.10": 0.046,
+     "cluster_lb>0": 0.045,
+     "foil>=p95": 0.392,
+     "both_instruments>0": 0.128,
+     "ex_top1pct>0": 0.375,
+     "ex_small_stop>0": 0.465
+    }
+   },
+   "mu_-0.10": {
+    "p_pass_joint": 0.0,
+    "p_kill": 0.731,
+    "p_futility": 0.147,
+    "p_each_criterion": {
+     "mean>=0.10": 0.0,
+     "cluster_lb>0": 0.0,
+     "foil>=p95": 0.029,
+     "both_instruments>0": 0.003,
+     "ex_top1pct>0": 0.026,
+     "ex_small_stop>0": 0.063
+    }
+   }
+  },
+  "joint_power_sensitivity": {
+   "N747_K-45": {
+    "mu_+0.15": 0.7587,
+    "mu_+0.10": 0.475,
+    "mu_+0.00": 0.0387,
+    "mu_-0.10": 0.0
+   },
+   "N738_K-40": {
+    "mu_+0.15": 0.7647,
+    "mu_+0.10": 0.4637,
+    "mu_+0.00": 0.0387,
+    "mu_-0.10": 0.0
+   }
+  },
+  "joint_power_note": "the six pass criteria are AND-ed and the kill and futility rules can stop a true edge, so the joint P(pass) is below the 0.80 single-test power; reported, not tuned. Simulation: clustered paths of the burned trades re-centred to mu, normal-approx cluster SE for the bounds, foil approximated as the burned pooled correct-side foil median (-0.0701) + 1.645*SD/sqrt(N) (research/evidence/quant/H016b_POWER_SIM_2026-10-04.py). Weakest criterion: both_instruments>0 (0.848 at +0.15)",
+  "measured_on_filter_eligible_burned_trades": {
+   "trades": 254,
+   "clusters": 174,
+   "clusters_both": 80,
+   "mean_cluster_size": 1.46,
+   "rho_R": 0.597,
+   "mean_R_burned": 0.0828,
+   "sd_R": 1.401,
+   "cluster_resid_var": 3.964,
+   "deff": 1.384,
+   "foil_median_pooled": -0.0701,
+   "N_trades": {
+    "0.1": 1680,
+    "0.15": 747,
+    "0.2": 420
+   }
+  },
+  "normal_approx_check": "CASSANDRA validated the normal-approx cluster SE against a percentile cluster bootstrap on the H016 sim (P(LB>0 | 0R) 0.047 vs 0.048; | +0.15 0.785 vs 0.785; P(futility | 0R) 0.162 vs 0.167; /workspace/h016_review/boot_vs_normal.out, not evidence)"
+ },
+ "binding_N": {
+  "decision": 747,
+  "no_verdict_language_before": 100,
+  "kill_active_from_trade": 1,
+  "futility_at": 200
+ },
+ "binding_kill": {
+  "rule": "pooled cumulative R after correct-side costs <= -40R at any point from the first counted trade (canonical order: date, killzone, US100 before US500, entry time) -> FAILS (kill), stop counting",
+  "justification": "clustered paths of the 254 filter-eligible burned trades re-centred (2,000 paths of 747 trades, seed 20261004, futility off): P(kill | +0.15R) = -30R 3.45%, -35R 1.85%, -40R 0.95%, -45R 0.60%, -50R 0.35%, -55R 0.10%, -60R 0.05%; -40R is the least negative level with P(kill | +0.15R) < 1%. With futility on (3,000 paths): (+0.15) 0.9%, (+0.10) 2.8%, (+0.00) 31.1%, (-0.10) 73.1%",
+  "kill_log": "the first crossing of the kill line is logged ONCE with its row keys (sealed/KILL_LOG.json), never overwritten (CASSANDRA F5)"
+ },
+ "binding_futility": {
+  "rule": "fires ONCE, at exactly the 200th counted pooled trade (canonical order); never re-evaluated (no repeated peeking). Same session-cluster bootstrap on those 200 trades (clusters cut at trade 200 kept partial), seed 20261004, 10,000 resamples: upper one-sided 97.5% bound = v[int(0.975*10000) - 1] = v[9749]. If v[9749] < +0.10R -> FAILS (futility), stop counting",
+  "frozen_set": "the first time counted N reaches 200, the 200 row keys, the bound and the decision are written ONCE to sealed/FUTILITY_SET.json (never overwritten, sealed until certification); futility is evaluated on exactly that set; a later backfill that reshuffles the canonical first 200 is reported, never used (CASSANDRA F5; = H015b v2 condition 4)",
+  "operating_characteristics": "simulated (normal-approx cluster SE, 3,000 paths, K -40R): P(futility | +0.15) 0.9%, P(futility | +0.10) 2.9%, P(futility | +0.00) 8.2%, P(futility | -0.10) 14.7%"
+ },
+ "binding_pass_at_N": [
+  "pooled mean R after correct-side costs >= +0.10",
+  "pooled session-cluster bootstrap one-sided 95% lower bound v[500] > 0 (statistical_test.binding_bound)",
+  "random-entry foil (same day + killzone, random minute, random side, same risk_pts / 2R target / correct-side fills with the same slippage floors (simulate_both on the same BID+ASK) / 16:00 exit; 2,000 replicates; ftn.research.score.foil method per instrument with seed 20261004, pooled per replicate as the trade-weighted mean of the non-None outcomes) >= 95th percentile, pooled. Each replicate's N (outcomes that are not None) is logged and reported (min / median / max)",
+  "mean R after correct-side costs > 0 on US100 and on US500 separately",
+  "pooled mean with the top 1% of trades by R dropped > 0",
+  "pooled mean with small-stop trades (risk_pts < sample p25, per instrument) excluded > 0"
+ ],
+ "binding_fail": "kill line at any time, futility at trade 200, or failing any pass criterion at N = 747 = FAILS",
+ "verdict_wording": {
+  "pass": "a pass is recorded as 'PASSES (unadjusted)'; it becomes SURVIVES only under family_rule",
+  "below_100": "no verdict or edge wording below N=100 counted trades (counts and data-quality only)",
+  "fill_fragile": "if the binding verdict (any of the six pass criteria, or the kill / futility outcome) flips under ANY fill_fragility perturbation, a pass is recorded as 'PASSES (unadjusted, fill-fragile)' and cannot be promoted to SURVIVES without replication under a new ID (CASSANDRA F7)"
+ },
+ "family_rule": {
+  "file": "research/protocols/FORWARD_FAMILY_RULE_2026-10-04.md",
+  "commit": "ebfa83b on main (ORION, 2026-10-04)",
+  "clause": "'any later forward test added to the active family'",
+  "active_family": [
+   "H013",
+   "H014",
+   "H016b"
+  ],
+  "applies": "a PASSES (unadjusted) becomes MINT-clearable SURVIVES only if its primary one-sided p (statistical_test.p_value_for_family_rule, the session-cluster bootstrap) clears Holm across the active family of THREE tests H013, H014, H016b at one-sided alpha 0.05: thresholds 0.0167 / 0.025 / 0.05 (smallest p first, stop at the first failure). Otherwise 'PASSES (unadjusted), replication required'",
+  "h015b": "H015b is WITHDRAWN-PRE-DATA (ORION, 2026-10-04; research/summaries/2026-10-04_H015b_WITHDRAWAL.md; basis CASSANDRA ruling /home/box/hermes-x/reviews/post-wave1/CASSANDRA_H015B_WITHDRAWAL_RULING_2026-10-04.md): not FAILS, no verdict, not in the family. If its harness is ever run it is a non-binding diagnostic only (flat vs correct-side cost comparison), can never produce SURVIVES, FAILS or a board entry, and its R stays sealed until H016b reaches a verdict (pass, fail, kill or futility), because its tickets overlap H016b's",
+  "orion_ruling_a": {
+   "attribution": "ORION, 2026-10-04",
+   "text": "ACKNOWLEDGED: unfinished, killed or futile tests enter Holm at p=1; Holm is re-run each time a test completes; a SURVIVES once granted is never revoked (it already cleared the strictest threshold, 0.0125, and later re-runs only loosen thresholds).",
+   "implementation": "at any decision time, every unfinished family test enters Holm with p = 1 and a killed or futile test has p = 1; Holm is re-run when each test completes"
+  },
+  "orion_ruling_b": {
+   "attribution": "ORION, 2026-10-04",
+   "scope": "H015b vs H016b (FTN-REV variants); retained as the standing rule although H015b is withdrawn",
+   "text": [
+    "1. Each is judged only on its own binding criteria plus Holm, and their trades are never pooled.",
+    "2. If exactly one passes, its SURVIVES is variant-specific (the stop/pip fix matters), with the failing variant's result disclosed beside it.",
+    "3. If both pass, it is ONE finding for the family rule, not replication; a fresh forward test under a new ID is required before MINT clearance beyond the paper limits.",
+    "4. If they point in opposite directions (one killed, the other passes), the passing one needs CASSANDRA's written check that the difference is explained by the fix and not noise before SURVIVES."
+   ],
+   "cassandra_stricter_points_take_precedence": {
+    "attribution": "CASSANDRA, 2026-10-04 (H015b withdrawal ruling)",
+    "text": [
+     "(b)2: a variant-specific SURVIVES for a flat-cost variant needs its correct-side co-report to pass as well.",
+     "(b)4: CASSANDRA's written check needs the fill-fragility co-report (H016b amendment 6) to be non-flipping."
+    ]
+   }
+  },
+  "not_independent": "H015b and H016b are REV variants on the same instruments and sessions, so a pass in one is NOT independent replication of the other",
+  "never_relaxed": "kills and the binding futility rule are per-test and are never relaxed by the family rule",
+  "why": "three tests at alpha 0.05: ~14% chance that at least one passes by luck with no edge if independent",
+  "co_report": "ORION's non-binding Holm co-report across H013 / H014 / H016b is kept in every report"
+ },
+ "non_binding_gates": [
+  "mean > 0 at 2x slippage floors and under the flat-cost model",
+  "long/short split and London vs NY AM split reported",
+  "max drawdown (R) vs bootstrap p95 under +0.15",
+  "trade-level bootstrap bound (statistical_test.co_report_trade_level)",
+  "running paper book (binding_metric_choice.running_book_spec)",
+  "fill-fragility co-report (fill_fragility_co_report)"
+ ],
+ "required_co_reports": [
+  "stream label on every forward result (series_labels); DUKASCOPY historical citations labelled burned",
+  "exit-reason breakdown; no exit tuning",
+  "per-instrument and per-killzone results",
+  "cost ladder: correct-side 1x (binding) / correct-side 2x slippage / flat cost 0.8 / 0.5 pt per side",
+  "running paper book: mean R, total R, equity path, max DD %, daily-loss and drawdown freezes, tickets lost to freezes",
+  "risk blocks: stop_below_min_risk count per instrument and killzone (tickets the min-stop rule removed)",
+  "spread_measured and ASK-gap minutes per counted session",
+  "foil N per replicate (min / median / max)",
+  "feed disclosure: Dukascopy BID+ASK, unlike H013/H014 CAPITALCOM and H015b BID-binding (withdrawn)",
+  "exit-bar / gap: gap_flag flagged n and sum R next to the headline, a non-binding headline excluding flagged trades, and short_session-dropped n and sum R",
+  "entry-minute: feed_gap_entry count per instrument and killzone; no_r_ticket count by reason",
+  "fill-fragility co-report (fill_fragility_co_report) and min_risk-threshold ticket count",
+  "DATA condition 4 (H015b v2 cert): non-binding headline excluding rows with non-empty context_missing_days or context_frozen_incomplete"
+ ],
+ "harness": {
+  "status": "NOT BUILT AT REGISTRATION. Must be built, hashed (harness_sha256 manifest) and registered in a separate note research/protocols/preregs/H016b_HARNESS_REGISTRATION_<date>.json (never an edit of this file) committed and pushed BEFORE any forward bar is downloaded or opened (counting_rules.computed_after_harness_registration)",
+  "adapt_from": "the H015b v2 harness research/forward/H015/{duka.py,h015.py} (tag harness-H015b-v2 -> 5ea3e89) + research/protocols/preregs/H015b_DATA_APPENDIX_2026-10-04.md; copied into a NEW research/forward/H016b/ directory, the H015b files and tags are never edited; a draft H016 harness (research/forward/H016/, never registered, never run on forward data) is superseded by research/forward/H016b/",
+  "needs": [
+   "research/forward/H016b/h016b.py + duka.py: daily job downloading Dukascopy BID AND ASK 1m day files for US100/US500 (context >= 22 sessions + the session; UTC days d-1 and d), saved under $HERMES_FWD_DATA/H016b/raw/<inst>/<BID|ASK>/<date>.* with sha256; no fallback",
+   "pin check at run time against this prereg's kernel_and_dtr_sha256 + risk_sha256 + scoring_sha256 (all files, incl. ftn/engine and the calendar CSV) -> harness_hash_mismatch",
+   "calendar check (holidays_excluded), trading-day filter, killzone min-bar filter on BID and ASK; statuses ok / feed_gap_bid / feed_gap_ask / holiday / short_session",
+   "kernel: History(bid, days, ask=ask, calendar=True) -> session_ticket_log(..., book=None) exactly as pinned; risk blocks (stop_below_min_risk) logged, not counted",
+   "outcome: simulate_both(bid, ask, ..., slip=instrument floors, slip_mult=1.0) binding; co-report simulate (flat cost) and simulate_both slip_mult=2.0",
+   "one log.csv row per session/instrument (ticket, block reason, direction, entry, stop, stop buffer label, spread_measured, risk_pts, R binding, R co-reports, fill_in/fill_out, exit, exit_time, ASK-gap minutes, raw BID/ASK sha256, compute time)",
+   "registration check: only sessions dated >= 2026-10-05 that start after the prereg-H016b tag push count",
+   "running pooled cumulative R and kill flag at -40R; futility once at N=200 (v[9749] < +0.10); report with per-instrument / pooled stats, session-cluster bootstrap (binding v[500], p for Holm) + trade-level co-report, foil on BID+ASK with N per replicate, ex-top-1%, ex-small-stop, cost ladder",
+   "running paper book co-report: replay RunningBook(0.5, reset='next_calendar_month') over the counted tickets in time order (gating via session_ticket_log(book=...)), never feeding back into the binding stream",
+   "H015b overlap co-report (reads the H015b log read-only, if available)",
+   "sealing as in H015b v2: R sealed until DATA_CERTIFIED.json and CASSANDRA_CLEARED.json with the H016b harness digest exist",
+   "tests: reproduce research/evidence/quant/FTN_M9_TRADES_US{100,500}_base_2026-10-04_h016_fixed_rev_burned.csv bit-for-bit on the burned tape (pin check); calendar on/off ticket identity; binding bootstrap index 500 / futility index 9749; counting, kill, BID-without-ASK refusal unit tests",
+   "entry-minute check (rule.entry_minute) -> feed_gap_entry; no_r_ticket status",
+   "exit-bar rule on BID and ASK for every session; gap_flag on either side",
+   "sealed/FUTILITY_SET.json and sealed/KILL_LOG.json written once",
+   "fill-fragility co-report",
+   "bi5 BID+ASK re-pull of >= 20 burned days (incl. 2026-03-23, 2026-04-10, 2026-05-29) through the harness downloader, reproducing the burned H016 trades for those days, BID/ASK minute-alignment report, input hashes (CASSANDRA F8)",
+   "no unpinned ftn imports (sys.modules test); feed suspension; per-session calendar identity"
+  ],
+  "data_appendix": "a DATA-handling appendix for H016b (pull time, finality, ASK specifics, spread, statuses, hashes, 2028+ holidays, outages) is committed with the harness before the first R; it may not change any binding item",
+  "refuse_conditions": [
+   "any pinned file or this prereg not byte-identical to the prereg-H016b tag -> harness_hash_mismatch",
+   "a session/instrument missing BID or ASK -> not counted (never a fallback)",
+   "DATA certification flag file missing -> no R shown",
+   "CASSANDRA clearance file missing -> no R shown",
+   "registration note missing on origin or manifest mismatch -> not counted",
+   "row computed before the H016b harness registration commit -> not counted (computed_before_registration)"
+  ]
+ },
+ "changes_after_registration": "any change to a pinned hash, feed, window, cost, exit, filter, N, kill, futility, bound or binding metric voids counting from that point and requires a new ID (H016c)",
+ "reviews_required_before_first_R": [
+  "CASSANDRA clears H016b (amendments 1-7 implemented as written) and the registered harness (amendments 8-10)",
+  "DATA clears H016b and certifies the BID+ASK pipeline on the registered H016b harness (C1-C13 incl. ASK as binding)",
+  "ORION's acknowledgement of the family (rulings (a) and (b), quoted) is recorded in this file; ORION records the H015b withdrawal (done: research/summaries/2026-10-04_H015b_WITHDRAWAL.md)"
+ ],
+ "review_paths": {
+  "prereg": "research/protocols/preregs/H016b_FORWARD_PREREG_2026-10-04.json",
+  "power_sim": [
+   "research/evidence/quant/H016b_POWER_SIM_2026-10-04.py",
+   "research/evidence/quant/H016b_POWER_SIM_2026-10-04.out"
+  ],
+  "burned_inputs": [
+   "research/evidence/quant/FTN_M9_TRADES_US100_base_2026-10-04_h016_fixed_rev_burned.csv",
+   "research/evidence/quant/FTN_M9_TRADES_US500_base_2026-10-04_h016_fixed_rev_burned.csv",
+   "research/evidence/quant/FTN_M9_SCORE_2026-10-04_h016_fixed_rev_burned.json"
+  ],
+  "rule_docs": [
+   "ftn/docs/POST_H015B_DEMO_FIXES.md",
+   "ftn/src/ftn/os/instruments.py",
+   "ftn/src/ftn/research/outcomes.py (simulate_both)",
+   "ftn/src/ftn/research/book.py"
+  ],
+  "pr": "https://github.com/GdotAiM/hermes/pull/4",
+  "superseded": "research/protocols/preregs/H016_FORWARD_PREREG_2026-10-04.json (tag prereg-H016)",
+  "h015b_withdrawal": "research/summaries/2026-10-04_H015b_WITHDRAWAL.md",
+  "cassandra_review": "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H016_PREREG_REDTEAM_2026-10-04.md",
+  "suggested_outputs": [
+   "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H016B_CLEARANCE_2026-10-04.md",
+   "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/DATA_REVIEW_H016B_PREREG_2026-10-04.md"
+  ]
+ },
+ "fill_fragility_co_report": {
+  "required": true,
+  "perturbations": [
+   "stop / target trigger levels +0.1 pt and -0.1 pt",
+   "stop / target trigger levels +1 tick and -1 tick (0.001 pt, the Dukascopy price step)",
+   "ASK series +0.1 pt and -0.1 pt (all ASK O/H/L/C)",
+   "min_risk +0.25 pt and -0.25 pt (re-gating every ticket; changes which tickets count)"
+  ],
+  "report": "per perturbation: n, pooled and per-instrument mean R, exit flips, each of the six pass criteria and the kill/futility outcome; count of gate-threshold tickets within +/-0.25 pt of min_risk",
+  "rule": "see verdict_wording.fill_fragile",
+  "burned_probe": "CASSANDRA /workspace/h016_review/fragility_burned.out (not evidence): US100 0 exit flips under all perturbations; US500 3/112 flips with a 0.1 pt tighter stop (mean 0.188 -> 0.160); smallest taken US500 risk 4.891 pt vs min_risk 4.88"
+ }
+}
