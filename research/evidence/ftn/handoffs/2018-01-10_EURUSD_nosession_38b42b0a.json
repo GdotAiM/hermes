@@ -1,0 +1,191 @@
+{
+  "schemaVersion": "1",
+  "kind": "day_context_handoff",
+  "producer": "ftn-agent",
+  "consumer": "hermes-x|hermes-desk",
+  "mode": "paper",
+  "fingerprint": "2107889760851263150",
+  "symbol": "EURUSD",
+  "date": "2018-01-10",
+  "session": null,
+  "market_state": {
+    "sentiment": {
+      "direction": "unclear",
+      "expected_delivery": "unclear",
+      "indicator": {
+        "name": "williams_r",
+        "period": 10,
+        "timeframe": "m15",
+        "value": null,
+        "state": "unavailable"
+      },
+      "reference_open": "gmt0",
+      "asian_range": {},
+      "liquidity_probe": {
+        "preferred_side": "either",
+        "observed_side": "none"
+      },
+      "judas_side": "none",
+      "reaction": {
+        "pd_array_reaction": "none"
+      },
+      "basis": [
+        "williams_r",
+        "pair_iof",
+        "asian_range",
+        "opening_price"
+      ]
+    },
+    "institutional": {
+      "sponsorship": {
+        "monthly": "not_scored",
+        "weekly": "not_scored",
+        "daily": "unclear",
+        "h4": "unclear"
+      },
+      "daytrade_iof": {
+        "daily": "unclear",
+        "h4": "unclear",
+        "m60": "unclear"
+      },
+      "state": "unclear",
+      "qualification": "unclear",
+      "notes": []
+    },
+    "dxy": {
+      "relationship": "unavailable"
+    },
+    "profile": "unclear",
+    "origin_pd_array": null,
+    "opposing_target_arrays": [],
+    "opens": {},
+    "scenarios": {},
+    "month1": null,
+    "month2": null,
+    "month3": null,
+    "month4": null,
+    "month5": null,
+    "month6": null,
+    "month7": null,
+    "month8": null,
+    "month10": null,
+    "month11": null,
+    "month12": null,
+    "charter": {
+      "identified_pam": "present",
+      "recognized_pams": [
+        {
+          "pam_id": "pam1",
+          "horizon": "intraday_scalp",
+          "primary_lecture_note": "present",
+          "amplified_note": "present",
+          "trade_plan_note": "present",
+          "algorithmic_theory_note": "present"
+        }
+      ],
+      "model13_bridge": "none",
+      "charter_recognition": {
+        "flag": true,
+        "reason": "identified_pam_with_named_pam"
+      }
+    },
+    "pam1_evidence": {
+      "direction": "bullish",
+      "ipda": {
+        "present": "present",
+        "lookback_trading_days": 20
+      },
+      "institutional_sponsorship": "present",
+      "premium_discount_context": "discount",
+      "liquidity_objective": {
+        "present": "present",
+        "type": "previous_daily_high"
+      },
+      "ny_execution_window": "present",
+      "ote": {
+        "present": "present",
+        "fib_level": "62_percent"
+      },
+      "directional_link": "present",
+      "confirming": {
+        "liquidity_raid": "present",
+        "displacement": "present",
+        "market_structure_shift": "present",
+        "institutional_reference": "present"
+      }
+    },
+    "pam1_completeness": {
+      "required_present": [
+        "direction",
+        "ipda",
+        "institutional_sponsorship",
+        "liquidity_objective",
+        "ny_execution_window",
+        "ote",
+        "directional_link"
+      ],
+      "required_missing": [],
+      "confirming_present": [
+        "liquidity_raid",
+        "displacement",
+        "market_structure_shift",
+        "institutional_reference"
+      ],
+      "confirming_missing": [],
+      "required_complete": true,
+      "reason": "required_complete"
+    }
+  },
+  "candidates": [
+    {
+      "module": "REV",
+      "state": "ineligible",
+      "eligible": false,
+      "reason": "no_named_extreme_plus_htf_context",
+      "origin": "ict_source"
+    },
+    {
+      "module": "CONSO",
+      "state": "ineligible",
+      "eligible": false,
+      "reason": "box_null",
+      "origin": "ict_source"
+    },
+    {
+      "module": "PIP20",
+      "state": "ineligible",
+      "eligible": false,
+      "reason": "profile=unclear",
+      "origin": "hermes_interpretation"
+    },
+    {
+      "module": "BB",
+      "state": "ineligible",
+      "eligible": false,
+      "reason": "missing_iof_or_judas_or_engine",
+      "origin": "ict_source"
+    },
+    {
+      "module": "FTN",
+      "state": "annotate",
+      "eligible": false,
+      "reason": "objectives_only",
+      "origin": "hermes_governance"
+    }
+  ],
+  "ftn_annotation": {
+    "family": null,
+    "bias": null,
+    "four": []
+  },
+  "session_ticket": null,
+  "contrary": null,
+  "notes": [
+    "Transport only: DayContext snapshot for research projection.",
+    "Consumers must not mutate Market State or invent ICT rules.",
+    "PAM recognition and completeness are not execution instructions.",
+    "Legacy kind was 'month9_handoff'; primary kind is 'day_context_handoff'.",
+    "Forbidden as signal fields: trade direction recommendation, model ranking, broker command.",
+    "Institutional IOF label is exported as 'qualification' (internal field name is banned in handoff.v1)."
+  ]
+}
