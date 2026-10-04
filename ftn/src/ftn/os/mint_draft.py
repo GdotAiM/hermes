@@ -39,6 +39,7 @@ from ftn.paths import draft_dir
 DRAFT_KIND = "ftn_research_draft"
 GATES = ("kernel_ticket", "direction", "risk", "allowlist", "mode", "contract")
 ENTRY_MODULES = {"REV", "CONSO", "BB", "PIP20"}
+REV_STOP_BUFFER_PIPS = 1  # FTN-D22: fixed in the prereg; no other values are run
 PIP20_STOP_PIPS = 20  # docs/MONTH9_BLUEPRINT.md §6 "PIP20: +20 objective, 20-pip stop"
 _LABEL = {"buy": "bullish", "sell": "bearish"}
 
@@ -60,6 +61,7 @@ def execution_context(state) -> dict:
         "box": {k: (ev.get("box") or {}).get(k) for k in ("high", "low")} if ev.get("box") else None,
         "conso_raided_edge": raided_edge(ev.get("box"), ev.get("raid")),
         "stop_reference": ev.get("stop_reference"),
+        "raid_extreme": ev.get("raid_extreme"),
         "pip": float(ev.get("pip") or (0.01 if "JPY" in sym else 0.1 if "XAU" in sym else 0.0001)),
     }
 
@@ -113,7 +115,18 @@ def _stop(module: str, side: str | None, handoff: dict) -> tuple[float | None, s
         if edge in ("low", "high") and box.get(edge) is not None:
             return float(box[edge]), f"raided_box_{edge}"
         return None, "no_raided_box_edge"
-    if module in {"REV", "BB"} and raid.get("taken") and raid.get("price") is not None:
+    if module == "REV" and side and raid.get("taken") and raid.get("price") is not None:
+        # FTN-D22 (prereg research/protocols/preregs/FTN_D22_REV_STOP_BEYOND_RAID_PREREG_2026-10-04.json):
+        # stop beyond the raid's own extreme by a 1-pip buffer; the raided level only without bars
+        buf = REV_STOP_BUFFER_PIPS * float(ctx.get("pip") or 0.0001)
+        ext = ctx.get("raid_extreme") or {}
+        want = "low" if side == "buy" else "high"
+        if ext.get("price") is not None and ext.get("side") == want:
+            px, src = float(ext["price"]), "beyond_raid_extreme"
+        else:
+            px, src = float(raid["price"]), "beyond_raided_level_no_bars"
+        return (px - buf if side == "buy" else px + buf), f"{src}_{raid.get('level')}"
+    if module == "BB" and raid.get("taken") and raid.get("price") is not None:
         return float(raid["price"]), f"raided_{raid.get('level')}"
     return None, "no_stop_reference"
 

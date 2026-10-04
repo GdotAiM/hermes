@@ -320,3 +320,79 @@ def test_d18_safety_net_still_blocks_incoherent_direction():
     assert g["pass"] is False and g["reason"] == "rev_direction_conflicts_with_raid"
     g = direction_gate("REV", "buy", "raid=pdl", {"execution_context": {"raid": {"level": "pdl", "taken": True, "also": ["pdh"]}}})
     assert g["pass"] is False and g["reason"] == "rev_raid_both_sides"
+
+
+# --- FTN-D22: REV stop beyond the raid's own extreme (prereg FTN_D22_..._2026-10-04) ----------
+
+from ftn.os.mint_draft import REV_STOP_BUFFER_PIPS, risk_gate  # noqa: E402
+
+
+def _rev_ctx(side_level, ext=None, last=1.1200, pip=0.0001, price=None):
+    price = price if price is not None else (1.1142 if side_level == "pdl" else 1.1250)
+    return {"last": last, "execution_context": {
+        "raid": {"level": side_level, "price": price, "taken": True, "also": []},
+        "raid_extreme": ext, "pip": pip, "stop_reference": None}}
+
+
+def test_d22_buffer_is_fixed_one_pip():
+    assert REV_STOP_BUFFER_PIPS == 1
+
+
+def test_d22_bullish_stop_below_raid_extreme_low():
+    h = _rev_ctx("pdl", {"side": "low", "price": 1.1135, "from_bar": 3, "to_bar": 9})
+    r = risk_gate("REV", "buy", h, load_config(), {"daily_loss_pct": 0, "drawdown_pct": 0})
+    assert r["pass"] and abs(r["stop_reference"] - (1.1135 - 0.0001)) < 1e-12
+    assert r["stop_source"] == "beyond_raid_extreme_pdl"
+
+
+def test_d22_bearish_stop_above_raid_extreme_high_index_point_buffer():
+    h = _rev_ctx("pdh", {"side": "high", "price": 20110.0, "from_bar": 2, "to_bar": 7},
+                 last=20080.0, pip=1.0, price=20100.0)
+    r = risk_gate("REV", "sell", h, load_config(), {"daily_loss_pct": 0, "drawdown_pct": 0})
+    assert r["pass"] and r["stop_reference"] == 20111.0 and r["stop_source"] == "beyond_raid_extreme_pdh"
+
+
+def test_d22_fallback_level_plus_buffer_without_bars():
+    r = risk_gate("REV", "buy", _rev_ctx("pdl", None), load_config(), {"daily_loss_pct": 0, "drawdown_pct": 0})
+    assert abs(r["stop_reference"] - 1.1141) < 1e-12 and r["stop_source"] == "beyond_raided_level_no_bars_pdl"
+
+
+def test_d22_wrong_side_extreme_is_ignored():
+    h = _rev_ctx("pdl", {"side": "high", "price": 1.1300, "from_bar": 1, "to_bar": 2})
+    r = risk_gate("REV", "buy", h, load_config(), {"daily_loss_pct": 0, "drawdown_pct": 0})
+    assert r["stop_source"] == "beyond_raided_level_no_bars_pdl"
+
+
+def test_d22_stop_side_safety_net_still_blocks():
+    # entry already below the extreme low − buffer → not protective → risk gate blocks
+    h = _rev_ctx("pdl", {"side": "low", "price": 1.1135, "from_bar": 3, "to_bar": 9}, last=1.1130)
+    r = risk_gate("REV", "buy", h, load_config(), {"daily_loss_pct": 0, "drawdown_pct": 0})
+    assert r["pass"] is False and r["reason"] == "stop_not_protective"
+
+
+def test_d22_bb_stop_unchanged():
+    h = _rev_ctx("pdl", {"side": "low", "price": 1.1135, "from_bar": 3, "to_bar": 9})
+    r = risk_gate("BB", "buy", h, load_config(), {"daily_loss_pct": 0, "drawdown_pct": 0})
+    assert r["stop_reference"] == 1.1142 and r["stop_source"] == "raided_pdl"
+
+
+def test_d22_raid_extreme_is_causal_from_raid_bar_to_entry():
+    ctx = build_context(FIX / "m9_raw_eurusd.json")
+    ev = ctx.evidence
+    raw = json.loads((FIX / "m9_raw_eurusd.json").read_text())
+    bars = raw.get("bars_m15") or raw["evidence"]["bars_m15"]
+    i = ev["mss_meta"]["raid_bar_index"]
+    assert ev["raid_extreme"] == {"side": "low", "price": min(float(b["l"]) for b in bars[i:]),
+                                  "from_bar": i, "to_bar": len(bars) - 1}
+    assert ev["raid_extreme"]["price"] <= float(ev["raid"]["price"])
+
+
+def test_d22_fixture_drafts_use_raid_extreme():
+    from ftn.os.briefing import brief_from_fixture
+    from ftn.os.mint_draft import gate_input
+    st, cands, _, ftn = brief_from_fixture(FIX / "m9_raw_eurusd.json")
+    d = draft_from_handoff(gate_input(st, build_handoff(st, cands, ftn)))
+    risk = next(g for g in d["gates"] if g["gate"] == "risk")
+    assert risk["stop_source"] == "beyond_raid_extreme_pdl"
+    assert abs(d["stop_reference"] - (st.context.evidence["raid_extreme"]["price"] - 0.0001)) < 1e-12
+    assert d["stop_reference"] < d["entry_reference"] and d["blocked_by"] == "allowlist:not_on_mint_allowlist"
