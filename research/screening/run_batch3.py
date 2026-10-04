@@ -215,7 +215,14 @@ def write_md(meta, res):
     return L
 
 
-READING = []
+READING = ["## Reading (screening caveats)", "",
+           "- **No rule qualifies.** All five fail S1, S2 and S3, and the gate power is 0.025 for each, because the burned era-cost mean and the S1 mean are both ≤ 0 for every rule (so even the power ceiling is 0.025).",
+           "- **S1 (the real out-of-sample test):** all five pooled S1 means are negative, and every CI excludes 0. Of the 15 rule × instrument cells, only E2 on US30 is positive (+0.058R, CI spans 0). No S1 calendar year is positive for any rule.",
+           "- **Burned (discovery):** every pooled burned mean is ≤ 0. The best single-instrument cells (E2 US100 +0.089R, E5 US100 +0.031R) do not carry over to US500 or to S1.",
+           "- **E1** (Asia/London sweep reversal) is the worst rule: −0.23R on burned and −0.32R on S1. Sweeps of the overnight range during NY AM did not reverse on average.",
+           "- **E4/E5** are exact mirrors and fire on the same 492 burned / 2,540 S1 signals. Both lose by about the cost, i.e. the 30-minute opening-range break carries no directional edge either way at 2R / 0.25 ATR.",
+           "- **S3:** the real burned means sit inside both null distributions (max p 0.43–0.96). The rules do no better than they do on shuffled-day or random-walk tape.",
+           "- **Caveats:** results are at realistic cost F only (gross was not pre-registered and is not reported). One fixed parameter set was tested per rule, by design. The rules are discarded, not re-tuned.", ""]
 
 
 if __name__ == "__main__" and sys.argv[1] == "report":

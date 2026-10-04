@@ -20,3 +20,9 @@ Run from the repo root with `PYTHONPATH=ftn/src:.` and numpy available:
 - Frozen code is vendored and sha-pinned in `batch2/vendor` and `batch2/configs`; `batch2/adapters.py` runs it.
 - Run: `PYTHONPATH=ftn/src:. python -m research.screening.run_batch2 {burned|s1|s3|report}`.
 - Results are in `batch2/REPORT.md` and `batch2/results.json`. Nothing qualifies.
+
+## Batch 3 (simple rules E1–E5)
+- Protocol addendum: `PROTOCOL_BATCH3.md` (committed `6389802` before any data read).
+- Rules: `batch3/rules.py`.
+- Run: `python -m research.screening.run_batch3 {burned|s1|s3|report}`.
+- Results: `batch3/REPORT.md`. Nothing qualifies.
