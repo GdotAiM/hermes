@@ -35,11 +35,12 @@ jobs:
         run: python3 -m pip install --quiet pytest jsonschema
       - name: pytest (ftn/) — incl. handoff.v1 contract + ban tests
         working-directory: ftn
-        # FTN tests persist session/swing tickets in dispatch/out/ and are not
-        # idempotent across runs; CI always starts clean.
+        # Tests write only to tmp_path (tests/conftest.py); run twice to prove the
+        # suite is idempotent and never leaks state through dispatch/out/.
         run: |
-          rm -f dispatch/out/*.json
           python3 -m pytest -q -p no:cacheprovider
+          python3 -m pytest -q -p no:cacheprovider
+          test -z "$(ls dispatch/out/*.json 2>/dev/null)"
       - name: Validate committed handoff.v1 samples
         working-directory: ftn
         run: PYTHONPATH=src python3 -m ftn.os.handoff_contract dispatch/samples/handoff_v1_*.json
