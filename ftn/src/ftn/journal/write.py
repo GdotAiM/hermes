@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from ftn.config_load import repo_root
+from ftn.paths import journal_dir
 
 
 def write_journal(payload: dict[str, Any]) -> Path:
@@ -35,8 +36,7 @@ def write_journal(payload: dict[str, Any]) -> Path:
         .replace("{{SETUP}}", setup_txt)
         .replace("{{REASONS}}", reason_txt)
     )
-    out = repo_root() / "dispatch" / "journal"
-    out.mkdir(parents=True, exist_ok=True)
+    out = journal_dir()
     path = out / f"{payload['scanned_at']}_DECISION.md"
     path.write_text(body, encoding="utf-8")
     return path

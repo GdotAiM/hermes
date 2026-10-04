@@ -53,9 +53,9 @@ def test_every_fixture_handoff_is_contract_clean(fixture):
 
 
 def test_written_latest_is_the_contract():
-    from ftn.os.handoff import OUT
+    from ftn.paths import out_dir
     _built(ROOT / "fixtures" / "m9_reconstruction_eurusd.json")
-    latest = OUT / "handoff_latest.json"
+    latest = out_dir() / "handoff_latest.json"
     assert latest.exists()
     assert validate_file(latest) == []
 

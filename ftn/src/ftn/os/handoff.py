@@ -12,8 +12,7 @@ from pathlib import Path
 
 from ftn.os.contracts import MarketState
 
-ROOT = Path(__file__).resolve().parents[3]
-OUT = ROOT / "dispatch" / "out"
+from ftn.paths import out_dir
 
 SCHEMA_VERSION = "1"
 KIND_V1 = "day_context_handoff"
@@ -121,11 +120,11 @@ def _build_handoff_raw(state: MarketState, candidates, ftn: dict) -> dict:
 
 
 def write_handoff(state: MarketState, candidates, ftn: dict) -> Path:
-    OUT.mkdir(parents=True, exist_ok=True)
+    out = out_dir()
     payload = build_handoff(state, candidates, ftn)
     blob = json.dumps(payload, indent=2, default=str) + "\n"
-    path = OUT / f"handoff_{c_date(state)}.json"
-    latest = OUT / "handoff_latest.json"
+    path = out / f"handoff_{c_date(state)}.json"
+    latest = out / "handoff_latest.json"
     written = None
     for dest in (path, latest):
         try:

@@ -2190,6 +2190,13 @@ def test_handoff_v1_i1b():
 
 
 if __name__ == "__main__":
+    # script mode bypasses conftest.py: isolate output dirs the same way
+    import os
+    import tempfile
+    _tmp = Path(tempfile.mkdtemp(prefix="ftn-tests-"))
+    for _var, _sub in (("FTN_OUT_DIR", "out"), ("FTN_JOURNAL_DIR", "journal"), ("FTN_DRAFT_DIR", "drafts")):
+        os.environ[_var] = str(_tmp / _sub)
+    os.environ.pop("FTN_WRITE_MINT_DRAFT", None)
     test_fixture_has_no_winner()
     test_reconstruct_matches_gold()
     test_gold_edit_does_not_change_engine(Path("/tmp"))

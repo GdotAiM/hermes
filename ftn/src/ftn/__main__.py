@@ -57,7 +57,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "brief":
         state, cands, md, ftn = brief_from_fixture(args.fixture)
-        out = args.out or Path("dispatch/journal") / f"{state.context.date}_{state.context.symbol}_BRIEFING.md"
+        from ftn.paths import journal_dir
+        out = args.out or journal_dir() / f"{state.context.date}_{state.context.symbol}_BRIEFING.md"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(md)
         print(md)

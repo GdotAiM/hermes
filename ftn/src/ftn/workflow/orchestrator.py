@@ -9,6 +9,7 @@ from ftn.config_load import load_config, repo_root
 from ftn.engine.levels import atr_pips, build_families, count_four, detect_bias, overlap_pd
 from ftn.engine.ohlc import load_bars
 from ftn.journal.write import write_journal
+from ftn.paths import out_dir as default_out_dir
 
 
 STAGES = ["PREP", "FILTER", "WATCH", "GATE", "MANAGE", "JOURNAL"]
@@ -97,7 +98,7 @@ def run_workflow(
         "note": "No orders placed. Ticket still needs MINT allowlist + RISK + human paper ack.",
     }
 
-    out = out_dir or (repo_root() / "dispatch" / "out")
+    out = out_dir or default_out_dir()
     out.mkdir(parents=True, exist_ok=True)
     stamp = payload["scanned_at"]
     path = out / f"ftn_{stamp}.json"

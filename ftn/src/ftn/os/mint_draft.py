@@ -6,8 +6,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
-OUT = ROOT / "dispatch" / "out"
+from ftn.paths import out_dir
 
 SIDE = {
     "REV": None,  # filled from sentiment/iof
@@ -57,7 +56,7 @@ def write_draft(handoff: dict) -> Path | None:
     draft = draft_from_handoff(handoff)
     if not draft:
         return None
-    OUT.mkdir(parents=True, exist_ok=True)
+    OUT = out_dir()
     path = OUT / f"mint_draft_{handoff.get('date')}_{handoff.get('symbol')}.json"
     blob = json.dumps(draft, indent=2) + "\n"
     try:
