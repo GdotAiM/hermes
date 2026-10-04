@@ -1,0 +1,58 @@
+{
+  "id": "H015b",
+  "kind": "harness v2 registration addendum (dated 2026-10-04; not a prereg edit)",
+  "status": "REGISTERED - ORION ruling 2026-10-04: the corrected harness stays H015b and re-registers under this addendum",
+  "supersedes_note": {
+    "file": "research/protocols/preregs/H015b_HARNESS_REGISTRATION_2026-10-04.json",
+    "harness_digest_v1": "733499035da5e33dcf3f177619144b5e893f7b7c9fd62086c49b9e17a7f208be",
+    "effect": "the v1 digest no longer registers anything: h015.py v2 reads only this addendum (REG_NOTE_REL) and counts rows only if the current manifest equals the one below; clearance files carrying the v1 digest do not unseal R"
+  },
+  "prereg": "research/protocols/preregs/H015b_FORWARD_PREREG_2026-10-04.json - UNCHANGED (tag prereg-H015b -> 49be2d6c47878ea48da15fadd969a0af3ef94e5a, sha256 3ee30e047a4e37b748730b809efd79a7d86b05e04bb7237537e9984c661e0453); the 96 pinned files are unchanged and byte-identical to the tag",
+  "first_eligible_session": "unchanged: London 2026-10-05 02:00 NY (08:00 SAST)",
+  "forward_rows_at_change": "ZERO. No forward row has been computed or read under v1 or v2: /home/box/hermes-x/forward/H015b holds context day-file pulls only (no log.csv, no sealed/outcomes.csv). The partial smoke pre-download there is left for v2 to re-check (v1 metas lack finality_rule and are re-pulled/re-validated)",
+  "reason": "DATA_CERT_H015B_HARNESS_2026-10-04: NOT CERTIFIED, blockers B1-B5 (code defects) + G1 (registration rule); ORION ruling (1)-(4)",
+  "changes": {
+    "B1": "duka.Store: a day file is FINAL only when pulled >= 01:00 UTC next day AND complete by content (Mon-Fri last real bar >= 16:14 NY that date; Sunday >= 23:50 UTC; Saturday closed; listed holiday/early close may be short). 404/empty/cut-off files stay non-final and are re-pulled each run for up to 5 weekdays, then frozen FINAL with frozen_incomplete=true (disclosed). Replaced non-final bytes kept under superseded/. FINAL files immutable",
+    "B2": "session completeness compares the full datetime: last bar >= datetime(d, 16:14); all files final but short -> feed_gap; any non-final file -> provisional",
+    "B3": "recovery path: expected context days absent from trading_days (e.g. frozen incomplete) are skipped exactly as the build's History skips them and disclosed per row (context_missing_days, context_frozen_incomplete); context_gap only if < 22 prior sessions exist",
+    "B4": "context calendar = full NYSE calendar: prereg list + 2028 + pre-window 2025-09-01, 2025-11-27, 2025-11-28 (early), 2025-12-24 (early), 2025-12-25, 2026-01-01, 01-19, 02-16, 04-03, 05-25, 06-19, 07-03, 2026-09-07 (Labor Day); 5-7 Oct 2026 no longer context_gap",
+    "B5": "binding exit-bars filter = >= 1 bar in [15:45, 16:00) NY on date d, applied to EVERY session (trade or no_trade); the > 5-min gap test is a per-row non-binding gap_flag, co-reported (flagged count + summed R next to the headline, plus a non-binding headline excluding flagged trades)"
+  },
+  "pre_data_change_to_registered_appendix": {
+    "file": "research/protocols/preregs/H015b_DATA_APPENDIX_2026-10-04.md",
+    "registered_version": "0ff2163, lines 43-45 ('\"1m bars to 16:00 exist\". Both conditions must hold:'); v1 exit_bars_ok applied both conditions",
+    "deleted_binding_line": "- no gap longer than 5 minutes between the entry time and 16:00.",
+    "reason": "not in the prereg (counting_rules.min_bar_filter: 'the 1m bars to 16:00 NY exist for exit resolution') and not in the build; it conditions on post-entry bars; on the burned tape it drops 6 trades with known, decisive outcomes (US100 4/185, US500 2/167). The kept condition drops 0/352",
+    "rulings": "CASSANDRA ACK, DATA agrees, ORION: stays H015b",
+    "forward_rows_computed_when_changed": 0
+  },
+  "cassandra_conditions_implemented": [
+    "(1) the [15:45,16:00) check applies to every session, trade or no_trade",
+    "(2) gap_flag logged per row; report shows flagged count + summed R next to the headline and a non-binding headline excluding flagged trades",
+    "(3) diff from 0ff2163 limited to B1-B5, this change and CASSANDRA's items (also: short_session-dropped count + summed R, kill_walk min_cum, DATA monthly spread/crossed-bar monitor, appendix 2029 reminder and cert key)",
+    "(4) the futility set's 200 row keys are written once to FUTILITY_SET.json the first time N reaches 200; futility is evaluated on that set and any later reshuffle is reported"
+  ],
+  "harness_commit": "3ab45fb (forward/h015-harness)",
+  "harness_sha256": {
+    "repo_root": "GdotAiM/hermes",
+    "files": {
+      "research/forward/H015/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "research/forward/H015/duka.py": "5d66ec0d698b9de662e35441ba3eb18fddf6cfd60241834418e533dd1e884719",
+      "research/forward/H015/h015.py": "624b4680c40d0ada2ee8b55f5ff0618f949cb76566ef3d2c93178810c87e198f",
+      "research/protocols/preregs/H015b_DATA_APPENDIX_2026-10-04.md": "901440326a9b8fd324276bd0afd9523924101266758a26914c671bfa111e1d12"
+    }
+  },
+  "harness_digest": "c2ab10e771b060be7095d11662e0fe0ee0b4688074a2ece72062db8c55de16c3",
+  "harness_digest_method": "sha256 of json.dumps(harness_sha256, sort_keys=True) (h015.harness_digest)",
+  "registration_rule": "the earliest commit on origin/main, origin/feat/ftn-research-bridge or origin/forward/h015-harness that carries this addendum with status REGISTERED is the v2 registration time; a row counts only if computed after it and the current manifest equals this one",
+  "evidence": {
+    "C11": "research/evidence/quant/H015b_HARNESS_V2_REPRO_BURNED_2026-10-04.json (US100 185/185 mean -0.017935, US500 167/167 mean +0.009554, 0 mismatches)",
+    "tests": "research/forward/tests/test_h015b.py reproduces DATA's failing cases (S1 Memorial Day context, B4 Labor Day context, S2 404-then-recover + next session, S3 truncated-then-full and persistent truncation -> feed_gap, B3 frozen day skipped with disclosure, B5 gap trades kept + flagged, exit rule on every session, futility set frozen)"
+  },
+  "before_first_R": [
+    "CASSANDRA re-acks v2 (CASSANDRA_CLEARED.json with key harness_sha256 = v2 digest)",
+    "DATA certifies v2 against C1-C13 (DATA_CERTIFIED.json with key harness_sha256 = v2 digest)"
+  ],
+  "scheduled_run": "python research/forward/H015/h015.py final (repo root, at or after 01:00 UTC = 03:00 SAST daily) - only from a checkout at the v2 commit; a checkout at v1 (9d25003/b5fb24e) is no longer registered and counts nothing",
+  "paper_only": "no orders, no broker calls, MINT actionability none, allowlist unchanged"
+}
