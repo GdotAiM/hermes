@@ -14,3 +14,10 @@ Actions:
 - Family rules (a) and (b) stand, including CASSANDRA's stricter additions:
   - a flat-cost SURVIVES also needs the correct-side co-report to pass;
   - the (b)4 check needs a non-flipping fill-fragility co-report.
+
+## Addendum: later additions (ORION, 2026-10-04 ~12:00 SAST)
+- CASSANDRA revoked her H015b clearance (archived as CASSANDRA_CLEARED_REVOKED_2026-10-04.json). DATA_CERTIFIED.json is still present but inert; DATA may revoke it as a second safeguard.
+- Active forward routines: only `h013-h014-forward-test-runner-weekday-ny-session`. The other routine, `mint-clear-scan-weekday`, is a board scan, not a forward runner. The H015b runner is deleted.
+- **Family F1 is CLOSED** at H013, H014 and H016b (Holm, one-sided, 0.05). No test joins F1 after this.
+- Any later forward test opens a new family (F2, ...) with its own pre-registered alpha and Holm. Its member list is closed before its first counted row. Each SURVIVES carries its family tag, and error control is per family, as disclosed. F2+ verdicts never change F1's thresholds or verdicts, and F1's never change F2+'s.
+- Program-wide guard: MINT clearance already needs a new-ID replication (rule b), so one false SURVIVES in any family can't clear on its own.
