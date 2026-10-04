@@ -59,7 +59,8 @@ def derive_month8_profile(raw: dict) -> Month8State:
     path = read_path(raw)
     iof = _iof(raw)
     profile, why = classify_london_profile(iof, path, base.london_session_gate.allowed)
-    proj = project_daily_extreme(base.cbdr, iof)
+    from ftn.os.instruments import spec
+    proj = project_daily_extreme(base.cbdr, iof, spec(raw.get("symbol"), (raw.get("evidence") or {}).get("pip")).pip)
     # frozen replace via constructor
     return Month8State(
         ict_true_day=base.ict_true_day,

@@ -91,12 +91,15 @@ class Month8State:
     )
 
 
-def classify_cbdr(height_pips: float | None) -> str:
+def classify_cbdr(height_pips: float | None, ideal_lt: float = 40.0, wide_ge: float = 50.0) -> str:
+    """ICT FX thresholds by default (< 40 ideal, 40-<50 expanded, >= 50 wide). ``height_pips`` is in the
+    instrument's own pip unit (index point for US100/US500); index callers pass the scaled thresholds from
+    ``ftn.os.instruments`` (post-H015b fix)."""
     if height_pips is None:
         return "unknown"
-    if height_pips < 40:
+    if height_pips < ideal_lt:
         return "ideal"
-    if height_pips < 50:
+    if height_pips < wide_ge:
         return "expanded"
     return "wide"
 
@@ -109,7 +112,12 @@ def parse_month8(raw: dict | None) -> Month8State | None:
         return None
     cb = block.get("cbdr") or {}
     height = cb.get("height_pips")
-    cls = cb.get("classification") or classify_cbdr(height)
+    if cb.get("classification"):
+        cls = cb["classification"]
+    else:
+        from ftn.os.instruments import spec
+        ins = spec(raw.get("symbol"), (raw.get("evidence") or {}).get("pip"))
+        cls = classify_cbdr(height, ins.cbdr_ideal_lt, ins.cbdr_wide_ge)
     gate = block.get("london_session_gate") or {}
     proj = block.get("daily_extreme_projection") or {}
     ov = block.get("htf_entry_overlap") or {}

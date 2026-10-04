@@ -5,6 +5,7 @@ Does not name ict_london_profile. That needs price-behavior evidence (Slice 3+).
 
 from __future__ import annotations
 
+from ftn.os.instruments import Instrument, spec
 from ftn.os.m8_contracts import (
     CbdrState,
     LondonGate,
@@ -14,12 +15,15 @@ from ftn.os.m8_contracts import (
 )
 
 
-def measure_cbdr(block: dict | None) -> CbdrState:
+def measure_cbdr(block: dict | None, ins: Instrument | None = None) -> CbdrState:
+    """Heights are in the instrument's pip unit (``ins.pip``; FX default 0.0001). Before the post-H015b fix this
+    was hard-coded ``x 10000``, which made every index CBDR "wide"."""
     block = block or {}
+    ins = ins or spec(None)
     height = block.get("height_pips")
     if height is None and block.get("body_high") is not None and block.get("body_low") is not None:
-        height = round((float(block["body_high"]) - float(block["body_low"])) * 10000, 1)
-    cls = classify_cbdr(height)
+        height = round((float(block["body_high"]) - float(block["body_low"])) / ins.pip, 1)
+    cls = classify_cbdr(height, ins.cbdr_ideal_lt, ins.cbdr_wide_ge)
     return CbdrState(
         height_pips=height,
         body_height_pips=block.get("body_height_pips"),
@@ -29,16 +33,18 @@ def measure_cbdr(block: dict | None) -> CbdrState:
         body_low=block.get("body_low"),
         classification=cls,
         daytrade_classic=cls == "ideal",
+        origin=ins.threshold_origin,
     )
 
 
-def london_gate_from_measures(cbdr: CbdrState, asian_pips: float | None, adr_remaining=None, news: bool = False) -> LondonGate:
+def london_gate_from_measures(cbdr: CbdrState, asian_pips: float | None, adr_remaining=None, news: bool = False,
+                              asian_poor_gt: float = 40.0) -> LondonGate:
     """Wide (>=50) is ICT-source avoidance. Expanded (40-<50) refuse-classic is Hermes interpretation."""
     if news:
         return LondonGate(allowed=False, reason="news", origin="ict_source")
     if cbdr.classification == "wide":
         return LondonGate(allowed=False, reason="wide_cbdr", origin="ict_source")
-    if asian_pips is not None and asian_pips > 40:
+    if asian_pips is not None and asian_pips > asian_poor_gt:
         return LondonGate(allowed=False, reason="poor_consolidation", origin="ict_source")
     if adr_remaining is not None and adr_remaining <= 0:
         return LondonGate(allowed=False, reason="adr_spent", origin="ict_source")
@@ -54,19 +60,20 @@ def derive_month8_measures(raw: dict) -> Month8State:
     base = parse_month8(raw) or Month8State()
     m8 = raw.get("month8") or raw.get("ict_day") or {}
     ranges = raw.get("ranges") or {}
+    ins = spec(raw.get("symbol"), (raw.get("evidence") or {}).get("pip"))
     cb_src = m8.get("cbdr") or ranges.get("cbdr") or {}
     if "height_pips" not in cb_src and cb_src.get("high") is not None:
         cb_src = dict(cb_src)
-        cb_src["height_pips"] = round((float(cb_src["high"]) - float(cb_src["low"])) * 10000, 1)
-    cbdr = measure_cbdr(cb_src)
+        cb_src["height_pips"] = round((float(cb_src["high"]) - float(cb_src["low"])) / ins.pip, 1)
+    cbdr = measure_cbdr(cb_src, ins)
     asian = m8.get("asian_height_pips")
     if asian is None:
         ar = ranges.get("asian") or {}
         if ar.get("high") is not None:
-            asian = round((float(ar["high"]) - float(ar["low"])) * 10000, 1)
+            asian = round((float(ar["high"]) - float(ar["low"])) / ins.pip, 1)
     news = any(str(e.get("impact", "")).lower() == "high" for e in (raw.get("calendar") or []))
     rem = (raw.get("adr5") or {}).get("remaining")
-    gate = london_gate_from_measures(cbdr, asian, rem, news)
+    gate = london_gate_from_measures(cbdr, asian, rem, news, ins.asian_poor_gt)
     # profile / opportunity / projection stay as labeled on known-state fixtures
     # evidence fixtures omit them → none / False / none
     return Month8State(

@@ -8,7 +8,9 @@ from __future__ import annotations
 
 from datetime import date, datetime, time, timedelta
 
+from ftn.os.instruments import spec
 from ftn.research.bars import Series, m15_bars, session_bounds
+from ftn.research.events import day_events
 
 ORIGIN = "hermes_interpretation"
 
@@ -30,8 +32,12 @@ def _block(t: datetime, hours: int) -> tuple[datetime, datetime]:
 class History:
     """Per-instrument session lookups shared across days."""
 
-    def __init__(self, s: Series, days: list[date]):
+    def __init__(self, s: Series, days: list[date], ask: Series | None = None, calendar: bool = True):
+        """``ask``: optional ASK series (correct-side fills; measured spread at the signal).
+        ``calendar``: attach the FOMC/CPI/NFP schedule (``ftn.research.events``) to each day (post-H015b fix 5)."""
         self.s = s
+        self.ask = ask
+        self.calendar = calendar
         self.days = days
         self.pos = {d: i for i, d in enumerate(days)}
         self._ohlc = {}
@@ -91,7 +97,7 @@ def build_raw(hist: History, d: date, t: datetime, session_name: str) -> dict | 
         "timezone": "America/New_York",
         "last": last,
         "focus_pair": s.symbol,
-        "calendar": [],
+        "calendar": day_events(d, s.symbol) if hist.calendar else [],
         "watchlist": [s.symbol],
         "pair_institutional": {"sponsorship": {"daily": iof["daily"], "h4": iof["h4"]}, "daytrade_iof": iof},
         "opens": {"ny_midnight": s.close_at(midnight + timedelta(minutes=1))},
@@ -104,7 +110,9 @@ def build_raw(hist: History, d: date, t: datetime, session_name: str) -> dict | 
         "adr5": {"high": None, "low": None,
                  "remaining": max(0.0, adr - (so_far[0] - so_far[1])) if so_far else None},
         "pd_matrix": {"htf": {"daily": daily}, "ltf": {}},
-        "evidence": {"session": session_name, "pip": 1.0, "provenance": ORIGIN,
-                     "source": "ftn.research.daycontext (bar-derived)"},
+        "evidence": {"session": session_name, "pip": spec(s.symbol, 1.0).pip, "provenance": ORIGIN,
+                     "source": "ftn.research.daycontext (bar-derived)",
+                     **({"spread_measured": round(hist.ask.close_at(t) - last, 6)}
+                        if hist.ask is not None and hist.ask.close_at(t) is not None and last is not None else {})},
         "bars_m15": bars,
     }

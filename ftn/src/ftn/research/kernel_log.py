@@ -39,7 +39,13 @@ def kernel_step(raw: dict, cfg: dict, tmpdir: Path):
     return ctx, state, cands, sel
 
 
-def session_ticket_log(hist: History, cfg: dict, days: list[date] | None = None) -> list[dict]:
+def session_ticket_log(hist: History, cfg: dict, days: list[date] | None = None,
+                       book=None, outcome=None) -> list[dict]:
+    """``book``: optional ``ftn.research.book.RunningBook`` (post-H015b fix 4). Without it every draft is gated
+    against ``FLAT_BOOK`` (the H015b behaviour). With it, ``outcome(row) -> dict`` (with ``R`` and ``exit_time``)
+    must be given: each tradeable ticket is simulated at once and booked, so later tickets see the real caps."""
+    if book is not None and outcome is None:
+        raise ValueError("a running book needs an outcome function")
     rows: list[dict] = []
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
@@ -62,7 +68,8 @@ def session_ticket_log(hist: History, cfg: dict, days: list[date] | None = None)
                                            kind="paper_entry", module=sel.module, session=sname)
                         state2 = freeze_market_state(replace(ctx, session_ticket=tk))
                         gin = gate_input(state2, build_handoff(state2, cands, annotate_ftn(state2)))
-                        draft = draft_from_handoff(gin, cfg=cfg, book=FLAT_BOOK) or {}
+                        bk = book.state(t) if book is not None else FLAT_BOOK
+                        draft = draft_from_handoff(gin, cfg=cfg, book=bk) or {}
                         orient, _basis = _side(sel.module, gin)  # internal orientation (research only)
                         ev = ctx.evidence or {}
                         row.update({
@@ -79,7 +86,23 @@ def session_ticket_log(hist: History, cfg: dict, days: list[date] | None = None)
                             "iof_confidence": ctx.pair_institutional.confidence,
                             "origin_pd_array": ctx.origin_pd_array,
                             "fingerprint": state2.fingerprint,
+                            "book_source": bk.get("source"),
+                            "book_dd_pct": bk.get("drawdown_pct"),
+                            "book_daily_loss_pct": bk.get("daily_loss_pct"),
+                            "spread_measured": ev.get("spread_measured"),
+                            "calendar": ";".join(f"{e['time_ny']} {e['kind']}" for e in (ctx.calendar or ())),
+                            "m8_cbdr": ((state2.context.month8.cbdr.classification if getattr(state2.context, "month8", None) else None)),
+                            "m8_london_gate": ((state2.context.month8.london_session_gate.reason or "allowed")
+                                               if getattr(state2.context, "month8", None) else None),
                         })
+                        if book is not None:
+                            rg = next((g for g in draft.get("gates", []) if g["gate"] == "risk"), None)
+                            if rg is not None and not rg["pass"]:
+                                book.blocked(t, rg["reason"])
+                            elif tradeable(row):
+                                res = outcome(row)
+                                if res.get("R") is not None:
+                                    book.record(datetime.fromisoformat(res["exit_time"]), res["R"])
                         break
                     t += timedelta(minutes=15)
                 rows.append(row)

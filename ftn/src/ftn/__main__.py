@@ -42,6 +42,15 @@ def build_parser() -> argparse.ArgumentParser:
     sc.add_argument("--tag", default="", help="suffix for output files (e.g. _rev_raid_side)")
     sc.add_argument("--before", default=None, help="previous FTN_M9_SCORE_*.json for a before/after table")
     sc.add_argument("--with-legacy", action="store_true", help="also run the pre-D18 kernel-side-as-is streams")
+    sc.add_argument("--asks-us100", default=None, help="ASK 1m CSV (same layout); needed by --cost-model correct_side")
+    sc.add_argument("--asks-us500", default=None)
+    sc.add_argument("--cost-model", choices=["correct_side", "flat"], default="correct_side",
+                    help="correct_side (default): bid/ask fills + DATA slippage floors; flat: legacy 0.8/0.5 pt per side")
+    sc.add_argument("--book", choices=["flat", "running", "both"], default="flat",
+                    help="flat: gate every ticket against a flat book; running: 2%%/5%% caps bind (RunningBook)")
+    sc.add_argument("--drawdown-reset", choices=["none", "next_calendar_month"], default=None,
+                    help="running book 5%% DD reset rule (default: config risk_caps.drawdown_reset) — HUMAN DECISION")
+    sc.add_argument("--no-calendar", action="store_true", help="do not attach the FOMC/CPI/NFP calendar")
     hy = sub.add_parser("hypotheses", help="Print the typed FTN hypothesis family (JSON)")
     lp = sub.add_parser("live-probe", help="Probe live DATA adapters (quotes only; orders refused)")
     lp.add_argument("--symbol", default="EURUSD")
@@ -74,7 +83,9 @@ def main(argv: list[str] | None = None) -> int:
         from ftn.research.score import score
         res = score(asof=args.asof, bars_us100=args.bars_us100, bars_us500=args.bars_us500,
                     research_dir=args.research_dir, write=not args.no_write, with_interp=not args.no_interp,
-                    tag=args.tag, before=args.before, with_legacy=args.with_legacy)
+                    tag=args.tag, before=args.before, with_legacy=args.with_legacy,
+                    asks_us100=args.asks_us100, asks_us500=args.asks_us500, cost_model=args.cost_model,
+                    book=args.book, drawdown_reset=args.drawdown_reset, calendar=not args.no_calendar)
         print(json.dumps({k: {"tickets": v["tickets"], "modules": v["modules"], "summary": v["summary"],
                               "foil_pct": v["foil_pct"]} for k, v in res.items() if not k.startswith("_")}, indent=2, default=str))
         return 0

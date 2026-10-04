@@ -26,14 +26,40 @@ from ftn.research.daycontext import History
 from ftn.research.features import compute
 from ftn.research.hypotheses import HYPOTHESES
 from ftn.research.kernel_log import KILLZONES, session_ticket_log, tradeable
-from ftn.research.outcomes import TARGET_R, simulate
+from ftn.os.instruments import spec
+from ftn.research.book import RunningBook
+from ftn.research.outcomes import TARGET_R, simulate, simulate_both
 
 DEFAULT_BARS = {
     "US100": "/workspace/ict-blueprint/research/model-u-longrun/data/US100_1m.csv.gz",
     "US500": "/workspace/ict-blueprint/research/model-u-longrun/data/US500_1m.csv.gz",
 }
 TAPE = {"US100": "DUKASCOPY-CFD-USATECHIDXUSD-BID1M", "US500": "DUKASCOPY-CFD-USA500IDXUSD-BID1M"}
-COST_PER_SIDE = {"US100": 0.8, "US500": 0.5}   # ict-blueprint model-u-longrun/data/costs.json
+COST_PER_SIDE = {"US100": 0.8, "US500": 0.5}   # ict-blueprint model-u-longrun/data/costs.json (flat comparison only)
+COST_MODELS = ("correct_side", "flat")
+BOOKS = ("flat", "running", "both")
+
+
+def slip_floors(sym: str) -> dict:
+    ins = spec(sym)
+    return {"market": ins.slip_market, "stop": ins.slip_stop, "limit": ins.slip_limit}
+
+
+def make_sim(sym: str, hist: History, cost_model: str):
+    """(entry_time, entry, stop, side) -> outcome dict. ``correct_side`` (DEFAULT since the post-H015b fixes;
+    CASSANDRA: binding for any future H016) needs ``hist.ask``; ``flat`` is the legacy 0.8 / 0.5 pt per side."""
+    if cost_model == "correct_side":
+        if hist.ask is None:
+            raise ValueError(f"{sym}: cost_model=correct_side needs an ASK series (--asks-{sym.lower()}); "
+                             "use --cost-model flat for the legacy comparison")
+        return lambda et, e, st, side: simulate_both(hist.s, hist.ask, et, e, st, side, slip_floors(sym))
+    if cost_model == "flat":
+        return lambda et, e, st, side: simulate(hist.s, et, e, st, side, COST_PER_SIDE[sym])
+    raise ValueError(f"cost_model {cost_model!r} not in {COST_MODELS}")
+
+
+def row_outcome(sim):
+    return lambda row: sim(datetime.fromisoformat(row["entry_time"]), float(row["entry"]), float(row["stop"]), row["side"])
 MIN_GROUP_N = 10
 N_FOIL = 2000
 BANNER = "EXPLORATORY — pending CASSANDRA + DATA review. Not a board result. No SURVIVES language."
@@ -43,8 +69,9 @@ def _sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def foil(hist: History, trades: list[dict], cost: float, n: int = N_FOIL, seed: int = stats.SEED) -> list[float]:
-    """Random-entry foil: same day + killzone, random minute, random side, same risk_pts."""
+def foil(hist: History, trades: list[dict], cost: float, n: int = N_FOIL, seed: int = stats.SEED, sim=None) -> list[float]:
+    """Random-entry foil: same day + killzone, random minute, random side, same risk_pts.
+    ``sim``: the stream's cost model (``make_sim``); default = flat ``cost`` per side."""
     rng = random.Random(seed)
     s = hist.s
     means = []
@@ -59,26 +86,30 @@ def foil(hist: History, trades: list[dict], cost: float, n: int = N_FOIL, seed: 
             side = rng.choice(("buy", "sell"))
             risk = tr["risk_pts"]
             stop = px - risk if side == "buy" else px + risk
-            r = simulate(s, et, px, stop, side, cost)["R"]
+            r = (sim(et, px, stop, side) if sim else simulate(s, et, px, stop, side, cost))["R"]
             if r is not None:
                 rs.append(r)
         means.append(mean(rs) if rs else 0.0)
     return means
 
 
+def load_history(sym: str, path: str, ask_path: str | None = None) -> History:
+    s = load_series(path, sym)
+    return History(s, trading_days(s), ask=load_series(ask_path, sym) if ask_path else None)
+
+
 def run_series(sym: str, path: str, cfg: dict, other: History | None = None, legacy_side: bool = False,
-               hist: History | None = None, log: list | None = None):
+               hist: History | None = None, log: list | None = None, cost_model: str = "flat", book=None):
     if hist is None:
-        s = load_series(path, sym)
-        hist = History(s, trading_days(s))
-    s = hist.s
-    log = log if log is not None else session_ticket_log(hist, cfg)
+        hist = load_history(sym, path)
+    sim = make_sim(sym, hist, cost_model)
+    if log is None:
+        log = session_ticket_log(hist, cfg, book=book, outcome=row_outcome(sim) if book is not None else None)
     trades = []
     for row in log:
         if not tradeable(row, legacy_side):
             continue
-        out = simulate(s, datetime.fromisoformat(row["entry_time"]), float(row["entry"]),
-                       float(row["stop"]), row["side"], COST_PER_SIDE[sym])
+        out = row_outcome(sim)(row)
         if out["R"] is None:
             continue
         row = dict(row, **out)
@@ -101,7 +132,12 @@ def summarize(trades: list[dict]) -> dict:
             "shorts": len([t for t in trades if t["side"] == "sell"]),
             "mean_ex_top1pct": mean(top[k:]) if len(top) > k else None,
             "mean_ex_small_stop": mean(big) if big else None,
-            "exits": {e: sum(1 for t in trades if t["exit"] == e) for e in ("stop", "target", "time")}}
+            "exits": {e: sum(1 for t in trades if t["exit"] == e) for e in ("stop", "target", "time")},
+            "total_R": sum(rs), "max_dd_R": stats.max_drawdown(sorted_rs(trades))}
+
+
+def sorted_rs(trades: list[dict]) -> list[float]:
+    return [t["R"] for t in sorted(trades, key=lambda t: t["entry_time"])]
 
 
 def evaluate_hypotheses(trades: list[dict]) -> list[dict]:
@@ -129,7 +165,10 @@ def evaluate_hypotheses(trades: list[dict]) -> list[dict]:
 def write_ticket_csv(path: Path, log: list[dict]) -> None:
     cols = ["date", "symbol", "session", "ticket", "module", "reason", "entry_time", "direction", "entry", "stop",
             "blocked_by", "raid_level", "iof_state", "iof_confidence", "origin_pd_array", "R", "R_gross",
-            "exit", "risk_pts", "cost_R", "fingerprint", "gates", "features"]
+            "exit", "risk_pts", "cost_R", "fingerprint", "gates", "features",
+            # post-H015b fix columns
+            "cost_model", "fill_in", "fill_out", "exit_time", "spread_measured", "book_source", "book_dd_pct",
+            "book_daily_loss_pct", "calendar", "m8_cbdr", "m8_london_gate"]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=cols, extrasaction="ignore")
@@ -232,6 +271,9 @@ def render_summary(asof: str, results: dict, tag: str = "") -> str:
          f"{base['days'][0]}→{base['days'][1]} · **burned** (same tape/calendar as H013/H014) · not CME futures",
          "", f"> **{BANNER}** Paper-only research. No trades, broker calls or allowlist changes are authorized by this file. "
          "The MINT allowlist stays empty.", "",
+         f"**Cost model / book:** {(results.get('_config') or {}).get('cost_model', 'flat')} / "
+         f"{(results.get('_config') or {}).get('book', 'flat')} (post-H015b fixes; `correct_side` = bid/ask fills + DATA "
+         "slippage floors, the default; `flat` = 0.8 / 0.5 pt per side, comparison only). NOT part of H015b.", "",
          "## WHAT DID WE THINK?",
          "The FTN context months (M1–M8, M10–M12, Model 13) each make lecture-derived claims about when a setup works. "
          f"They were turned into {len(HYPOTHESES)} typed hypotheses "
@@ -250,7 +292,11 @@ def render_summary(asof: str, results: dict, tag: str = "") -> str:
          f"longs {s.get('longs')} / shorts {s.get('shorts')} · exits {s.get('exits')} |",
          f"| Random-entry foil (US100) | kernel mean at the **{base['foil_pct']:.1f}th pct** of {N_FOIL} foil means "
          f"(foil median {_fmt(base['foil_median'])}) |"]
-    for key, label in (("US100_base_legacy_side", "US100 kernel side as-is (pre-D18; admits REV buys after high raids / sells after low raids)"),
+    for key, label in (("US100_base_flatcost", "US100 flat-cost comparison (0.8 pt per side, bid fills)"),
+                       ("US100_base_runningbook", "US100 running paper book (2% daily / 5% DD caps bind)"),
+                       ("US500_base_flatcost", "US500 flat-cost comparison (0.5 pt per side)"),
+                       ("US500_base_runningbook", "US500 running paper book"),
+                       ("US100_base_legacy_side", "US100 kernel side as-is (pre-D18; admits REV buys after high raids / sells after low raids)"),
                        ("US500_base", "US500 disclosure (same rules, never pooled)"),
                        ("US500_base_legacy_side", "US500 kernel side as-is (pre-D18)"),
                        ("US100_interp", "US100 with interpretation triggers ON (CONSO/BB/PIP20; disclosure)")):
@@ -309,59 +355,95 @@ def render_summary(asof: str, results: dict, tag: str = "") -> str:
 
 def score(asof: str | None = None, bars_us100: str | None = None, bars_us500: str | None = None,
           research_dir: str | Path | None = None, write: bool = True, with_interp: bool = True,
-          tag: str = "", before: str | Path | None = None, with_legacy: bool = False) -> dict:
+          tag: str = "", before: str | Path | None = None, with_legacy: bool = False,
+          asks_us100: str | None = None, asks_us500: str | None = None, cost_model: str = "correct_side",
+          book: str = "flat", drawdown_reset: str | None = None, calendar: bool = True) -> dict:
     """``before``: a previous FTN_M9_SCORE_*.json to compare against (before/after table).
-    ``with_legacy``: also run the pre-D18 "kernel side as-is" disclosure streams."""
+    ``with_legacy``: also run the pre-D18 "kernel side as-is" disclosure streams.
+    Post-H015b fixes (NOT part of H015b): ``cost_model`` = ``correct_side`` (DEFAULT; bid/ask fills + DATA slippage
+    floors; needs ``asks_*``) or ``flat`` (legacy 0.8 / 0.5 pt per side). With ``correct_side`` a ``*_flatcost``
+    comparison stream is added. ``book`` = ``flat`` (every ticket gated against a flat book), ``running``
+    (``RunningBook``: the 2% daily / 5% drawdown caps bind; ``drawdown_reset`` default from config) or ``both``."""
     asof = asof or date.today().isoformat()
+    if cost_model not in COST_MODELS:
+        raise ValueError(f"cost_model {cost_model!r} not in {COST_MODELS}")
+    if book not in BOOKS:
+        raise ValueError(f"book {book!r} not in {BOOKS}")
     cfg = load_config()
+    reset = drawdown_reset or cfg.get("drawdown_reset", "next_calendar_month")
     cfg_base = deepcopy(cfg)
     cfg_base["interpretation_triggers"] = {"conso": False, "bb": False, "pip20": False}
     p100, p500 = bars_us100 or DEFAULT_BARS["US100"], bars_us500 or DEFAULT_BARS["US500"]
-    other = None
-    results: dict = {}
-    if Path(p500).is_file():
-        s5 = load_series(p500, "US500")
-        other = History(s5, trading_days(s5))
-    runs = [("US100_base", "US100", p100, cfg_base, other, False)]
-    if with_legacy:
-        runs.append(("US100_base_legacy_side", "US100", p100, cfg_base, other, True))
-    if other is not None:
-        runs.append(("US500_base", "US500", p500, cfg_base, None, False))
-        if with_legacy:
-            runs.append(("US500_base_legacy_side", "US500", p500, cfg_base, None, True))
+    asks = {"US100": asks_us100, "US500": asks_us500}
+    hists: dict = {}
+    def hist_for(sym, path):
+        if sym not in hists:
+            hists[sym] = load_history(sym, path, asks[sym])
+            hists[sym].calendar = calendar
+        return hists[sym]
+    other = hist_for("US500", p500) if Path(p500).is_file() else None
+    results: dict = {"_config": {"cost_model": cost_model, "book": book, "drawdown_reset": reset, "calendar": calendar,
+                                 "label": "post-H015b fixes (ftn/demo-fixes); NOT part of H015b"}}
+    syms = [("US100", p100, other)] + ([("US500", p500, None)] if other is not None else [])
+    runs = []
+    for sym, path, oth in syms:
+        if book in ("flat", "both"):
+            runs.append((f"{sym}_base", sym, path, cfg_base, oth, False, cost_model, None))
+            if cost_model == "correct_side":
+                runs.append((f"{sym}_base_flatcost", sym, path, cfg_base, oth, False, "flat", None))
+            if with_legacy:
+                runs.append((f"{sym}_base_legacy_side", sym, path, cfg_base, oth, True, cost_model, None))
+        if book in ("running", "both"):
+            runs.append((f"{sym}_base_runningbook" if book == "both" else f"{sym}_base", sym, path, cfg_base, oth, False,
+                         cost_model, "running"))
     if with_interp:
         cfg_i = deepcopy(cfg)
         cfg_i["interpretation_triggers"] = {"conso": True, "bb": True, "pip20": True}
-        runs.append(("US100_interp", "US100", p100, cfg_i, other, False))
+        runs.append(("US100_interp", "US100", p100, cfg_i, other, False, cost_model, None))
     logs: dict = {}
     trades_by: dict = {}
     cache: dict = {}
-    for key, sym, path, c, oth, legacy in runs:
-        ck = (sym, json.dumps(c["interpretation_triggers"], sort_keys=True))
-        if ck in cache:
-            hist0, log0 = cache[ck]
-            hist, log, trades = run_series(sym, path, c, oth, legacy, hist=hist0, log=log0)
+    for key, sym, path, c, oth, legacy, cm, bk in runs:
+        hist = hist_for(sym, path)
+        interp = any(c["interpretation_triggers"].values())
+        if bk == "running":
+            rb = RunningBook(float(c.get("max_trade_risk_pct", 0.5)), reset=reset)
+            hist, log, trades = run_series(sym, path, c, oth, legacy, hist=hist, cost_model=cm, book=rb)
+            logs[f"{sym}_runningbook"] = log
         else:
-            hist, log, trades = run_series(sym, path, c, oth, legacy)
-            cache[ck] = (hist, log)
-            logs[f"{sym}_{'interp' if any(c['interpretation_triggers'].values()) else 'base'}"] = log
+            ck = (sym, interp)
+            if ck in cache:
+                hist, log, trades = run_series(sym, path, c, oth, legacy, hist=hist, log=cache[ck], cost_model=cm)
+            else:
+                hist, log, trades = run_series(sym, path, c, oth, legacy, hist=hist, cost_model=cm)
+                cache[ck] = log
+                logs[f"{sym}_{'interp' if interp else 'base'}"] = log
+            rb = None
         trades_by[key] = trades
-        fm = foil(hist, trades, COST_PER_SIDE[sym]) if trades else []
+        fm = foil(hist, trades, COST_PER_SIDE[sym], sim=make_sim(sym, hist, cm)) if trades else []
         real = mean(t["R"] for t in trades) if trades else 0.0
         mods: dict = {}
         for r in log:
             if r["ticket"]:
                 mods[r["module"]] = mods.get(r["module"], 0) + 1
+        blocked: dict = {}
+        for r in log:
+            if r["ticket"] and r.get("blocked_by") and not r["blocked_by"].startswith(("allowlist:", "contract:")):
+                blocked[r["blocked_by"]] = blocked.get(r["blocked_by"], 0) + 1
         results[key] = {
             "symbol": sym, "days": (hist.days[0].isoformat(), hist.days[-1].isoformat()),
+            "cost_model": cm, "book": bk or "flat",
             "sessions": len(log), "tickets": sum(1 for r in log if r["ticket"]),
             "risk_blocked": sum(1 for r in log if r["ticket"] and (r.get("blocked_by") or "").startswith("risk")),
+            "blocked_research_gates": blocked,
             "modules": mods, "summary": summarize(trades),
             "foil_pct": 100.0 * sum(1 for m in fm if m < real) / len(fm) if fm else float("nan"),
             "foil_median": sorted(fm)[len(fm) // 2] if fm else None,
-            "hypotheses": evaluate_hypotheses(trades) if "_base" in key else [],
+            "hypotheses": evaluate_hypotheses(trades) if key.endswith("_base") else [],
             "side_conflicts": sum(1 for r in log if "direction:FAIL:rev_direction_conflicts_with_raid" in (r.get("gates") or [])),
             "rev_direction_undetermined_sessions": sum(1 for r in log if r.get("rev_direction_undetermined_seen")),
+            **({"book_events": rb.events, "book_final_equity_pct": rb.state(datetime.max.replace(year=9998))["equity_pct"]}
+               if rb is not None else {}),
         }
     if before:
         results["_before"] = {"source": str(before), **{k: _brief(v) for k, v in
