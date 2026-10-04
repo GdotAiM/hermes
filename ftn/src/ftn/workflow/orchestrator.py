@@ -15,6 +15,30 @@ from ftn.paths import out_dir as default_out_dir
 STAGES = ["PREP", "FILTER", "WATCH", "GATE", "MANAGE", "JOURNAL"]
 
 
+class RunFixtureError(ValueError):
+    """The file is not an `ftn run`/`ftn prep` fixture."""
+
+
+RUN_KEYS = ("previous_day", "cbdr", "asian", "flout")
+
+
+def _unique(path: Path) -> Path:
+    """Same-second runs must not overwrite each other (scanned_at has 1 s resolution)."""
+    n, cand = 1, path
+    while cand.exists():
+        cand = path.with_name(f"{path.stem}_{n}{path.suffix}")
+        n += 1
+    return cand
+
+
+def _check_run_pack(pack: dict, fixture: Path | None) -> None:
+    missing = [k for k in RUN_KEYS if not isinstance(pack.get(k), dict)]
+    if missing:
+        name = Path(fixture).name if fixture else "<default fixture>"
+        hint = " It looks like a DTR fixture: use `python -m ftn brief --fixture ...`." if "date" in pack else ""
+        raise RunFixtureError(f"{name}: not an `ftn run`/`ftn prep` fixture: missing {', '.join(missing)}.{hint}")
+
+
 def run_workflow(
     *,
     symbol: str,
@@ -26,6 +50,7 @@ def run_workflow(
 ) -> dict[str, Any]:
     cfg = load_config()
     pack = load_bars(fixture, symbol)
+    _check_run_pack(pack, fixture)
     families = build_families(pack)
     last = price if price is not None else pack.get("last", pack["previous_day"]["close"])
     direction = detect_bias(pack, bias)
@@ -64,10 +89,15 @@ def run_workflow(
     if cfg.get("mode") != "paper":
         no_trade_reasons.append("non_paper_mode_refused")
 
-    actionable = len(no_trade_reasons) == 0
+    setup_complete = len(no_trade_reasons) == 0
+    # I0: FTN never clears anything for MINT. `entry_candidate` is MINT's own kind
+    # for board-SURVIVES tickets, so FTN must not emit it, and actionable_for_mint is
+    # always False. The only cross-part object is handoff.v1 (`ftn brief`).
     ticket = {
-        "kind": "entry_candidate" if actionable else "no_trade",
-        "actionable_for_mint": actionable,
+        "kind": "ftn_setup_ticket" if setup_complete else "no_trade",
+        "setup_complete": setup_complete,
+        "actionable_for_mint": False,
+        "requires": ["board SURVIVES", "allowlist", "RISK", "human_ack"],
         "symbol": pack.get("symbol", symbol),
         "bias": direction,
         "price": last,
@@ -95,13 +125,13 @@ def run_workflow(
         "stage": stage,
         "stages": STAGES if stage == "all" else ["PREP"],
         "ticket": ticket,
-        "note": "No orders placed. Ticket still needs MINT allowlist + RISK + human paper ack.",
+        "note": "No orders placed. Research ticket, not a contract and not for MINT; only handoff.v1 crosses parts.",
     }
 
     out = out_dir or default_out_dir()
     out.mkdir(parents=True, exist_ok=True)
     stamp = payload["scanned_at"]
-    path = out / f"ftn_{stamp}.json"
+    path = _unique(out / f"ftn_{stamp}.json")
     path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
     (out / "latest.json").write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
     payload["dispatch_path"] = str(path)

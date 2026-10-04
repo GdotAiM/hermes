@@ -38,5 +38,9 @@ def write_journal(payload: dict[str, Any]) -> Path:
     )
     out = journal_dir()
     path = out / f"{payload['scanned_at']}_DECISION.md"
+    n = 1
+    while path.exists():
+        path = out / f"{payload['scanned_at']}_{n}_DECISION.md"
+        n += 1
     path.write_text(body, encoding="utf-8")
     return path

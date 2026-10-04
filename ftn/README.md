@@ -41,7 +41,8 @@ Changes made on import (beyond moving files): the handoff export renames the int
 contract module/schema/samples/tests above were added. No engine logic changed.
 
 **Not the contract:** `dispatch/out/latest.json` (from `ftn run`, the older six-stage
-FTN ticket) and the legacy research draft from `src/ftn/os/mint_draft.py`. That draft is
+FTN ticket; since ftn-fixes its kind is `ftn_setup_ticket`/`no_trade` — never MINT's own
+`entry_candidate` — and `actionable_for_mint` is always `false`) and the legacy research draft from `src/ftn/os/mint_draft.py`. That draft is
 no longer written by default; with `FTN_WRITE_MINT_DRAFT=1`, `ftn brief` writes
 `dispatch/drafts/ftn_draft_*.json` (outside `dispatch/out/`). It carries
 `direction_hypothesis` (the IOF label: bullish/bearish/unclear), never a buy/sell `side`
