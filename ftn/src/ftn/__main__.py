@@ -32,6 +32,14 @@ def build_parser() -> argparse.ArgumentParser:
     br = sub.add_parser("brief", help="Month-9 DTR briefing + candidate log")
     br.add_argument("--fixture", type=Path, required=True)
     br.add_argument("--out", type=Path, default=None)
+    sc = sub.add_parser("score", help="EXPLORATORY: score month-layer hypotheses on M9 kernel tickets over 1m bars")
+    sc.add_argument("--asof", default=None, help="date stamp for output files (default today)")
+    sc.add_argument("--bars-us100", default=None)
+    sc.add_argument("--bars-us500", default=None)
+    sc.add_argument("--research-dir", type=Path, default=None, help="default: <monorepo>/research")
+    sc.add_argument("--no-write", action="store_true")
+    sc.add_argument("--no-interp", action="store_true", help="skip the interpretation-trigger variant")
+    hy = sub.add_parser("hypotheses", help="Print the typed FTN hypothesis family (JSON)")
     lp = sub.add_parser("live-probe", help="Probe live DATA adapters (quotes only; orders refused)")
     lp.add_argument("--symbol", default="EURUSD")
     return p
@@ -54,6 +62,17 @@ def main(argv: list[str] | None = None) -> int:
             "orders": refuse_live_orders(),
         }
         print(json.dumps(payload, indent=2))
+        return 0
+    if args.command == "hypotheses":
+        from ftn.research.hypotheses import HYPOTHESES
+        print(json.dumps([h.to_dict() for h in HYPOTHESES], indent=2))
+        return 0
+    if args.command == "score":
+        from ftn.research.score import score
+        res = score(asof=args.asof, bars_us100=args.bars_us100, bars_us500=args.bars_us500,
+                    research_dir=args.research_dir, write=not args.no_write, with_interp=not args.no_interp)
+        print(json.dumps({k: {"tickets": v["tickets"], "modules": v["modules"], "summary": v["summary"],
+                              "foil_pct": v["foil_pct"]} for k, v in res.items()}, indent=2, default=str))
         return 0
     if args.command == "brief":
         from ftn.os.contracts import FixtureError
