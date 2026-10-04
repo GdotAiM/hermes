@@ -127,3 +127,40 @@ def test_batch2_pins_and_params():
     p = B.params("D1", "US100", "frozen"); assert p["cost_per_side"] == 0.8
     g = B.params("D1", "XAUUSD"); assert abs(g["tick"] - 0.04241) < 1e-5 and abs(g["cost_rt"] - 1.402) < 1e-9
     assert set(B.HOLDOUT["D1"]) == {"US100"} and len(B.NAMES) == 6
+
+
+def _toy_series(days=30, seed=1):
+    import numpy as np
+    from datetime import datetime, timedelta, date as _d
+    from ftn.research.bars import Series
+    rng = np.random.default_rng(seed)
+    t, o, h, l, c = [], [], [], [], []
+    px = 100.0
+    d = _d(2024, 3, 4)
+    while len({x.date() for x in t}) < days:
+        if d.weekday() < 5:
+            m = datetime.combine(d - timedelta(days=1), datetime.min.time()) + timedelta(hours=18)
+            while m < datetime.combine(d, datetime.min.time()) + timedelta(hours=17):
+                nx = px + rng.normal(0, 0.1)
+                t.append(m); o.append(px); c.append(nx); h.append(max(px, nx) + 0.02); l.append(min(px, nx) - 0.02)
+                px = nx; m += timedelta(minutes=1)
+        d += timedelta(days=1)
+    return Series("TOY", t, o, h, l, c)
+
+
+def test_batch3_rules_mechanics():
+    from datetime import date as _d
+    from research.screening.batch3 import rules
+    s = _toy_series()
+    out = {r: rules.run_rule(r, "TOY", s, 0.0, _d(2024, 1, 1), _d(2024, 12, 31)) for r in rules.RULES}
+    assert any(out.values())
+    for r, tr in out.items():
+        assert len({t["date"] for t in tr}) == len(tr)                    # one trade per day
+        for t in tr:
+            assert t["R"] <= rules.TARGET_R + 1e-9 and t["t_entry"][11:16] < "11:30"
+            assert t["why"] != "stop" or t["R"] <= 0
+    # E4 and E5 fire on the same signal bars, in opposite directions
+    a = {t["date"]: t["direction"] for t in out["E4"]}; b = {t["date"]: t["direction"] for t in out["E5"]}
+    assert a.keys() == b.keys() and all(a[k] != b[k] for k in a)
+    # E3 signals at or after 09:30, E4/E5 at or after 10:00
+    assert all(t["t_entry"][11:16] >= "10:00" for t in out["E4"])
