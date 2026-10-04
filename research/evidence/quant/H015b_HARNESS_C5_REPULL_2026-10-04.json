@@ -1,0 +1,233 @@
+{
+ "dir": "/tmp/h015b_c5_ryoxa48v",
+ "days": [
+  "2026-03-09",
+  "2026-03-30",
+  "2026-06-15",
+  "2026-09-10",
+  "2025-11-03"
+ ],
+ "results": [
+  {
+   "inst": "US100",
+   "day": "2026-03-09",
+   "side": "BID",
+   "rows": 1332,
+   "filler_dropped": 108,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1332,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US100",
+   "day": "2026-03-09",
+   "side": "ASK",
+   "rows": 1332,
+   "filler_dropped": 108,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1332,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US100",
+   "day": "2026-03-30",
+   "side": "BID",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US100",
+   "day": "2026-03-30",
+   "side": "ASK",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US100",
+   "day": "2026-06-15",
+   "side": "BID",
+   "rows": 1333,
+   "filler_dropped": 107,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1333,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US100",
+   "day": "2026-06-15",
+   "side": "ASK",
+   "rows": 1333,
+   "filler_dropped": 107,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1333,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US100",
+   "day": "2026-09-10",
+   "side": "BID",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US100",
+   "day": "2026-09-10",
+   "side": "ASK",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US100",
+   "day": "2025-11-03",
+   "side": "BID",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US100",
+   "day": "2025-11-03",
+   "side": "ASK",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2026-03-09",
+   "side": "BID",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2026-03-09",
+   "side": "ASK",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2026-03-30",
+   "side": "BID",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2026-03-30",
+   "side": "ASK",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2026-06-15",
+   "side": "BID",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2026-06-15",
+   "side": "ASK",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2026-09-10",
+   "side": "BID",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2026-09-10",
+   "side": "ASK",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2025-11-03",
+   "side": "BID",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  },
+  {
+   "inst": "US500",
+   "day": "2025-11-03",
+   "side": "ASK",
+   "rows": 1335,
+   "filler_dropped": 105,
+   "bi5_equal_marketdata_raw": true,
+   "rows_marketdata": 1335,
+   "csv_equal_marketdata": true,
+   "bars_17h_ny": 0
+  }
+ ],
+ "ok": true
+}

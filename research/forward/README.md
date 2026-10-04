@@ -51,3 +51,13 @@ $P -m pytest -q research/forward/tests     # reproduction + counting + kill test
    - I chose not to splice Dukascopy history in, because the forward feed must be CAPITALCOM only. DATA/CASSANDRA may rule otherwise.
 3. **CAPITALCOM spread and bid/mid side are unmeasured** (DATA fix 3). The cost co-reports use Dukascopy spreads: H013 `R_5050_cost{1p5x,2x,3x}`; H014 `r_cost2x` and `r_data_measured_cost` (1.617 / 1.01 RT). DATA's fill-realism proxy needs an engine re-run, which can be done from the saved raw bars.
 4. **CAPITALCOM trades until 16:59 NY** (halt 17:00–18:00, like futures), whereas Dukascopy halts at 16:14. This affects the H014 1H bars around the halt (DATA fix 9).
+
+## H015b (FTN REV, FTN-D22 stop; US100 + US500; Dukascopy BID)
+- **Prereg:** `research/protocols/preregs/H015b_FORWARD_PREREG_2026-10-04.json`, tag `prereg-H015b` → 49be2d6. It supersedes H015, which had no R read.
+- **Data appendix:** `research/protocols/preregs/H015b_DATA_APPENDIX_2026-10-04.md`.
+- **Harness registration:** `research/protocols/preregs/H015b_HARNESS_REGISTRATION_2026-10-04.json`. This is a separate note; the prereg is never edited.
+- **Harness:** `research/forward/H015/{duka.py,h015.py}`. Its data lives in `$HERMES_FWD_DATA/H015b` (default `/home/box/hermes-x/forward/H015b`).
+- **Scheduled run:** `python research/forward/H015/h015.py final`, at or after **01:00 UTC (03:00 SAST)** every day. It scores the previous NY day(s).
+- **Other commands:** `report`, `verify`, `selfcheck`, `repro-burned`, and `c5` (network).
+- **Sealed R:** R stays sealed in `sealed/outcomes.csv` until `DATA_CERTIFIED.json` and `CASSANDRA_CLEARED.json` exist in the data dir. Each must carry the registered `harness_sha256`.
+- **Tests:** `research/forward/tests/test_h015b.py`.
