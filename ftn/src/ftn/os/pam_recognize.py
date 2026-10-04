@@ -25,5 +25,8 @@ def classify_charter_recognition(st: CharterState) -> CharterRecognition:
 
 
 def derive_charter(raw: dict) -> CharterState:
-    base = derive_charter_context(raw)
+    from ftn.os.m13_context import attach_model13
+
+    base = attach_model13(derive_charter_context(raw), raw)
+    # Model 13 bridge never feeds classify_charter_recognition (not a PAM).
     return replace(base, charter_recognition=classify_charter_recognition(base))

@@ -83,9 +83,31 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -e . pytest
 python3 -m ftn brief --fixture fixtures/m9_reconstruction_eurusd.json   # → dispatch/out/handoff_latest.json
 python3 -m ftn.os.handoff_contract dispatch/out/handoff_latest.json     # contract check
+python3 -m ftn brief --fixture fixtures/m9_raw_eurusd.json              # REV session ticket; research-draft gate chain blocked_by allowlist
 python3 -m ftn run --symbol EURUSD --fixture fixtures/sample_eurusd.json
 rm -f dispatch/out/*.json && pytest                                     # clean first (see limitations)
 ```
+
+### One ticket authority, one research-draft gate chain
+
+`ftn brief` is the only path that reaches the Month-9 kernel
+(`src/ftn/os/briefing.py::brief_from_fixture`); `ftn run` refuses DTR fixtures and points to
+`ftn brief`. The brief evaluates one research-draft gate chain (`src/ftn/os/mint_draft.py`):
+
+1. `kernel_ticket` — the kernel selected an entry model (REV/CONSO/BB/PIP20) and persisted its session ticket.
+2. `direction` — `direction_hypothesis` (bullish/bearish) from evidence, never defaulted
+   (REV/BB/PIP20: daytrade IOF; CONSO: raided box edge).
+3. `risk` — `config.yaml` caps: 0.5% per trade, 2% daily loss, 5% drawdown, valid protective stop.
+4. `allowlist` — the model is on `config.yaml mint_allowlist` (see `docs/MINT_ALLOWLIST.md`); stamps must be signed.
+5. `mode` — paper only. Live stays dual-locked and refused; no broker routing.
+6. `contract` — **always FAIL** (`hermes_integration_i0_ftn_never_actionable`): under the frozen
+   HERMES_INTEGRATION_I0 contract FTN output is never MINT-actionable.
+
+So the draft (`kind: ftn_research_draft`, written to `dispatch/drafts/` only with
+`FTN_WRITE_MINT_DRAFT=1`) always has `actionable_for_mint: false`, never a `side`, and records
+`gates_before_contract_pass` plus `blocked_by`. **Today the allowlist is empty**, so every kernel
+ticket is `blocked_by: allowlist:not_on_mint_allowlist`. Months 1–8, 10–12, the Charter and
+Model 13 are context on the DayContext; they never issue tickets. `FTN_CONFIG` selects another config file.
 
 ## Layout
 

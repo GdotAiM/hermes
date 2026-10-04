@@ -21,7 +21,7 @@ def _pack(ctx) -> dict | None:
         "pd_arrays": [],
         "htf_bias": ctx.pair_institutional.state
         if ctx.pair_institutional.state in {"bullish", "bearish"}
-        else "bullish",
+        else "undetermined",
     }
 
 
@@ -30,9 +30,15 @@ def annotate_ftn(state: MarketState) -> dict:
     pack = _pack(ctx)
     cand = Candidate("FTN", "annotate", False, "objectives_only", "hermes_governance")
     if not pack or ctx.last is None:
-        return {"candidate": cand, "families": None, "four": [], "family": None}
+        return {"candidate": cand, "families": None, "four": [], "family": None,
+                "bias": None, "four_reason": "missing_previous_day_or_last"}
     families = build_families(pack)
     bias = pack["htf_bias"]
+    if bias == "undetermined":
+        # No directional four-count without a bullish/bearish daytrade IOF.
+        return {"candidate": cand, "families": None, "four": [], "family": None,
+                "bias": "undetermined", "four_reason": "bias_undetermined",
+                "fingerprint": state.fingerprint}
     four = count_four(families, bias=bias, price=float(ctx.last), family="cbdr")
     if len(four) < 4:
         four = count_four(families, bias=bias, price=float(ctx.last), family="pivots")
@@ -50,5 +56,6 @@ def annotate_ftn(state: MarketState) -> dict:
         "four": four,
         "family": family,
         "bias": bias,
+        "four_reason": "counted",
         "fingerprint": state.fingerprint,
     }

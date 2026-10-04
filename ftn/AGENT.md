@@ -45,7 +45,9 @@ ICT is the vocabulary. Only a human / MINT allowlist may turn a ticket into size
 PREP → FILTER → WATCH → GATE → MANAGE → JOURNAL
 ```
 
-See `src/ftn/workflow/orchestrator.py`.
+See `src/ftn/workflow/orchestrator.py`. Since 2026-10-04 the GATE stage is the Month-9
+kernel (`ftn brief` path): only it may produce a session ticket or MINT draft. The legacy
+fixture `setup` booleans are research context and can never make a ticket actionable.
 
 ---
 
@@ -65,10 +67,13 @@ Projections without PD-array overlap are logged, not traded.
 ## 4. Handoff
 
 ```
-Next: MINT
-Path: dispatch/out/latest.json
-Ask: Paper-ack only if RISK + allowlist clear; else journal NO-TRADE.
+Next: MINT (read-only consumer of handoff.v1; HERMES_INTEGRATION_I0)
+Path: dispatch/out/handoff_latest.json (+ opt-in research draft dispatch/drafts/ftn_draft_latest.json, FTN_WRITE_MINT_DRAFT=1)
+Gate chain: kernel_ticket → direction → risk (0.5% / 2% / 5%) → mint_allowlist → paper mode → contract
+Ask: none. actionable_for_mint is always false (contract gate); blocked_by names the first failing gate.
 ```
+
+Allowlist population is human-only — see `docs/MINT_ALLOWLIST.md`. Today it is empty.
 
 ---
 

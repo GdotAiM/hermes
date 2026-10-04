@@ -286,3 +286,37 @@ Superseded by HERMES_INTEGRATION_I0: not a contract (MINT rejects it), no buy/se
 Default off. Quotes only if `live_data_enabled: true` AND `FTN_LIVE_DATA=1`.
 `python3 -m ftn live-probe` shows data_allowed=false and orders refused.
 Trading `live_enabled` remains false. Stub still refuses live orders.
+
+
+## Slice M13 — Model 13 bridge ("Month 13") — added in 2026-10-04 review
+
+| File | Role |
+|------|------|
+| `docs/MONTH13_RESEARCH_CARD.md` | Lecture-note card for Charter Model 13 (kNlySn81dmo); not a detector spec |
+| `docs/MONTH13_SLICE0_GLOSSARY.md` | Proposed, unsigned glossary |
+| `src/ftn/os/m13_contracts.py` | `Model13Card`, `explicit_bridge()`, reference metadata |
+| `src/ftn/os/m13_context.py` | attach explicit `model13_bridge` + card to `CharterState`; orchestrator annotation |
+| `fixtures/m13_bridge_eurusd.json` | synthetic labeled card |
+| `tests/test_model13.py` | never a PAM, never a ticket, none by default |
+
+Extends the existing `CharterState.model13_bridge`; no `pam13`.
+
+
+## Slice R — `ftn run` routed through the Month-9 kernel (2026-10-04 decision)
+
+| File | Role |
+|------|------|
+| `src/ftn/workflow/orchestrator.py` | `run` calls `brief_from_fixture`; ticket/draft are the kernel's; legacy FTN measurement = research context |
+| `src/ftn/journal/write.py` | decision journal records ticket authority |
+| `tests/test_run_authority.py` | legacy booleans never actionable; `run` tickets == `brief` tickets for every dated fixture; prep never calls kernel; Model 13 through `run` makes no ticket |
+
+
+## Slice G — MINT gate chain + harmony (2026-10-04)
+
+| File | Role |
+|------|------|
+| `src/ftn/os/mint_draft.py` | research draft: kernel_ticket → direction → risk → allowlist → mode → contract (I0: never actionable); `blocked_by` |
+| `src/ftn/os/briefing.py` | `draft_status()` — the single research-draft status shown by `ftn brief` |
+| `src/ftn/config_load.py` | strict YAML-subset parser + schema (`ConfigError`), `mint_allowlist`, `FTN_CONFIG` |
+| `docs/MINT_ALLOWLIST.md` | how the allowlist is populated; empty today |
+| `tests/test_gate_chain.py` | every gate passing/blocked; run == brief == desk on all dated fixtures |

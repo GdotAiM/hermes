@@ -20,6 +20,16 @@ KIND_V1 = "day_context_handoff"
 LEGACY_KIND = "month9_handoff"
 
 
+
+def _charter_block(ch):
+    """Charter layer; the optional Model 13 card is omitted while absent (keeps samples stable)."""
+    if not ch:
+        return None
+    d = asdict(ch)
+    if d.get("model13") is None:
+        d.pop("model13", None)
+    return d
+
 def _opt_asdict(obj):
     if obj is None:
         return None
@@ -87,7 +97,7 @@ def _build_handoff_raw(state: MarketState, candidates, ftn: dict) -> dict:
             "month10": asdict(c.month10) if c.month10 else None,
             "month11": asdict(c.month11) if c.month11 else None,
             "month12": asdict(c.month12) if c.month12 else None,
-            "charter": asdict(c.charter) if c.charter else None,
+            "charter": _charter_block(c.charter),
             "pam1_evidence": _opt_asdict(getattr(c, "pam1_evidence", None)),
             "pam1_completeness": _opt_asdict(getattr(c, "pam1_completeness", None)),
         },

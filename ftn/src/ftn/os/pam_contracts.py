@@ -62,8 +62,10 @@ class PamEntry:
 class CharterState:
     identified_pam: Pres = "none"
     recognized_pams: tuple = ()  # tuple[PamEntry, ...]
+    # Model 13 bridge: explicit "present" only; never a pam_id (see m13_contracts.py)
     model13_bridge: Pres = "none"
     charter_recognition: CharterRecognition = field(default_factory=CharterRecognition)
+    model13: object = None  # Model13Card | None — labeled lecture-note card, not a detector
 
 
 def _one(v, allowed):
@@ -85,6 +87,11 @@ def _entry(item: dict) -> PamEntry:
     )
 
 
+def _model13_card(block: dict):
+    from ftn.os.m13_contracts import parse_model13_card
+    return parse_model13_card({"charter": block})
+
+
 def parse_charter(raw: dict) -> CharterState | None:
     block = raw.get("charter") or raw.get("ict_charter")
     if not block:
@@ -104,6 +111,7 @@ def parse_charter(raw: dict) -> CharterState | None:
         identified_pam=_one(block.get("identified_pam"), PRES),
         recognized_pams=tuple(entries),
         model13_bridge=_one(block.get("model13_bridge"), PRES),
+        model13=_model13_card(block),
         charter_recognition=CharterRecognition(
             flag=bool(cr.get("flag", False)),
             reason=cr.get("reason") or "provided_state",
