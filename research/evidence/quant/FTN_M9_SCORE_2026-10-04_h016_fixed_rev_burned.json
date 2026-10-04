@@ -1,0 +1,771 @@
+{
+  "_config": {
+    "cost_model": "correct_side",
+    "book": "both",
+    "drawdown_reset": "next_calendar_month",
+    "calendar": true,
+    "label": "post-H015b fixes (ftn/demo-fixes); NOT part of H015b"
+  },
+  "US100_base": {
+    "symbol": "US100",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "cost_model": "correct_side",
+    "book": "flat",
+    "sessions": 544,
+    "tickets": 185,
+    "risk_blocked": 39,
+    "blocked_research_gates": {
+      "risk:stop_below_min_risk": 39
+    },
+    "modules": {
+      "REV": 185
+    },
+    "summary": {
+      "n": 146,
+      "mean_R": 0.03338292824306412,
+      "ci95": [
+        -0.19291657416828467,
+        0.2665498138964471
+      ],
+      "win_rate": 0.3698630136986301,
+      "longs": 65,
+      "shorts": 81,
+      "mean_ex_top1pct": 0.019851451229245476,
+      "mean_ex_small_stop": 0.036968326194625915,
+      "exits": {
+        "stop": 89,
+        "target": 47,
+        "time": 10
+      },
+      "total_R": 4.873907523487361,
+      "max_dd_R": 18.97225068778356
+    },
+    "foil_pct": 75.85,
+    "foil_median": -0.05145032406650431,
+    "hypotheses": [
+      {
+        "id": "FTN-H001",
+        "month": "M1",
+        "var": "m1_correct_side_of_eq",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 144,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H002",
+        "month": "M2",
+        "var": "m2_false_breakout",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 33,
+        "n_false": 113,
+        "diff": 0.06180399064836591,
+        "ci95": [
+          -0.45301184121080423,
+          0.6052125115573496
+        ],
+        "p_one_sided": 0.40905909409059094,
+        "metric_true": 0.08121752374488157,
+        "metric_false": 0.01941353309651566,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H003",
+        "month": "M3",
+        "var": "m3_iof_aligned",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 88,
+        "n_false": 58,
+        "diff": -0.023710211424494393,
+        "ci95": [
+          -0.47478998759184654,
+          0.43229409050541184
+        ],
+        "p_one_sided": 0.5386461353864613,
+        "metric_true": 0.02396380315662114,
+        "metric_false": 0.04767401458111553,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H004",
+        "month": "M4",
+        "var": "m4_fvg_in_displacement",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 83,
+        "n_false": 63,
+        "diff": 0.26280023572678485,
+        "ci95": [
+          -0.201488890717293,
+          0.7117285907549491
+        ],
+        "p_one_sided": 0.13408659134086592,
+        "metric_true": 0.14678302996078635,
+        "metric_false": -0.11601720576599851,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H005",
+        "month": "M5",
+        "var": "m5_ipda20_discount",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 112,
+        "n_false": 34,
+        "diff": 0.22022128726607984,
+        "ci95": [
+          -0.299500499268301,
+          0.7156617166715675
+        ],
+        "p_one_sided": 0.21277872212778723,
+        "metric_true": 0.08466733760639777,
+        "metric_false": -0.13555394965968207,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H006",
+        "month": "M6",
+        "var": "m6_with_20d_swing",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 52,
+        "n_false": 94,
+        "diff": -0.2520019671802281,
+        "ci95": [
+          -0.7082191059985535,
+          0.20830181087834249
+        ],
+        "p_one_sided": 0.8547145285471452,
+        "metric_true": -0.12886491364009645,
+        "metric_false": 0.12313705354013167,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H007",
+        "month": "M7",
+        "var": "m7_osok_profile",
+        "metric": "win_rate",
+        "direction": "higher_when_true",
+        "n_true": 89,
+        "n_false": 57,
+        "diff": 0.117484723043564,
+        "ci95": [
+          -0.039030159668834996,
+          0.2726197516262567
+        ],
+        "p_one_sided": 0.10668933106689331,
+        "metric_true": 0.4157303370786517,
+        "metric_false": 0.2982456140350877,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H008",
+        "month": "M8",
+        "var": "m8_cbdr_tight",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 72,
+        "n_false": 74,
+        "diff": -0.41279470896001813,
+        "ci95": [
+          -0.8581413228239703,
+          0.02871527556578271
+        ],
+        "p_one_sided": 0.9643035696430357,
+        "metric_true": -0.17584178725721905,
+        "metric_false": 0.2369529217027991,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H009",
+        "month": "M8",
+        "var": "m8_ny_continues_london",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 25,
+        "n_false": 75,
+        "diff": 0.6825505948106053,
+        "ci95": [
+          0.05759477720575118,
+          1.2970567404905355
+        ],
+        "p_one_sided": 0.016698330166983303,
+        "metric_true": 0.5314458914564226,
+        "metric_false": -0.1511047033541827,
+        "status": "evaluated",
+        "p_holm": 0.20037996200379965
+      },
+      {
+        "id": "FTN-H010",
+        "month": "M10",
+        "var": "m10_us500_confirms",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 68,
+        "n_false": 78,
+        "diff": 0.27918995645314454,
+        "ci95": [
+          -0.17614463262952534,
+          0.7180298498529858
+        ],
+        "p_one_sided": 0.11728827117288271,
+        "metric_true": 0.18253920634816873,
+        "metric_false": -0.0966507501049758,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H011",
+        "month": "M11",
+        "var": "m11_smt_divergence",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 31,
+        "n_false": 115,
+        "diff": -0.008912895745931591,
+        "ci95": [
+          -0.5795604661250204,
+          0.5617715712558194
+        ],
+        "p_one_sided": 0.5038496150384961,
+        "metric_true": 0.02636249666236458,
+        "metric_false": 0.03527539240829617,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H012",
+        "month": "M12",
+        "var": "m12_topdown_agree",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 12,
+        "n_false": 134,
+        "diff": -0.319379023077694,
+        "ci95": [
+          -0.9178182060099437,
+          0.3581415566066306
+        ],
+        "p_one_sided": 0.7404259574042595,
+        "metric_true": -0.2597457641707098,
+        "metric_false": 0.05963325890698417,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H013",
+        "month": "M13",
+        "var": "m13_bridge_window_fvg",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 21,
+        "n_false": 125,
+        "diff": 0.33890815962140713,
+        "ci95": [
+          -0.2904904627246475,
+          0.9736200817434821
+        ],
+        "p_one_sided": 0.15608439156084392,
+        "metric_true": 0.32354402380933733,
+        "metric_false": -0.015364135812069786,
+        "status": "evaluated",
+        "p_holm": 1.0
+      }
+    ],
+    "side_conflicts": 0,
+    "rev_direction_undetermined_sessions": 1
+  },
+  "US100_base_flatcost": {
+    "symbol": "US100",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "cost_model": "flat",
+    "book": "flat",
+    "sessions": 544,
+    "tickets": 185,
+    "risk_blocked": 39,
+    "blocked_research_gates": {
+      "risk:stop_below_min_risk": 39
+    },
+    "modules": {
+      "REV": 185
+    },
+    "summary": {
+      "n": 146,
+      "mean_R": 0.047865782609706566,
+      "ci95": [
+        -0.17981916248819932,
+        0.28196516357972434
+      ],
+      "win_rate": 0.3767123287671233,
+      "longs": 65,
+      "shorts": 81,
+      "mean_ex_top1pct": 0.03444138630965453,
+      "mean_ex_small_stop": 0.06424176732314385,
+      "exits": {
+        "stop": 88,
+        "target": 48,
+        "time": 10
+      },
+      "total_R": 6.988404261017159,
+      "max_dd_R": 19.237947847935324
+    },
+    "foil_pct": 74.6,
+    "foil_median": -0.027994030109063452,
+    "hypotheses": [],
+    "side_conflicts": 0,
+    "rev_direction_undetermined_sessions": 1
+  },
+  "US100_base_runningbook": {
+    "symbol": "US100",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "cost_model": "correct_side",
+    "book": "running",
+    "sessions": 544,
+    "tickets": 185,
+    "risk_blocked": 45,
+    "blocked_research_gates": {
+      "risk:stop_below_min_risk": 39,
+      "risk:max_drawdown_cap": 6
+    },
+    "modules": {
+      "REV": 185
+    },
+    "summary": {
+      "n": 140,
+      "mean_R": 0.0053109470024764625,
+      "ci95": [
+        -0.22482949741117592,
+        0.24276465044871792
+      ],
+      "win_rate": 0.35714285714285715,
+      "longs": 62,
+      "shorts": 78,
+      "mean_ex_top1pct": -0.009006579243885341,
+      "mean_ex_small_stop": -0.010846115823196488,
+      "exits": {
+        "stop": 87,
+        "target": 44,
+        "time": 9
+      },
+      "total_R": 0.7435325803467048,
+      "max_dd_R": 19.894222372616316
+    },
+    "foil_pct": 67.05,
+    "foil_median": -0.0477028551306243,
+    "hypotheses": [],
+    "side_conflicts": 0,
+    "rev_direction_undetermined_sessions": 1,
+    "book_events": [
+      {
+        "t": "2026-06-25T03:30:00",
+        "event": "drawdown_cap_tripped",
+        "equity": 102.76847782292782,
+        "peak": 107.81553534882364
+      },
+      {
+        "t": "2026-07-02T03:00:00",
+        "event": "drawdown_reset",
+        "peak_before": 107.81553534882364,
+        "equity": 102.76847782292782
+      },
+      {
+        "t": "2026-07-27T10:00:00",
+        "event": "drawdown_cap_tripped",
+        "equity": 98.05098361586435,
+        "peak": 102.76847782292782
+      },
+      {
+        "t": "2026-08-04T03:15:00",
+        "event": "drawdown_reset",
+        "peak_before": 102.76847782292782,
+        "equity": 98.05098361586435
+      }
+    ],
+    "book_final_equity_pct": 100.03518155857708
+  },
+  "US500_base": {
+    "symbol": "US500",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "cost_model": "correct_side",
+    "book": "flat",
+    "sessions": 544,
+    "tickets": 167,
+    "risk_blocked": 55,
+    "blocked_research_gates": {
+      "risk:stop_below_min_risk": 55
+    },
+    "modules": {
+      "REV": 167
+    },
+    "summary": {
+      "n": 112,
+      "mean_R": 0.18764223846632602,
+      "ci95": [
+        -0.07793432174842753,
+        0.45125967784427157
+      ],
+      "win_rate": 0.44642857142857145,
+      "longs": 53,
+      "shorts": 59,
+      "mean_ex_top1pct": 0.171393502161454,
+      "mean_ex_small_stop": 0.22299901770285832,
+      "exits": {
+        "stop": 58,
+        "target": 41,
+        "time": 13
+      },
+      "total_R": 21.015930708228513,
+      "max_dd_R": 12.850660095114481
+    },
+    "foil_pct": 98.85,
+    "foil_median": -0.09435072801475754,
+    "hypotheses": [
+      {
+        "id": "FTN-H001",
+        "month": "M1",
+        "var": "m1_correct_side_of_eq",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 110,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H002",
+        "month": "M2",
+        "var": "m2_false_breakout",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 34,
+        "n_false": 78,
+        "diff": 0.39704872130584545,
+        "ci95": [
+          -0.1747527645845629,
+          0.9587041650374439
+        ],
+        "p_one_sided": 0.08909109089091091,
+        "metric_true": 0.46415831223289694,
+        "metric_false": 0.06710959092705152,
+        "status": "evaluated",
+        "p_holm": 0.8018198180181982
+      },
+      {
+        "id": "FTN-H003",
+        "month": "M3",
+        "var": "m3_iof_aligned",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 65,
+        "n_false": 47,
+        "diff": -0.09547159937760741,
+        "ci95": [
+          -0.6426134736290361,
+          0.44720641935123356
+        ],
+        "p_one_sided": 0.6324367563243676,
+        "metric_true": 0.14757826372750862,
+        "metric_false": 0.24304986310511603,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H004",
+        "month": "M4",
+        "var": "m4_fvg_in_displacement",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 64,
+        "n_false": 48,
+        "diff": 0.39701620652330555,
+        "ci95": [
+          -0.1268086737109335,
+          0.9208348091593281
+        ],
+        "p_one_sided": 0.0746925307469253,
+        "metric_true": 0.3577920412620284,
+        "metric_false": -0.03922416526127714,
+        "status": "evaluated",
+        "p_holm": 0.746925307469253
+      },
+      {
+        "id": "FTN-H005",
+        "month": "M5",
+        "var": "m5_ipda20_discount",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 83,
+        "n_false": 29,
+        "diff": -0.5315085967001528,
+        "ci95": [
+          -1.0990137397665307,
+          0.050707510478303575
+        ],
+        "p_one_sided": 0.9553044695530447,
+        "metric_true": 0.050019476820750745,
+        "metric_false": 0.5815280735209035,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H006",
+        "month": "M6",
+        "var": "m6_with_20d_swing",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 39,
+        "n_false": 73,
+        "diff": 0.1917989932022789,
+        "ci95": [
+          -0.36547645425093406,
+          0.7449179084769202
+        ],
+        "p_one_sided": 0.24847515248475152,
+        "metric_true": 0.3126540822499542,
+        "metric_false": 0.12085508904767535,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H007",
+        "month": "M7",
+        "var": "m7_osok_profile",
+        "metric": "win_rate",
+        "direction": "higher_when_true",
+        "n_true": 68,
+        "n_false": 44,
+        "diff": -0.08823529411764708,
+        "ci95": [
+          -0.2834224598930481,
+          0.09893048128342247
+        ],
+        "p_one_sided": 0.8658134186581342,
+        "metric_true": 0.4117647058823529,
+        "metric_false": 0.5,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H008",
+        "month": "M8",
+        "var": "m8_cbdr_tight",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 54,
+        "n_false": 58,
+        "diff": 0.2215562380838088,
+        "ci95": [
+          -0.30627034735919856,
+          0.739092542188518
+        ],
+        "p_one_sided": 0.20357964203579643,
+        "metric_true": 0.30237671890258416,
+        "metric_false": 0.08082048081877534,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H009",
+        "month": "M8",
+        "var": "m8_ny_continues_london",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 23,
+        "n_false": 54,
+        "diff": 0.09338260620319883,
+        "ci95": [
+          -0.580869558631844,
+          0.767105980563392
+        ],
+        "p_one_sided": 0.38786121387861217,
+        "metric_true": 0.28618960062262505,
+        "metric_false": 0.19280699441942623,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H010",
+        "month": "M10",
+        "var": "m10_us500_confirms",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 0,
+        "n_false": 0,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H011",
+        "month": "M11",
+        "var": "m11_smt_divergence",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 0,
+        "n_false": 0,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H012",
+        "month": "M12",
+        "var": "m12_topdown_agree",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 11,
+        "n_false": 101,
+        "diff": 0.26327067823305006,
+        "ci95": [
+          -0.41350103675272354,
+          0.9812178257890453
+        ],
+        "p_one_sided": 0.28317168283171684,
+        "metric_true": 0.42505597508720155,
+        "metric_false": 0.16178529685415147,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H013",
+        "month": "M13",
+        "var": "m13_bridge_window_fvg",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 21,
+        "n_false": 91,
+        "diff": 0.20953014499934597,
+        "ci95": [
+          -0.3900871424296013,
+          0.8143426499953632
+        ],
+        "p_one_sided": 0.26707329267073293,
+        "metric_true": 0.3578854812782946,
+        "metric_false": 0.14835533627894865,
+        "status": "evaluated",
+        "p_holm": 1.0
+      }
+    ],
+    "side_conflicts": 0,
+    "rev_direction_undetermined_sessions": 1
+  },
+  "US500_base_flatcost": {
+    "symbol": "US500",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "cost_model": "flat",
+    "book": "flat",
+    "sessions": 544,
+    "tickets": 167,
+    "risk_blocked": 55,
+    "blocked_research_gates": {
+      "risk:stop_below_min_risk": 55
+    },
+    "modules": {
+      "REV": 167
+    },
+    "summary": {
+      "n": 112,
+      "mean_R": 0.18444867474515253,
+      "ci95": [
+        -0.08308267877725929,
+        0.45422675359555337
+      ],
+      "win_rate": 0.45535714285714285,
+      "longs": 53,
+      "shorts": 59,
+      "mean_ex_top1pct": 0.1682685959653399,
+      "mean_ex_small_stop": 0.24115163469227144,
+      "exits": {
+        "stop": 57,
+        "target": 42,
+        "time": 13
+      },
+      "total_R": 20.658251571457082,
+      "max_dd_R": 14.053331395230305
+    },
+    "foil_pct": 98.95,
+    "foil_median": -0.08981002932583886,
+    "hypotheses": [],
+    "side_conflicts": 0,
+    "rev_direction_undetermined_sessions": 1
+  },
+  "US500_base_runningbook": {
+    "symbol": "US500",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "cost_model": "correct_side",
+    "book": "running",
+    "sessions": 544,
+    "tickets": 167,
+    "risk_blocked": 67,
+    "blocked_research_gates": {
+      "risk:stop_below_min_risk": 55,
+      "risk:max_drawdown_cap": 12
+    },
+    "modules": {
+      "REV": 167
+    },
+    "summary": {
+      "n": 100,
+      "mean_R": 0.21764989027517856,
+      "ci95": [
+        -0.058452490391886006,
+        0.5000114719460184
+      ],
+      "win_rate": 0.46,
+      "longs": 51,
+      "shorts": 49,
+      "mean_ex_top1pct": 0.1997347177698054,
+      "mean_ex_small_stop": 0.21715698959501598,
+      "exits": {
+        "stop": 50,
+        "target": 37,
+        "time": 13
+      },
+      "total_R": 21.764989027517856,
+      "max_dd_R": 12.101601775825138
+    },
+    "foil_pct": 99.05,
+    "foil_median": -0.08990474328444825,
+    "hypotheses": [],
+    "side_conflicts": 0,
+    "rev_direction_undetermined_sessions": 1,
+    "book_events": [
+      {
+        "t": "2026-05-07T02:15:00",
+        "event": "drawdown_cap_tripped",
+        "equity": 107.92296418217182,
+        "peak": 113.46719149375394
+      },
+      {
+        "t": "2026-06-01T02:15:00",
+        "event": "drawdown_reset",
+        "peak_before": 113.46719149375394,
+        "equity": 107.92296418217182
+      }
+    ],
+    "book_final_equity_pct": 111.21277739183228
+  }
+}
