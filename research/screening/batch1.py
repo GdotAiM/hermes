@@ -186,6 +186,7 @@ def report():
                         era=era, era2_mean=era2["mean"], sd_era=sd, deff=deff, rate=rate, n_hold=n_hold,
                         mu_plan=mu_plan, s1_mean_for_plan=s1_mean,
                         power=power(mu_plan, sd, deff, n_hold),
+                        power_ceiling=power(SHRINK * era["mean"], sd, deff, n_hold),
                         power_unshrunk=power(era["mean"], sd, deff, n_hold),
                         n_for_08_at_mu_plan=n_for_power(mu_plan, sd, deff))
     h1 = core.holm({k: v["s1"]["p_le0"] if v["s1"]["n"] else 1.0 for k, v in res.items()})
@@ -194,6 +195,9 @@ def report():
         v["s1_holm"], v["s3_holm"] = h1[k], h3[k]
         v["S1"] = "PASS" if v["s1"]["n"] >= 30 and h1[k] <= ALPHA_SCREEN and v["s1_majority_positive"] else "FAIL"
         v["S2"] = "PASS" if v["s2a_pos"] >= 3 and v["s2b_pos"] >= 3 else "FAIL"
+        if not s1["coverage"]:
+            v["S1"] = "PENDING"
+            v["S2"] = "FAIL" if v["s2a_pos"] < 3 else "PENDING"   # S2b needs S1 data
         v["S3"] = "PASS" if h3[k] <= ALPHA_SCREEN and v["burned"]["mean"] > 0 else "FAIL"
         v["power_ok"] = bool(v["power"] is not None and v["power"] >= 0.8)
         v["QUALIFIES"] = all(v[s] == "PASS" for s in ("S1", "S2", "S3")) and v["power_ok"]
@@ -208,9 +212,6 @@ def v_mean_pos(v):
     return v["mean"] is not None and v["mean"] > 0
 
 
-if __name__ == "__main__":
-    OUT.mkdir(exist_ok=True)
-    {"s3": run_s3, "s1": run_s1, "report": lambda: write_md(*report())}[sys.argv[1]]()
 
 
 def write_md(meta, res):
@@ -220,6 +221,9 @@ def write_md(meta, res):
          "> The burned window is burned, and C2 was chosen by looking at it. A PASS here would only *earn* a holdout; the holdout "
          "(US100 2019-01-01..2022-12-23, US500 before 2025-06-01) stays SEALED and was not opened, decoded or hashed.", ""]
     cov = meta["s1_coverage"]
+    if not cov:
+        L += ["> **INTERIM: S1 data is still downloading.** S1 and S2b are PENDING. The S2a, S3 and power numbers are final. "
+              "Re-run `batch1 s1 && batch1 report` once `dl build` has finished.", ""]
     L += ["## Data", "",
           f"- Burned: US100/US500 canonical BID+ASK tape 2025-08-25..2026-09-25 (trading days {meta['burned_trading_days']}), 258 registered trades.",
           "- S1: fresh Dukascopy BID+ASK 1m, UTC days 2023-01-01..2026-09-25:"]
@@ -249,13 +253,20 @@ def write_md(meta, res):
               f"p95 {f(v['s3_null']['B']['p95'])}, ~{v['s3_null']['B']['n_trades_mean']:.0f} trades/rep); max = {v['s3_p_max']:.3f}, Holm = {v['s3_holm']:.3f}.",
               f"- **Holdout power**: era-cost (×1.5) burned mean {f(v['era']['mean'])} (×2.0: {f(v['era2_mean'])}); μ_plan = 0.5 × min({f(v['era']['mean'])}, S1 {f(v['s1_mean_for_plan'])}) = {f(v['mu_plan'])}; "
               f"σ {v['sd_era']:.3f}, deff {v['deff']:.2f}; projected holdout N = {v['n_hold']:.0f} ({', '.join(f'{k} {r:.3f}/day' for k, r in v['rate'].items())}); "
-              f"**power = {v['power']:.3f}** (unshrunk {f(v['power_unshrunk'])}; N for 0.8 at μ_plan: {v['n_for_08_at_mu_plan'] or 'n/a, μ_plan ≤ 0'}).",
+              f"**power = {v['power']:.3f}**; ceiling if S1 ≥ burned (μ_plan = 0.5 × burned era mean) = {v['power_ceiling']:.3f} "
+              f"(unshrunk {v['power_unshrunk']:.3f}; N for 0.8 at μ_plan: {v['n_for_08_at_mu_plan'] or 'n/a, μ_plan ≤ 0'}).",
               f"- **Gate: {'QUALIFIES' if v['QUALIFIES'] else 'does NOT qualify'}**."]
-    L += ["", "## Summary", "", "| candidate | burned N | burned mean R [CI] | S1 N | S1 mean R [CI] | S1 | S2 | S3 | holdout power | qualifies |",
-          "|---|---:|---|---:|---|---|---|---|---:|---|"]
+    L += ["", "## Summary", "", "| candidate | burned N | burned mean R [CI] | S1 N | S1 mean R [CI] | S1 | S2 | S3 | holdout power | power ceiling | qualifies |",
+          "|---|---:|---|---:|---|---|---|---|---:|---:|---|"]
     for cid, v in res.items():
         b, s1 = v["burned"], v["s1"]
         L.append(f"| {cid} {v['name']} | {b['n']} | {f(b['mean'])} [{f(b['lo'])}, {f(b['hi'])}] | {s1['n']} | "
-                 f"{f(s1['mean'])} [{f(s1['lo'])}, {f(s1['hi'])}] | {v['S1']} | {v['S2']} | {v['S3']} | {v['power']:.3f} | {'yes' if v['QUALIFIES'] else 'no'} |")
-    L += ["", "Holm per stage across the 3 candidates of this batch at α_screen = 0.10 (S1 and S3). S2 is rule-based.", ""]
+                 f"{f(s1['mean'])} [{f(s1['lo'])}, {f(s1['hi'])}] | {v['S1']} | {v['S2']} | {v['S3']} | {v['power']:.3f} | {v['power_ceiling']:.3f} | {'yes' if v['QUALIFIES'] else 'no'} |")
+    L += ["", "Holm per stage across the 3 candidates of this batch at α_screen = 0.10 (S1 and S3). S2 is rule-based.",
+          "Power ceiling = the gate power when S1 is at least as good as the burned era-cost mean. This is the most S1 could give; it is a derived bound, not a protocol change.", ""]
     (OUT / "REPORT.md").write_text("\n".join(L) + "\n")
+
+
+if __name__ == "__main__":
+    OUT.mkdir(exist_ok=True)
+    {"s3": run_s3, "s1": run_s1, "report": lambda: write_md(*report())}[sys.argv[1]]()
