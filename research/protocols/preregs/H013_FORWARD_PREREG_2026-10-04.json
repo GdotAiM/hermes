@@ -17,7 +17,12 @@
     "research/model-u-longrun/data/costs.json": "a1df6f5b59122ae91bd9673911dbab1f3560737c14515234b3dd78bddd07062d"
   },
   "invocation": "best_trade(ctx, \"11:00\", False, False, True)",
-  "engine_settings": {"FILL_THRU_ticks": 1, "SLIP_ticks": 3.2, "cost_per_side_pts": 0.8, "tick": 0.25},
+  "engine_settings": {
+    "FILL_THRU_ticks": 1,
+    "SLIP_ticks": 3.2,
+    "cost_per_side_pts": 0.8,
+    "tick": 0.25
+  },
   "decision_series": "US100 only (CAPITALCOM:US100), first trade per day (variant v1); v1_reentry rows never count",
   "disclosure_series": "US500 (CAPITALCOM:US500) logged and reported separately; never pooled, never gating",
   "forward_feed": {
@@ -35,12 +40,35 @@
     "timezone": "all rule times America/New_York wall clock"
   },
   "holidays_excluded": {
-    "full_closures": ["2026-11-26", "2026-12-25", "2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26", "2027-05-31", "2027-06-18", "2027-07-05", "2027-09-06", "2027-11-25", "2027-12-24"],
-    "early_closes": ["2026-11-27", "2026-12-24", "2027-11-26"],
-    "historical_additions": ["2025-12-24"],
+    "full_closures": [
+      "2026-11-26",
+      "2026-12-25",
+      "2027-01-01",
+      "2027-01-18",
+      "2027-02-15",
+      "2027-03-26",
+      "2027-05-31",
+      "2027-06-18",
+      "2027-07-05",
+      "2027-09-06",
+      "2027-11-25",
+      "2027-12-24"
+    ],
+    "early_closes": [
+      "2026-11-27",
+      "2026-12-24",
+      "2027-11-26"
+    ],
+    "historical_additions": [
+      "2025-12-24"
+    ],
     "maintenance": "ORION-compiled from NYSE rules; DATA to verify against the published NYSE calendar and extend for each new year before that year's first session"
   },
-  "binding_N": {"decision": 550, "provisional_read": 250, "no_verdict_language_before": 100},
+  "binding_N": {
+    "decision": 550,
+    "provisional_read": 250,
+    "no_verdict_language_before": 100
+  },
   "binding_pass_at_N_550": [
     "mean R_5050 after costs >= +0.15",
     "one-sided 95% lower bound > 0 (percentile bootstrap, 10,000 resamples, seed 20261004)",
@@ -64,6 +92,22 @@
     "1-pt trade-through on entries and stops; R capped at +5; long/short split",
     "ex-gap-days and ex-holiday results"
   ],
-  "harness_sha256": "PENDING - patched forward harness (FILL_THRU=1, CAPITALCOM only, holiday + min-bar filters, raw-bar persistence, docs corrected) must be hashed and committed here before first_eligible_session",
+  "harness_sha256": {
+    "repo_root": "GdotAiM/hermes",
+    "path": "research/forward",
+    "frozen_copies": "research/forward/H013/frozen (byte-identical to rule_object_sha256; research/forward/PROVENANCE.md)",
+    "files": {
+      "research/forward/common/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "research/forward/common/fwdlib.py": "7669b87d58d88b186c2ef38664b575c25940c3876f772e5db47b878eeb9d7926",
+      "research/forward/common/tv_feed.py": "2773d47246f7f31329ab271c3d740265b990ca2f3cd1cd57b0150f4b4f7c8336",
+      "research/forward/H013/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "research/forward/H013/h013.py": "a6b1bba56972163b52017840797ab1cfe56f69269d4a63e40c8207eea48233f7"
+    },
+    "registration": "the first first-parent commit on origin/main carrying this files manifest; its commit time is the registration time (checked by the harness at run time)",
+    "runtime": "/home/box/hermes-x/forward/.venv (research/forward/requirements.txt)",
+    "data_dir": "$HERMES_FWD_DATA/H013 (default /home/box/hermes-x/forward/H013), outside git",
+    "supersedes_unmerged": "branch forward/h013-h014-scripts commit 32d131d (deployed-root harness in non-git folders; never registered on main)",
+    "replaces": "PENDING - patched forward harness (FILL_THRU=1, CAPITALCOM only, holiday + min-bar filters, raw-bar persistence, docs corrected) must be hashed and committed here before first_eligible_session"
+  },
   "changes_after_registration": "any change to a pinned hash, feed, window, exit or filter voids counting from that point and requires a new ID (H013b)"
 }

@@ -1,0 +1,7 @@
+# Forward harness runtime (H013/H014). Versions = those that reproduced the frozen trades (tests/).
+pandas==3.0.6
+numpy==2.5.3
+pyarrow==25.0.1
+PyYAML==6.0.3
+websocket-client==1.9.2
+pytest==9.1.1
