@@ -1,0 +1,792 @@
+{
+  "US100_base": {
+    "symbol": "US100",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "sessions": 544,
+    "tickets": 185,
+    "risk_blocked": 136,
+    "modules": {
+      "REV": 185
+    },
+    "summary": {
+      "n": 49,
+      "mean_R": 0.15540228499828604,
+      "ci95": [
+        -0.263584029191778,
+        0.5706502441323842
+      ],
+      "win_rate": 0.42857142857142855,
+      "longs": 22,
+      "shorts": 27,
+      "mean_ex_top1pct": 0.11734391117074718,
+      "mean_ex_small_stop": -0.08472352648217253,
+      "exits": {
+        "stop": 27,
+        "target": 20,
+        "time": 2
+      }
+    },
+    "foil_pct": 87.8,
+    "foil_median": -0.09846238693888829,
+    "hypotheses": [
+      {
+        "id": "FTN-H001",
+        "month": "M1",
+        "var": "m1_correct_side_of_eq",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 47,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H002",
+        "month": "M2",
+        "var": "m2_false_breakout",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 20,
+        "n_false": 29,
+        "diff": 0.014975100430856453,
+        "ci95": [
+          -0.8100459452008899,
+          0.866457498456332
+        ],
+        "p_one_sided": 0.49275072492750727,
+        "metric_true": 0.16426509953899698,
+        "metric_false": 0.14928999910814053,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H003",
+        "month": "M3",
+        "var": "m3_iof_aligned",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 26,
+        "n_false": 23,
+        "diff": -0.5006797397138743,
+        "ci95": [
+          -1.3132577209399416,
+          0.3303572497383498
+        ],
+        "p_one_sided": 0.8791120887911209,
+        "metric_true": -0.0796106540510835,
+        "metric_false": 0.4210690856627907,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H004",
+        "month": "M4",
+        "var": "m4_fvg_in_displacement",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 28,
+        "n_false": 21,
+        "diff": -0.03538850010389144,
+        "ci95": [
+          -0.8675196112229928,
+          0.7949510290604784
+        ],
+        "p_one_sided": 0.5261473852614739,
+        "metric_true": 0.14023578495376113,
+        "metric_false": 0.17562428505765257,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H005",
+        "month": "M5",
+        "var": "m5_ipda20_discount",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 37,
+        "n_false": 12,
+        "diff": -0.1825028453670844,
+        "ci95": [
+          -1.1116350242137343,
+          0.7183369101838356
+        ],
+        "p_one_sided": 0.648935106489351,
+        "metric_true": 0.11070771062267352,
+        "metric_false": 0.2932105559897579,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H006",
+        "month": "M6",
+        "var": "m6_with_20d_swing",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 14,
+        "n_false": 35,
+        "diff": 0.050388913284257264,
+        "ci95": [
+          -0.924567147468551,
+          0.9967543884439668
+        ],
+        "p_one_sided": 0.4737526247375263,
+        "metric_true": 0.19139436591561265,
+        "metric_false": 0.1410054526313554,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H007",
+        "month": "M7",
+        "var": "m7_osok_profile",
+        "metric": "win_rate",
+        "direction": "higher_when_true",
+        "n_true": 24,
+        "n_false": 25,
+        "diff": 0.14,
+        "ci95": [
+          -0.14333333333333337,
+          0.39
+        ],
+        "p_one_sided": 0.23627637236276372,
+        "metric_true": 0.5,
+        "metric_false": 0.36,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H008",
+        "month": "M8",
+        "var": "m8_cbdr_tight",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 19,
+        "n_false": 30,
+        "diff": -0.052455321400363034,
+        "ci95": [
+          -0.910842367760376,
+          0.8155417609974436
+        ],
+        "p_one_sided": 0.5503449655034497,
+        "metric_true": 0.12328678210010459,
+        "metric_false": 0.17574210350046762,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H009",
+        "month": "M8",
+        "var": "m8_ny_continues_london",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 10,
+        "n_false": 26,
+        "diff": -0.3493180330064758,
+        "ci95": [
+          -1.3128021738823976,
+          0.6779669161331929
+        ],
+        "p_one_sided": 0.7653234676532347,
+        "metric_true": -0.16588343361021096,
+        "metric_false": 0.1834345993962648,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H010",
+        "month": "M10",
+        "var": "m10_us500_confirms",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 43,
+        "n_false": 6,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H011",
+        "month": "M11",
+        "var": "m11_smt_divergence",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 17,
+        "n_false": 32,
+        "diff": -0.7347799679264492,
+        "ci95": [
+          -1.5541446576837652,
+          0.13096167485464288
+        ],
+        "p_one_sided": 0.952004799520048,
+        "metric_true": -0.3244540205863338,
+        "metric_false": 0.41032594734011535,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H012",
+        "month": "M12",
+        "var": "m12_topdown_agree",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 7,
+        "n_false": 42,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H013",
+        "month": "M13",
+        "var": "m13_bridge_window_fvg",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 8,
+        "n_false": 41,
+        "status": "not_evaluable_n<10"
+      }
+    ],
+    "side_conflicts": 0,
+    "rev_direction_undetermined_sessions": 1
+  },
+  "US500_base": {
+    "symbol": "US500",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "sessions": 544,
+    "tickets": 167,
+    "risk_blocked": 121,
+    "modules": {
+      "REV": 167
+    },
+    "summary": {
+      "n": 46,
+      "mean_R": -0.06786504535974923,
+      "ci95": [
+        -0.5215491955263163,
+        0.37754249627460085
+      ],
+      "win_rate": 0.45652173913043476,
+      "longs": 19,
+      "shorts": 27,
+      "mean_ex_top1pct": -0.11315622626192355,
+      "mean_ex_small_stop": 0.22324100555866097,
+      "exits": {
+        "stop": 23,
+        "target": 17,
+        "time": 6
+      }
+    },
+    "foil_pct": 88.15,
+    "foil_median": -0.3191242797252211,
+    "hypotheses": [
+      {
+        "id": "FTN-H001",
+        "month": "M1",
+        "var": "m1_correct_side_of_eq",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 44,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H002",
+        "month": "M2",
+        "var": "m2_false_breakout",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 25,
+        "n_false": 21,
+        "diff": -0.5438480770113552,
+        "ci95": [
+          -1.4516626998141082,
+          0.38141976647523873
+        ],
+        "p_one_sided": 0.8772122787721228,
+        "metric_true": -0.3161435152997157,
+        "metric_false": 0.22770456171163944,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H003",
+        "month": "M3",
+        "var": "m3_iof_aligned",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 22,
+        "n_false": 24,
+        "diff": -0.11697768840390567,
+        "ci95": [
+          -1.0457885802389884,
+          0.7806123019971554
+        ],
+        "p_one_sided": 0.5952404759524048,
+        "metric_true": -0.12889688278787392,
+        "metric_false": -0.01191919438396826,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H004",
+        "month": "M4",
+        "var": "m4_fvg_in_displacement",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 28,
+        "n_false": 18,
+        "diff": 0.790955581403641,
+        "ci95": [
+          -0.15039535045004238,
+          1.749269738602751
+        ],
+        "p_one_sided": 0.048995100489951,
+        "metric_true": 0.24163931258080595,
+        "metric_false": -0.549316268822835,
+        "status": "evaluated",
+        "p_holm": 0.34296570342965704
+      },
+      {
+        "id": "FTN-H005",
+        "month": "M5",
+        "var": "m5_ipda20_discount",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 33,
+        "n_false": 13,
+        "diff": -0.9815466098734549,
+        "ci95": [
+          -1.8742762177117243,
+          -0.08475820447967555
+        ],
+        "p_one_sided": 0.9745025497450255,
+        "metric_true": -0.3452586524978995,
+        "metric_false": 0.6362879573755553,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H006",
+        "month": "M6",
+        "var": "m6_with_20d_swing",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 16,
+        "n_false": 30,
+        "diff": 0.34936833568212755,
+        "ci95": [
+          -0.6077705154063016,
+          1.2755376959777116
+        ],
+        "p_one_sided": 0.23927607239276072,
+        "metric_true": 0.15998386921555136,
+        "metric_false": -0.1893844664665762,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H007",
+        "month": "M7",
+        "var": "m7_osok_profile",
+        "metric": "win_rate",
+        "direction": "higher_when_true",
+        "n_true": 24,
+        "n_false": 22,
+        "diff": 0.17803030303030298,
+        "ci95": [
+          -0.0984848484848484,
+          0.4507575757575757
+        ],
+        "p_one_sided": 0.1820817918208179,
+        "metric_true": 0.5416666666666666,
+        "metric_false": 0.36363636363636365,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H008",
+        "month": "M8",
+        "var": "m8_cbdr_tight",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 26,
+        "n_false": 20,
+        "diff": -0.1353089244867453,
+        "ci95": [
+          -1.053283218019841,
+          0.7836891213151543
+        ],
+        "p_one_sided": 0.6017398260173983,
+        "metric_true": -0.12669501252789936,
+        "metric_false": 0.00861391195884596,
+        "status": "evaluated",
+        "p_holm": 1.0
+      },
+      {
+        "id": "FTN-H009",
+        "month": "M8",
+        "var": "m8_ny_continues_london",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 7,
+        "n_false": 26,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H010",
+        "month": "M10",
+        "var": "m10_us500_confirms",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 0,
+        "n_false": 0,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H011",
+        "month": "M11",
+        "var": "m11_smt_divergence",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 0,
+        "n_false": 0,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H012",
+        "month": "M12",
+        "var": "m12_topdown_agree",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 9,
+        "n_false": 37,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H013",
+        "month": "M13",
+        "var": "m13_bridge_window_fvg",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 8,
+        "n_false": 38,
+        "status": "not_evaluable_n<10"
+      }
+    ],
+    "side_conflicts": 0,
+    "rev_direction_undetermined_sessions": 1
+  },
+  "US100_interp": {
+    "symbol": "US100",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "sessions": 544,
+    "tickets": 188,
+    "risk_blocked": 136,
+    "modules": {
+      "REV": 185,
+      "PIP20": 3
+    },
+    "summary": {
+      "n": 52,
+      "mean_R": 0.19951369163300028,
+      "ci95": [
+        -0.2023389514503266,
+        0.6179960280516866
+      ],
+      "win_rate": 0.4423076923076923,
+      "longs": 23,
+      "shorts": 29,
+      "mean_ex_top1pct": 0.16455897521952675,
+      "mean_ex_small_stop": 0.018371302650789435,
+      "exits": {
+        "stop": 28,
+        "target": 22,
+        "time": 2
+      }
+    },
+    "foil_pct": 93.85,
+    "foil_median": -0.09304269318809749,
+    "hypotheses": [],
+    "side_conflicts": 0,
+    "rev_direction_undetermined_sessions": 1
+  },
+  "_before": {
+    "source": "research/evidence/quant/FTN_M9_SCORE_2026-10-04_before_rebased.json",
+    "US100_base": {
+      "tickets": 186,
+      "tradeable_n": 9,
+      "mean_R": -0.1209900677044497,
+      "ci95": [
+        -0.8393113556889806,
+        0.6994329958150999
+      ],
+      "foil_pct": 40.15,
+      "side_conflicts": 170,
+      "hypotheses": {
+        "FTN-H001": {
+          "status": "not_evaluable_n<10",
+          "n_true": 7,
+          "n_false": 2,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H002": {
+          "status": "not_evaluable_n<10",
+          "n_true": 2,
+          "n_false": 7,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H003": {
+          "status": "not_evaluable_n<10",
+          "n_true": 6,
+          "n_false": 3,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H004": {
+          "status": "not_evaluable_n<10",
+          "n_true": 7,
+          "n_false": 2,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H005": {
+          "status": "not_evaluable_n<10",
+          "n_true": 2,
+          "n_false": 7,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H006": {
+          "status": "not_evaluable_n<10",
+          "n_true": 7,
+          "n_false": 2,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H007": {
+          "status": "not_evaluable_n<10",
+          "n_true": 7,
+          "n_false": 2,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H008": {
+          "status": "not_evaluable_n<10",
+          "n_true": 2,
+          "n_false": 7,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H009": {
+          "status": "not_evaluable_n<10",
+          "n_true": 2,
+          "n_false": 6,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H010": {
+          "status": "not_evaluable_n<10",
+          "n_true": 9,
+          "n_false": 0,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H011": {
+          "status": "not_evaluable_n<10",
+          "n_true": 3,
+          "n_false": 6,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H012": {
+          "status": "not_evaluable_n<10",
+          "n_true": 7,
+          "n_false": 2,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H013": {
+          "status": "not_evaluable_n<10",
+          "n_true": 5,
+          "n_false": 4,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        }
+      }
+    },
+    "US500_base": {
+      "tickets": 168,
+      "tradeable_n": 13,
+      "mean_R": 0.39389950625870485,
+      "ci95": [
+        -0.34183265195772494,
+        1.1024071336660144
+      ],
+      "foil_pct": 78.8,
+      "side_conflicts": 151,
+      "hypotheses": {
+        "FTN-H001": {
+          "status": "not_evaluable_n<10",
+          "n_true": 11,
+          "n_false": 2,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H002": {
+          "status": "not_evaluable_n<10",
+          "n_true": 4,
+          "n_false": 9,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H003": {
+          "status": "not_evaluable_n<10",
+          "n_true": 8,
+          "n_false": 5,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H004": {
+          "status": "not_evaluable_n<10",
+          "n_true": 11,
+          "n_false": 2,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H005": {
+          "status": "not_evaluable_n<10",
+          "n_true": 2,
+          "n_false": 11,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H006": {
+          "status": "not_evaluable_n<10",
+          "n_true": 10,
+          "n_false": 3,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H007": {
+          "status": "not_evaluable_n<10",
+          "n_true": 11,
+          "n_false": 2,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H008": {
+          "status": "not_evaluable_n<10",
+          "n_true": 6,
+          "n_false": 7,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H009": {
+          "status": "not_evaluable_n<10",
+          "n_true": 3,
+          "n_false": 8,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H010": {
+          "status": "not_evaluable_n<10",
+          "n_true": 0,
+          "n_false": 0,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H011": {
+          "status": "not_evaluable_n<10",
+          "n_true": 0,
+          "n_false": 0,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H012": {
+          "status": "not_evaluable_n<10",
+          "n_true": 10,
+          "n_false": 3,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        },
+        "FTN-H013": {
+          "status": "not_evaluable_n<10",
+          "n_true": 6,
+          "n_false": 7,
+          "diff": null,
+          "ci95": null,
+          "p_one_sided": null,
+          "p_holm": null
+        }
+      }
+    },
+    "US100_interp": {
+      "tickets": 189,
+      "tradeable_n": 12,
+      "mean_R": 0.13925744922166272,
+      "ci95": [
+        -0.5546843879244,
+        0.9156619203513067
+      ],
+      "foil_pct": 65.45,
+      "side_conflicts": 170,
+      "hypotheses": {}
+    }
+  }
+}

@@ -1,0 +1,373 @@
+{
+  "US100_base": {
+    "symbol": "US100",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "sessions": 544,
+    "tickets": 186,
+    "risk_blocked": 7,
+    "modules": {
+      "REV": 186
+    },
+    "summary": {
+      "n": 9,
+      "mean_R": -0.1209900677044497,
+      "ci95": [
+        -0.8393113556889806,
+        0.6994329958150999
+      ],
+      "win_rate": 0.3333333333333333,
+      "longs": 3,
+      "shorts": 6,
+      "mean_ex_top1pct": -0.3824123844559592,
+      "mean_ex_small_stop": -0.26926120768088974,
+      "exits": {
+        "stop": 5,
+        "target": 2,
+        "time": 2
+      }
+    },
+    "foil_pct": 40.15,
+    "foil_median": 0.014037259334915076,
+    "hypotheses": [
+      {
+        "id": "FTN-H001",
+        "month": "M1",
+        "var": "m1_correct_side_of_eq",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 7,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H002",
+        "month": "M2",
+        "var": "m2_false_breakout",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 2,
+        "n_false": 7,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H003",
+        "month": "M3",
+        "var": "m3_iof_aligned",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 6,
+        "n_false": 3,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H004",
+        "month": "M4",
+        "var": "m4_fvg_in_displacement",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 7,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H005",
+        "month": "M5",
+        "var": "m5_ipda20_discount",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 2,
+        "n_false": 7,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H006",
+        "month": "M6",
+        "var": "m6_with_20d_swing",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 7,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H007",
+        "month": "M7",
+        "var": "m7_osok_profile",
+        "metric": "win_rate",
+        "direction": "higher_when_true",
+        "n_true": 7,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H008",
+        "month": "M8",
+        "var": "m8_cbdr_tight",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 2,
+        "n_false": 7,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H009",
+        "month": "M8",
+        "var": "m8_ny_continues_london",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 2,
+        "n_false": 6,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H010",
+        "month": "M10",
+        "var": "m10_us500_confirms",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 9,
+        "n_false": 0,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H011",
+        "month": "M11",
+        "var": "m11_smt_divergence",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 3,
+        "n_false": 6,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H012",
+        "month": "M12",
+        "var": "m12_topdown_agree",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 7,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H013",
+        "month": "M13",
+        "var": "m13_bridge_window_fvg",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 5,
+        "n_false": 4,
+        "status": "not_evaluable_n<10"
+      }
+    ],
+    "side_conflicts": 170,
+    "rev_direction_undetermined_sessions": 0
+  },
+  "US500_base": {
+    "symbol": "US500",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "sessions": 544,
+    "tickets": 168,
+    "risk_blocked": 4,
+    "modules": {
+      "REV": 168
+    },
+    "summary": {
+      "n": 13,
+      "mean_R": 0.39389950625870485,
+      "ci95": [
+        -0.34183265195772494,
+        1.1024071336660144
+      ],
+      "win_rate": 0.5384615384615384,
+      "longs": 7,
+      "shorts": 6,
+      "mean_ex_top1pct": 0.26253795717708894,
+      "mean_ex_small_stop": 0.5700157248740724,
+      "exits": {
+        "stop": 5,
+        "target": 5,
+        "time": 3
+      }
+    },
+    "foil_pct": 78.8,
+    "foil_median": 0.06412748665283773,
+    "hypotheses": [
+      {
+        "id": "FTN-H001",
+        "month": "M1",
+        "var": "m1_correct_side_of_eq",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 11,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H002",
+        "month": "M2",
+        "var": "m2_false_breakout",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 4,
+        "n_false": 9,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H003",
+        "month": "M3",
+        "var": "m3_iof_aligned",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 8,
+        "n_false": 5,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H004",
+        "month": "M4",
+        "var": "m4_fvg_in_displacement",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 11,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H005",
+        "month": "M5",
+        "var": "m5_ipda20_discount",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 2,
+        "n_false": 11,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H006",
+        "month": "M6",
+        "var": "m6_with_20d_swing",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 10,
+        "n_false": 3,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H007",
+        "month": "M7",
+        "var": "m7_osok_profile",
+        "metric": "win_rate",
+        "direction": "higher_when_true",
+        "n_true": 11,
+        "n_false": 2,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H008",
+        "month": "M8",
+        "var": "m8_cbdr_tight",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 6,
+        "n_false": 7,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H009",
+        "month": "M8",
+        "var": "m8_ny_continues_london",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 3,
+        "n_false": 8,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H010",
+        "month": "M10",
+        "var": "m10_us500_confirms",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 0,
+        "n_false": 0,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H011",
+        "month": "M11",
+        "var": "m11_smt_divergence",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 0,
+        "n_false": 0,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H012",
+        "month": "M12",
+        "var": "m12_topdown_agree",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 10,
+        "n_false": 3,
+        "status": "not_evaluable_n<10"
+      },
+      {
+        "id": "FTN-H013",
+        "month": "M13",
+        "var": "m13_bridge_window_fvg",
+        "metric": "mean_R",
+        "direction": "higher_when_true",
+        "n_true": 6,
+        "n_false": 7,
+        "status": "not_evaluable_n<10"
+      }
+    ],
+    "side_conflicts": 151,
+    "rev_direction_undetermined_sessions": 0
+  },
+  "US100_interp": {
+    "symbol": "US100",
+    "days": [
+      "2025-08-25",
+      "2026-09-25"
+    ],
+    "sessions": 544,
+    "tickets": 189,
+    "risk_blocked": 7,
+    "modules": {
+      "REV": 186,
+      "PIP20": 3
+    },
+    "summary": {
+      "n": 12,
+      "mean_R": 0.13925744922166272,
+      "ci95": [
+        -0.5546843879244,
+        0.9156619203513067
+      ],
+      "win_rate": 0.4166666666666667,
+      "longs": 4,
+      "shorts": 8,
+      "mean_ex_top1pct": -0.02720900687706128,
+      "mean_ex_small_stop": -0.01567279805147941,
+      "exits": {
+        "stop": 6,
+        "target": 4,
+        "time": 2
+      }
+    },
+    "foil_pct": 65.45,
+    "foil_median": -0.016171263238078243,
+    "hypotheses": [],
+    "side_conflicts": 170,
+    "rev_direction_undetermined_sessions": 0
+  }
+}
