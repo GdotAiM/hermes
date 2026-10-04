@@ -62,6 +62,18 @@ def build_context(path: str | Path):
         ev["mss"] = bool(ms.get("mss") or ms.get("displacement"))
         ev["displacement"] = ms.get("displacement")
         ev["mss_meta"] = {k: ms[k] for k in ("source", "raid_bar_index", "swing") if k in ms}
+        if ms.get("raid_bar_index") is not None:
+            # FTN-D22: the raid's own extreme, raid bar → entry bar inclusive (causal)
+            seg = bars[int(ms["raid_bar_index"]):]
+            lvl = (ev.get("raid") or {}).get("level")
+            if lvl in {"pdh", "week_so_far_high", "ith"}:
+                ev["raid_extreme"] = {"side": "high", "price": max(float(b["h"]) for b in seg),
+                                      "from_bar": int(ms["raid_bar_index"]), "to_bar": len(bars) - 1}
+            elif lvl in {"pdl", "week_so_far_low", "itl"}:
+                ev["raid_extreme"] = {"side": "low", "price": min(float(b["l"]) for b in seg),
+                                      "from_bar": int(ms["raid_bar_index"]), "to_bar": len(bars) - 1}
+            # closes after the raid bar (used only by the CONSO interpretation trigger)
+            ev["post_raid_closes"] = [float(b["c"]) for b in bars[int(ms["raid_bar_index"]) + 1:]]
     wr_raw = dict(raw)
     # sentiment WR uses tape into the raid, not the displacement after
     idx = (ev.get("mss_meta") or {}).get("raid_bar_index")

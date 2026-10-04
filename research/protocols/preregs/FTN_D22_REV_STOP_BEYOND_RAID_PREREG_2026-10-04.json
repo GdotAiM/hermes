@@ -1,0 +1,66 @@
+{
+  "id": "FTN-D22",
+  "title": "FTN Month 9 REV: stop beyond the raid's own extreme (replaces stop at the raided level), US100 + US500 CFD, exploratory re-score",
+  "status_at_registration": "EXPLORATORY — NOT A CONFIRMATORY TEST. Registered before any code change or scoring of this rule; the tape is burned",
+  "registered_by": "FTN research bridge (agent-generated, on the user's D22 decision); not ORION",
+  "registered_at": "2026-10-04 (SAST); this file's git commit on branch feat/ftn-research-bridge is the registration timestamp, and it precedes the commit that implements the rule",
+  "decision_ref": "ftn/docs/review/REPORT.md D22 (user decision 2026-10-04: put REV's stop beyond the raid instead of at the raided level)",
+  "parent_rules": "REV direction from the raid (REPORT F24 / D18 fix, commit a795a57): high raided -> bearish, low raided -> bullish, both/neither -> no ticket",
+  "rule": {
+    "bearish_rev_high_raided": "stop = raid_extreme_high + buffer",
+    "bullish_rev_low_raided": "stop = raid_extreme_low - buffer",
+    "raid_extreme": "the most extreme price printed by the raid leg: max(high) (bearish) or min(low) (bullish) over the 15m kernel bars from the raid bar (the first 15m bar that traded through the raided level, mss_meta.raid_bar_index from ftn.os.mss.detect_mss) through the entry bar (the 15m bar whose close is the kernel ticket / entry), inclusive. Causal: only bars available at the entry close are used",
+    "buffer": "1 pip in the kernel's own per-instrument unit (evidence.pip): 1.0 index point for US100 and US500 (ftn.research.daycontext sets pip = 1.0), 0.0001 for EURUSD fixtures",
+    "buffer_justification": "one simple rule fixed in advance: the unit already defined per instrument inside the kernel (also used by PIP20), so no new parameter and no ATR window/multiple to choose; it only has to put the stop strictly beyond the printed extreme, and 1 point is the same order as the frozen round-trip costs (US100 1.6 / US500 1.0 pt). No other buffer values will be run or reported",
+    "fallback_without_bars": "if no raid bar index is available (hand-labelled fixtures without bars_m15), the raided level price is the only known extreme: stop = level + buffer (bearish) / level - buffer (bullish), stop_source 'beyond_raided_level_no_bars'",
+    "scope": "REV only. CONSO, BB and PIP20 stops are unchanged",
+    "safety_nets_kept": [
+      "direction gate D18 coherence (rev_direction_conflicts_with_raid, rev_raid_both_sides)",
+      "risk gate stop side check (stop_not_protective)"
+    ]
+  },
+  "unchanged": {
+    "targets": "fixed 2R from entry using the new stop distance; stop / 2R / 16:00 NY time exit; stop-first on ambiguous 1m bars (ftn/src/ftn/research/outcomes.py)",
+    "costs_pts_per_side": {
+      "US100": 0.8,
+      "US500": 0.5
+    },
+    "entry": "close of the 15m kernel ticket bar; one ticket per session (London 02:00-05:00, NY AM 07:00-10:00 NY)",
+    "tradeable": "every research-draft gate passes except the empty allowlist and the I0 contract gate",
+    "statistics": "percentile bootstrap 10,000 resamples seed 20261004; one-sided permutation p; Holm across the evaluated FTN-H001..H013 family per instrument; min group n 10; random-entry foil 2,000 replicates (same day + killzone, random minute, random side, same risk_pts/target/costs/exit)",
+    "hypothesis_family": "research/protocols/preregs/FTN_HYPOTHESES_EXPLORATORY_2026-10-04.json (no new hypotheses)"
+  },
+  "series": {
+    "US100": "DUKASCOPY-CFD-USATECHIDXUSD-BID1M (decision)",
+    "US500": "DUKASCOPY-CFD-USA500IDXUSD-BID1M (reported separately, never pooled)",
+    "window": "2025-08-25 -> 2026-09-25 (same files as the two prior FTN scores)"
+  },
+  "readouts": "three-column comparison per instrument: before the raid fix / after the raid fix / after stop-beyond-raid: kernel tickets, tradeable N, mean R after costs with 95% CI, foil percentile, blocked counts by reason, Holm table",
+  "no_claim_rule": "no SURVIVES or edge language; any row that looks interesting needs a new ID and a fresh prereg on untouched data",
+  "tape_status": "BURNED. The same Dukascopy tape and calendar were used for H013/H014 and for the two prior FTN scores (2026-10-04 first score and the REV raid-side re-score). Results on it are EXPLORATORY only",
+  "confirmation_requires": [
+    "forward sessions after 2026-09-25 that no FTN score has touched",
+    "the /workspace/marketdata Dukascopy pull, once DATA certifies it and only for sessions not in the burned window"
+  ],
+  "rule_object_root": "ftn/ (GdotAiM/hermes, branch feat/ftn-research-bridge)",
+  "scoring_harness_sha256_pinned_unchanged": {
+    "ftn/src/ftn/research/outcomes.py": "791d1de3158267fec04e217e0f5f6af0a6ff8358297165178bb6158d689b3885",
+    "ftn/src/ftn/research/stats.py": "0e24d29f7956019f6ec310587e4a0811d1af353fa6ff4e7e1b5edd219724fb75",
+    "ftn/src/ftn/research/score.py": "b719c71ed8d348c006e6ffd2f22d690c7a5bdbf29d4a381a60b0c584a2393025",
+    "ftn/src/ftn/research/features.py": "c66ebd602b0f3b0a36a452b25a9bfcee2501fbec0fff42b13a03fc7ce669551d",
+    "ftn/src/ftn/research/hypotheses.py": "0dd653da4a0148dade96dfc09b0d590693433d179c4d6f3ac8d4087b7904a17c",
+    "ftn/src/ftn/research/daycontext.py": "1475b0886aabb0b8e7d0722cb98022abfcf2b6cbb566723276363361b046bb1d",
+    "ftn/src/ftn/research/kernel_log.py": "d414890f67567fa6168be92a8d4d9f3a7a41caa96a74973da23a4bba3d0917cc",
+    "ftn/src/ftn/research/bars.py": "4e442714579edec8c7e2c3d8afb3b3eabf2facd2c24c8fcba973d53ee2a11266"
+  },
+  "prior_results_sha256": {
+    "research/evidence/quant/FTN_M9_SCORE_2026-10-04_before_rebased.json": "9a28b1a3e84c37abdd3ea683cb8ca264cf1609366eb3fc919c37015a06520402",
+    "research/evidence/quant/FTN_M9_SCORE_2026-10-04_rev_raid_side.json": "905ec66dc73a31b46f406a7428be1ad9b29becdc3de41f766c1ba1374b56bf0f"
+  },
+  "implementation_files_expected_to_change": [
+    "ftn/src/ftn/os/dtr.py (raid extreme in evidence)",
+    "ftn/src/ftn/os/mint_draft.py (REV stop)",
+    "tests"
+  ],
+  "changes_after_registration": "any change to the buffer, the extreme window, costs, exit or statistics voids this registration and requires a new ID (FTN-D22b)"
+}

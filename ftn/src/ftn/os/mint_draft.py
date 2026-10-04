@@ -39,6 +39,7 @@ from ftn.paths import draft_dir
 DRAFT_KIND = "ftn_research_draft"
 GATES = ("kernel_ticket", "direction", "risk", "allowlist", "mode", "contract")
 ENTRY_MODULES = {"REV", "CONSO", "BB", "PIP20"}
+REV_STOP_BUFFER_PIPS = 1  # FTN-D22: fixed in the prereg; no other values are run
 PIP20_STOP_PIPS = 20  # docs/MONTH9_BLUEPRINT.md §6 "PIP20: +20 objective, 20-pip stop"
 _LABEL = {"buy": "bullish", "sell": "bearish"}
 
@@ -56,10 +57,11 @@ def execution_context(state) -> dict:
     sym = c.symbol or ""
     return {
         "last": c.last,
-        "raid": {k: (ev.get("raid") or {}).get(k) for k in ("level", "price", "taken")},
+        "raid": {k: (ev.get("raid") or {}).get(k) for k in ("level", "price", "taken", "also")},
         "box": {k: (ev.get("box") or {}).get(k) for k in ("high", "low")} if ev.get("box") else None,
         "conso_raided_edge": raided_edge(ev.get("box"), ev.get("raid")),
         "stop_reference": ev.get("stop_reference"),
+        "raid_extreme": ev.get("raid_extreme"),
         "pip": float(ev.get("pip") or (0.01 if "JPY" in sym else 0.1 if "XAU" in sym else 0.0001)),
     }
 
@@ -82,10 +84,20 @@ def _side(module: str, handoff: dict) -> tuple[str | None, str]:
         edge = (handoff.get("execution_context") or {}).get("conso_raided_edge")
         side = {"low": "buy", "high": "sell"}.get(edge or "")
         return side, f"conso_raided_edge={edge}"
-    if module in {"REV", "BB", "PIP20"}:
+    if module == "REV":
+        # REV direction comes from the raid, not the IOF (REPORT D18 fix)
+        from ftn.models.rev import rev_direction
+        raid = (handoff.get("execution_context") or {}).get("raid") or {}
+        d = rev_direction(raid)
+        return {"bullish": "buy", "bearish": "sell"}.get(d or ""), f"raid={raid.get('level')}"
+    if module in {"BB", "PIP20"}:
         side = "buy" if iof == "bullish" else "sell" if iof == "bearish" else None
         return side, f"daytrade_iof={iof}"
     return None, "not_an_entry_model"
+
+
+LOW_RAIDS = {"pdl", "week_so_far_low", "itl"}
+HIGH_RAIDS = {"pdh", "week_so_far_high", "ith"}
 
 
 def _stop(module: str, side: str | None, handoff: dict) -> tuple[float | None, str]:
@@ -103,7 +115,18 @@ def _stop(module: str, side: str | None, handoff: dict) -> tuple[float | None, s
         if edge in ("low", "high") and box.get(edge) is not None:
             return float(box[edge]), f"raided_box_{edge}"
         return None, "no_raided_box_edge"
-    if module in {"REV", "BB"} and raid.get("taken") and raid.get("price") is not None:
+    if module == "REV" and side and raid.get("taken") and raid.get("price") is not None:
+        # FTN-D22 (prereg research/protocols/preregs/FTN_D22_REV_STOP_BEYOND_RAID_PREREG_2026-10-04.json):
+        # stop beyond the raid's own extreme by a 1-pip buffer; the raided level only without bars
+        buf = REV_STOP_BUFFER_PIPS * float(ctx.get("pip") or 0.0001)
+        ext = ctx.get("raid_extreme") or {}
+        want = "low" if side == "buy" else "high"
+        if ext.get("price") is not None and ext.get("side") == want:
+            px, src = float(ext["price"]), "beyond_raid_extreme"
+        else:
+            px, src = float(raid["price"]), "beyond_raided_level_no_bars"
+        return (px - buf if side == "buy" else px + buf), f"{src}_{raid.get('level')}"
+    if module == "BB" and raid.get("taken") and raid.get("price") is not None:
         return float(raid["price"]), f"raided_{raid.get('level')}"
     return None, "no_stop_reference"
 
@@ -185,8 +208,28 @@ def mode_gate(cfg: dict) -> dict:
 
 
 def direction_gate(module: str, orient: str | None, basis: str, handoff: dict) -> dict:
+    """Direction must be determined AND, for REV, oppose the raided extreme (REPORT D18).
+
+    REV is "Trading Market Reversals": a sell-side (low) raid reverses up (bullish) and a
+    buy-side (high) raid reverses down (bearish). ``detect_mss`` already looks for the MSS
+    in that reversal direction, so a direction that agrees with the raid is incoherent.
+    """
     if orient is None:
         return _gate("direction", False, "undetermined", basis=basis)
+    if module == "REV":
+        raid = (handoff.get("execution_context") or {}).get("raid") or {}
+        level = raid.get("level")
+        also = set(raid.get("also") or [])
+        if (level in LOW_RAIDS and also & HIGH_RAIDS) or (level in HIGH_RAIDS and also & LOW_RAIDS):
+            return _gate("direction", False, "rev_raid_both_sides", basis=basis,
+                         direction_proposed=_LABEL[orient])
+        want = "buy" if level in LOW_RAIDS else "sell" if level in HIGH_RAIDS else None
+        if want is None:
+            return _gate("direction", False, "rev_raid_level_unknown", basis=basis,
+                         direction_proposed=_LABEL[orient])
+        if want != orient:
+            return _gate("direction", False, "rev_direction_conflicts_with_raid", basis=basis,
+                         direction_proposed=_LABEL[orient], raid_level=level, reversal_direction=_LABEL[want])
     return _gate("direction", True, "determined", basis=basis)
 
 
@@ -222,6 +265,12 @@ def draft_from_handoff(handoff: dict, cfg: dict | None = None, book: dict | None
     risk = gates[2]
     ms = handoff.get("market_state") or {}
     iof = (ms.get("institutional") or {}).get("state") or "unclear"
+    has_ctx = "execution_context" in handoff
+    if module in ENTRY_MODULES and has_ctx:
+        hyp, src = _LABEL.get(orient or "", "unclear"), basis.split("=")[0]
+    else:
+        # plain handoff.v1 (no gate evidence): main's I0 meaning — the IOF label, context only
+        hyp, src = iof, "iof_label_only_no_execution_context"
     return {
         "kind": DRAFT_KIND,
         "mode": "paper",
@@ -236,7 +285,8 @@ def draft_from_handoff(handoff: dict, cfg: dict | None = None, book: dict | None
         "symbol": handoff.get("symbol"),
         "date": handoff.get("date"),
         "session": handoff.get("session"),
-        "direction_hypothesis": _LABEL.get(orient or "", "unclear") if module in ENTRY_MODULES else iof,
+        "direction_hypothesis": hyp,
+        "direction_source": src,
         "iof_state": iof,
         "module": module,
         "entry_reference": risk.get("entry_reference"),

@@ -58,6 +58,16 @@ confluence:
 # explicit model13_bridge label when a fixture provides one.
 model13_bridge_enabled: false
 
+# Interpretation entry triggers for CONSO / BB / PIP20 (REPORT D15). The Month 9 docs give
+# eligibility for these models but NO sourced execution trigger (only REV's LTF MSS exists,
+# itself hermes_interpretation). With a flag on, the arbiter may SELECT that model when its
+# labelled hermes_interpretation trigger fires (REV still preempts). OFF by default; turning
+# one on is a research decision, not a trading one — the MINT allowlist still gates drafts.
+interpretation_triggers:
+  conso: false   # fade_edge + a later 15m close back inside the box
+  bb: false      # engine=offset + LTF MSS after the raid
+  pip20: false   # eligible + displacement after the raid
+
 # MINT allowlist for M9 entry models (mirrors HERMES trading/ALLOWLIST.md).
 # Gate 4 of the FTN research-draft chain. Passing it is necessary but NOT sufficient:
 # gate 6 (contract, HERMES_INTEGRATION_I0) keeps actionable_for_mint false regardless.
