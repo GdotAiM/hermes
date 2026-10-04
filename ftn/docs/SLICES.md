@@ -274,8 +274,10 @@ Writes `docs/X_WHY_REV.md`. X may file a claim; it must not mutate DayContext.
 
 ## Slice I — MINT paper draft
 
-`src/ftn/os/mint_draft.py` → `dispatch/out/mint_draft_latest.json`
-`actionable_for_mint: false`. Requires RISK + allowlist + human ack. No broker.
+`src/ftn/os/mint_draft.py` → `dispatch/drafts/ftn_draft_latest.json` (opt-in: `FTN_WRITE_MINT_DRAFT=1`)
+`actionable_for_mint: false`. Requires board SURVIVES + allowlist + RISK + human ack. No broker.
+Superseded by HERMES_INTEGRATION_I0: not a contract (MINT rejects it), no buy/sell
+`side` — only `direction_hypothesis` (IOF label). Never written to `dispatch/out/`.
 
 
 ## Slice J — live DATA adapters (opt-in)

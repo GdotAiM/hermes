@@ -56,15 +56,38 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(payload, indent=2))
         return 0
     if args.command == "brief":
-        state, cands, md, ftn = brief_from_fixture(args.fixture)
-        out = args.out or Path("dispatch/journal") / f"{state.context.date}_{state.context.symbol}_BRIEFING.md"
+        from ftn.os.contracts import FixtureError
+        try:
+            state, cands, md, ftn = brief_from_fixture(args.fixture)
+        except FixtureError as exc:
+            print(f"ftn brief: {exc}", file=sys.stderr)
+            return 2
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"ftn brief: cannot read {args.fixture}: {exc}", file=sys.stderr)
+            return 2
+        from ftn.paths import journal_dir
+        out = args.out or journal_dir() / f"{state.context.date}_{state.context.symbol}_BRIEFING.md"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(md)
         print(md)
         print(f"\n# wrote {out}", file=sys.stderr)
         return 0
     stage = "all" if args.command == "run" else "prep"
-    result = run_workflow(
+    from ftn.workflow.orchestrator import RunFixtureError
+    try:
+        result = _run(args, stage)
+    except RunFixtureError as exc:
+        print(f"ftn {args.command}: {exc}", file=sys.stderr)
+        return 2
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"ftn {args.command}: cannot read {args.fixture}: {exc}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, indent=2, default=str))
+    return 0 if result.get("ok") else 1
+
+
+def _run(args: argparse.Namespace, stage: str) -> dict:
+    return run_workflow(
         symbol=args.symbol,
         fixture=args.fixture,
         bias=args.bias,
@@ -72,8 +95,6 @@ def main(argv: list[str] | None = None) -> int:
         stage=stage,
         out_dir=args.out,
     )
-    print(json.dumps(result, indent=2, default=str))
-    return 0 if result.get("ok") else 1
 
 
 if __name__ == "__main__":

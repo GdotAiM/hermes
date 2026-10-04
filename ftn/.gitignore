@@ -13,3 +13,4 @@ build/
 dispatch/out/*.md
 dispatch/out/*.log
 dispatch/journal/
+dispatch/drafts/

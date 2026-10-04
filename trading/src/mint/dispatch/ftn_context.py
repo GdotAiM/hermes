@@ -113,7 +113,7 @@ def load_handoff(path: Path) -> dict:
     if h.get("schemaVersion") != "1":
         errs.append("schemaVersion must be '1'")
     if h.get("kind") != "day_context_handoff":
-        errs.append("kind must be 'day_context_handoff' (mint_draft_* files are not the contract)")
+        errs.append("kind must be 'day_context_handoff' (FTN mint_draft_* / ftn_draft_* research drafts are not the contract)")
     if h.get("mode") != "paper":
         errs.append("mode must be 'paper'")
     errs.extend(ban_violations(h))

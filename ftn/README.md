@@ -40,20 +40,34 @@ Changes made on import (beyond moving files): the handoff export renames the int
 `confidence` key anywhere; FTN's own test only checked top-level keys), and the handoff
 contract module/schema/samples/tests above were added. No engine logic changed.
 
+Fixes on branch `ftn-fixes` (after import): lazily resolved, env-overridable output dirs and
+isolated tests; deterministic `sha256:` fingerprint; `ftn brief` / `ftn run` refuse the wrong
+fixture type with a clear message; the old MINT paper draft became an opt-in research draft
+without a buy/sell side; `ftn run` tickets are never `actionable_for_mint`. Model/candidate
+logic is unchanged (all reconstruction tests still pass).
+
 **Not the contract:** `dispatch/out/latest.json` (from `ftn run`, the older six-stage
-FTN ticket) and `dispatch/out/mint_draft_*.json` (from `ftn brief`, carries a `side`
-field). MINT's reader rejects both; only handoff.v1 crosses part boundaries.
+FTN ticket; since ftn-fixes its kind is `ftn_setup_ticket`/`no_trade` — never MINT's own
+`entry_candidate` — and `actionable_for_mint` is always `false`) and the legacy research draft from `src/ftn/os/mint_draft.py`. That draft is
+no longer written by default; with `FTN_WRITE_MINT_DRAFT=1`, `ftn brief` writes
+`dispatch/drafts/ftn_draft_*.json` (outside `dispatch/out/`). It carries
+`direction_hypothesis` (the IOF label: bullish/bearish/unclear), never a buy/sell `side`
+(I0 bans BUY/SELL), and `actionable_for_mint: false`. MINT's reader rejects both; only
+handoff.v1 crosses part boundaries.
 
 ### Known limitations (honest)
 - Forex-first: fixtures are EURUSD (56) and XAUUSD (2), hand-labelled single days
   (mostly 2017–2018). The Desk / Wave-1 research are index-first (NQ). Fixtures are not a
   sample — tests prove the engine reproduces the labelled reconstructions, not an edge.
-- `fingerprint` = `abs(hash(json))` — salted per process, so it is not reproducible unless
-  `PYTHONHASHSEED` is pinned (samples were generated with `PYTHONHASHSEED=0`).
-- The test suite persists session/swing tickets in `dispatch/out/` and is **not idempotent**:
-  a second run fails `test_month7_slice7_swing` until `dispatch/out/*.json` is removed.
-  CI and the E2E script start clean. (Pre-existing; not changed.)
-- `fixtures/sample_eurusd.json` is for `ftn run/prep`; `ftn brief` on it fails (`KeyError: 'date'`).
+- `fingerprint` is `sha256:` + 16 hex of SHA-256 over the canonical JSON of the DayContext
+  (`ftn.os.contracts.context_fingerprint`) — deterministic across processes and
+  `PYTHONHASHSEED` values. (Before ftn-fixes it was a salted `abs(hash(json))`.)
+- Output dirs are resolved at call time (`src/ftn/paths.py`): `FTN_OUT_DIR` (default
+  `dispatch/out`), `FTN_JOURNAL_DIR` (`dispatch/journal`), `FTN_DRAFT_DIR` (`dispatch/drafts`).
+  The test suite redirects all three to `tmp_path` (`tests/conftest.py`), so it is
+  idempotent and order-independent and never touches the real `dispatch/` folders.
+- `fixtures/sample_eurusd.json` is for `ftn run/prep`. `ftn brief` refuses it, the `*.expected.json`
+  gold oracles and handoff.v1 outputs with a one-line reason and exit code 2 (no traceback).
 
 ## Old desk (reference only)
 

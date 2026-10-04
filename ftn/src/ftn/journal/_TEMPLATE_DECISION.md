@@ -28,6 +28,6 @@ Pivots / CBDR / Asian / Flout are **targets**, not entries.
 
 ## Handoff
 
-Next: MINT
-Path: dispatch/out/latest.json
-Ask: Paper-ack only if RISK + allowlist clear.
+Next: human review (research only).
+This ticket is not a contract and not for MINT (actionable_for_mint: false).
+MINT reads only handoff.v1 from `ftn brief` and acts only on board SURVIVES + allowlist + RISK + human ack.

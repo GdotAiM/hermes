@@ -8,9 +8,7 @@ from dataclasses import replace
 from pathlib import Path
 
 from ftn.os.contracts import DayContext, SessionTicket
-
-ROOT = Path(__file__).resolve().parents[3]
-STORE = ROOT / "dispatch" / "out"
+from ftn.paths import out_dir
 
 
 def _key(ctx: DayContext) -> str:
@@ -19,8 +17,7 @@ def _key(ctx: DayContext) -> str:
 
 
 def path_for(ctx: DayContext) -> Path:
-    STORE.mkdir(parents=True, exist_ok=True)
-    return STORE / _key(ctx)
+    return out_dir() / _key(ctx)
 
 
 def load_ticket(ctx: DayContext) -> SessionTicket | None:

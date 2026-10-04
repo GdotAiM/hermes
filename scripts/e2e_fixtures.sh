@@ -6,13 +6,13 @@
 # Usage (repo root):  scripts/e2e_fixtures.sh            # or: make e2e
 #   FIXTURE=fixtures/pam1_evidence_eurusd.json scripts/e2e_fixtures.sh
 #   E2E_TESTS=1 scripts/e2e_fixtures.sh                  # also run ftn/ + trading/ pytest (needs pytest)
-# Note: clears ftn/dispatch/out/*.json first (git-ignored scratch, incl. FTN's persisted
-# session/swing tickets) so the run is reproducible. Committed samples are untouched.
+# Note: step 1 clears ftn/dispatch/out/*.json (git-ignored scratch, incl. FTN's persisted
+# session/swing tickets) so the brief starts from a clean day. The test suites never touch
+# ftn/dispatch/out (tests/conftest.py redirects FTN_OUT_DIR etc. to tmp_path).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PY="${PYTHON:-python3}"
 FIXTURE="${FIXTURE:-fixtures/m9_reconstruction_eurusd.json}"
-export PYTHONHASHSEED="${PYTHONHASHSEED:-0}"   # FTN fingerprint = salted hash(); pin it
 step() { printf '\n== %s ==\n' "$*"; }
 
 step "0. environment"
@@ -22,7 +22,6 @@ echo "fixture: ftn/$FIXTURE"
 
 if [[ "${E2E_TESTS:-0}" == "1" ]]; then
   step "0b. test suites"
-  rm -f "$ROOT"/ftn/dispatch/out/*.json
   (cd "$ROOT/ftn" && $PY -m pytest -q -p no:cacheprovider)
   (cd "$ROOT/trading" && $PY -m pytest -q -p no:cacheprovider)
 fi

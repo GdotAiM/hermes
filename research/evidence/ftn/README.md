@@ -28,6 +28,9 @@ python3 research/scripts/file_ftn_handoff.py --origin live_observation   # = ftn
 - FTN's `candidates[].state == "selected"`, `session_ticket`, PAM1 completeness and Charter
   recognition are FTN's *reconstruction* of ICT rules on that day. None of them is evidence
   that the rule makes money. Recognition ≠ clearance ≠ execution.
-- The two initial rows are the committed contract samples — both `origin: fixture`.
-- Known FTN limitation: `fingerprint` is Python's salted `hash()` — it changes per process
-  unless `PYTHONHASHSEED` is fixed, so use the `sha256` column as the identity.
+- All rows so far are the committed contract samples — `origin: fixture` (rows 1–2: old salted
+  fingerprints; rows 3–4: the same samples regenerated with the deterministic sha256 fingerprint).
+- `fingerprint`: rows filed before ftn-fixes carry FTN's old salted `hash()` fingerprint
+  (digits only, not reproducible across processes); they are kept as filed. Newer FTN output
+  carries `sha256:<16 hex>` over the canonical DayContext, which is deterministic. The file's
+  own `sha256` column remains the identity of a filed handoff.

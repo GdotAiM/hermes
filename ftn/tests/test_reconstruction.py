@@ -369,7 +369,10 @@ def test_mint_draft_paper():
     ftn = rest[-1] if rest else {}
     d = draft_from_handoff(build_handoff(st, cands, ftn if isinstance(ftn, dict) else {}))
     assert d["actionable_for_mint"] is False and d["mode"] == "paper"
-    assert d["module"] == "REV" and d["side"] == "buy"
+    # I0 bans BUY/SELL: the draft carries the IOF label, never a trade side
+    assert d["module"] == "REV" and "side" not in d and d["direction_hypothesis"] == "bullish"
+    from ftn.os.handoff_contract import find_ban_violations
+    assert find_ban_violations(d) == []
 
 
 
@@ -2190,6 +2193,13 @@ def test_handoff_v1_i1b():
 
 
 if __name__ == "__main__":
+    # script mode bypasses conftest.py: isolate output dirs the same way
+    import os
+    import tempfile
+    _tmp = Path(tempfile.mkdtemp(prefix="ftn-tests-"))
+    for _var, _sub in (("FTN_OUT_DIR", "out"), ("FTN_JOURNAL_DIR", "journal"), ("FTN_DRAFT_DIR", "drafts")):
+        os.environ[_var] = str(_tmp / _sub)
+    os.environ.pop("FTN_WRITE_MINT_DRAFT", None)
     test_fixture_has_no_winner()
     test_reconstruct_matches_gold()
     test_gold_edit_does_not_change_engine(Path("/tmp"))

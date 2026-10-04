@@ -11,9 +11,7 @@ from pathlib import Path
 
 from ftn.os.m7_contracts import Month7State, SwingTicket
 from ftn.os.m7_osok import derive_month7_osok
-
-ROOT = Path(__file__).resolve().parents[3]
-STORE = ROOT / "dispatch" / "out"
+from ftn.paths import out_dir
 
 
 def _week_id(d: str) -> str:
@@ -25,8 +23,7 @@ def _week_id(d: str) -> str:
 
 
 def path_for(symbol: str, d: str) -> Path:
-    STORE.mkdir(parents=True, exist_ok=True)
-    return STORE / f"swing_{_week_id(d)}_{symbol}.json"
+    return out_dir() / f"swing_{_week_id(d)}_{symbol}.json"
 
 
 def load_swing(symbol: str, d: str) -> SwingTicket | None:

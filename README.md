@@ -102,9 +102,6 @@ python3 -m http.server 8765   # open http://localhost:8765/desk/  → EURUSD →
   not edge. Nothing FTN emits is a tradeable claim until the research board says SURVIVES.
 - No single FTN fixture carries both PAM1/Charter and FTN four levels, so there are two
   committed samples.
-- FTN `fingerprint` is a salted `hash()` (changes per process unless `PYTHONHASHSEED` is
-  pinned); FTN's test suite persists tickets in `ftn/dispatch/out/` and fails a second run
-  unless that directory is cleared (CI and `scripts/e2e_fixtures.sh` clear it).
 
 ## Paper-only limits (hard)
 
