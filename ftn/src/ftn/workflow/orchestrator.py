@@ -35,8 +35,84 @@ def _check_run_pack(pack: dict, fixture: Path | None) -> None:
     missing = [k for k in RUN_KEYS if not isinstance(pack.get(k), dict)]
     if missing:
         name = Path(fixture).name if fixture else "<default fixture>"
-        hint = " It looks like a DTR fixture: use `python -m ftn brief --fixture ...`." if "date" in pack else ""
-        raise RunFixtureError(f"{name}: not an `ftn run`/`ftn prep` fixture: missing {', '.join(missing)}.{hint}")
+        raise RunFixtureError(f"{name}: neither a Month 9 DTR fixture (date + evidence/ranges) nor a legacy "
+                              f"four-count pack: missing {', '.join(missing)}.")
+
+
+def is_dtr_fixture(pack: dict) -> bool:
+    """A Month 9 DTR fixture (what `ftn brief` reads) rather than a legacy four-count run pack."""
+    return "date" in pack and any(k in pack for k in ("evidence", "ranges", "bars_m15", "pair_institutional"))
+
+
+def run_month9(fixture: Path, stage: str = "all", out_dir: Path | None = None) -> dict[str, Any]:
+    """F2: `ftn run` on a DTR fixture goes through the Month 9 kernel — the sole ticket authority.
+
+    Same path as `ftn brief` (DayContext → frozen MarketState → candidates → session_ticket → handoff.v1 →
+    research-draft gate chain), plus the per-ticket pipeline trace and a decision journal. Paper only; the ticket
+    is never actionable for MINT and never an ``entry_candidate``; no broker call. ``stage="prep"`` stops before the
+    journal. The FTN four-count stays an annotation (objectives), never the ticket.
+    """
+    from ftn.os.briefing import brief_from_fixture
+    from ftn.os.contracts import FixtureError
+    from ftn.os.handoff import build_handoff
+    from ftn.os.mint_draft import draft_from_handoff, gate_input
+    from ftn.pipeline.trace import trace_for_state
+
+    try:
+        state, cands, _md, ftn = brief_from_fixture(fixture)
+    except FixtureError as exc:
+        raise RunFixtureError(str(exc)) from exc
+    ctx = state.context
+    draft = draft_from_handoff(gate_input(state, build_handoff(state, cands, ftn)))
+    sel = next((c for c in cands if c.state == "selected"), None)
+    trace = trace_for_state(state, cands, ftn, f"ftn run (fixture {Path(fixture).name})")
+    st = ctx.session_ticket
+    ticket = {
+        "kind": "m9_kernel_ticket" if sel else "no_trade",
+        "authority": "month9_kernel",
+        "selected_module": sel.module if sel else None,
+        "session_ticket": {"id": st.id, "module": st.module, "session": st.session} if st else None,
+        "actionable_for_mint": False,
+        "requires": ["board SURVIVES", "allowlist", "RISK", "human_ack"],
+        "symbol": ctx.symbol,
+        "date": ctx.date,
+        "direction_hypothesis": (draft or {}).get("direction_hypothesis"),
+        "blocked_by": (draft or {}).get("blocked_by") or "kernel_ticket:no_selected_candidate",
+        "gates": trace["gates"]["chain"],
+        "candidates": trace["setup"]["candidates"],
+        "four_levels": ftn.get("four") or [],
+        "family": ftn.get("family"),
+        "bias": ftn.get("bias"),
+        "no_trade_reasons": [] if sel else ["no_selected_candidate"],
+        "setup": {},
+        "legacy_gate_ok": None,
+        "fingerprint": state.fingerprint,
+        "mode": "paper",
+    }
+    payload = {
+        "ok": True,
+        "scanned_at": datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
+        "stage": stage,
+        "engine": "month9_kernel",
+        "stages": STAGES if stage == "all" else ["PREP"],
+        "ticket": ticket,
+        "trace": trace,
+        "annotations": {},
+        "note": "No orders placed. Month 9 research ticket, not a contract and not for MINT; only handoff.v1 crosses parts.",
+    }
+    return _write(payload, out_dir, stage)
+
+
+def _write(payload: dict, out_dir: Path | None, stage: str) -> dict:
+    out = out_dir or default_out_dir()
+    out.mkdir(parents=True, exist_ok=True)
+    path = _unique(out / f"ftn_{payload['scanned_at']}.json")
+    path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+    (out / "latest.json").write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
+    payload["dispatch_path"] = str(path)
+    if stage == "all":
+        payload["journal_path"] = str(write_journal(payload))
+    return payload
 
 
 def _model13_annotations(cfg: dict, pack: dict) -> dict:
@@ -55,8 +131,10 @@ def run_workflow(
     stage: str = "all",
     out_dir: Path | None = None,
 ) -> dict[str, Any]:
-    cfg = load_config()
     pack = load_bars(fixture, symbol)
+    if fixture is not None and is_dtr_fixture(pack):
+        return run_month9(Path(fixture), stage, out_dir)
+    cfg = load_config()
     _check_run_pack(pack, fixture)
     families = build_families(pack)
     last = price if price is not None else pack.get("last", pack["previous_day"]["close"])
@@ -105,6 +183,9 @@ def run_workflow(
     # always False. The only cross-part object is handoff.v1 (`ftn brief`).
     ticket = {
         "kind": "ftn_setup_ticket" if setup_complete else "no_trade",
+        # Legacy four-count pack: objectives + fixture-provided setup flags only. Not a Month 9 ticket and
+        # never a session_ticket (the Month 9 kernel is the sole ticket authority; give `ftn run` a DTR fixture).
+        "engine": "legacy_four_count_objectives",
         "setup_complete": setup_complete,
         "actionable_for_mint": False,
         "requires": ["board SURVIVES", "allowlist", "RISK", "human_ack"],
@@ -133,6 +214,7 @@ def run_workflow(
         "ok": True,
         "scanned_at": datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
         "stage": stage,
+        "engine": "legacy_four_count",
         "stages": STAGES if stage == "all" else ["PREP"],
         "ticket": ticket,
         # Model 13 (Charter bridge) annotation: off by default, never changes the ticket.
@@ -140,16 +222,4 @@ def run_workflow(
         "note": "No orders placed. Research ticket, not a contract and not for MINT; only handoff.v1 crosses parts.",
     }
 
-    out = out_dir or default_out_dir()
-    out.mkdir(parents=True, exist_ok=True)
-    stamp = payload["scanned_at"]
-    path = _unique(out / f"ftn_{stamp}.json")
-    path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
-    (out / "latest.json").write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
-    payload["dispatch_path"] = str(path)
-
-    if stage == "all":
-        jpath = write_journal(payload)
-        payload["journal_path"] = str(jpath)
-
-    return payload
+    return _write(payload, out_dir, stage)

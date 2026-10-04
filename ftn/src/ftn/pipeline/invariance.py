@@ -9,7 +9,8 @@ BID/ASK fills, burned window 2025-08-25 -> 2026-09-25. It writes the trade CSV w
 Burned data only. Every R in those CSVs was already published at registration, so this reads no new R.
 The guard checks that the wiring branch (pipeline trace, bar-derived context layers, W%R context, results
 journal) never changes which tickets REV takes, their stops, gates, fingerprints or outcomes.
-``trace=True`` re-runs the same streams with the per-ticket trace attached and must give the same bytes.
+``trace=True`` re-runs the same streams with the per-ticket trace attached (``pipeline.kernel_trace``) and must
+give the same bytes.
 """
 
 from __future__ import annotations
@@ -86,7 +87,10 @@ def regenerate(out_dir: Path, hists=None, trace: bool = False) -> dict:
     res = {}
     for sym, other in (("US100", hists["US500"]), ("US500", None)):
         h = hists[sym]
-        log = session_ticket_log(h, cfg, trace=trace, other=other) if trace else None
+        log = None
+        if trace:
+            from ftn.pipeline.kernel_trace import trace_rows
+            log = trace_rows(session_ticket_log(h, cfg), h, cfg, other)
         _, log, trades = run_series(sym, h.s.source, cfg, other, False, hist=h, log=log, cost_model="correct_side")
         p = Path(out_dir) / f"FTN_M9_TRADES_{sym}_base_{REG_TAG}.csv"
         write_ticket_csv(p, trades)

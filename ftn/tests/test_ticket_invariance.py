@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import pytest
 
-from ftn.research import invariance as inv
+from ftn.pipeline import invariance as inv
 
 pytestmark = pytest.mark.skipif(bool(inv.check_data()), reason=f"burned guard tape unavailable: {inv.check_data()}")
 

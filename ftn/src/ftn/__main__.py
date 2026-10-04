@@ -51,6 +51,23 @@ def build_parser() -> argparse.ArgumentParser:
     sc.add_argument("--drawdown-reset", choices=["none", "next_calendar_month"], default=None,
                     help="running book 5%% DD reset rule (default: config risk_caps.drawdown_reset) — HUMAN DECISION")
     sc.add_argument("--no-calendar", action="store_true", help="do not attach the FOMC/CPI/NFP calendar")
+    def add_bars(sp):
+        sp.add_argument("--symbol", choices=["US100", "US500"], default="US100")
+        sp.add_argument("--data-dir", type=Path, default=None,
+                        help="dir with US{100,500}_1m_{bid,ask}.csv.gz (default: the F1 guard tape, $FTN_GUARD_DATA_DIR)")
+    tr = sub.add_parser("trace", help="Pipeline trace (ftn.trace.v1) for one day's Month 9 sessions (bar-derived; context only)")
+    tr.add_argument("--date", required=True)
+    add_bars(tr)
+    rs = sub.add_parser("results", help="Paper results journal: trace + outcome per session (H016 forward R sealed)")
+    rs.add_argument("--from", dest="date_from", required=True)
+    rs.add_argument("--to", dest="date_to", required=True)
+    rs.add_argument("--clearance", type=Path, default=None,
+                    help="human-signed H016 clearance stamp (CASSANDRA: CLEARED + DATA: CLEARED); without it, "
+                         "sessions after 2026-09-25 stay sealed (no R computed)")
+    rs.add_argument("--no-write", action="store_true")
+    add_bars(rs)
+    gd = sub.add_parser("guard", help="F1: re-run the H016 base streams on the burned window and byte-compare to the registration CSVs")
+    gd.add_argument("--trace", action="store_true", help="also run with the pipeline trace attached")
     hy = sub.add_parser("hypotheses", help="Print the typed FTN hypothesis family (JSON)")
     lp = sub.add_parser("live-probe", help="Probe live DATA adapters (quotes only; orders refused)")
     lp.add_argument("--symbol", default="EURUSD")
@@ -75,6 +92,23 @@ def main(argv: list[str] | None = None) -> int:
         }
         print(json.dumps(payload, indent=2))
         return 0
+    if args.command in ("trace", "results"):
+        return _bar_commands(args)
+    if args.command == "guard":
+        import tempfile
+        from ftn.pipeline import invariance as inv
+        bad = inv.check_data()
+        if bad:
+            print(f"ftn guard: burned tape unavailable: {bad}", file=sys.stderr)
+            return 2
+        hists = inv.load_histories()
+        out = {}
+        with tempfile.TemporaryDirectory() as td:
+            out["base"] = inv.compare(inv.regenerate(Path(td) / "base", hists))
+            if args.trace:
+                out["trace"] = inv.compare(inv.regenerate(Path(td) / "trace", hists, trace=True))
+        print(json.dumps(out, indent=2))
+        return 0 if all(v["identical"] for r in out.values() for v in r.values()) else 1
     if args.command == "hypotheses":
         from ftn.research.hypotheses import HYPOTHESES
         print(json.dumps([h.to_dict() for h in HYPOTHESES], indent=2))
@@ -100,6 +134,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"ftn brief: cannot read {args.fixture}: {exc}", file=sys.stderr)
             return 2
         from ftn.paths import journal_dir
+        from ftn.pipeline.trace import render_trace_summary, trace_for_state
+        md += render_trace_summary(trace_for_state(state, cands, ftn, "ftn brief"))
         out = args.out or journal_dir() / f"{state.context.date}_{state.context.symbol}_BRIEFING.md"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(md)
@@ -118,6 +154,47 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     print(json.dumps(result, indent=2, default=str))
     return 0 if result.get("ok") else 1
+
+
+def _bar_commands(args: argparse.Namespace) -> int:
+    from datetime import date
+    from ftn.journal.results import BURNED_END, BURNED_START, journal_rows
+    from ftn.pipeline import invariance as inv
+    from ftn.research.kernel_log import session_ticket_log
+    from ftn.research.score import load_history, make_sim, row_outcome
+
+    d0 = date.fromisoformat(args.date if args.command == "trace" else args.date_from)
+    d1 = date.fromisoformat(args.date if args.command == "trace" else args.date_to)
+    if args.data_dir:
+        import os
+        os.environ["FTN_GUARD_DATA_DIR"] = str(args.data_dir)
+    dd = inv.data_dir()
+    hists = {}
+    for sym in ("US100", "US500"):
+        bid, ask = dd / f"{sym}_1m_bid.csv.gz", dd / f"{sym}_1m_ask.csv.gz"
+        if not bid.is_file() or not ask.is_file():
+            print(f"ftn {args.command}: missing BID/ASK tape for {sym} in {dd}", file=sys.stderr)
+            return 2
+        hists[sym] = load_history(sym, str(bid), str(ask))
+    h = hists[args.symbol]
+    other = hists["US500"] if args.symbol == "US100" else None
+    days = [x for x in h.days if d0 <= x <= d1]
+    if not days:
+        print(f"ftn {args.command}: no trading days {d0}..{d1} in the tape "
+              f"(burned window {BURNED_START}..{BURNED_END})", file=sys.stderr)
+        return 2
+    from ftn.pipeline.kernel_trace import trace_rows
+    cfg = inv.base_cfg()
+    rows = trace_rows(session_ticket_log(h, cfg, days=days), h, cfg, other)
+    if args.command == "trace":
+        print(json.dumps([r.get("trace") or {k: r.get(k) for k in ("date", "symbol", "session", "ticket", "reason")}
+                          for r in rows], indent=2, default=str))
+        return 0
+    recs = journal_rows(rows, row_outcome(make_sim(args.symbol, h, "correct_side")), args.clearance,
+                        write=not args.no_write)
+    print(json.dumps([{k: r[k] for k in ("date", "symbol", "session", "ticket", "module", "result")} for r in recs],
+                     indent=2, default=str))
+    return 0
 
 
 def _run(args: argparse.Namespace, stage: str) -> dict:

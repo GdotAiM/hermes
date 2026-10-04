@@ -318,10 +318,17 @@ def test_handoff_stays_contract_clean_with_gate_chain(monkeypatch):
 
 @pytest.mark.parametrize("fx", [REV_FX, ROOT / "fixtures/m9_rev_no_raid.json"], ids=lambda p: p.name)
 def test_run_never_issues_kernel_tickets(fx, capsys):
-    """Main's `ftn run` refuses DTR fixtures (use `ftn brief`): one ticket authority."""
+    """`ftn run` on a DTR fixture goes through the Month 9 kernel (F2): one ticket authority, the same session
+    ticket and gate chain as `ftn brief`, never MINT-actionable."""
+    import json as _json
     from ftn.__main__ import main
-    assert main(["run", "--fixture", str(fx)]) == 2
-    assert "ftn brief" in capsys.readouterr().err
+    assert main(["run", "--fixture", str(fx)]) == 0
+    t = _json.loads(capsys.readouterr().out)["ticket"]
+    st, cands, _, ftn = brief_from_fixture(fx)  # second pass reads the persisted session ticket
+    sel = next((c.module for c in cands if c.state == "selected"), None)
+    assert t["authority"] == "month9_kernel" and t["selected_module"] == sel
+    assert t["actionable_for_mint"] is False and t["kind"] in {"m9_kernel_ticket", "no_trade"}
+    assert (t["session_ticket"] or {}).get("id") == (st.context.session_ticket.id if st.context.session_ticket else None)
 
 
 # --- unsigned stamps never clear the allowlist gate -------------------------------------
