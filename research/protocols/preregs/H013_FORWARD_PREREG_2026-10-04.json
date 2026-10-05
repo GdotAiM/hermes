@@ -97,6 +97,11 @@
     "path": "research/forward",
     "frozen_copies": "research/forward/H013/frozen (byte-identical to rule_object_sha256; research/forward/PROVENANCE.md)",
     "files": {
+      "h013_harness.py": "ab1e9eb15b3b91c682a3e0197308ab85879140fe4c4a1b3ab8a502fe630bd13c",
+      "tv_final.py": "070a0ec50bd9f1fdde645dd96f8f34fe9186c49bbeeec18ff4c973d00cb51c83",
+      "backfill_tv.py": "8acde80f3fbf1cf2725fb1244f09cf9d4f8bfc328b5253fb9705f3394acfecc9",
+      "h013_live_watch.py": "435982c1e3beccb327909b4bbfa9074ee8e7e2e07b6020caeff7e67b7be4a5a9",
+      "tv_feed.py": "2773d47246f7f31329ab271c3d740265b990ca2f3cd1cd57b0150f4b4f7c8336",
       "research/forward/common/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "research/forward/common/fwdlib.py": "7669b87d58d88b186c2ef38664b575c25940c3876f772e5db47b878eeb9d7926",
       "research/forward/common/tv_feed.py": "2773d47246f7f31329ab271c3d740265b990ca2f3cd1cd57b0150f4b4f7c8336",
@@ -107,7 +112,7 @@
     "runtime": "/home/box/hermes-x/forward/.venv (research/forward/requirements.txt)",
     "data_dir": "$HERMES_FWD_DATA/H013 (default /home/box/hermes-x/forward/H013), outside git",
     "supersedes_unmerged": "branch forward/h013-h014-scripts commit 32d131d (deployed-root harness in non-git folders; never registered on main)",
-    "replaces": "PENDING - patched forward harness (FILL_THRU=1, CAPITALCOM only, holiday + min-bar filters, raw-bar persistence, docs corrected) must be hashed and committed here before first_eligible_session"
+    "replaces": "Registered 2026-10-05: live counting gate files from ict-blueprint/forward-test (h013_harness.py, tv_final.py, backfill_tv.py, h013_live_watch.py, tv_feed.py). Digest of those five files: 3dd5c4d06b77b931c8d111bf969153766fa79807f745eb3ef5c937a3ac86db9b."
   },
   "changes_after_registration": "any change to a pinned hash, feed, window, exit or filter voids counting from that point and requires a new ID (H013b)"
 }
