@@ -26,3 +26,9 @@ Run from the repo root with `PYTHONPATH=ftn/src:.` and numpy available:
 - Rules: `batch3/rules.py`.
 - Run: `python -m research.screening.run_batch3 {burned|s1|s3|report}`.
 - Results: `batch3/REPORT.md`. Nothing qualifies.
+
+## DATA screening-feed conditions (2026-10-05)
+- `PROTOCOL_DATA_CONDITIONS.md` records DATA's binding conditions C1–C12 and the downloader-isolation blocker.
+- Batches 1–3 are labelled in-sample screening (`data=dukascopy-screening-2023-20260925`).
+- **No further scoring on `/workspace/screening-data`, and no new download, until the remediation checklist R1–R10 is cleared and the C11 gate is PASS.**
+- The provenance banners in `batch{1,2,3}/REPORT.md` were added by hand. The `write_md` generators do not emit them, so re-add them if a report is ever regenerated.

@@ -1,5 +1,7 @@
 # Screening batch 1: C1 REV baseline, C2 Wednesday-only, C3 US500-only
 
+> **Provenance (added 2026-10-05, label only, per `PROTOCOL_DATA_CONDITIONS.md`):** design=in-sample-screening · data=dukascopy-screening-2023-20260925 (Dukascopy BID/ASK, DEUIDXEUR/USA30IDXUSD/XAUUSD) · screening-manifest content hash: pending (R1) · qc_gate=not_run · slip=provisional · session=cfd · n_instruments=3. Not confirmatory; no certified-untouched claim.
+
 > **Screening, not evidence.** Protocol `research/screening/PROTOCOL.md` v1 was committed (`d42f966`) before any run.
 > The burned window is burned, and C2 was chosen by looking at it. A PASS here would only *earn* a holdout; the holdout (US100 2019-01-01..2022-12-23, US500 before 2025-06-01) stays SEALED and was not opened, decoded or hashed.
 

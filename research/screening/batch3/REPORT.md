@@ -1,5 +1,7 @@
 # Screening batch 3: simple session-level rules E1–E5
 
+> **Provenance (added 2026-10-05, label only, per `PROTOCOL_DATA_CONDITIONS.md`):** design=in-sample-screening · data=dukascopy-screening-2023-20260925 (Dukascopy BID/ASK, DEUIDXEUR/USA30IDXUSD/XAUUSD) · screening-manifest content hash: pending (R1) · qc_gate=not_run · slip=provisional · session=cfd · n_instruments=3. Not confirmatory; no certified-untouched claim.
+
 > **Screening.** The protocol is `PROTOCOL.md` v1 + `PROTOCOL_BATCH3.md`, committed and pushed before any batch 3 data was read.
 > The burned US100/US500 window is *discovery* for these new rules; S1 (GER40, US30, XAUUSD 2023-01..2026-09-25) is the real out-of-sample test. The H017 holdout was not read.
 

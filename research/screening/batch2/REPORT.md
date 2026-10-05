@@ -1,5 +1,7 @@
 # Screening batch 2: Model U v1 (H013) and MMXM v1–v5 (incl. v5 A = H014)
 
+> **Provenance (added 2026-10-05, label only, per `PROTOCOL_DATA_CONDITIONS.md`):** design=in-sample-screening · data=dukascopy-screening-2023-20260925 (Dukascopy BID/ASK, DEUIDXEUR/USA30IDXUSD/XAUUSD) · screening-manifest content hash: pending (R1) · qc_gate=not_run · slip=provisional · session=cfd · n_instruments=3. Not confirmatory; no certified-untouched claim.
+
 > **Screening, not evidence.** The protocol is `PROTOCOL.md` v1 + `PROTOCOL_BATCH2.md`, committed and pushed in `0a3b052` before any batch 2 run.
 > The burned window is burned, and every candidate was developed on it. The H017 holdout was not read.
 
