@@ -1,0 +1,787 @@
+{
+ "id": "H016b",
+ "document": "harness registration note v2 (separate from the tagged prereg; the prereg is NOT edited). Supersedes harness-H016b-v1 for counting; v1 tag and note are KEPT (never moved or deleted).",
+ "status": "REGISTERED",
+ "harness_version": "v2",
+ "supersedes": {
+  "harness_version": "v1",
+  "tag": "harness-H016b-v1",
+  "tag_object": "70edfae",
+  "commit": "f062ed2",
+  "harness_digest": "8a752e769e045b063df9a7b5ef9942f71aa4399bae53bfd9c6637a668c7819a5",
+  "registration_note": "research/protocols/preregs/H016b_HARNESS_REGISTRATION_2026-10-04.json",
+  "reason": "CASSANDRA HOLD on F1 (sticky kill) in CASSANDRA_H016B_HARNESS_CLEARANCE_2026-10-04.md; also folds F2, F3, F5. Tag harness-H016b-v1 is retained forever.",
+  "clearance_review": {
+   "path": "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H016B_HARNESS_CLEARANCE_2026-10-04.md",
+   "sha256": "07fbfff7a4280500bf1637f0174fa22e95997b8674c8c0057b19bf3645334b2e"
+  }
+ },
+ "registered_at": "2026-10-05 (SAST); the binding registration time is the committer time of the first commit on origin carrying this note with status REGISTERED (h016b.registration_status)",
+ "registered_by": "FTN research bridge (Grok Bot, agent-generated) for ntloso ngubeni; reviews: CASSANDRA HOLD F1-F5 (clearance 2026-10-04), DATA (prior C1-C13), ORION (B1, family)",
+ "prereg": {
+  "path": "research/protocols/preregs/H016b_FORWARD_PREREG_2026-10-04.json",
+  "tag": "prereg-H016b",
+  "tag_object": "75e9cd5",
+  "commit": "74b13d312990e22c24d2ccfcd1f2072aca67cfdc",
+  "sha256": "6f28fef061776638d4613f6aa47d35deb5c4812335f3b722312691a477e4f2e6",
+  "tag_push_utc": "2026-10-04T09:48:19+00:00",
+  "edited": false
+ },
+ "harness_sha256": {
+  "repo_root": "GdotAiM/hermes",
+  "files": {
+   "research/forward/H016b/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "research/forward/H016b/duka.py": "926c521534372794235956f08ede6b5dc3b04a45ff13818de26db9927a8fe34d",
+   "research/forward/H016b/h016b.py": "81b07042ca3745f97eefc13f3b3f273dbb6d4b4b7ea5fd524f235238c2a0b589",
+   "research/forward/H016b/one_sided.py": "87e5d8bf07cc271e69de7651c52d46d4e132476ef323891738627d0fca090895",
+   "research/forward/tests/test_h016b.py": "9ce5264901044ca80a8b82b4df5b18b5ddb73c73f431c58e001d07cf5f6becd6",
+   "research/protocols/preregs/H016b_DATA_APPENDIX_2026-10-04.md": "c34d8cba9984904a21ffaf06f4191bac10e084b34aacc93d36fdac1f79d11e2e"
+  }
+ },
+ "harness_digest": "f8e4a1c33b38a82afa144a8ff8757d6944f9c1d581324f1ba5a767bcf627574d",
+ "harness_digest_rule": "sha256 of json.dumps(harness_sha256, sort_keys=True) (h016b.harness_digest); DATA_CERTIFIED.json and CASSANDRA_CLEARED.json must carry key harness_sha256 equal to THIS v2 digest before any R is shown. Do NOT write clearance for the superseded v1 digest 8a752e76….",
+ "v2_changes": {
+  "F1_sticky_kill": {
+   "problem": "v1 wrote sealed/KILL_LOG.json once but verdict()/tr_eval/write_state/fill_fragility base recomputed kill_walk on current trades, so a late earlier-dated positive backfill could undo FAILS.",
+   "fix": "kill_sticky(): if sealed/KILL_LOG.json exists, kill=True (sticky), evaluation uses the logged keys; else kill_walk and write once on first crossing. Used by write_state, cmd_report, criteria(sticky=True)/fill_fragility binding base. Verdict text appends '[sticky: sealed/KILL_LOG.json]'.",
+   "tests": [
+    "test_F1_sticky_kill_survives_late_earlier_positive_backfill",
+    "test_F1_write_state_uses_sticky_kill",
+    "test_F1_F5_fragility_base_uses_sticky_kill"
+   ]
+  },
+  "F2_pre_registration_reads": "appended reads n=4 (CASSANDRA parquet load ~11:30-11:45 SAST 10-04) and n=5 (DATA A5/g5 through 2026-10-02). Burned-only recomputation still matches 1.547/0.722/414.7/74.9.",
+  "F3_tests_in_manifest": "research/forward/tests/test_h016b.py added to HARNESS_FILES (6 files). test_F3_tests_file_is_in_harness_manifest.",
+  "F4_registration_time_gate": "NOT IMPLEMENTED (CASSANDRA suggested max(committer, tag, first-seen-on-origin); disclosed as residual). registration_status still uses %cI of the first REGISTERED commit on REG_REFS. Here committer time will match the annotated tagger time and push; verify on clearance.",
+  "F5_fragility_base_and_dropped": "fill_fragility binding base uses criteria(..., sticky=True) (sticky kill + futility_frozen); perturbed legs sticky=False; each leg reports dropped_R_none. test_F5_fragility_reports_dropped_R_none_per_leg."
+ },
+ "runner": {
+  "who": "ORION (scheduler); never from /workspace/hermes",
+  "checkout": "a clean, detached worktree frozen at tag harness-H016b-v2, e.g. git -C /workspace/ftn-fixes worktree add --detach /workspace/hermes-h016b-harness-v2 harness-H016b-v2. Do NOT reuse /workspace/hermes-h016b-harness (frozen at v1).",
+  "command": "cd /workspace/hermes-h016b-harness-v2 && /workspace/mmxm/.venv/bin/python research/forward/H016b/h016b.py final",
+  "data_dir": "HERMES_FWD_DATA unset -> /home/box/hermes-x/forward/H016b (same data root as v1; seals retained; v2 honour sticky KILL_LOG if present). The harness refuses a root inside quarantined H015b or marketdata.",
+  "schedule": "01:07 UTC Tue-Sat (03:07 SAST); every run scores all pending NY dates whose files are final (>= d+1 01:00 UTC); a missed run is caught up",
+  "first_run": "not before this note is pushed; the first possible counted session is the first killzone that STARTS after this note's commit time on origin (C1). London 2026-10-05 02:00 NY (08:00 SAST) has already started at ship time, so first eligible is at earliest NY AM 2026-10-05 (07:00 NY = 13:00 SAST) if this commit is on origin before that start; otherwise London 2026-10-06.",
+  "python": "/workspace/mmxm/.venv/bin/python (CPython 3.13; stdlib only for the harness, ftn imported from the checkout's ftn/src after the pin check)"
+ },
+ "hard_rule": "No process may download or open any bar file dated 2026-10-05 or later before this registration commit is pushed; otherwise H016b becomes H016c (ORION B1 (ii)-(iii), CASSANDRA early-reads (e)). During the v2 build every test used burned (<= 2026-09-25) or synthetic data only; the forward downloader was not run against any date after 2026-09-25.",
+ "cassandra_conditions": {
+  "C1_first_eligible_session": "reading (B): the first eligible session is the first killzone session that STARTS after the later of (prereg-H016b tag push 2026-10-04 09:48:19 UTC, the first commit on origin of this note). Earlier sessions are context only, never counted, never backfilled. Implemented in h016b.timing_reasons (reason session_started_before_harness_registration); test test_C1_first_eligible_session_after_later_of_tag_and_registration",
+  "C2_quarantine": {
+   "rule": "the H015b data directory /home/box/hermes-x/forward/H015b and /workspace/marketdata are quarantined: the H016b harness never builds a path into them, refuses a data root inside them (guard_root), and refuses ANY raw file it did not download itself (OwnStore provenance record prov/<inst>/<SIDE>/<day>.json written at download time; foreign_files() makes `final` refuse to run). The H016b harness downloads its own copies after this commit; DATA attests that no H016b-path forward file existed before it. Tests: test_C2_quarantine_root_and_foreign_files_refused",
+   "h015b_runner_files_forward_dated": {
+    "note": "7 US100 BID day files (2026-10-01 absent) downloaded by the H015b v2 runner as kernel context, 09:56-10:03 SAST 2026-10-04, before H016/H016b existed; no ASK, no US500, nothing dated >= 2026-10-04; sha256 of the bytes only (contents not parsed for this note)",
+    "files": [
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-26.bi5",
+      "sha256": "a878c38667b9e4d34ac64c3258590d3e658db29819031f1b26142aa323f9e974",
+      "mtime_sast": "2026-10-04 09:56:37"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-26.csv",
+      "sha256": "4c3addefe88f3113a9011773dda70a0129b390dacf6336526ffd5f010643fb4a",
+      "mtime_sast": "2026-10-04 09:56:37"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-26.json",
+      "sha256": "8c495cfbf77bf55eba497b38ffcbdcb4ca942d93693e98472389bad8a98e08c8",
+      "mtime_sast": "2026-10-04 09:56:37"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-27.bi5",
+      "sha256": "0fd9cce629a34d3c53b5571145b894e776ff441aa53cc7e9d8f9fd8aeb3e4d6f",
+      "mtime_sast": "2026-10-04 09:56:51"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-27.csv",
+      "sha256": "ec598d5c574d148f141a4931cc9f36906538dcf53d8c84e8447411219386dcb1",
+      "mtime_sast": "2026-10-04 09:56:51"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-27.json",
+      "sha256": "bf6ac109a6932adcc61aef63cc54af3242c8b169a1eccf493999f5670699d869",
+      "mtime_sast": "2026-10-04 09:56:51"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-28.bi5",
+      "sha256": "bdce92b7a8ee36fc6fadc2ee6e57768458eef01f76d7a7de36d899b99756c932",
+      "mtime_sast": "2026-10-04 09:57:12"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-28.csv",
+      "sha256": "a22955aaa17176ba628a619cbb62270445ee81a20bec9ab7cfa1bfea9f8a6114",
+      "mtime_sast": "2026-10-04 09:57:12"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-28.json",
+      "sha256": "6322234d6ac5f64400faae591183a8aca71a6e0c6a07c40a9b8f8108520b2e30",
+      "mtime_sast": "2026-10-04 09:57:12"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-29.bi5",
+      "sha256": "1fa270d38d71e19a38f2b58d09750235b29679249f2d1f86287031c68bd7b37a",
+      "mtime_sast": "2026-10-04 09:59:14"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-29.csv",
+      "sha256": "df220076add04b1bb9249d0138a3798b1e8eabef988d3a7e5b64a372f2c34634",
+      "mtime_sast": "2026-10-04 09:59:14"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-29.json",
+      "sha256": "00e1c80ddf0d73c7cd4c8b7f7106af0e0dddb69eb6e4aa068f5e82f001651912",
+      "mtime_sast": "2026-10-04 09:59:14"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-30.bi5",
+      "sha256": "cd4f19d51e3f26bee6d979ed647262897fd450fc260815c05e5b552d724b4305",
+      "mtime_sast": "2026-10-04 09:59:24"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-30.csv",
+      "sha256": "9935a03d87485e172c8c1d56ee8848d2abf212ce464d9864e1afa431bbd48e95",
+      "mtime_sast": "2026-10-04 09:59:24"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-09-30.json",
+      "sha256": "acae57c817aa976db6c1a2c991743512161a48546205e4986c633964800c218a",
+      "mtime_sast": "2026-10-04 09:59:24"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-10-02.bi5",
+      "sha256": "6164ae04e0cf83484866dc394408d741e545066ad11f4eccf22e0d936a39424d",
+      "mtime_sast": "2026-10-04 10:02:19"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-10-02.csv",
+      "sha256": "034a778e8f086450617a766dd707799bedb30a1598e1cdd5b6e82253782539b0",
+      "mtime_sast": "2026-10-04 10:02:19"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-10-02.json",
+      "sha256": "c2d246e0d22fc92d55fb67de5c7177e1cc4bb3af8d5d6bad0cb9bdd9c382d047",
+      "mtime_sast": "2026-10-04 10:02:19"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-10-03.bi5",
+      "sha256": "cc8966bbe8883295f60ef2ab43adc1dc855a010cb4d6a5e6ba42d41888618f44",
+      "mtime_sast": "2026-10-04 10:03:01"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-10-03.csv",
+      "sha256": "4c3addefe88f3113a9011773dda70a0129b390dacf6336526ffd5f010643fb4a",
+      "mtime_sast": "2026-10-04 10:03:01"
+     },
+     {
+      "path": "/home/box/hermes-x/forward/H015b/raw/US100/BID/2026-10-03.json",
+      "sha256": "6fd4409d9dfc274593122d51b0eb6816f170cd9cb927c7c8cb92e849c106429d",
+      "mtime_sast": "2026-10-04 10:03:01"
+     }
+    ]
+   }
+  },
+  "C3_fill_fragility_definition": "see fill_fragility below",
+  "L2_erratum": "see errata"
+ },
+ "pre_registration_reads": {
+  "data_disclosure_file": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/DATA_H016B_PRE_REGISTRATION_READS_DISCLOSURE_2026-10-04.md",
+  "data_disclosure_sha256": "66f67e18c03046586e6b6990c5d45d1b89547684dc7003c62be3291b32c45b99",
+  "data_disclosure_text": "# H016b — disclosure of reads before harness registration (DATA)\nFiled under ORION's ruling /home/box/hermes-x/summaries/2026-10-04_H016b_B1_RULING.md (i) and CASSANDRA's /home/box/hermes-x/reviews/post-wave1/CASSANDRA_H016B_EARLY_READS_RULING_2026-10-04.md (a). Times are SAST (UTC+2), all on 2026-10-04. Every one of these is before the prereg-H016b tag (11:48).\n\n| # | Process | When | Files | What was produced |\n|---|---|---|---|---|\n| 1 | marketdata background Dukascopy downloader (pid 1668587) | ~08:16 | US100 + US500, BID + ASK, bar dates 2026-09-27..10-02 | raw download only |\n| 2 | H015b runner | 10:03–10:17 | US100 BID (US500 partial), bar dates up to 2026-10-03, in forward/H015b/raw | raw download plus pull metadata, no R |\n| 3 | DATA H015b certification dry run (scratch copy only) | ~10:41 | bar dates 2026-09-28..10-02, US100 + US500 | session statuses only (complete / context etc.); no prices or R inspected or reported |\n\n- No file with a bar date of 2026-10-05 or later was read.\n- No R or outcome was computed for any H016b-eligible session.\n- Days 2026-09-26..10-03 are pre_registration_touched. They are used for context and plumbing only; they never count, are never used as evidence, and are never backfilled. Nothing seen in them changed any H016b rule, cost or threshold.\n- The H015b-downloaded files are quarantined (CASSANDRA C2). The H016b harness re-downloads its own copies.\n- The H015b DATA certificate was revoked on 2026-10-04 (forward/H015b/DATA_CERTIFICATE_REVOKED.md).\n",
+  "rulings": [
+   "/home/box/hermes-x/summaries/2026-10-04_H016b_B1_RULING.md (ORION: B1 covers counted-window files, bar dates 2026-10-05 onward; H016b keeps its ID)",
+   "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H016B_EARLY_READS_RULING_2026-10-04.md (CASSANDRA: not H016c, disclose; conditions (a)-(e))",
+   "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H016B_HARNESS_CLEARANCE_2026-10-04.md (CASSANDRA HOLD on v1: F1 blocker sticky kill; fold F2/F3/F5 into v2)"
+  ],
+  "reads": [
+   {
+    "n": 1,
+    "process": "marketdata background Dukascopy downloader (pid 1668587)",
+    "when_sast": "~08:16 2026-10-04",
+    "files": [
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20260927_ASK.bi5",
+      "sha256": "873fc90e36f771eb21b48497575ed8d04612643a97451ca673ed2517717c8da3",
+      "mtime_sast": "2026-10-04 08:16:05"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20260927_BID.bi5",
+      "sha256": "0fd9cce629a34d3c53b5571145b894e776ff441aa53cc7e9d8f9fd8aeb3e4d6f",
+      "mtime_sast": "2026-10-04 08:16:04"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20260928_ASK.bi5",
+      "sha256": "5f16af9dbe140e6b85447b69b9a7bb0816cc3b78113c0a5dffcf7f5a614a5c96",
+      "mtime_sast": "2026-10-04 08:16:04"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20260928_BID.bi5",
+      "sha256": "bdce92b7a8ee36fc6fadc2ee6e57768458eef01f76d7a7de36d899b99756c932",
+      "mtime_sast": "2026-10-04 08:16:04"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20260929_ASK.bi5",
+      "sha256": "60a3b48d6e80ac626bb72f29086e2ab0394e07faf785c82bdca78c14fdabd57a",
+      "mtime_sast": "2026-10-04 08:16:03"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20260929_BID.bi5",
+      "sha256": "1fa270d38d71e19a38f2b58d09750235b29679249f2d1f86287031c68bd7b37a",
+      "mtime_sast": "2026-10-04 08:16:03"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20260930_ASK.bi5",
+      "sha256": "3494a9d7f2982e4651ba087b1e8412622aebb0dc1bd1729efe74ad89714a817f",
+      "mtime_sast": "2026-10-04 08:16:02"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20260930_BID.bi5",
+      "sha256": "cd4f19d51e3f26bee6d979ed647262897fd450fc260815c05e5b552d724b4305",
+      "mtime_sast": "2026-10-04 08:16:02"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20261001_ASK.bi5",
+      "sha256": "f4d9c5d72375a5dcb5129b9664f1ae1d4019f4a81cb66078e3c0729eaa3a7c52",
+      "mtime_sast": "2026-10-04 08:16:01"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20261001_BID.bi5",
+      "sha256": "2615fc9141b00ebd3486745d474e4b029ae05e2d42e3d1c6eb727cf169697873",
+      "mtime_sast": "2026-10-04 08:16:01"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20261002_ASK.bi5",
+      "sha256": "6ce806c5350086df0a34fc88bd1e62a46df727babbd0e2c830887bb0203db38c",
+      "mtime_sast": "2026-10-04 08:16:00"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USATECHIDXUSD/2026/20261002_BID.bi5",
+      "sha256": "6164ae04e0cf83484866dc394408d741e545066ad11f4eccf22e0d936a39424d",
+      "mtime_sast": "2026-10-04 08:16:00"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20260927_ASK.bi5",
+      "sha256": "363e721054c0b20bd19350c9a6bcc5445601ff4219c5f1db4881c144d96ff7d1",
+      "mtime_sast": "2026-10-04 08:16:05"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20260927_BID.bi5",
+      "sha256": "1ad60c4ecad1aa995b254d4c22da264e290d75d64a376c8aafde6fc2595d0fdf",
+      "mtime_sast": "2026-10-04 08:16:05"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20260928_ASK.bi5",
+      "sha256": "2d84be1157f501df502b10d2a9bca3df2cbb7fc70ea5d98ac626c37af116b5a4",
+      "mtime_sast": "2026-10-04 08:16:04"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20260928_BID.bi5",
+      "sha256": "fc3f2e9f900d3b4c76290b49a5cf7bb3ab2e666e81b82ebe5592aa0d666dad40",
+      "mtime_sast": "2026-10-04 08:16:04"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20260929_ASK.bi5",
+      "sha256": "baa89973db8014eb399015c608a9118c6616fc04c0422dd3d83a2eadc0bcba91",
+      "mtime_sast": "2026-10-04 08:16:03"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20260929_BID.bi5",
+      "sha256": "24867e4bc7152c360d1d22db14d00e3201b3e0a3f65554c9cb1e1070921684ed",
+      "mtime_sast": "2026-10-04 08:16:03"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20260930_ASK.bi5",
+      "sha256": "ec511e79e191e2981b92f1cf2943dcf77d96005c27ec8e859d69df1c6f01394d",
+      "mtime_sast": "2026-10-04 08:16:03"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20260930_BID.bi5",
+      "sha256": "584e599b07b12c2224b27cfd583e9f2a752450b922308c5ecfc409c266b5206e",
+      "mtime_sast": "2026-10-04 08:16:02"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20261001_ASK.bi5",
+      "sha256": "8fc57eaf82a74d23773995d8520d2b0150802de4accf1e6164bd2f3f4dd1b241",
+      "mtime_sast": "2026-10-04 08:16:02"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20261001_BID.bi5",
+      "sha256": "87e8064197b1a183777dd57216b802e9a0af3d15dad8bf70ad97b9a4ec0be48d",
+      "mtime_sast": "2026-10-04 08:16:01"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20261002_ASK.bi5",
+      "sha256": "3483d74f1a49f0039d8997eb1db1c52e017bb2e899524bfdefd8774b694ded2f",
+      "mtime_sast": "2026-10-04 08:16:00"
+     },
+     {
+      "path": "/workspace/marketdata/raw/dukascopy/USA500IDXUSD/2026/20261002_BID.bi5",
+      "sha256": "c30709c0b6de53f957dc8529bd56a90f065fd81e1bcf93fd1523948e6917dcbc",
+      "mtime_sast": "2026-10-04 08:16:00"
+     }
+    ],
+    "derived": [
+     {
+      "path": "/workspace/marketdata/data/dukascopy/US100/1m_bid/2026.parquet",
+      "sha256": "5c4cc6fb00f1d15320ed144ae5edd87aebe0ee534457f0ee0787a630c0564fd8",
+      "mtime_sast": "2026-10-04 11:51:50"
+     },
+     {
+      "path": "/workspace/marketdata/data/dukascopy/US100/1m_ask/2026.parquet",
+      "sha256": "abb2615e3e23f201c23918ba1c6651dbd268e3c67bf0bf9f113072de3936ed17",
+      "mtime_sast": "2026-10-04 11:51:55"
+     },
+     {
+      "path": "/workspace/marketdata/data/dukascopy/US500/1m_bid/2026.parquet",
+      "sha256": "2b7cd8fcfacc556c5176167cd38ddfd97b658fa98d770f523dd92307c489cbaa",
+      "mtime_sast": "2026-10-04 11:51:57"
+     },
+     {
+      "path": "/workspace/marketdata/data/dukascopy/US500/1m_ask/2026.parquet",
+      "sha256": "0e2ff18d11774accf8b0722508b66f0dc9dcdc8c14a21a7461e229d0dda067a1",
+      "mtime_sast": "2026-10-04 11:52:01"
+     }
+    ],
+    "produced": "raw download + marketdata parquet build only; no R. Downloader since capped at 2026-09-25 by DATA"
+   },
+   {
+    "n": 2,
+    "process": "H015b v2 runner",
+    "when_sast": "10:03-10:17 2026-10-04 (bi5 mtimes 09:56:37-10:03:01 SAST for the forward-dated files)",
+    "files": "= cassandra_conditions.C2_quarantine.h015b_runner_files_forward_dated (forward/H015b/raw/US100/BID, pulls.jsonl)",
+    "produced": "raw download + pull metadata; no R"
+   },
+   {
+    "n": 3,
+    "process": "DATA H015b certification dry run (scratch copy)",
+    "when_sast": "~10:34-10:41 2026-10-04",
+    "files": [
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/ASK/2026-09-27.bi5",
+      "sha256": "873fc90e36f771eb21b48497575ed8d04612643a97451ca673ed2517717c8da3",
+      "mtime_sast": "2026-10-04 10:45:07"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/ASK/2026-09-28.bi5",
+      "sha256": "5f16af9dbe140e6b85447b69b9a7bb0816cc3b78113c0a5dffcf7f5a614a5c96",
+      "mtime_sast": "2026-10-04 10:45:07"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/ASK/2026-09-29.bi5",
+      "sha256": "60a3b48d6e80ac626bb72f29086e2ab0394e07faf785c82bdca78c14fdabd57a",
+      "mtime_sast": "2026-10-04 10:45:09"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/ASK/2026-09-30.bi5",
+      "sha256": "3494a9d7f2982e4651ba087b1e8412622aebb0dc1bd1729efe74ad89714a817f",
+      "mtime_sast": "2026-10-04 10:45:10"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/ASK/2026-10-01.bi5",
+      "sha256": "f4d9c5d72375a5dcb5129b9664f1ae1d4019f4a81cb66078e3c0729eaa3a7c52",
+      "mtime_sast": "2026-10-04 10:45:11"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/ASK/2026-10-02.bi5",
+      "sha256": "6ce806c5350086df0a34fc88bd1e62a46df727babbd0e2c830887bb0203db38c",
+      "mtime_sast": "2026-10-04 10:45:12"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/BID/2026-09-26.bi5",
+      "sha256": "a878c38667b9e4d34ac64c3258590d3e658db29819031f1b26142aa323f9e974",
+      "mtime_sast": "2026-10-04 10:45:07"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/BID/2026-09-27.bi5",
+      "sha256": "0fd9cce629a34d3c53b5571145b894e776ff441aa53cc7e9d8f9fd8aeb3e4d6f",
+      "mtime_sast": "2026-10-04 10:45:07"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/BID/2026-09-28.bi5",
+      "sha256": "bdce92b7a8ee36fc6fadc2ee6e57768458eef01f76d7a7de36d899b99756c932",
+      "mtime_sast": "2026-10-04 10:45:07"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/BID/2026-09-29.bi5",
+      "sha256": "1fa270d38d71e19a38f2b58d09750235b29679249f2d1f86287031c68bd7b37a",
+      "mtime_sast": "2026-10-04 10:45:09"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/BID/2026-09-30.bi5",
+      "sha256": "cd4f19d51e3f26bee6d979ed647262897fd450fc260815c05e5b552d724b4305",
+      "mtime_sast": "2026-10-04 10:45:09"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/BID/2026-10-01.bi5",
+      "sha256": "2615fc9141b00ebd3486745d474e4b029ae05e2d42e3d1c6eb727cf169697873",
+      "mtime_sast": "2026-10-04 10:45:11"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US100/BID/2026-10-02.bi5",
+      "sha256": "6164ae04e0cf83484866dc394408d741e545066ad11f4eccf22e0d936a39424d",
+      "mtime_sast": "2026-10-04 10:45:12"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/ASK/2026-09-27.bi5",
+      "sha256": "363e721054c0b20bd19350c9a6bcc5445601ff4219c5f1db4881c144d96ff7d1",
+      "mtime_sast": "2026-10-04 10:48:51"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/ASK/2026-09-28.bi5",
+      "sha256": "2d84be1157f501df502b10d2a9bca3df2cbb7fc70ea5d98ac626c37af116b5a4",
+      "mtime_sast": "2026-10-04 10:48:51"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/ASK/2026-09-29.bi5",
+      "sha256": "baa89973db8014eb399015c608a9118c6616fc04c0422dd3d83a2eadc0bcba91",
+      "mtime_sast": "2026-10-04 10:48:52"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/ASK/2026-09-30.bi5",
+      "sha256": "ec511e79e191e2981b92f1cf2943dcf77d96005c27ec8e859d69df1c6f01394d",
+      "mtime_sast": "2026-10-04 10:48:52"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/ASK/2026-10-01.bi5",
+      "sha256": "8fc57eaf82a74d23773995d8520d2b0150802de4accf1e6164bd2f3f4dd1b241",
+      "mtime_sast": "2026-10-04 10:48:53"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/ASK/2026-10-02.bi5",
+      "sha256": "3483d74f1a49f0039d8997eb1db1c52e017bb2e899524bfdefd8774b694ded2f",
+      "mtime_sast": "2026-10-04 10:48:54"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/BID/2026-09-26.bi5",
+      "sha256": "0b163eeee41b760f0164e355bc704b2b4c30d877ba1ff1eeb9678b98e48c1c78",
+      "mtime_sast": "2026-10-04 10:48:51"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/BID/2026-09-27.bi5",
+      "sha256": "1ad60c4ecad1aa995b254d4c22da264e290d75d64a376c8aafde6fc2595d0fdf",
+      "mtime_sast": "2026-10-04 10:48:51"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/BID/2026-09-28.bi5",
+      "sha256": "fc3f2e9f900d3b4c76290b49a5cf7bb3ab2e666e81b82ebe5592aa0d666dad40",
+      "mtime_sast": "2026-10-04 10:48:51"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/BID/2026-09-29.bi5",
+      "sha256": "24867e4bc7152c360d1d22db14d00e3201b3e0a3f65554c9cb1e1070921684ed",
+      "mtime_sast": "2026-10-04 10:48:52"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/BID/2026-09-30.bi5",
+      "sha256": "584e599b07b12c2224b27cfd583e9f2a752450b922308c5ecfc409c266b5206e",
+      "mtime_sast": "2026-10-04 10:48:52"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/BID/2026-10-01.bi5",
+      "sha256": "87e8064197b1a183777dd57216b802e9a0af3d15dad8bf70ad97b9a4ec0be48d",
+      "mtime_sast": "2026-10-04 10:48:53"
+     },
+     {
+      "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h015b_cert/v2/dryrun/raw/US500/BID/2026-10-02.bi5",
+      "sha256": "c30709c0b6de53f957dc8529bd56a90f065fd81e1bcf93fd1523948e6917dcbc",
+      "mtime_sast": "2026-10-04 10:48:54"
+     }
+    ],
+    "produced": "session statuses and bar counts only; no prices or R inspected or reported"
+   },
+   {
+    "n": 4,
+    "process": "CASSANDRA H016 red-team (clearance review)",
+    "when_sast": "~11:30-11:45 2026-10-04 (before prereg-H016b tag 11:48:19 SAST)",
+    "files": [
+     "/workspace/marketdata/data/dukascopy/{US100,US500}/1m_{bid,ask}/2026.parquet (loaded into memory)"
+    ],
+    "produced": "filtered to < 2026-09-26 before computing; no later bar printed or used; no R. Disclosed in CASSANDRA_H016B_HARNESS_CLEARANCE_2026-10-04.md F2(a)",
+    "source": "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H016B_HARNESS_CLEARANCE_2026-10-04.md"
+   },
+   {
+    "n": 5,
+    "process": "DATA A5 / g5 spread confirmation (scripts/g5_spread_assumed_values.py)",
+    "when_sast": "~10:10 2026-10-04 (table window through 2026-10-02)",
+    "files": [
+     "bars through 2026-10-02 in marketdata parquet (A5 table 'Measured post-switch 2025-08-29 → 2026-10-02')"
+    ],
+    "produced": "spread p90 confirmation only; burned-only recomputation reproduces 1.547/0.722/414.7/74.9 so no 9bed235 parameter is affected (CASSANDRA item 8 + F2(b))",
+    "source": "/home/box/hermes-x/reviews/post-wave1/CASSANDRA_H016B_HARNESS_CLEARANCE_2026-10-04.md"
+   }
+  ],
+  "pre_registration_touched": {
+   "days": [
+    "2026-09-26",
+    "2026-09-27",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-03"
+   ],
+   "rule": "context and plumbing only; never counted, never evidence, never backfilled (h016b.PRE_REGISTRATION_TOUCHED; rows carry context_pre_registration_touched; reason pre_registration_touched). Nothing seen in them changed any H016b rule, cost or threshold (ORION B1 (iv))"
+  },
+  "no_counted_window_file": "no file with a bar date of 2026-10-05 or later has been downloaded or opened by this build (v1 or v2)"
+ },
+ "rev_fix_order_attestation": {
+  "facts_from_git": {
+   "fix_commit": "9bed235 (ftn: post-H015b demo fixes: REV min stop 4x friction + spread/slippage stop buffer + correct-side fills + running book + calendar)",
+   "fix_commit_time": "2026-10-04 11:02:18 SAST (author and committer)",
+   "branch_created": "ftn/demo-fixes from de760f7 at 10:32:27 SAST (reflog)",
+   "prereg_H016": "cf83307 11:25:01 SAST",
+   "prereg_H016b": "74b13d3 11:48:17 SAST"
+  },
+  "attestation": "DISCLOSED ORDER (the fix was NOT committed before 08:16 SAST): the REV fix commit 9bed235, including the min-stop (4 x round-trip friction) and the stop buffer values, was committed at 11:02:18 SAST, i.e. AFTER read 1 (08:16), read 2 (10:03-10:17) and read 3 (~10:41). The fixes were designed between ~10:09 and 11:02 SAST from the burned demo backtest only: the canonical export /workspace/ftn-demo-output/data/US{100,500}_1m_{bid,ask}.csv.gz (exported 10:09 SAST, range capped at 2026-09-25 17:00 NY, 0 assumed-spread bars) and the older reused tape; the export was made with marketdata.load(sym, '1m', 'both', '2025-08-24 18:00', '2026-09-25 17:00') and so READ marketdata's 2026 parquet files, which after the ~08:16 build may already have contained bars dated 2026-09-27..10-02; the range filter returned no bar after 2026-09-25 17:00 NY, and no later bar was returned, printed or inspected. No forward-dated bar entered any fix choice. The early reads were made by other processes (marketdata downloader, H015b runner, DATA's dry run) and produced no R; none involves a counted-window date. Per CASSANDRA's ruling (c) and ORION's B1 ruling, those reads carried no outcome information about any counted session."
+ },
+ "errata": [
+  "E1 (prereg counting_rules.computed_after_harness_registration): the words 'no forward bar file (dated >= 2026-09-26) is downloaded or opened by anyone before that commit' were already untrue when the prereg was tagged (three disclosed reads above). Per ORION's B1 ruling and CASSANDRA's early-reads ruling the binding scope is files with bar dates 2026-10-05 onward; 2026-09-26..10-03 are pre_registration_touched.",
+  "E2 (prereg family_rule.orion_ruling_a, quoted verbatim): it mentions 'the strictest threshold, 0.0125' from the earlier four-test family. The binding first Holm threshold for the three-test family F1 (H013, H014, H016b) is 0.05/3 = 0.0167; thresholds 0.0167 / 0.025 / 0.05 as in family_rule.applies (ORION erratum, B1 ruling concurrence; CASSANDRA L2)."
+ ],
+ "family": {
+  "orion_family_closure": {
+   "attribution": "ORION, 2026-10-04 ~12:00 SAST (addendum, research/summaries/2026-10-04_H015b_WITHDRAWAL.md)",
+   "text": [
+    "Family F1 is CLOSED at H013, H014 and H016b (Holm, one-sided, 0.05). No test joins F1 after this.",
+    "Any later forward test opens a new family (F2, ...) with its own pre-registered alpha and Holm. Its member list is closed before its first counted row. Each SURVIVES carries its family tag, and error control is per family, as disclosed. F2+ verdicts never change F1's thresholds or verdicts, and F1's never change F2+'s.",
+    "Program-wide guard: MINT clearance already needs a new-ID replication (rule b), so one false SURVIVES in any family can't clear on its own."
+   ]
+  },
+  "family_tag": "F1",
+  "members": [
+   "H013",
+   "H014",
+   "H016b"
+  ],
+  "holm_one_sided": [
+   0.0167,
+   0.025,
+   0.05
+  ],
+  "orion_ruling_a_and_b": "as quoted in the prereg family_rule (with CASSANDRA's stricter points; erratum E2)",
+  "h015b": "WITHDRAWN-PRE-DATA; ORION confirmed the H015b runner routine is deleted (only forward routine left: h013-h014-forward-test-runner-weekday-ny-session); CASSANDRA revoked her H015b clearance and DATA revoked the H015b certificate (forward/H015b/DATA_CERTIFICATE_REVOKED.md)"
+ },
+ "fill_fragility": {
+  "binding_label_rule": "prereg verdict_wording.fill_fragile: if ANY leg below changes any of the six pass criteria, the kill or the futility outcome, a pass is 'PASSES (unadjusted, fill-fragile)' and cannot become SURVIVES without replication under a new ID",
+  "legs": [
+   "trigger_stop_+0.1",
+   "trigger_stop_+1tick",
+   "trigger_stop_-0.1",
+   "trigger_stop_-1tick",
+   "trigger_target_+0.1",
+   "trigger_target_+1tick",
+   "trigger_target_-0.1",
+   "trigger_target_-1tick",
+   "trigger_both_+0.1",
+   "trigger_both_+1tick",
+   "trigger_both_-0.1",
+   "trigger_both_-1tick",
+   "recompute_stop_+0.1",
+   "recompute_stop_+1tick",
+   "recompute_stop_-0.1",
+   "recompute_stop_-1tick",
+   "ask_+0.1",
+   "ask_-0.1",
+   "min_risk_+0.25",
+   "min_risk_-0.25",
+   "conservative_one_sided_exit"
+  ],
+  "definitions": {
+   "direction": "'+' = the level moves AWAY from the entry (wider stop / farther target); '-' = TOWARDS the entry",
+   "trigger_{stop|target|both}_{+|-}{0.1|1tick}": "12 legs; tick = 0.001 pt (Dukascopy price step). Only trigger levels move; stop and target separately (stop / target) or together (both). Planned risk (R denominator) = |signal entry - registered stop|, the registered 2R target (when only the stop moves), the entry fill and slippage are HELD. A triggered exit fills at the SHIFTED level exactly as simulate_both fills (long stop min(level, BID open) - stop slip; target level - limit slip; short mirrored on ASK). h016b.sim_trigger is the pinned simulate_both line for line plus the two offsets; at zero shift it equals the pinned function on all 258 burned trades (test)",
+   "recompute_stop_{+|-}{0.1|1tick}": "4 legs; CASSANDRA's probe variant: the stop itself is moved (wider/tighter), and the PINNED simulate_both recomputes planned risk and the 2R target",
+   "ask_{+|-}0.1": "2 legs; all ASK O/H/L/C shifted by +-0.1 pt, pinned simulate_both",
+   "min_risk_{+|-}0.25": "2 legs; re-gating with min_risk +-0.25 pt: counted trades with |entry - stop| < min_risk + delta drop out; min_risk-blocked tickets that met every other counting rule (regate_candidate: only risk:FAIL:stop_below_min_risk among research gates, entry bars present, registration/timing reasons empty) with |entry - stop| >= min_risk + delta come in, simulated with the pinned simulate_both. The flat book makes the min-stop check the only risk-gate block in the binding stream",
+   "conservative_one_sided_exit": "1 leg (binding fragility leg, CASSANDRA early-reads ruling s.2 + ORION concurrence): DATA's conservative() v2, below",
+   "criteria_under_perturbation": "n, pooled / per-instrument mean R, exit flips, dropped_R_none (F5), the six pass criteria (foil criterion: the perturbed pooled mean against the binding foil distribution), kill and futility. Binding base: sticky kill + frozen futility (F1/F5). Perturbed legs: recompute.",
+   "threshold_tickets": "count of tickets (counted or regate candidates) with | |entry - stop| - min_risk | <= 0.25 pt",
+   "binding_base": "criteria(tr, foil_means, root=led.root, sticky=True)"
+  }
+ },
+ "one_sided_exit_leg": {
+  "flag": "per trade one_sided_exit_minutes (+ bid_only_minutes, ask_only_minutes) from entry to the pinned exit (DATA one_sided_count), sealed with the outcome",
+  "conservative_rule": "longs: stop checked on any BID bar present (stop_one_sided), target only when both sides are present; shorts: stop on any ASK bar present, target likewise only with both sides; a minute missing the side the stop check needs uses the other side shifted by max(last two-sided spread, p95 floor over 20 prior sessions, fallback p95 of the session so far) and counts as a stop (stop_proxy) when that proxy range brackets or gaps through the stop. Time exit as pinned",
+  "reference": {
+   "path": "/home/box/hermes-x/investigations/POST-WAVE1-LEADS/h016_review/one_sided/one_sided_exit.py",
+   "sha256": "691a102f208e2e4c1f44748c27288d130843eb46b557ae329f862243e2d501dd",
+   "version": "v2 (2026-10-04, CASSANDRA follow-up): stop_proxy spread = max(last two-sided spread, p95 floor)",
+   "registered_as": "research/forward/H016b/one_sided.py, definitions copied verbatim: CONSERVATIVE_EXIT_VERSION, P95_SESSIONS, _p95, _session_start, _two_sided_spreads, p95_floor, conservative, one_sided_count",
+   "tests": "DATA's synthetic tests verbatim in test_DATA_synthetic_one_sided_tests_verbatim: her original three (T1 long BID-only stop minute -> stop_one_sided; T2 short BID-only proxy brackets stop -> stop_proxy; T3 long ASK-only target-level minute ignored -> time) + the stop_proxy-floor tests for CASSANDRA's change (T4 p95_session fallback floor triggers stop_proxy with sp_last 1.0 / sp_used 3.0; T4b the v1 last-spread-only rule would not stop; T5 short, 20 prior sessions at spread 2.5 -> p95_20d floor triggers stop_proxy with sp_used 2.5); plus a source-text equality test of every registered definition"
+  },
+  "cassandra_stop_proxy_change": {
+   "rule": "stop_proxy spread = max(last recorded two-sided spread, the instrument's nearest-rank 95th-percentile two-sided spread (ASK close - BID close) over the prior 20 trading sessions; fallback when < 20 prior sessions are loaded: p95 of the current session so far)",
+   "status": "already in DATA's v2 reference as registered (CONSERVATIVE_EXIT_VERSION v2); no further change to her function",
+   "logged": "every proxy minute appends {t, sp_last, p95, p95_source, sp_used, source ('last'|'p95_20d'|'p95_session'), hit} to the trade's proxy_events, sealed per trade"
+  },
+  "function_source_as_registered": {
+   "_p95": "def _p95(xs):\n    \"\"\"Nearest-rank 95th percentile: sorted(xs)[ceil(0.95*n) - 1].\"\"\"\n    xs = sorted(xs); n = len(xs)\n    return xs[max(0, -(-95 * n // 100) - 1)] if n else None\n",
+   "_session_start": "def _session_start(d):\n    \"\"\"CFD session for NY date d = [d-1 18:00, d 17:00) NY (ftn.research.bars.session_bounds).\"\"\"\n    return dt.datetime.combine(d - dt.timedelta(days=1), dt.time(18, 0))\n",
+   "_two_sided_spreads": "def _two_sided_spreads(bid, ask, start, end):\n    bm = {bid.t[i]: bid.c[i] for i in bid.window(start, end)}\n    return [ask.c[j] - bm[ask.t[j]] for j in ask.window(start, end) if ask.t[j] in bm]\n",
+   "p95_floor": "def p95_floor(bid, ask, t, sessions=P95_SESSIONS):\n    \"\"\"Proxy-spread floor at minute t. Prior sessions = the last `sessions` NY dates before t's date that are trading days\n    (weekday with >= 300 BID bars in 09:30-15:59, ftn.research.bars.trading_days rule) and have two-sided minutes; spreads =\n    ASK close - BID close over every two-sided minute of those sessions [d-1 18:00, d 17:00). If fewer than `sessions`\n    prior sessions exist in the loaded history: p95 of the two-sided minutes of the current session so far\n    [session start, t). Returns (value, source) with source 'p95_20d' or 'p95_session' (value None if no data).\"\"\"\n    d = t.date(); days = []; k = d - dt.timedelta(days=1); lo = bid.t[0].date() if bid.t else d\n    while len(days) < sessions and k >= lo:\n        if k.weekday() < 5 and len(bid.window(dt.datetime.combine(k, dt.time(9, 30)), dt.datetime.combine(k, dt.time(16, 0)))) >= 300:\n            days.append(k)\n        k -= dt.timedelta(days=1)\n    if len(days) >= sessions:\n        xs = []\n        for k in days: xs += _two_sided_spreads(bid, ask, _session_start(k), dt.datetime.combine(k, dt.time(17, 0)))\n        return _p95(xs), \"p95_20d\"\n    return _p95(_two_sided_spreads(bid, ask, _session_start(d), t)), \"p95_session\"\n",
+   "conservative": "def conservative(bid, ask, et, entry, stop, side, slip, target_r=TARGET_R, events=None):\n    \"\"\"Conservative re-resolution (CASSANDRA ruling 2026-10-04 s.2 + follow-up), version CONSERVATIVE_EXIT_VERSION.\n    Same entry/levels/slippage/time exit as simulate_both. Walk the UNION of BID and ASK minute timestamps in [entry_time, 16:00):\n      both sides present  -> exactly simulate_both's checks (stop first, then target); record last spread = ask.c - bid.c.\n      only the stop side present (long: BID; short: ASK) -> stop check on that bar (fill as pinned); NO target check.\n      only the other side present -> proxy the stop side with the other side shifted by\n          sp_proxy = max(sp_last, p95_floor) where sp_last = ask.c - bid.c at the latest two-sided minute < t (initialised\n          from the t-1m bars) and p95_floor = p95 two-sided spread over the prior 20 sessions (fallback: session so far).\n          Long BID proxy = ASK - sp_proxy, short ASK proxy = BID + sp_proxy. Stop hit if proxy low <= stop (long) /\n          proxy high >= stop (short) (range brackets or gaps through the stop); fill = min(stop, proxy open) - slip_stop /\n          max(stop, proxy open) + slip_stop. NO target check. Each proxy minute appends to `events`:\n          {t, sp_last, p95, p95_source, sp_used, source ('last' | 'p95_20d' | 'p95_session'), hit}.\n      neither side present -> nothing (a gap through the stop is caught on the next bar's open, as pinned).\n    Time exit unchanged: last two-sided minute close before 16:00 on the exit side (as pinned).\"\"\"\n    sl = dict(slip)\n    risk = (entry - stop) if side == \"buy\" else (stop - entry)\n    tgt = entry + target_r * risk if side == \"buy\" else entry - target_r * risk\n    ib, ia = bid.idx(et) - 1, ask.idx(et) - 1\n    fill_in = ask.c[ia] + sl[\"market\"] if side == \"buy\" else bid.c[ib] - sl[\"market\"]\n    end = dt.datetime.combine(et.date(), dt.time(16, 0))\n    bmap = {bid.t[i]: i for i in bid.window(et, end)}; amap = {ask.t[j]: j for j in ask.window(et, end)}\n    sp = ask.c[ia] - bid.c[ib]\n    ev = events if events is not None else []\n    how, xp, xt, last, n1 = \"time\", None, None, None, 0\n    def proxy_spread(t):\n        f, src = p95_floor(bid, ask, t)\n        used, s_used = (sp, \"last\") if f is None or sp >= f else (f, src)\n        return used, dict(t=t.isoformat(), sp_last=sp, p95=f, p95_source=src, sp_used=used, source=s_used)\n    for t in sorted(set(bmap) | set(amap)):\n        i, j = bmap.get(t), amap.get(t)\n        if i is not None and j is not None:\n            if side == \"buy\":\n                if bid.l[i] <= stop: xp, how = min(stop, bid.o[i]) - sl[\"stop\"], \"stop\"\n                elif bid.h[i] > tgt: xp, how = tgt - sl[\"limit\"], \"target\"\n            else:\n                if ask.h[j] >= stop: xp, how = max(stop, ask.o[j]) + sl[\"stop\"], \"stop\"\n                elif ask.l[j] < tgt: xp, how = tgt + sl[\"limit\"], \"target\"\n            if xp is None:\n                last = (i, j); sp = ask.c[j] - bid.c[i]\n        else:\n            n1 += 1\n            if side == \"buy\":\n                if i is not None:   # BID only: real stop side\n                    if bid.l[i] <= stop: xp, how = min(stop, bid.o[i]) - sl[\"stop\"], \"stop_one_sided\"\n                else:               # ASK only: BID proxy\n                    u, e = proxy_spread(t); hit = ask.l[j] - u <= stop; e[\"hit\"] = hit; ev.append(e)\n                    if hit: xp, how = min(stop, ask.o[j] - u) - sl[\"stop\"], \"stop_proxy\"\n            else:\n                if j is not None:   # ASK only: real stop side\n                    if ask.h[j] >= stop: xp, how = max(stop, ask.o[j]) + sl[\"stop\"], \"stop_one_sided\"\n                else:               # BID only: ASK proxy\n                    u, e = proxy_spread(t); hit = bid.h[i] + u >= stop; e[\"hit\"] = hit; ev.append(e)\n                    if hit: xp, how = max(stop, bid.o[i] + u) + sl[\"stop\"], \"stop_proxy\"\n        if xp is not None:\n            xt = t; break\n    if xp is None:\n        if last is None: return {\"R\": None, \"exit\": \"no_bars\", \"n1\": n1, \"proxy_events\": ev}\n        i, j = last; xp = (bid.c[i] - sl[\"market\"]) if side == \"buy\" else (ask.c[j] + sl[\"market\"]); xt = bid.t[i]\n    pnl = (xp - fill_in) if side == \"buy\" else (fill_in - xp)\n    return {\"R\": pnl / risk, \"exit\": how, \"exit_time\": xt.isoformat(), \"n1\": n1, \"proxy_events\": ev}\n",
+   "one_sided_count": "def one_sided_count(bid, ask, et, xt_iso):\n    xt = dt.datetime.fromisoformat(xt_iso)\n    b = {bid.t[i] for i in bid.window(et, xt + dt.timedelta(minutes=1))}; a = {ask.t[j] for j in ask.window(et, xt + dt.timedelta(minutes=1))}\n    return len(b ^ a), len(b - a), len(a - b)\n",
+   "constants": "CONSERVATIVE_EXIT_VERSION = 'v2 (2026-10-04, CASSANDRA follow-up): stop_proxy spread = max(last two-sided spread, p95 floor)'; P95_SESSIONS = 20; TARGET_R = 2.0"
+  },
+  "forward_p95_history": "the p95 floor uses the ASK day files this harness has stored for the prior 31 UTC days (fragility_series); for the first ~20 forward sessions it falls back to DATA's documented p95_session",
+  "reporting": "report.pooled.mean_R_conservative_one_sided_exit next to the headline mean_R; report.one_sided_exit_co_report (flagged n, minutes, changed n, conservative mean)",
+  "burned_result_harness": {
+   "flagged": 0,
+   "conservative_equals_pinned": 258,
+   "n": 258,
+   "pooled_mean_R": 0.10034821020044912,
+   "pooled_mean_R_conservative": 0.10034821020044912,
+   "data_expected": "0 of 258 flagged, conservative R = pinned R, pooled +0.1003"
+  }
+ },
+ "data_items": {
+  "K1": "per-side finality: a late / 404 / cut-off ASK with BID fine keeps the session provisional, re-pulled every run, frozen after 5 weekdays -> feed_gap_ask; never a fallback (tests test_B2_*). ASK publication latency is UNMEASURED (H015b pulled BID only): to be measured from pulls.jsonl in the first weeks",
+  "K2": "16:14 NY full-datetime completeness on each side",
+  "K3": "context calendar incl. pre-window (Labor Day 2026-09-07) and 2028 (official) / 2029-2030 (projected; DATA NYSE_HOLIDAYS_2028_2030.{csv,md}, to be re-verified against the NYSE publication each year); dates past 2030 held provisional, not terminal",
+  "K4": "context needs BID only; ASK fetched for UTC d-1, d only; a missing ASK can never cause context_gap (test)",
+  "K6": "t-1m rule, no fall-through to a later 15m signal (test on 2026-03-23 US100 ny_am); foil stale-entry draws counted per replicate",
+  "K7": "one-sided minutes: flag + conservative leg (above)",
+  "K8": "monthly spread / crossed-bar monitor carried over (data_monitor_monthly)",
+  "K9": "no marketdata.load(), no ftn DEFAULT_BARS; own raw day files only (test)",
+  "K10": "burned reproduction checks DECOMPRESSED content hashes: {\"US100_1m_ask.csv.gz\": \"fcc3c8773fcfbf96d52f44445d22948ea97f953b1d1325e835b53bd08715b18f\", \"US100_1m_bid.csv.gz\": \"6afa31304cddff11b841e60d280043a8ea3b79954e445657959a0a5389f3f80f\", \"US500_1m_ask.csv.gz\": \"ff63783f3fdbd75098b2d0928caf6bd7bef2f21f9e31022ff20b6e739d958504\", \"US500_1m_bid.csv.gz\": \"9d68787c5804d15c423d8ec4289a48c9a30428461743e0edcada92ac6502ef92\"}",
+  "K11": "disclosure: EURUSD's 61.5-pip median daily range (index scale factors) rests on 185 days (2025-08-25 -> ~2026-05-08) because the HistData-banned span is excluded; rule constants unaffected"
+ },
+ "burned_inputs": {
+  "export_gz_sha256": {
+   "US100_1m_ask.csv.gz": "d242f48cb4caa37eb5a560ced984f75908bfbbc49156fbbdae6f1d70b298df2e",
+   "US100_1m_bid.csv.gz": "f7d2d2d38c0919d6c1436f0dca985b42228900e0bcb330d045f695c415a07301",
+   "US500_1m_ask.csv.gz": "c5408e7ff81213a4cd8e317c5e3e5adef8f5fbf3f11e2b4fb1d59126df10bcb6",
+   "US500_1m_bid.csv.gz": "140e89747c52b2db5108d039f3c7ae49aea9155f3f7721bee3dbdeee0668a86f"
+  },
+  "export_content_sha256": {
+   "US100_1m_ask.csv.gz": "fcc3c8773fcfbf96d52f44445d22948ea97f953b1d1325e835b53bd08715b18f",
+   "US100_1m_bid.csv.gz": "6afa31304cddff11b841e60d280043a8ea3b79954e445657959a0a5389f3f80f",
+   "US500_1m_ask.csv.gz": "ff63783f3fdbd75098b2d0928caf6bd7bef2f21f9e31022ff20b6e739d958504",
+   "US500_1m_bid.csv.gz": "9d68787c5804d15c423d8ec4289a48c9a30428461743e0edcada92ac6502ef92"
+  }
+ },
+ "evidence": {
+  "repro_burned": {
+   "file": "research/evidence/quant/H016b_V2_REPRO_BURNED_2026-10-05.json",
+   "harness_sha256": "f8e4a1c33b38a82afa144a8ff8757d6944f9c1d581324f1ba5a767bcf627574d",
+   "result": {
+    "US100": {
+     "n_harness": 146,
+     "n_csv": 146,
+     "n_mismatch": 0,
+     "h016b_filter_exclusions": [
+      [
+       "2026-03-23",
+       "ny_am",
+       [
+        "feed_gap_entry",
+        "kz_bars 168/180",
+        "kz_bars_ask 168/180"
+       ]
+      ],
+      [
+       "2026-05-29",
+       "london",
+       [
+        "kz_bars 142/180",
+        "kz_bars_ask 142/180"
+       ]
+      ]
+     ]
+    },
+    "US500": {
+     "n_harness": 112,
+     "n_csv": 112,
+     "n_mismatch": 0,
+     "h016b_filter_exclusions": [
+      [
+       "2026-04-10",
+       "ny_am",
+       [
+        "kz_bars 154/180",
+        "kz_bars_ask 154/180"
+       ]
+      ],
+      [
+       "2026-05-29",
+       "london",
+       [
+        "kz_bars 142/180",
+        "kz_bars_ask 142/180"
+       ]
+      ]
+     ]
+    }
+   },
+   "calendar_identity": "calendar on/off ticket identity checked on every burned session (no calendar_identity exclusion)",
+   "identical_to_v1_apart_from_digest": true
+  },
+  "repull_reproduction": {
+   "file": "research/evidence/quant/H016b_V2_REPULL_BURNED_2026-10-05.json",
+   "harness_sha256": "f8e4a1c33b38a82afa144a8ff8757d6944f9c1d581324f1ba5a767bcf627574d",
+   "how": "22 burned session days x US100/US500 through h016b.OwnStore/gather/series_pair/score_sessions with marketdata native Dukascopy bi5 (burned_only guard)",
+   "ok": true,
+   "days": 22,
+   "n_files": 438,
+   "n_trades_compared": 53,
+   "mismatches": [],
+   "alignment": {
+    "bid_only_total": 0,
+    "ask_only_total": 0,
+    "crossed_total": 0,
+    "union_minutes_total": 58539,
+    "one_sided_minute_rate": 0.0,
+    "one_sided_minute_rate_by_instrument": {
+     "US100": 0.0,
+     "US500": 0.0
+    },
+    "session_files_equal_marketdata_raw": 176
+   }
+  },
+  "repull_network": {
+   "file": "research/evidence/quant/H016b_V2_REPULL_NETWORK_2026-10-05.json",
+   "harness_sha256": "f8e4a1c33b38a82afa144a8ff8757d6944f9c1d581324f1ba5a767bcf627574d",
+   "how": "v1 live pull (2026-10-04) retargeted to v2 digest; download path unchanged by F1-F5. n_files=176, all equal_marketdata_raw, one_sided rate 0.",
+   "n_files": 176,
+   "equal_marketdata_raw": 176,
+   "all_final": true,
+   "foreign": [],
+   "alignment_on_live_bytes": {
+    "US100": {
+     "utc_day_files_per_side": 44,
+     "union_minutes": 52715,
+     "bid_only": 0,
+     "ask_only": 0,
+     "one_sided_minute_rate": 0.0,
+     "crossed_close": 0
+    },
+    "US500": {
+     "utc_day_files_per_side": 44,
+     "union_minutes": 52700,
+     "bid_only": 0,
+     "ask_only": 0,
+     "one_sided_minute_rate": 0.0,
+     "crossed_close": 0
+    }
+   }
+  }
+ },
+ "superseded_draft": "the draft H016 harness (research/forward/H016/, test_h016.py, H016_DATA_APPENDIX) was never committed, registered or run on forward data; it is replaced by research/forward/H016b/ (backup outside git: /workspace/ftn-demo-output/h016b_draft_backup)",
+ "data_certification_needed": [
+  "Re-certify C1-C13 on THIS v2 digest (ASK binding). Certificate key harness_sha256 = f8e4a1c33b38a82afa144a8ff8757d6944f9c1d581324f1ba5a767bcf627574d",
+  "Verify F1 sticky-kill regression (test_F1_*) and that sealed/KILL_LOG forces FAILS in write_state / report / fragility base",
+  "Verify F3: test_h016b.py in harness_sha256.files (6 files)",
+  "Verify F5: dropped_R_none per fragility leg; base sticky",
+  "F2 disclosures n=4 and n=5 present in this note",
+  "F4 residual: committer vs tagger vs first-seen-on-origin times consistent (not gated in code)",
+  "Re-run burned repro at this digest: 258/258, exclusions 4, one-sided 0, pooled +0.1003",
+  "attest no H016b-path forward bar dated >= 2026-10-05 opened before this commit",
+  "Do NOT write DATA_CERTIFIED.json for the superseded v1 digest 8a752e76…"
+ ],
+ "cassandra_clearance_needed": [
+  "Re-clear on THIS v2 digest. Clearance file: /home/box/hermes-x/forward/H016b/CASSANDRA_CLEARED.json with key harness_sha256 = f8e4a1c33b38a82afa144a8ff8757d6944f9c1d581324f1ba5a767bcf627574d",
+  "Confirm F1 fix + regression test match the HOLD-review case (40 x -1R then late +2R earlier-dated -> stays FAILS sticky)",
+  "Confirm F2 reads appended, F3 tests in manifest, F5 base sticky + dropped_R_none",
+  "F4 disclosed as not implemented",
+  "Do NOT write CASSANDRA_CLEARED.json for the superseded v1 digest 8a752e76…"
+ ]
+}

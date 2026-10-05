@@ -1,0 +1,2879 @@
+{
+ "mode": "local",
+ "days": [
+  "2026-02-17",
+  "2026-02-24",
+  "2026-02-26",
+  "2026-03-06",
+  "2026-03-09",
+  "2026-03-12",
+  "2026-03-18",
+  "2026-03-20",
+  "2026-03-23",
+  "2026-03-25",
+  "2026-03-27",
+  "2026-04-06",
+  "2026-04-10",
+  "2026-04-14",
+  "2026-04-21",
+  "2026-05-06",
+  "2026-05-14",
+  "2026-05-21",
+  "2026-05-26",
+  "2026-05-29",
+  "2026-06-15",
+  "2026-06-26"
+ ],
+ "harness_sha256": "f8e4a1c33b38a82afa144a8ff8757d6944f9c1d581324f1ba5a767bcf627574d",
+ "per_day": [
+  {
+   "date": "2026-02-17",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-02-17T02:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-02-17T07:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-02-16",
+     "BID",
+     "8a8923fefc06c26b3abb281b3c4e16e4104bae250dd7d5248512a837e5480ee8",
+     "d608ff01d63e648979b0d3fcd1d2ac66549de64e3b1248d13ff181e7ea4c2f4e"
+    ],
+    [
+     "2026-02-17",
+     "BID",
+     "761fc51be37addd45c37ba768aed0fafad4abfdfa6f28fc5f19cb3b2cc2dfbc5",
+     "b404291c9059b39a29ed629c8b252e8fee8525684455b80bfec080b0a8585c24"
+    ],
+    [
+     "2026-02-16",
+     "ASK",
+     "c090db7b400617ed4a7cccfe3f9e8a0747c1e682e4cb396fe1e409b2cc3c3b24",
+     "98c13d4f4a368fdfbaeeb13ce3b271c1bfcf725a67bef1d7bac14e31fc2cc65d"
+    ],
+    [
+     "2026-02-17",
+     "ASK",
+     "141b06fc59ef3d9d4a88a41c9470fb34ff21f070e72700674462e8c516e6ee0f",
+     "10214c2129ac27cf1a2a0f9ac97a39597ae8ee90f7837f6a27bfd513f749bddb"
+    ]
+   ],
+   "session_raw_sha256": "41d88bb5e727c53f2e413897b8a6ffdf1cc1ea35d3b895c817dba327e40f1e73",
+   "context_manifest_sha256": "22e7e51e4dab6f08224efd85ed0b6b42e87bc6c6631236e574fbbbd9edb40984",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-02-17",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [],
+   "session_files": [
+    [
+     "2026-02-16",
+     "BID",
+     "c46c57132056beb513ba039581c3acf1786d0c14fa8666f812599a5cea602461",
+     "293d9085a747312f25d8691c627a23cd26fb99ede0df251c4f60135ee5a47dbe"
+    ],
+    [
+     "2026-02-17",
+     "BID",
+     "f351a87c1191b6aa0725d5555515aba20bcc1b1b2a13dc84f6036a07de7b5508",
+     "c07d72f514963c4ac0d8fb4cb0329afb10e1a9d072508367624ed8bd78924c81"
+    ],
+    [
+     "2026-02-16",
+     "ASK",
+     "667d9f2440749b81447b1f546b25d08ab43b9b3b5e87b45666aa72f7ff2caa26",
+     "534e819031e3c9b7c4b9378f27a0acc78057c01c3ed03761f46b2b4938a7cdd8"
+    ],
+    [
+     "2026-02-17",
+     "ASK",
+     "1279f33972d0dc959bd8a509954162c23e88f432cfcfec2a2ef2304df3cbeb8e",
+     "bb1cb097b62ab4ce8c150e352b1918c1c25b1914c8a4bbc607dcc7946f35aa46"
+    ]
+   ],
+   "session_raw_sha256": "dfed4d27643d7f39b3e78db6bc33dd4f53d3efbfebff943433ef9a0e807d6740",
+   "context_manifest_sha256": "b07ccea7bf974c0e5012cd1b8d813f72c3b7981880efb3af518c350111c240ec",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-02-24",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [],
+   "session_files": [
+    [
+     "2026-02-23",
+     "BID",
+     "c2b2f30d0955762fca5cc521406cc4ed195eeb8f912485ebd7450af7515d8676",
+     "3d1e9e4c46077e0d78c55ef97cac5ceb90484b40de53e95bc4cdc648d67a75bf"
+    ],
+    [
+     "2026-02-24",
+     "BID",
+     "f51b5b85e5eaa6454c4e33d1053adfba0faf38d166e4fea2e3a828c99435e9b4",
+     "b3258efee40f176741246322d6611699dbdc424e6380cccad2941d86aa91b18c"
+    ],
+    [
+     "2026-02-23",
+     "ASK",
+     "880a929f2593f8f826f93cc399b45218e457864a7b1850927657971ac3986a46",
+     "65d44eb3f4026c8020c64e8ea5289db2fc75b19ff8bdf36d6a660fce15f32f4d"
+    ],
+    [
+     "2026-02-24",
+     "ASK",
+     "f5ed91e4d5189e315f9867f553f67719004bf94bc9eb4c99a713129d1cbb0e38",
+     "18ffad5fbea6fac3ca82fa6f23f28c19776ccca0ee808ddfc8cafc133bb98114"
+    ]
+   ],
+   "session_raw_sha256": "fb58703d51cd2ac555d6dc6597c47c628e6898dd19034d51adf766923f655ebf",
+   "context_manifest_sha256": "2c5ce6264812a90e2ca39913a14c01e1b984802273ce68ec4839122309431cec",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-02-24",
+   "instrument": "US500",
+   "bid_minutes": 1334,
+   "ask_minutes": 1334,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-02-24T10:00:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-02-23",
+     "BID",
+     "37953f47ede92786be5c188f1301d322607ea8d63f24908fef18d06f5d68381e",
+     "65986ad80151955d616fc7d9a1169dd92f8f0f325dc6ba3166242b41c678ddaa"
+    ],
+    [
+     "2026-02-24",
+     "BID",
+     "317e1e34a51b90715fcb800a86ba3d4e99021b9161e09ab61c03d48e4a4369b3",
+     "328306ef0a4e141c6caa5063ca8f81e820a688290660258d95f8d9016a7d31a3"
+    ],
+    [
+     "2026-02-23",
+     "ASK",
+     "bdacbb6d58e5e85042f46b7f1a82c6102dec76922df18161d38719185473e5c2",
+     "65a5b8ca23f023c3661d9afa5f1919a62214602c3c1080b6f93ef3b05bf3d7d4"
+    ],
+    [
+     "2026-02-24",
+     "ASK",
+     "8d1517eab5bbc427c12038e9e7ad680bfaa3fb1a93bacfde16cdc9e8dc405c09",
+     "d7f6aab75e25a4ff7e776e98c7158e9d6775a822f5f2fdb42911a99b4a6e4b60"
+    ]
+   ],
+   "session_raw_sha256": "38b15ae39e0aafcdef520052570980f214751d021fec3b887472119e31eaf64a",
+   "context_manifest_sha256": "c355ffbb572fcf892b31346d0dd309b0df0cca12d0660e1383d1e89f6a2ceec5",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-02-26",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-02-26T09:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-02-25",
+     "BID",
+     "361b2772af90d5a480fb88301c71a3e3b158dda3086f5547311ee84e9f931c34",
+     "a94294b2a9f1681a97cd811d553515eede380c113df3726f70f4e141ee299e19"
+    ],
+    [
+     "2026-02-26",
+     "BID",
+     "08607f79ae581cece761c092fefb02f03c77ee189a623fc1d572a7ea4dbcb082",
+     "b309b8b5d4f1e3f113747c31ee753f2b010be0e477fff99bee6ff93bf794875b"
+    ],
+    [
+     "2026-02-25",
+     "ASK",
+     "a5535a6eb5f98da081cc7a34ee6a5117dbb1a9b52b610186e195ac760a84bb8b",
+     "25c513a66dc216b503c3bf1f4ec62b14083bd7fc679bf50c23d2f7adf4b1725a"
+    ],
+    [
+     "2026-02-26",
+     "ASK",
+     "7c08a2330288c1206d016eec414efe252dc0fafd2f598aa1794d23b7096a8a5c",
+     "905b0a7864a9cac2642f8b03cebd4247e5c10573785e8c95a424e6404121e840"
+    ]
+   ],
+   "session_raw_sha256": "493644fe8531da42259db884421496193d4cda3f7a9781aa22b85914a6ee1189",
+   "context_manifest_sha256": "8775dec689f98a98f39e2e7165b3589c9532b8918cdab1e69009329f767e50b8",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-02-26",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-02-26T09:30:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-02-25",
+     "BID",
+     "cb53c6986025e00ff2f0b97a9303fff63beaad0e23970163bccb08931f730b0a",
+     "1fd89ad7a9d8a46a0d6eccca975f86bce27035e7861d80ad9634cdd894b137df"
+    ],
+    [
+     "2026-02-26",
+     "BID",
+     "5fabab957a92b96b60a1d7068df2257f12038bbf59ce31371442356497d03a99",
+     "d38a1106dd1a41c2286c933f52d6e3272be0c5909abac1164284b314017566c0"
+    ],
+    [
+     "2026-02-25",
+     "ASK",
+     "65dee37bafae1db4df4f80cde3086238e9d0fb83f730f59b3925095eb70ae7d4",
+     "5ffe6ce98bc768ad99af033ade8e9eb8a530704ddca2a71916cf0d9f7cf84ff1"
+    ],
+    [
+     "2026-02-26",
+     "ASK",
+     "556200a4a67de9619e3c61faabfc0fb1de85ce06565ea643ac8429588fe82798",
+     "7be084bf06aed1e9afb1cbeb4aed58cd86881d01ab858f1cb84d7dfc91e4793a"
+    ]
+   ],
+   "session_raw_sha256": "b6d7a477e5b2384adc13bbf9c48b220b925d1a25f67af0a4c91505a58094d5be",
+   "context_manifest_sha256": "e79d311737a56ec4e36c3f8db743403021eb2542b996740db7292a51ad322cc1",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-06",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-06T09:00:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-05",
+     "BID",
+     "6b2245f3caea6a4bdea5e686e7c887287781340d984748e606c250753aa876b4",
+     "0d6bd4de1a21a718cd508a61fdf0cef9c327e0f048d31f1fd06aca24a296f42d"
+    ],
+    [
+     "2026-03-06",
+     "BID",
+     "71327bdb82c30db0004f47a8c191da7fe64695c1b75f3454138c1b54d061a733",
+     "d6c77bef077002908df2355eb21fb6bd7fb103497946748dc08aaf55799f8623"
+    ],
+    [
+     "2026-03-05",
+     "ASK",
+     "08addb50a87cde8ce10336aeb2a78da7bbc18f6a96fdce83580105eae948f7e1",
+     "42a643c3fb70fb412ee045666a6c060ac6b66e66787886827b8afffae993b45d"
+    ],
+    [
+     "2026-03-06",
+     "ASK",
+     "1bc3b7592a3e98e9f938405cac169dc6c7a6e1b1377249f0497b91b74c47230e",
+     "d0b2365b045b56da0997a67e2c864ac14f46762f7eab596af8b2f41125510eb3"
+    ]
+   ],
+   "session_raw_sha256": "4e7258fcf7553850bc8e60818397dfd36f6e2f10e31362b7540b9c3fa0221fed",
+   "context_manifest_sha256": "8272b98f84c328bc6215e1b08b32e43498d03a49b4f549704944a148450a6978",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-06",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-06T09:00:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-05",
+     "BID",
+     "35ff4fd8d47004ed5d2aba840536bdc5113ca6fe45b5d7fb7da1345f1aa92081",
+     "c3eeaebf2372628d4f687fd2f12f71a36b41243c48bff1d6d53705552fb0e74b"
+    ],
+    [
+     "2026-03-06",
+     "BID",
+     "275dbb40976b365d133c6041dc4e460850fd251663fab1e56c5153a784b01e1a",
+     "94c430d9650a86f7f81227d0e8945adffc8f6410bf80f376b07124bc9db38b94"
+    ],
+    [
+     "2026-03-05",
+     "ASK",
+     "8d502e0e2517fae31344134cc2316203bf193c4db36da643c689f8b050b240e5",
+     "78ffcd20deef3b840c148a5ce3dd426ab18968250a52348f620b3049632a90c6"
+    ],
+    [
+     "2026-03-06",
+     "ASK",
+     "76ed0523aec6a69cbda4c1159644b3e4f313cac3558341597988664a0d194f07",
+     "bcf73ee3f1d5477803932b427315961d7a0d91cc42c23097bec73c4e111941c8"
+    ]
+   ],
+   "session_raw_sha256": "d87385439e0d1723a08fe8585553831f92c63d9a1952a4697b47fbc8feaa718e",
+   "context_manifest_sha256": "a8659bf035f06cb5bb852e950f0f2bbd167e707818ec5399d433882d8ed93c4f",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-09",
+   "instrument": "US100",
+   "bid_minutes": 1332,
+   "ask_minutes": 1332,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-09T10:00:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-08",
+     "BID",
+     "43a9b60b0e76132b3426630961848ebf01b1914d419a1a107943b4fbf8ae8ef5",
+     "1aeac923ea0a9a4c1d27cd181fe9a4ebf24a3158c3f9adcd5b1998e895512b42"
+    ],
+    [
+     "2026-03-09",
+     "BID",
+     "e9bd6dcbedf72d5ad4cc324348a2d6a3004b460249b0545b37024796aaf9577c",
+     "49576c0a522d52b07576fa128fb831d804cce2625696b7685a32125495370267"
+    ],
+    [
+     "2026-03-08",
+     "ASK",
+     "52c858aacad6f6749d819874770abda29680d0665e4983be9625b0356d71a8de",
+     "6ac08e3f27fc451f8f4e10d8f16fcd381e856bc217886ad035bdc2dd142f3272"
+    ],
+    [
+     "2026-03-09",
+     "ASK",
+     "f19ad1364deb5bc11cf9777c783ad4bcdfe4bad08045af3bdc1a0ad816e24e87",
+     "add50941d8f3c38f5df22afdb7da2976d2e63e27da19ede54ead794095ad1a62"
+    ]
+   ],
+   "session_raw_sha256": "680c2d0755ad2303bcea5be730af2f584656723971f4b179dbc8fd54d4b1222b",
+   "context_manifest_sha256": "0c37b2c58fdc6a1c6c5d62b6ee4b2ceee4a3d00bbab76621c67f600af7bc2c02",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-09",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-09T10:00:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-08",
+     "BID",
+     "06fce0aa8c10e2f43a81ad8541a9f3218576d475259a6b4e5290985aaf41678d",
+     "58e39b2440caf0f6957b6903e7d310691fdb9c4b567aba9c23aab13c6ee7e655"
+    ],
+    [
+     "2026-03-09",
+     "BID",
+     "dad5566aa449c65e41f62f1aa2e81690067f6870ff776b0b532982cca20fa712",
+     "a0b45eba78f47814f09456c60dc8e558bce4b5d27a15dd29262e5d61640a64bf"
+    ],
+    [
+     "2026-03-08",
+     "ASK",
+     "b1e822c83450bc099d12fdb2170a821086fdae169e3125bee49e1377af18d2e6",
+     "1530740419a3a8a4e331cec70e2c2256ad12e5e2c3306e28ee168493c2e56bb6"
+    ],
+    [
+     "2026-03-09",
+     "ASK",
+     "ff10ac86a03c0cce45f8e2d31e52d69596bd31377f33eeb86e299b93ac5584de",
+     "098551d2af3723bccdaf01ef9691c6e13ad02a8149d0a31ba554b69041ff7984"
+    ]
+   ],
+   "session_raw_sha256": "10cb3b76a67a71341ee2dab5a7a4a337b5797766f37292c5c84ebbd9042de1f4",
+   "context_manifest_sha256": "f861525be712cda4f5f556a0661e57f830eb0b53f9bb027ffd69961b016396f8",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-12",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-03-12T02:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-12T10:00:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-11",
+     "BID",
+     "1356002ff7adbc68586301b3ba708e901451ad11244f5a48b7a1d0f786e604a9",
+     "d1ab27946f99e8f023e855b5f86327c8a294b26ee1101b4ac898b270f9253840"
+    ],
+    [
+     "2026-03-12",
+     "BID",
+     "3962e1a52a2ee06d2465808a05ad933fd5c019368cc25ff1e872edbb0ebff406",
+     "8397ae31bc89b0818f737766a1831c608c07f01b8987a138d22c904cd4bc8722"
+    ],
+    [
+     "2026-03-11",
+     "ASK",
+     "beb84a05ad8a13a0a85476b65a72fc4d157863cb6491390e66623c19d15662bf",
+     "ac7ee4ddb63135004e48922173c66ffd7afea23f453779a8a1094531ba3e7c19"
+    ],
+    [
+     "2026-03-12",
+     "ASK",
+     "fb7f58f9ac2fc9ee56a235095be57e954613d6df94db85c69ceb7ad8071fdb3b",
+     "6ad1cd7ba36daf706d734fd1aacfb00af5d91b6ff0024a26ef2b9afc8f6aa743"
+    ]
+   ],
+   "session_raw_sha256": "da0e0334d52b8c164baddbba16e32691935e1097c79044985a6609f4d10daa2f",
+   "context_manifest_sha256": "a10d519c8f46c20617f584d10b8e9fb3ac5c487c4bd459e29121e9776681e056",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-12",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-03-12T02:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-12T10:00:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-11",
+     "BID",
+     "cae1f1a1022cb674ab6489e4135b261140d422a75e30d6f95347468407f35447",
+     "0810d0a68f20945fb75bc15b56b1833ac2ae2bea2c218e1e5d60102aad774bc8"
+    ],
+    [
+     "2026-03-12",
+     "BID",
+     "96c1318ea81462a3757ec1dd9e607e44ba823e89ce74d83a4ff28becb2aedf9b",
+     "4447d7855769448793f6a3bdb74a0fec3cc73d71fc3673bbb79f36464c5f40d2"
+    ],
+    [
+     "2026-03-11",
+     "ASK",
+     "9b109366703329e3f50275cdb67d966098f5eee8ed1c5d42fbac22256180b4f8",
+     "50c080d292e99efce7bb3ba7d43aa01553be3787581752acca2d15513a347b75"
+    ],
+    [
+     "2026-03-12",
+     "ASK",
+     "f833a8174efc05e8b5cc543c22596fa13600a755a44cb4c5e4293d633459de98",
+     "90609d7f8c83bf09f2cd04edd232cd80d560e398507b38b02e80d581067c1556"
+    ]
+   ],
+   "session_raw_sha256": "67cf5b1fa291db6124510cd6febfb51a385ef3ee958e8e96f64bc6d40812509e",
+   "context_manifest_sha256": "cbe75162a13f8934c7b5d4e8b12960c27bc02648ad3f514330a61a57cf716cfb",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-18",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-03-18T02:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-18T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-17",
+     "BID",
+     "4c4bbbcefd8c227d9a9c391240a8780af15d082e4dce63d6f61841d74458f45b",
+     "fa4132947731c3434c02c2eed378e2fa144d72debf59cd529afe4d5b0873a332"
+    ],
+    [
+     "2026-03-18",
+     "BID",
+     "05e5c6ed596cb5b19f6d7810e9d20ba9fe375add5ebbda97952c7f9a42cc9b97",
+     "59d1880a9952617a438123609a44612ca95eb0d91b5cd0257ad1f1b477beaed1"
+    ],
+    [
+     "2026-03-17",
+     "ASK",
+     "ed953d5c3bd77916880787d2404dd76e342a414866d87bff0a92e22560e3991d",
+     "ba1b962efdda732915ceee7d61e00dbf1c11d7381a512be0550a2b97b5273e73"
+    ],
+    [
+     "2026-03-18",
+     "ASK",
+     "7771df9442d4508e91e7dd9e9ba60522553c550f7b8d711d04424b2ff87cefb1",
+     "34e50fe83060387069e4459e96e0a9c91b546ad1bdc1c1e45515aee75b799db3"
+    ]
+   ],
+   "session_raw_sha256": "e5bc0c7365b6c1b7487eb8f7da147e26eede96b2845c16667900f1a4b3aa6006",
+   "context_manifest_sha256": "894a4174ea5b9acad6d5e008b3ae025a35710f9596d8b39f894bed6be8806f1b",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-18",
+   "instrument": "US500",
+   "bid_minutes": 1333,
+   "ask_minutes": 1333,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-18T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-17",
+     "BID",
+     "eeae97282f956f67526905f3ede961d33f14191a03420b55c5da95410bfb9af9",
+     "df260aaa3c0ade68cbe44cfdea820c53e48325291c7585f7a5105f6b941492be"
+    ],
+    [
+     "2026-03-18",
+     "BID",
+     "31b76f0141ab2b34c8305f2530feb93f7a750fd3a482a428149aed4e5c361b6b",
+     "e9cd64d795adf6a4ae8e7116513a90a64a97f7e00442629b78bf06c624dea0cf"
+    ],
+    [
+     "2026-03-17",
+     "ASK",
+     "f84db6731fbdaae5b8626413dabd675326cf49eeaae6ddc516ef16e7c15a8735",
+     "f6b920c6e0ba280df2e7c7a51d00b4083f4417edec147643f6d86a42a12e8762"
+    ],
+    [
+     "2026-03-18",
+     "ASK",
+     "96056ac7954c32d1c4b9df1b97ed39fd3710b50a5532ba24804136b13ab378d0",
+     "4f51505599fb63bd66ad0b1528e6a2fee126fcb388e8d60fe5214ecb7befc2b4"
+    ]
+   ],
+   "session_raw_sha256": "0880f4bc5748df2cfaff122d4034ab0365b28ae12373a0751e57536110cd263b",
+   "context_manifest_sha256": "8caf2dbc4c5eb79dce5fccfe1250bb6a856875cb6b2ca1689429b23de759dbe2",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-20",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-20T07:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-19",
+     "BID",
+     "da0982a722661e289d587d571355528856fe65c2d9aab4a959d09fe7c578be00",
+     "8ad6c96b986ab2aa2bfeb726ea87a832673c435c4c8af15cd218a719ba567bb1"
+    ],
+    [
+     "2026-03-20",
+     "BID",
+     "8951c1e8361a273dbc797ef0243701e4671a8639a27a467fb84cfafda62faeee",
+     "23250cd2fe0e9891fcd548e51e144086f794cfca4523627628d97665bf0c0fd2"
+    ],
+    [
+     "2026-03-19",
+     "ASK",
+     "63c056769deda0d756df244d66533c77546afd7ee6e2759fb374051eb53e48e5",
+     "eb097250e3d2f1d51296fd706a40a5c4d36409a18d98fa0484496a00e92e65e0"
+    ],
+    [
+     "2026-03-20",
+     "ASK",
+     "4f6e3ae4043c727a32da90c1c4c4e099c1024179610e9511bae3d2f11fd4b9be",
+     "79b220c6aebcb38afc1276e822db7a5345f5e9ed52dc040fc24eaada29c62105"
+    ]
+   ],
+   "session_raw_sha256": "ce91cd61681efaacc66cbeae3c97deafe2abcd90755e9fd343170def102fef7a",
+   "context_manifest_sha256": "6ecb1626e3a2c27588e084db4fd5597bedd33006c5e43c9867d1b332d43bab8e",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-20",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-20T07:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-19",
+     "BID",
+     "ee5e6d67aa6f8b805c6446541876b7aba546721b53ed3f907af1326c79e44c81",
+     "fa79db938cca3a9ff7d9d3c70122bf7921d3e4cecfbb23a326802ddd5a71cfdd"
+    ],
+    [
+     "2026-03-20",
+     "BID",
+     "3bba742902c40bbcdbf00a3d29c965e89cc5c8d05babfd4f5d6df8cfce1d0566",
+     "f487ced7e0382b7b4881bf0f7c187a9b88b5e3820c1a5bd46d933506f4404405"
+    ],
+    [
+     "2026-03-19",
+     "ASK",
+     "e3d29a42709d80af6fb3622c0f9d0b136380916141cb5f404d6d7984fa16eb8a",
+     "df46c2e09b266ab9eeb6ed41571ae514b859ce7e9b9db91b877ee1637f3c6268"
+    ],
+    [
+     "2026-03-20",
+     "ASK",
+     "eb729a6a9a6488dae42e4fe627bdcc3a7ca9298d2321633e26b1618ebb48eef0",
+     "02b473053a60f08e29d67a43c29581f93c858f75bc8a9f4ffd1aab542d0bec6e"
+    ]
+   ],
+   "session_raw_sha256": "ee36e5cc049044a2b7807e59cdf0fd5207a7038319393ef6eb640c9b51b1b8ae",
+   "context_manifest_sha256": "24d48337fa3d42209c4493a13e52516a1c7e01c475dbdaef42cda0d12bc6a145",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-23",
+   "instrument": "US100",
+   "bid_minutes": 1323,
+   "ask_minutes": 1323,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     168,
+     168
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-03-23T02:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-23T07:15:00",
+     "side": "buy",
+     "entry_bar_bid": false,
+     "entry_bar_ask": false
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-22",
+     "BID",
+     "f229bdb64015988719797371b7187f30134b8449f735bb9054024f77f6d8982e",
+     "85912ce3c1664c3cbbb687c97e40468f2bd9ecfce3eb537ae8941440645e2c1e"
+    ],
+    [
+     "2026-03-23",
+     "BID",
+     "a636c10e01ec638a7aff7bb6e53a850db6d44b0d03a2d6500d71b46547584fbd",
+     "2360895cadc17933bcd3c9cfbda4b6d4e6527c25ef4c82bfab5cea038e486247"
+    ],
+    [
+     "2026-03-22",
+     "ASK",
+     "c7833e9c5a5786940f0fe9f64fd27e0fc9696735299adcdafe317b489d6563b0",
+     "1e89ca0160ac15d5082651717f6b62273131bff2badba26312fa7a0da96ef5df"
+    ],
+    [
+     "2026-03-23",
+     "ASK",
+     "1b460cae987a4d66f6d27599e3eafedce9e6babbf4aeb7197a67b538bbf1f06d",
+     "418c38b3fd19196ac92b2df7ee11ef6b58055c1cddd553bb5e620c9fc1682fce"
+    ]
+   ],
+   "session_raw_sha256": "855aae161014011c8bd3baf9cd5e5d1c464990195299baaa5f866e63040f2ed0",
+   "context_manifest_sha256": "e044b5989b6f6510f22d6dc0d2bf741170959ebb433da5d694a8ee20d9b17058",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-23",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [],
+   "session_files": [
+    [
+     "2026-03-22",
+     "BID",
+     "08b9c54d80e72d1b8dde971aa289dc7359ef29de12036bcb430d28a3bbc37b70",
+     "208140c9923237b3e44dae43a361ce47d88d0eec15dbdf5a8a80d374dbd5aa66"
+    ],
+    [
+     "2026-03-23",
+     "BID",
+     "527dd30b709e7ffe661112755110f99d4bb11042303d92c2564a99803aea1b6d",
+     "e1fd8530920ed8aafc75effc734ffd711b2dd3ab054d2fb02ad9070856423452"
+    ],
+    [
+     "2026-03-22",
+     "ASK",
+     "2627cdd2d80eff87bd10d2e6f2b7ebbf965d2134bcecc0bb7ad072721f61fab4",
+     "aef211908103a9c1a4ebebc749f197a0ce1fdf972190cdff238ce5367bb15da8"
+    ],
+    [
+     "2026-03-23",
+     "ASK",
+     "9d24d7a9985d89be9457090aa0d58829817e73735bc6f04cd3d1ec5fc38c0ac2",
+     "f1024bf5268cdc1d06d2a3066c2c883991b0843c01588a830f889d231fa35ad8"
+    ]
+   ],
+   "session_raw_sha256": "70b9b8816d315d20cf1b2f8b34d387783065ebff430c98254033f82fc0a3e9b1",
+   "context_manifest_sha256": "c7b652dcab28b649f1c54a03d4a6c7d549d93043cd2988ab176f806dd9109c69",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-25",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-03-25T04:45:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-25T10:00:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-24",
+     "BID",
+     "041fa9ac217656f2818b2682c7f70a5920f5fd9fbce05522d44b83de28e154c3",
+     "c8df142834322aa9f929a1843ce0f1eb7306a5295c1c8dd0253dadad84d76070"
+    ],
+    [
+     "2026-03-25",
+     "BID",
+     "b9ef9e8b06ef3cda01177dd4eab3f5e6786cf75dd9f94fb1286cff22e6e8c528",
+     "90aaa5e7cdc64e2a2b902658018d46e8fbc3b6ee0a0146509b04f66b355a2715"
+    ],
+    [
+     "2026-03-24",
+     "ASK",
+     "39be06153039dea798cdb9f94bf1504299e88e54e147e023c1acc60bbdbb9b3e",
+     "9d2063aacee32e40c58b5e093119a7bacd44b9a49de9a460818848eb7a19d2c0"
+    ],
+    [
+     "2026-03-25",
+     "ASK",
+     "48b1d31e79accf64980d09ea23b29d056253a642e73cf0031caeea2da327123d",
+     "acbef6bf407b66ba44eef6b962d8bbeb220589940f628a034c5b8e73003593b3"
+    ]
+   ],
+   "session_raw_sha256": "2cf8b8d04d15148f08f758e76ba6be53a2544ce0b8f72e0bc5e5a62458ca11bb",
+   "context_manifest_sha256": "1d71694fa19d5de857411663fdc162668003531788f0cb7ceaaa874a21aa1da7",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-25",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-03-25T02:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-25T10:00:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-24",
+     "BID",
+     "5a0d4a97c1bb5aa104892830e03ef831231fb9d2f0ccc29b7e53cbb59c20e1ef",
+     "a57729c09dc2170dcc0b4b0610c337f3cc702e854d6a41249d4f5a8da89862ef"
+    ],
+    [
+     "2026-03-25",
+     "BID",
+     "9065daef3aeef52d6860fbc1e312cca73119444b228064bba3c5948102fd566c",
+     "dcf17c4398b7de29efcad97c7ffcda1653e0c47a0bb0475844a3831b883df3bb"
+    ],
+    [
+     "2026-03-24",
+     "ASK",
+     "c0426e285b3c1588cf6e4f2c59d05a3da3d75164593e78a2b25360ff14654783",
+     "087c6dd3048c88a7f6c6fe3bf1882b2540204f3d1793af55a9edbe53d2c4f849"
+    ],
+    [
+     "2026-03-25",
+     "ASK",
+     "44dc9259265202fb4636325181a3f92ae6955b74f5352c3fcb91220830ff319b",
+     "ca5b8d654c25a3bdee9d7408dfdcf52dd3c1c87b5f00cd44caddb06fc37f55ac"
+    ]
+   ],
+   "session_raw_sha256": "a0396bcedf97e384b3f55c53c4e3387ab298ea5d19c0079d9fbf59e9aad74352",
+   "context_manifest_sha256": "d5c84929ffb4c76fe5cb437ff959319812dc48b8c3a5e658fb2af1c96ba341ea",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-27",
+   "instrument": "US100",
+   "bid_minutes": 1334,
+   "ask_minutes": 1334,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-27T07:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-26",
+     "BID",
+     "883c2f3df4b04ac98bb8717fef379b2a411587677a457e04e7fd9d743eacb4b8",
+     "c9e32c89c0602a343c9d15642420d99cb631d59ef53516aa3ed0a997be259844"
+    ],
+    [
+     "2026-03-27",
+     "BID",
+     "2547730b0011bbed3488218bfd63d64e9541b741d455cacdf8e9f1fd74946ec4",
+     "941426ca477fb511956abcd5c4ca18a6c762255273bae10d6d6594ab9e210d3d"
+    ],
+    [
+     "2026-03-26",
+     "ASK",
+     "55a56703951db2aa70d8753e63ed919a54f4f1743315113a1d01e058c0b8ae6e",
+     "c31d8c55f191ddd8c8d5a1545c1ed47ecdb03f8267dc26784c8a583215c3190b"
+    ],
+    [
+     "2026-03-27",
+     "ASK",
+     "2288941bf5864ac111e998c318eb3f994d0ccdc43772962e6ed0cae2aae0c62c",
+     "73e1b026e71a88ea2762b44ea8c2e35f6d37088c3c06ca57e060ba3cd674c409"
+    ]
+   ],
+   "session_raw_sha256": "5ce379978064ce1967345408722ff435e30541e0f71f0f292af2cc34c5552bf4",
+   "context_manifest_sha256": "5731cd13d37de7ca360c8010a260c03f717d7248254011d827aa04469cfc587b",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-03-27",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-03-27T07:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-03-26",
+     "BID",
+     "6cf461be2e503ecaa68af84c11b50bfe532c816f2c7f139c4cac05d984b416a8",
+     "2d8dd51d685f53225d5fae25354b741d8b8f27633133675362f0be465c189c0b"
+    ],
+    [
+     "2026-03-27",
+     "BID",
+     "a129b1e3bdf8f03990417a047a2576f092c8ab5f369d2ea53e0e37b51309c395",
+     "58ef2c4b53a4bbd48a43190ffe57cfa09b7c843af426fb209c73625aff458cbe"
+    ],
+    [
+     "2026-03-26",
+     "ASK",
+     "c6f39a81426e68fffe7875292700e4506d8307afce29cd1352caeb9ef23f55f5",
+     "38bd6f7c44b12407a5849c83ccdd98cdbef6a47c194d0baea82f508283b074bd"
+    ],
+    [
+     "2026-03-27",
+     "ASK",
+     "4748dac1e4baff71b744cebcddbed039527865a9278bec65ecaeb9ce2edbc535",
+     "221347d51f99f84ad04928cc4f26b57cde89a8bb77d2f8f0bca080fb2b9f6795"
+    ]
+   ],
+   "session_raw_sha256": "66b894f0f465eae5e230e96d8728eaf439cde34cdd0c4d69abc75edf0ab7d099",
+   "context_manifest_sha256": "1cb35c5f8d35192ecbdad3924489bbc57cf3b56cd0eebbc62da5cda0283b8a6f",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-04-06",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-04-06T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-04-05",
+     "BID",
+     "5af88ee15120c3cff78ff191176c3834825ecb5970fd00599731e2fc528e86f8",
+     "035f3a5983fdc7ad44c1fd65b98d9ce3bb5beeeae232bbef30dc8bb9b82f8626"
+    ],
+    [
+     "2026-04-06",
+     "BID",
+     "4a291c77faebdfac8b7b38db240480e8e37aa4551ac4b312dcf45fcd20cae254",
+     "4ce926d663c35786987dbd06b5af4c9d1c119b5248f9c3bb2185ea06f73ba563"
+    ],
+    [
+     "2026-04-05",
+     "ASK",
+     "e9d68a51bb0cba787b71ae6ddc1a12cb933825a8d1bddf2aedbdb09a3f9fdb18",
+     "3f89579e74d5a3e3f156c280ca979491b0c072d22192307f5649a578c4f3bb19"
+    ],
+    [
+     "2026-04-06",
+     "ASK",
+     "b6e6f2f750c4b535128a9196636ca13904261b09a5f6377203cc30d92fa5a94d",
+     "59e7a1ae164932499bcb938f64a70d123b99cfe69ac012d624373173c97e6136"
+    ]
+   ],
+   "session_raw_sha256": "a3c5c02c6e3553045ab16180a628719d0cc6cf51df7fb93d00cdc735fe008f92",
+   "context_manifest_sha256": "462db4e916e7009e24bf7e670b4043706dfc50da8fd0d70ead0d1fea4ac78285",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-04-06",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-04-06T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-04-05",
+     "BID",
+     "4ef722cd66adf342558dd9efa71120b9a2e8d3005e7dcbec36afacd4f828d87c",
+     "00fc219dd4bc1b98117b26df1238c3c0dd5493dd42e2cf85d000c2449e07cd82"
+    ],
+    [
+     "2026-04-06",
+     "BID",
+     "0a560ce838bd7331bdb13980ec7346597725bbc9848535b587b6677dfe50c5a3",
+     "925d75cc8b08b9b4a45a9f2ee38754f30fd937897461e729f937c5ee683e2020"
+    ],
+    [
+     "2026-04-05",
+     "ASK",
+     "37cd19df7129440476b985d70dfdcde1c8652a8e5c19d93d200f108421a85ae6",
+     "575639b66607d8b3c6d16752d6e0fed8c7d6396da583a3b381f0cf7c3780e696"
+    ],
+    [
+     "2026-04-06",
+     "ASK",
+     "aefb22412bb0c69662b536129f2c802deccd22508f0128a8135771b009e28876",
+     "d518675f9d4a9cc15bbf4e1259f45050d622c728a8d9b81aeb58016246e152cd"
+    ]
+   ],
+   "session_raw_sha256": "22e64838a4cea8c1d60b6aaaeecc5fa0f4c3986955c44e1bea98cec5200e0927",
+   "context_manifest_sha256": "b24446b7031957d939eee4010caf54888f9e3faa1870567ce32e83a2a1e8b227",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-04-10",
+   "instrument": "US100",
+   "bid_minutes": 1334,
+   "ask_minutes": 1334,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-04-10T10:00:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-04-09",
+     "BID",
+     "e43f8601f3200e1f8f0a85311c2191afb4998ddc2d09077cd97602633092e8a8",
+     "a6ba7a9a9b12a7ead316bab8e9e23d9dc469f76bd951a080ab217311e4f58cf4"
+    ],
+    [
+     "2026-04-10",
+     "BID",
+     "8f02748079acd172aab0a6b2e49bb2eda1c61b1af520fe174e84c80e576af7a6",
+     "108275b9fcaad62a5e1f0b348dc5d0e96b9082f30228782ff094f75d2a061ed5"
+    ],
+    [
+     "2026-04-09",
+     "ASK",
+     "88c5dd36e14891695609b553400d5a5e9ac2b870198e20d609fb586ca7a8e6ba",
+     "69ea999ad7a0c94b24220fefb47fa0740b1fa0da34e170f7115f55e3ff5a1115"
+    ],
+    [
+     "2026-04-10",
+     "ASK",
+     "2e90ca080e95df0c562fb382674a07686099cbf098ec78fa65f4c694fcc5ea77",
+     "6b8cbb13da3965246f8091308c498ccc960d20ae69747a6ad80d669e5d0224ae"
+    ]
+   ],
+   "session_raw_sha256": "51ce9fb00bcb9599af37d8a439b7be1316a547ab09228b2e9b5537824522bf15",
+   "context_manifest_sha256": "29ec91a2db8dc60800ea8f8098267242eca8654b4e9409d4ea9bbc35b86cabc6",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-04-10",
+   "instrument": "US500",
+   "bid_minutes": 1309,
+   "ask_minutes": 1309,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     154,
+     154
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-04-10T08:45:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-04-09",
+     "BID",
+     "1c2cc4ba7cd3e4a48ca74935e40c8771740ee9ba710db4f052d81c71cd428b80",
+     "a49478cf92d6c1696c9c998df983399bf9c21229f1aec60cf3a22c20ac844b3b"
+    ],
+    [
+     "2026-04-10",
+     "BID",
+     "1ba12e1e03a178a25200cc5d30fb333d056421d8f53b505377a7c5dfe8eb1784",
+     "ba6fa2af25971580baa71ac5591ce2ceb0e430f9a88d4d1300873925565a320c"
+    ],
+    [
+     "2026-04-09",
+     "ASK",
+     "8299611caa7f9601509d26d332001e7c537f348683ceede0dce1c6f122c56d68",
+     "a59e136b87565511c1b5ef77bb6c2a8f0249c7e028769823408431050bdc46ca"
+    ],
+    [
+     "2026-04-10",
+     "ASK",
+     "2e95e185e5a412ae164e6db875bfbe668b522250e084e0fbb53f6132dc9f4d19",
+     "f4d55ec4f3b15045e5bcafc3ec7fc54cbd33ffd44b1fffc94df3b6fb22d6ccd4"
+    ]
+   ],
+   "session_raw_sha256": "3d5f6af986971df8a27e437a02c0a55b4b218c9004bed139f131cc0351be541f",
+   "context_manifest_sha256": "8ebdd6535ce413684580be7c91f5f0bdb8accec5e012de75f403370fe86bc201",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-04-14",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-04-14T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-04-13",
+     "BID",
+     "a6190127d82ce77d97f69cab3279322175a998f500018aa0d33d7e639fba79ad",
+     "17ec470b5868148dd71879fac4b1d9a3655f0f605ae832500abf5d9d515220d6"
+    ],
+    [
+     "2026-04-14",
+     "BID",
+     "8d357033b751c9bd843a5328f9e2c417a98bd39533ed353b3b2e4ec4217f7d9e",
+     "23ef3ad53e2aa4e8e2d12b2bf2c6ce7299422f6868bf4b9f6c2e233cad3c06e3"
+    ],
+    [
+     "2026-04-13",
+     "ASK",
+     "0fc535450aa51136950f77c7825290c8ce3ab2d288a9983c1f831dedff2b5679",
+     "9ea81f6fc60c1f345b499620381e4d47b57d564f7a33e31cf877c20c1be458df"
+    ],
+    [
+     "2026-04-14",
+     "ASK",
+     "6a9ffcc505db460d143258114e17924defdec098f78299f39d8b2474b796785a",
+     "087b39e9648931c1835c7acf729dd640abb64ff6a321b9baf699a7a4987fbd4a"
+    ]
+   ],
+   "session_raw_sha256": "e2360aa36d73d75caf4a917cd25bcd20ca4809ab72d694add3827c313c887673",
+   "context_manifest_sha256": "32620465a802695afe3ca893a89f6cf54c26307a6b27715ff7e278f319d8c29f",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-04-14",
+   "instrument": "US500",
+   "bid_minutes": 1329,
+   "ask_minutes": 1329,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-04-14T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-04-13",
+     "BID",
+     "ee7f8d0c8fb8d2ad19ebe87f202f526084204c6a665dd27fb5c10df9707192fb",
+     "954de54b60ca9bc287531e92dee4d6b0c77b1050ea0b02c48ffb50fae5b16814"
+    ],
+    [
+     "2026-04-14",
+     "BID",
+     "f3c052288ef3313b87d034625acd487d286a4dd8356739712c0fe05eedc173ba",
+     "a4a1d67240f2610d4b8be8360fe69d99fc08d0eed9f7037eca25326eb7ccbab8"
+    ],
+    [
+     "2026-04-13",
+     "ASK",
+     "38e7ae347cb67e906bcc48a85e24ef2f1047b06b2f7d370461dd53b2c6c06763",
+     "4201aef027a77c6fd38ccfaeaf8bda364a48cad8c3979dd19f9223bd00dac9f4"
+    ],
+    [
+     "2026-04-14",
+     "ASK",
+     "a595910c50f694ad318e93d70ed607e22dfcb65cc33445ff885e201861595407",
+     "5137d1d26be7f69f5bef8cb6093f75d8b7fa8493f958edd56138bc83fa942835"
+    ]
+   ],
+   "session_raw_sha256": "a48cb41be8c84b5ebd5f11a6bbb1a541114c653a6edd2ec1465302814a5d7045",
+   "context_manifest_sha256": "ff7dab9fdefd68ecd3e76fd0e2cd62483d3e73c612e7dc5a9dbe4fdcbd0fce3b",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-04-21",
+   "instrument": "US100",
+   "bid_minutes": 1334,
+   "ask_minutes": 1334,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-04-21T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-04-20",
+     "BID",
+     "c3ec73f63511fc96fb14ed4accacdd5dd688267395e202836befdabef593ed7d",
+     "276e7b3064a10bcd9336f9f8bec851bd4794eb200ca7eedb7a583559d67652f0"
+    ],
+    [
+     "2026-04-21",
+     "BID",
+     "e00d072254e7c94c9cb12f25083ad0ed7dc42bba0ee30925868870de3748477c",
+     "52a9c3b497d82c4140f7ffdd9e70dd397c92ccfc8ef430d4c4ef7dfe9e0475fd"
+    ],
+    [
+     "2026-04-20",
+     "ASK",
+     "3ba61e335f3b9354a66e850d8dc6abcec108bcc31478da5a0e38c8de734cd6fe",
+     "73f6934110f8a139caefb0bcd4f04fb1f86dcf4956cf9a696067da37d39458af"
+    ],
+    [
+     "2026-04-21",
+     "ASK",
+     "35095aa6d8563274c12a322b3f00c1d34c30143d8afc133c27f630047ede4e71",
+     "96e43e0f535ad728b4029d8a87e531ac5ccbd8b223c6218d5d7990aa68df149f"
+    ]
+   ],
+   "session_raw_sha256": "f73a10f5cb49b5443e945b2f38c1690711d2951e960b2fee755e491e7c37d611",
+   "context_manifest_sha256": "0199c84d8f1f9048361083cd931d2332adf6ef6a77df4cc174521bf6517d89d7",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-04-21",
+   "instrument": "US500",
+   "bid_minutes": 1329,
+   "ask_minutes": 1329,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-04-21T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-04-20",
+     "BID",
+     "f674183bbdd2a90f4f3bd2fc219932dfdb8d02707be55a2d1afaecb775813fc9",
+     "fcc52088309b11d60b10cc3fcff9839e64c2cbac6f94266431fe4fadf5c4649d"
+    ],
+    [
+     "2026-04-21",
+     "BID",
+     "7029dcac4d4c3c66675044a8dfa75f3a750e0c20f26f76670f6f9406a2f6b968",
+     "4cd17b12e703504cfdc38e163207a885a2fc89fbe6650ac30bb3b41e5968519c"
+    ],
+    [
+     "2026-04-20",
+     "ASK",
+     "1f8babaa20747de028b85bb506d8ce7cd542b5944218b241758215c0baf85167",
+     "a4039ba8fbd7aa6305eeed71c03f3a11e88a5ee27c046e0b431ecbe7c1485e42"
+    ],
+    [
+     "2026-04-21",
+     "ASK",
+     "c72702fa58eaa16a0bd722199894ed6e6eae964e2a4d50e971f62e00ee71f1b4",
+     "587c26d7795ee96a163dc6275ec3312085fbd4594006a1493bd995692e2b8f39"
+    ]
+   ],
+   "session_raw_sha256": "36430a59eb07df7cc39efe303d66a1f2e8c54fe8ef4ac4eceebd49d9e7f19a1e",
+   "context_manifest_sha256": "bf508c997fb7a7f23ee10899588cd6306f03a4dcd8cfe6d459e7ca0260ddd112",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-06",
+   "instrument": "US100",
+   "bid_minutes": 1333,
+   "ask_minutes": 1333,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     178,
+     178
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-05-06T02:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-05-06T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-05",
+     "BID",
+     "dde6eed6e5b1ca0cbe6d1de2a96c54c75a425b99350896281d79d9d8705e5de3",
+     "066d41314a9ff38f90080d289f35b98ae6bfa80cfaf9aa5562279b2ea9afd4c1"
+    ],
+    [
+     "2026-05-06",
+     "BID",
+     "790ed645d5676f08db8fb23c5a52d54ffce3abd606e1533d809086269610aaf9",
+     "f0a2bedc2f9a6694a357f031338cb6b1dccd6a063d6dcd80eb4e2ef55adb1589"
+    ],
+    [
+     "2026-05-05",
+     "ASK",
+     "cb4ba19a4025b29e7508ad5cca49d6bca74356f31f7cac107d28e927fb156e61",
+     "4ef992a0616b4da775004e565cac3c03ce41e997d322fe0bb5f88ba759bfebc5"
+    ],
+    [
+     "2026-05-06",
+     "ASK",
+     "cb8f709925b8da51b26313b260e8ff9a4467a7b1e8e6cf35cd76ad4ba9a627dd",
+     "d344b660d432723b73ec80320f329843e40450f28eb4e39df2a4d80f57363608"
+    ]
+   ],
+   "session_raw_sha256": "7a9325f8ccd7e04a022cab4b5bac6abf2c7871c47eb3f7752539fc5948792e9a",
+   "context_manifest_sha256": "09ade7946de0fdc9d2c8477c8b1cd9a20130acc6414d7574480572259f74cf08",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-06",
+   "instrument": "US500",
+   "bid_minutes": 1334,
+   "ask_minutes": 1334,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-05-06T02:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-05",
+     "BID",
+     "950d8e7c319cd4529169bf404d9129be8a3ce727f7749d2b2a8e5684862ceece",
+     "e526fc12192fc6ce45bb81496b2380e34f3ad5ebfebf64586804c7c6edf277fd"
+    ],
+    [
+     "2026-05-06",
+     "BID",
+     "ca41ef601e28b51d0bd77655fe17b15bdaf6b34de13e47b606382be837d2056e",
+     "430d3ff8cb2b9541358b98836116a4868aa7b0ebd49331ad10948b31ca8af6fa"
+    ],
+    [
+     "2026-05-05",
+     "ASK",
+     "e1e06f72a4a646bf4a996be8410b9645f815f3cf915c65c3508f636ec30c5c81",
+     "1282b623bfef3f01b28e6b4a57c7d61b2e7e587a163f53177ef61d22d157aa39"
+    ],
+    [
+     "2026-05-06",
+     "ASK",
+     "fc25f318d69b128d7cb4191928ab84db923d9b61ea97c7a58d44717e8202fe46",
+     "45e48cc1239799cff1d85560e274b9814eb8abd06e2959c55bb010c920f403df"
+    ]
+   ],
+   "session_raw_sha256": "a8a4a834ba8d2982adb3593de9335fcf1d69e112a7bb537d9f8bb5e762e9aba5",
+   "context_manifest_sha256": "6d7e4f8eefef4eac319bd065a58622c13e0389b1261b7b5e4af916eb29529db2",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-14",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-05-14T10:00:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-13",
+     "BID",
+     "a939d774476bb86e5b6352a4a371bb6c1963db9e341578d6050d7f8c275dd8a4",
+     "f1e84238e5d8a8c2b582f6cdc8857855459e231b87fb97a5edcf354604a459d3"
+    ],
+    [
+     "2026-05-14",
+     "BID",
+     "44a2aaffe61736b73c039d3a7a8cec4128b997e54f3baaa32bd1b76cde756561",
+     "cc9f2edc93dcf9b34c1edf63dfac41a1094490422969dec71308cfb3d317b884"
+    ],
+    [
+     "2026-05-13",
+     "ASK",
+     "17014a4a90e8e48e9b3a2821dcead546b2e2ba003bf029e4387313779432fcbd",
+     "13c79c9ccd01ffcc0cd2b723a284188600f9001a29b8094f3e90399d8c37af40"
+    ],
+    [
+     "2026-05-14",
+     "ASK",
+     "ca12a53a50b6842649f3b8393b2ec180fe37ebf7a1ca89a15a4f87ae1ad69cb8",
+     "cb79370d0dde59510a4ecc2801b77bf428d034214a303f36f743fe5a750dae2e"
+    ]
+   ],
+   "session_raw_sha256": "80ab6f8ee4a76b0c38d61e559c8cafd6bfc3b8cb517cdad9c393d90f9bc701b8",
+   "context_manifest_sha256": "f857373da435c504e168d8f7383bdb93663dec41af47eecf0a1b02398fc6c9b1",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-14",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-05-14T04:00:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-13",
+     "BID",
+     "dc93338a083aacc61c18a0a6e20cb8373b846b3bf2d845e9549063fd03cadd67",
+     "8a9f69b2d6919d5ed83d8c1cff91f1dc1a0b94cc02e352c6c6edb6897cf92c76"
+    ],
+    [
+     "2026-05-14",
+     "BID",
+     "076aaf23a215fff702b7108efee28431c15635243adb3d4a5e09f078436aa3cb",
+     "255c94a7d3363027f969f22eef7adc05122f8c8bc05fe0e11bb8213c18c54340"
+    ],
+    [
+     "2026-05-13",
+     "ASK",
+     "aca80d076682dd10663fc0c80aa574bdcf5a5d176e39911f6809cd26ecfd57b5",
+     "87bb3b791a4429743b3865344f41948f88547d58bf33dc368df342e838caaf80"
+    ],
+    [
+     "2026-05-14",
+     "ASK",
+     "37dc1e3c38feb26124ddc71938f02e67a2547d1fada17ef48c214d39a782a384",
+     "8f7fe6de73af2bcb807021230ff259bff7da1f156cf289da1ec964662900bfaa"
+    ]
+   ],
+   "session_raw_sha256": "15df5369d1eba5e482b93efea54080dc914b0042a6eced8fc450213ae032da8d",
+   "context_manifest_sha256": "b6c2daedc195e3fad6a2f6e8c1431a8c81ca0e0c9f2fc4df567abce7bdd9fd36",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-21",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-05-21T02:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-05-21T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-20",
+     "BID",
+     "67e2aa59f3d51d8185c83b33c58b275a9e94ce8f0e76542a26faf2bba18c0ce3",
+     "c0a14d85faf5e0dab7cceac3fd4a2b1915ad08b0655516c0a32b43baf36528e5"
+    ],
+    [
+     "2026-05-21",
+     "BID",
+     "cd0b9e272ac44d6748f8abec5d061236def77f23301ddae6658760d445960a3a",
+     "0c4cc566716901f55441ceb6decc1af3c445942634856cd9ae847198a9b3443f"
+    ],
+    [
+     "2026-05-20",
+     "ASK",
+     "6576d516f37ed272c0fbce3e103f229fd5ce9bfad92d97be1ef3dabd8a88ee17",
+     "c583c086416cd6334a53cf4d8ab47b7f0c461f937f94a37a996805118e11bdc0"
+    ],
+    [
+     "2026-05-21",
+     "ASK",
+     "b9f3d79c895dab731bf2b4b9544171508c23ed3bd12cf6f17e64b1f8220d8d75",
+     "1c39898cdd0e1111ac372d37509a2b82912dd7ce0d71eedc22c253dd13cf825e"
+    ]
+   ],
+   "session_raw_sha256": "dcbe3f7e6cca2036739a27e88298233470758e47100bda892a779ed024b45c2a",
+   "context_manifest_sha256": "0d26d6f04783fa2eade64b6e00073689f7fad522bee6c1854783d7036fbaef9a",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-21",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-05-21T04:30:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-05-21T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-20",
+     "BID",
+     "b0f7f2a5f3205c3cc818c429ab452d7354df0a736009791a8ae32caabeba3110",
+     "28cfeced82695a38acae33d6bc412746d44cde5e64e9543600fadb6f19db5786"
+    ],
+    [
+     "2026-05-21",
+     "BID",
+     "6bb3d002d4dcea22ea8e9e2f17ac5a9c38f5f28646013af60f745c26e1174655",
+     "9b0ceb5d06165d5a394d39f367ad24ecc8e8ebce43501b8cb934ae0b787b3cd3"
+    ],
+    [
+     "2026-05-20",
+     "ASK",
+     "93f034fe6311ed384e22f02b2fd1c0982003d75e71e036cb8ff7d040bd6fd047",
+     "05972f29646445ef4a4d988bee9066eda96b2900d5c0207ef50ae0c509780aec"
+    ],
+    [
+     "2026-05-21",
+     "ASK",
+     "4ae4b75b07ec8f065913af9739492857c63cf51674f3561ee82d69dae9ce6487",
+     "77eeb02edf989444d704faadccddf2bb6fbefc6e5b9a3517488eb900e65856b3"
+    ]
+   ],
+   "session_raw_sha256": "4be24a66a9b68198c27f047fa8c0f20995fb43727725ace598ff694d8acbe003",
+   "context_manifest_sha256": "7b4a7a8101914c3d8e3dd2e3905632d5fb773f8da822175a038a2ab60f46a13c",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-26",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-05-26T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-25",
+     "BID",
+     "1eede6ae1d5320a583efe72ec2226008581b137b9b461db7fd19f36b29335d19",
+     "7e08f4adf8385b86c0fde4e5cca714310f3be76ac84bfadf63e2bc0fa1d715a6"
+    ],
+    [
+     "2026-05-26",
+     "BID",
+     "4e29b77d92b51027cd5662a5ff9ea2026c3094a975c32f423404aa3ac11abdb1",
+     "869671c0daff079acdf4d97d738fafab2a5887d6db9c15f3349bcdbda53d0227"
+    ],
+    [
+     "2026-05-25",
+     "ASK",
+     "fcb9a580eb5ae6987946bf359b5fff09ea54ed01cbaaac867b43c1094825c512",
+     "2412716b5443203e5cf44b7eec7485e34856e33f56099867698035709f3feb96"
+    ],
+    [
+     "2026-05-26",
+     "ASK",
+     "0308fdda094aab546c8bd577f663375d90ab9d258a22d7e3150ff792e1d531a6",
+     "8b3d245252561aad72b0b6a975afa2abc0c2745b594e20db7f195376016d28ef"
+    ]
+   ],
+   "session_raw_sha256": "d03dfade13542ea3f7cc2d96c63c130c2d9c5096001242a84ec3106fa774b76b",
+   "context_manifest_sha256": "7f351addad651210f4f8722adbf33504b692ab2488d8b8dbf24f6c7b420380c1",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-26",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "ny_am",
+     "entry_time": "2026-05-26T10:00:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-25",
+     "BID",
+     "17ecfdc746f5f9f160e4c8c13b8b33e735445b44135c0a80f8c832e4c5e51b95",
+     "1430fcc4b5bdec86234695f48965031277bb11b4078de4379cb0013676a5e258"
+    ],
+    [
+     "2026-05-26",
+     "BID",
+     "d49bd34dc2f2a0e9b29ad4a686de27e0d20549bf92842b28c4cbb01e2c0e7960",
+     "d0cef55a3349fd7533cd9afc2f12a1904a0e1c74b1f268061997d46a7be217e1"
+    ],
+    [
+     "2026-05-25",
+     "ASK",
+     "96c2652db98f1939e5fe10a6221af34515a176269c908f5567e3b9a06d37f4d5",
+     "87695a1fe8a7701d9b4054ca44074cdbfbd4f4e758e2b0f044632698bca56f24"
+    ],
+    [
+     "2026-05-26",
+     "ASK",
+     "e478d283ccfd8fa59b1245ded225f26910b3080712427ec686bd2f02c23bd879",
+     "de3757833c0f2da60ef9b482d0d56830e5cfe6f3af49f7c9c215ef3b1447f4e4"
+    ]
+   ],
+   "session_raw_sha256": "af92071896d802eb8927d6d459ca6ec6754888b49555ab77e848a899a5ac0b03",
+   "context_manifest_sha256": "51eb94ddf13b5ec96d4b30f1f74c10f9a547c00a985c23aa267c631dad43ceb7",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-29",
+   "instrument": "US100",
+   "bid_minutes": 1267,
+   "ask_minutes": 1267,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     142,
+     142
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-05-29T03:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-28",
+     "BID",
+     "f3a5886cfda3230cf823a3e3ab402ad3d3d52c7406360827b12cd2c6c0606ee8",
+     "03c9299b183de7690a96219a450ae53a5fa2ad1758000d0b0e8dcefe9e1c6b9c"
+    ],
+    [
+     "2026-05-29",
+     "BID",
+     "4a17a6ba2add3666ba2e80c4c86604653d656be65f36feba5462ee2d437984e6",
+     "635caacee0fefdecbff955b83ca4e690324fd44a46fbbb57b7f27cca06c4a31c"
+    ],
+    [
+     "2026-05-28",
+     "ASK",
+     "0e608f70b568623b2d41b933dbb6bc2a6873c34a866d0dfbb9935506921e0e37",
+     "c4c67dfe11907b5addbafd15679eca15f676135997ff7c806122c48f96a6bb6c"
+    ],
+    [
+     "2026-05-29",
+     "ASK",
+     "c188202194dad7c423d1db96623d1aeeea052f8618830d741ebc6efe4875b91c",
+     "74c748bbe4087e865f91bb03db480d351f5bcac335711fe99733c76681527cea"
+    ]
+   ],
+   "session_raw_sha256": "9be393243c7cea2673c6facdeee428fe15fdaa67e0a05730e917c91ec54612ea",
+   "context_manifest_sha256": "28cdc769b02d9738309f431dbd700cc4662eaea9108b3d55e7ca459f77d70edb",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-05-29",
+   "instrument": "US500",
+   "bid_minutes": 1266,
+   "ask_minutes": 1266,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     142,
+     142
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-05-29T03:30:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-05-28",
+     "BID",
+     "7bd5232c61da8f6285f94892f44070a581961bfbae5b18a785350f052a412ed0",
+     "1b6044273c2cf0efccca220358985cfeeca24c2e6398327b0db9bce37aac8276"
+    ],
+    [
+     "2026-05-29",
+     "BID",
+     "06b32f8090e67c0f387990a91011ce973f7fe0a0f07cbc2a11d6daa6a7f0c721",
+     "216fbb4b479a778c20a7431ad8bf263e04b0da2b1a74cd1b8cec3ca5339b8650"
+    ],
+    [
+     "2026-05-28",
+     "ASK",
+     "dcbd675882764d601e0816a3f7816c565469534084076142b2db74b9cb3886dd",
+     "72998e7c36df9cbe8b73c2e7bb3a548333955c5a25e2720948be0285e3434353"
+    ],
+    [
+     "2026-05-29",
+     "ASK",
+     "972de50b8db20f5e72d483be4049c1e36b5e273540bd9e67c81d327b9b65f020",
+     "b017006dcf645bd94696d1298e5803b9c2cf234b7666ff3c523ce417523f17ec"
+    ]
+   ],
+   "session_raw_sha256": "ebcaca02787a6b1a5bc2e9ef8feb840bcade0259a49f41bf6c2cbf92ec3259a2",
+   "context_manifest_sha256": "570273b1916f45a2838bdd18780da889780ad6d9c4667abed4cd3586a86730f1",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-06-15",
+   "instrument": "US100",
+   "bid_minutes": 1333,
+   "ask_minutes": 1333,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-06-15T02:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-06-15T07:15:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-06-14",
+     "BID",
+     "e0100821d9a36f160d7471b18d30cc0e8bdd39e3b4f8255d5e334dd98d49db0f",
+     "5688c4f16bf8d15adb29a05be1817c1849b5ed3efd8b69ed1b36897f04b5f3c2"
+    ],
+    [
+     "2026-06-15",
+     "BID",
+     "b7ca239d4471daf3e33ce9926b4e10f00f644be96df31cc76912e946257239db",
+     "499f7b74742da94b638175641c3bbe98030bd0e5721dd9ed54aa2fce413dfa49"
+    ],
+    [
+     "2026-06-14",
+     "ASK",
+     "6f568b70ba06bd464a2a1211cb109714707c159a55b13f299093bcb5746c4802",
+     "310b4a76c273db51dae81f3fabc1f30bc35935a380d3f47337433fe81385b224"
+    ],
+    [
+     "2026-06-15",
+     "ASK",
+     "4d28243b3b1353d80c71635211ba89fcee52eb84cade40d182489d3778606b87",
+     "d6c84117b3c0ef8b8567e6e9cfccbeaed9211b0dbc1378a4ea9a248ba275c206"
+    ]
+   ],
+   "session_raw_sha256": "c2fbc391789f8dddc5eec95aa9c3fe367d9223cc9b59ac816ca9cf558e38eccc",
+   "context_manifest_sha256": "e9bbfcd17d1f8282f75b0ea2563a782e1866f71e5b6cc6a7a611790b2af2d86b",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-06-15",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-06-15T02:30:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    },
+    {
+     "session": "ny_am",
+     "entry_time": "2026-06-15T10:00:00",
+     "side": "sell",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-06-14",
+     "BID",
+     "d44ab4b1beacf1a0d3a74e54037eda8d13f2e8501c559ecec86450c5d2d1fb42",
+     "e4e562efb0a6fbd3e4cd337a3f20c5baa3c3c176ea05262aaba837ed6598b53c"
+    ],
+    [
+     "2026-06-15",
+     "BID",
+     "ad7366d30f40208e52f29dd62a1f53ad754bf310030bf8d1a4ced99eab17a2e0",
+     "6f8c15f975db8241906d4e724d2f3a2f8110acd63da5598595dccb8b923f21a1"
+    ],
+    [
+     "2026-06-14",
+     "ASK",
+     "ad6e9dfc68638de48806cc2d77c8d3d3d1bed43e11e096a3bac9a5897f06cb0d",
+     "725cc0c54dd1c2340c918d2dc468c86658183328d45be2a4bb45234ca1fff767"
+    ],
+    [
+     "2026-06-15",
+     "ASK",
+     "eaf7b73876bee11c8b4c1da1071189f4bec62df246b69262973fd3bcf8f3b496",
+     "3075aa204b4208983209fde3aaa556da4888c6b12a264f53f4fc4adb30b1990b"
+    ]
+   ],
+   "session_raw_sha256": "b5471618b6e338b5999a9e5d60031d7bd8f5b0773413f3d5eeb058257dfa70c7",
+   "context_manifest_sha256": "7babe62f3c06c4cf7d4c546ccf911abcab0d4129c60af98aee9d2f7dd2de10b8",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-06-26",
+   "instrument": "US100",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-06-26T02:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-06-25",
+     "BID",
+     "5f4ac47b8feee84ff81e1d6c4331c21dc06659d5f8d41abd9d30d4e7eadfc8d0",
+     "e3a53b39406b9f7f2facbfce980a155dd53c4547cd46eec2b5502bb707924d6e"
+    ],
+    [
+     "2026-06-26",
+     "BID",
+     "6d0a2003e22d943849222bb89d7a1a00c1aa49ef71f458be8166c5d481efed5e",
+     "85697e34a01dab10fdbf73f5df7f91aaa9e19c2ab14d7ed889568a7d6a1fb60f"
+    ],
+    [
+     "2026-06-25",
+     "ASK",
+     "e984285a5387dd40db5295d427b6bbb966e159d32d3174bc7f8dde94fa8e60e9",
+     "0723ef881d27b7afb67b2943c3798468d62408a85b888c4008258682c041166a"
+    ],
+    [
+     "2026-06-26",
+     "ASK",
+     "10baaa04e888e2fce2eb842083f00c7c37038fb515382f19427196132f5be8e1",
+     "2a31adbed1f3c91b837e5371c91457766df1f583879faab5aea5c6e6f16ed3bc"
+    ]
+   ],
+   "session_raw_sha256": "6a27049cd6697fa13a6f70374f1de806fc85b71c25f4dd7d905c6eeb85ed944b",
+   "context_manifest_sha256": "ab980d0da07bad79ac90ec81192faf97b3fbc6292c527343a69db29c4307f2af",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "date": "2026-06-26",
+   "instrument": "US500",
+   "bid_minutes": 1335,
+   "ask_minutes": 1335,
+   "bid_only": 0,
+   "ask_only": 0,
+   "kz_bars_bid_ask": {
+    "london": [
+     180,
+     180
+    ],
+    "ny_am": [
+     180,
+     180
+    ]
+   },
+   "crossed_bars": 0,
+   "trades": [
+    {
+     "session": "london",
+     "entry_time": "2026-06-26T02:15:00",
+     "side": "buy",
+     "entry_bar_bid": true,
+     "entry_bar_ask": true
+    }
+   ],
+   "session_files": [
+    [
+     "2026-06-25",
+     "BID",
+     "9c3221c168c7b555f8c2b16cfcac5bbeeed17db3813180489c63661937e612bf",
+     "c29bab6fe03c6519ba2f47af8aae13ebf72570d434d445604533fad862f1d91a"
+    ],
+    [
+     "2026-06-26",
+     "BID",
+     "01e1f64756083a8e4b37296f48cbd1eda8aef34ab8ccca55e70fb5b79bcff4d7",
+     "6e355519c11b3952f189f4ecbe704d746a4b7871135049f7a5563444f4a26219"
+    ],
+    [
+     "2026-06-25",
+     "ASK",
+     "f52440d9b5a5aba1e9c11d1522bc6ce4d32f98241dd4e0cf518684d01dcde116",
+     "cfdec1afb4ab5a37d23329273956120083d7e1320e3735bd2f910f338cc7d21c"
+    ],
+    [
+     "2026-06-26",
+     "ASK",
+     "47e2fcd50be986c4fb30bb4e9d013df1cb3ed30f6b6accb1c2f2484e6a14867d",
+     "a0e52c12a1e37f6fbe8d6ad7f310d005be5ea96487687efcb0168cb85c011c21"
+    ]
+   ],
+   "session_raw_sha256": "2aa8d3a9fa3b4ff28d8e4a58ed29626aeecf17ff1f81146fad0b6ec265143dd7",
+   "context_manifest_sha256": "95d32bf515af073927ee2c59c52474be82daedf3946f1e1da7b65ec56ddc01ca",
+   "n_context_files": 48,
+   "bi5_equal_marketdata_raw": [
+    true,
+    true,
+    true,
+    true
+   ]
+  }
+ ],
+ "mismatches": [],
+ "n_files": 438,
+ "n_trades_compared": 53,
+ "ok": true,
+ "harness_manifest": {
+  "repo_root": "GdotAiM/hermes",
+  "files": {
+   "research/forward/H016b/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "research/forward/H016b/duka.py": "926c521534372794235956f08ede6b5dc3b04a45ff13818de26db9927a8fe34d",
+   "research/forward/H016b/h016b.py": "81b07042ca3745f97eefc13f3b3f273dbb6d4b4b7ea5fd524f235238c2a0b589",
+   "research/forward/H016b/one_sided.py": "87e5d8bf07cc271e69de7651c52d46d4e132476ef323891738627d0fca090895",
+   "research/forward/tests/test_h016b.py": "9ce5264901044ca80a8b82b4df5b18b5ddb73c73f431c58e001d07cf5f6becd6",
+   "research/protocols/preregs/H016b_DATA_APPENDIX_2026-10-04.md": "c34d8cba9984904a21ffaf06f4191bac10e084b34aacc93d36fdac1f79d11e2e"
+  }
+ },
+ "computed_at_utc": "2026-10-05T06:28:23+00:00",
+ "seconds": 17
+}

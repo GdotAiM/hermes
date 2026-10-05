@@ -15,7 +15,8 @@ H016b binding items (prereg):
   * per session: History(bid, trading_days(bid), ask=ask, calendar=True) -> session_ticket_log(days=[d], flat book) ->
     tradeable -> entry-minute rule (BID and ASK bars at exactly t-1m, else feed_gap_entry) -> simulate_both binding
     (R None -> no_r_ticket); calendar on/off ticket identity per session (else calendar_identity_fail, refused)
-  * N = 747, kill at -40R (crossing logged once to sealed/KILL_LOG.json), futility once at trade 200 on the frozen
+  * N = 747, kill at -40R (crossing logged once to sealed/KILL_LOG.json and STICKY: a logged kill forces FAILS forever;
+    CASSANDRA F1 / harness-H016b-v2), futility once at trade 200 on the frozen
     sealed/FUTILITY_SET.json (v[9749] < +0.10), session-cluster bootstrap seed 20261004, 10,000 resamples, LB v[500]
   * counting only for rows computed after the first H016b harness registration commit on origin; R SEALED until
     DATA_CERTIFIED.json and CASSANDRA_CLEARED.json carrying this harness digest exist; no verdict wording below N=100
@@ -23,7 +24,7 @@ H016b binding items (prereg):
     short_session-dropped, entry-minute / no_r counts, DATA condition 4, monthly spread monitor, family rule (H013/H014/H016b)
 Data/logs: $HERMES_FWD_DATA/H016b (default /home/box/hermes-x/forward/H016b), outside git.
 
-CLI (from the root of a clean checkout at tag harness-H016b-v1; scheduled run = `final` at or after 01:00 UTC, Tue-Sat):
+CLI (from the root of a clean checkout at tag harness-H016b-v2; scheduled run = `final` at or after 01:00 UTC, Tue-Sat):
   python research/forward/H016b/h016b.py final        score every pending session date d with now >= d+1 01:00 UTC
   python research/forward/H016b/h016b.py report       status counts; R/stats only after both clearance files exist
   python research/forward/H016b/h016b.py verify       recompute every FINAL row from stored files; must match exactly
@@ -48,12 +49,13 @@ one_sided = importlib.util.module_from_spec(_spec2); sys.modules["h016b_one_side
 LEAD = "H016b"
 PREREG_REL = "research/protocols/preregs/H016b_FORWARD_PREREG_2026-10-04.json"
 APPENDIX_REL = "research/protocols/preregs/H016b_DATA_APPENDIX_2026-10-04.md"
-REG_NOTE_REL = "research/protocols/preregs/H016b_HARNESS_REGISTRATION_2026-10-04.json"
-HARNESS_VERSION = "v1"
+REG_NOTE_REL = "research/protocols/preregs/H016b_HARNESS_REGISTRATION_V2_2026-10-05.json"
+HARNESS_VERSION = "v2"
 TAG = "prereg-H016b"
 TAG_COMMIT = "74b13d312990e22c24d2ccfcd1f2072aca67cfdc"
 REG_REFS = ("origin/main", "origin/ftn/demo-fixes")
-HARNESS_FILES = [HERE / "__init__.py", HERE / "duka.py", HERE / "h016b.py", HERE / "one_sided.py", REPO / APPENDIX_REL]
+HARNESS_FILES = [HERE / "__init__.py", HERE / "duka.py", HERE / "h016b.py", HERE / "one_sided.py",
+                 REPO / "research/forward/tests/test_h016b.py", REPO / APPENDIX_REL]
 DATA_ROOT = pathlib.Path(os.environ.get("HERMES_FWD_DATA", "/home/box/hermes-x/forward")) / LEAD
 # CASSANDRA C2 / DATA B1: the H015b data directory and every file the H016b harness did not download itself are QUARANTINED.
 # The harness never reads H015b's directory (no path to it is built anywhere), refuses to run with a data root inside it,
@@ -768,10 +770,9 @@ def write_state(led: Ledger, at: dt.datetime, run_id: str) -> None:
                last_run_utc=at.isoformat(timespec="seconds"), status_counts=st, n_counted=len(tr), binding_N=N_DECISION,
                pending_dates=[x.isoformat() for x in pending_dates(led, at)])
     (led.root / "STATE.json").write_text(json.dumps(pub, indent=1) + "\n")
-    k = kill_walk(tr)
-    kill_log_once(tr, k, led.root, at)
-    sealed = dict(pub, cum_R=sum(float(t["R"]) for t in canonical(tr)[:k["kill_at_trade"] or N_DECISION]), kill=k)
-    fu = futility_frozen(tr[:k["kill_at_trade"]] if k["kill"] else canonical(tr)[:N_DECISION], led.root)
+    k = kill_sticky(tr, led.root, at)                         # F1: sticky; writes the log on first crossing
+    sealed = dict(pub, cum_R=sum(float(t["R"]) for t in k["eval_trades"]), kill={x: k[x] for x in ("kill", "kill_at_trade", "min_cum", "sticky")})
+    fu = futility_frozen(k["eval_trades"], led.root)
     sealed["futility"] = fu
     (led.root / "sealed").mkdir(parents=True, exist_ok=True)
     (led.root / "sealed" / "STATE.json").write_text(json.dumps(sealed, indent=1, default=str) + "\n")
@@ -899,6 +900,27 @@ def kill_log_once(trades: list[dict], k: dict, root: pathlib.Path, at: dt.dateti
                cum_R_at_crossing=sum(float(t["R"]) for t in c), keys=[key(t) for t in c], harness_sha256=harness_digest())
     p.write_text(json.dumps(rec, indent=1) + "\n")
     return rec
+
+
+def kill_sticky(trades: list[dict], root: pathlib.Path, at: dt.datetime | None = None) -> dict:
+    """CASSANDRA F1 (harness-H016b-v2): if sealed/KILL_LOG.json exists, the kill is STICKY - verdict is FAILS and evaluation
+    uses the logged keys (a late backfill of an earlier positive session cannot undo it). Otherwise compute kill_walk and,
+    on a first crossing, write the log once. Returns kill, kill_at_trade, min_cum, sticky, keys, eval_trades."""
+    p = pathlib.Path(root) / "sealed" / "KILL_LOG.json"
+    by = {key(t): t for t in canonical(trades)}
+    if p.exists():
+        log = json.loads(p.read_text())
+        keys = list(log["keys"])
+        ev = [by[k] for k in keys if k in by]
+        return dict(kill=True, kill_at_trade=log["kill_at_trade"], min_cum=log.get("cum_R_at_crossing"),
+                    sticky=True, keys=keys, keys_missing=[k for k in keys if k not in by],
+                    eval_trades=ev, log=log)
+    k = kill_walk(trades)
+    log = kill_log_once(trades, k, root, at or now_utc()) if k["kill"] else None
+    if k["kill"]:
+        c = canonical(trades)[:k["kill_at_trade"]]
+        return dict(k, sticky=False, keys=[key(t) for t in c], keys_missing=[], eval_trades=c, log=log)
+    return dict(k, sticky=False, keys=None, keys_missing=[], eval_trades=canonical(trades)[:N_DECISION], log=None)
 
 
 def key(t: dict) -> str:
@@ -1073,7 +1095,8 @@ def spread_report(store, rows) -> dict:
 
 def verdict(rep, n, k, fu) -> str:
     if k["kill"]:
-        return f"FAILS (kill: pooled cumulative R <= {KILL_R}R at trade {k['kill_at_trade']})"
+        sticky = " [sticky: sealed/KILL_LOG.json]" if k.get("sticky") else ""
+        return f"FAILS (kill: pooled cumulative R <= {KILL_R}R at trade {k['kill_at_trade']}{sticky})"
     if fu and fu["fails"]:
         return f"FAILS (futility at N={FUTILITY_AT}: upper 97.5% cluster bound {fu['ub_one_sided_975']:+.3f} < +{FUTILITY_BAR})"
     if n < NO_VERDICT_BELOW:
@@ -1089,14 +1112,24 @@ def verdict(rep, n, k, fu) -> str:
     return "PASSES (unadjusted, fill-fragile)" if (rep.get("fill_fragility") or {}).get("verdict_flips") else "PASSES (unadjusted)"
 
 
-def criteria(tr: list[dict], foil_means: list[float] | None) -> dict:
-    """The six binding pass criteria + kill + futility outcome for a trade list (canonical; fragility co-report)."""
-    c = canonical(tr); k = kill_walk(c)
-    ev = c[:k["kill_at_trade"]] if k["kill"] else c[:N_DECISION]
+def criteria(tr: list[dict], foil_means: list[float] | None, root: pathlib.Path | None = None,
+             sticky: bool = False) -> dict:
+    """The six binding pass criteria + kill + futility outcome for a trade list (canonical; fragility co-report).
+    sticky=True (binding base, CASSANDRA F1/F5): use sealed/KILL_LOG.json and sealed/FUTILITY_SET.json when present.
+    sticky=False (perturbed legs): recompute kill_walk / futility on the perturbed trades themselves."""
+    c = canonical(tr)
+    if sticky and root is not None:
+        ks = kill_sticky(c, root)
+        ev = ks["eval_trades"]; k_kill = ks["kill"]
+        fu = futility_frozen(ev, root)
+    else:
+        k = kill_walk(c)
+        ev = c[:k["kill_at_trade"]] if k["kill"] else c[:N_DECISION]
+        k_kill = k["kill"]; fu = futility(ev)
     rs = [float(t["R"]) for t in ev]; n = len(rs)
     if not n:
-        return dict(n=0, kill=k["kill"], futility_fails=None, crit=None, mean_R=None)
-    fu = futility(ev); per = {i: [float(t["R"]) for t in ev if t["instrument"] == i] for i in INSTS}
+        return dict(n=0, kill=k_kill, futility_fails=None, crit=None, mean_R=None)
+    per = {i: [float(t["R"]) for t in ev if t["instrument"] == i] for i in INSTS}
     top = sorted(rs, reverse=True); kk = max(1, n // 100)
     p25 = {i: sorted(float(t["risk_pts"]) for t in ev if t["instrument"] == i)[len(per[i]) // 4] for i in INSTS if per[i]}
     big = [float(t["R"]) for t in ev if float(t["risk_pts"]) >= p25.get(t["instrument"], 0)]
@@ -1104,7 +1137,7 @@ def criteria(tr: list[dict], foil_means: list[float] | None) -> dict:
     crit = [m >= 0.10, binding_bound(ev)["lb_one_sided_95"] > 0,
             (100.0 * sum(1 for x in foil_means if x < m) / len(foil_means) >= 95.0) if foil_means else None,
             all(per[i] and mean(per[i]) > 0 for i in INSTS), (mean(top[kk:]) if n > kk else -1) > 0, (mean(big) if big else -1) > 0]
-    return dict(n=n, mean_R=m, per_instrument={i: mean(v) if v else None for i, v in per.items()}, kill=k["kill"],
+    return dict(n=n, mean_R=m, per_instrument={i: mean(v) if v else None for i, v in per.items()}, kill=k_kill,
                 futility_fails=(fu or {}).get("fails"), crit=crit)
 
 
@@ -1215,12 +1248,14 @@ def perturbed_outcome(bid, ask, t: dict, kw: dict, F=None) -> dict:
     raise ValueError(k)
 
 
-def fill_fragility(store, tr: list[dict], cands: list[dict], foil_means: list[float] | None) -> dict:
+def fill_fragility(store, tr: list[dict], cands: list[dict], foil_means: list[float] | None,
+                   root: pathlib.Path | None = None) -> dict:
     """Prereg fill_fragility_co_report (CASSANDRA F7 + C3) and the binding one-sided-exit leg (CASSANDRA/ORION 2026-10-04).
-    For each PERTURBATIONS entry: n, pooled / per-instrument mean, exit flips, the six pass criteria (foil criterion = the
-    perturbed pooled mean against the binding foil distribution), kill and futility. verdict_flips = any perturbation
-    changes any criterion, kill or futility -> 'PASSES (unadjusted, fill-fragile)', SURVIVES blocked."""
-    F = ftn(); base = criteria(tr, foil_means); cache = {}
+    Binding base uses sticky kill + frozen futility (CASSANDRA F1/F5). Each perturbed leg recomputes kill/futility on its
+    own trades. For each PERTURBATIONS entry: n, pooled / per-instrument mean, exit flips, dropped_R_none (F5), the six
+    pass criteria, kill and futility. verdict_flips = any perturbation changes any criterion, kill or futility ->
+    'PASSES (unadjusted, fill-fragile)', SURVIVES blocked."""
+    F = ftn(); base = criteria(tr, foil_means, root=root, sticky=True); cache = {}
 
     def ser(t):
         k2 = (t["instrument"], t["date"])
@@ -1234,7 +1269,7 @@ def fill_fragility(store, tr: list[dict], cands: list[dict], foil_means: list[fl
     out = dict(binding=base, min_risk=mr, threshold_tickets_within_0_25=len(thr), threshold_keys=thr, perturbations={})
     flips_any = False
     for name, kw in PERTURBATIONS:
-        new, ex_flips = [], 0
+        new, ex_flips, dropped = [], 0, 0
         if kw["kind"] == "min_risk":
             dm = kw["delta"]
             new = [t for t in tr if float(t.get("dist_pts") or t["risk_pts"]) >= mr[t["instrument"]] + dm]
@@ -1242,19 +1277,22 @@ def fill_fragility(store, tr: list[dict], cands: list[dict], foil_means: list[fl
                 if float(t["dist_pts"]) >= mr[t["instrument"]] + dm:
                     o = F["out"].simulate_both(*ser(t), dt.datetime.fromisoformat(t["entry_time"]), float(t["entry"]),
                                                float(t["stop"]), t["side"], slip(t["instrument"]))
-                    if o["R"] is not None:
+                    if o["R"] is None:
+                        dropped += 1
+                    else:
                         new.append(dict(t, R=o["R"], exit=o["exit"], risk_pts=o["risk_pts"]))
         else:
             for t in tr:
                 o = perturbed_outcome(*ser(t), t, kw, F)
                 if o["R"] is None:
+                    dropped += 1
                     continue
                 ex_flips += int(o["exit"] != t["exit"])
                 new.append(dict(t, R=o["R"], exit=o["exit"]))
-        c = criteria(new, foil_means)
+        c = criteria(new, foil_means, sticky=False)
         fl = (c["crit"] != base["crit"]) or (c["kill"] != base["kill"]) or (c["futility_fails"] != base["futility_fails"])
         flips_any |= fl
-        out["perturbations"][name] = dict(c, exit_flips=ex_flips, verdict_flip=fl)
+        out["perturbations"][name] = dict(c, exit_flips=ex_flips, dropped_R_none=dropped, verdict_flip=fl)
     out["verdict_flips"] = flips_any
     out["one_sided_exit_leg_flips"] = out["perturbations"]["conservative_one_sided_exit"]["verdict_flip"]
     return out
@@ -1294,9 +1332,13 @@ def cmd_report(root=None, foil_n: int = N_FOIL) -> dict:
         rep["R"] = "SEALED: DATA_CERTIFIED.json and CASSANDRA_CLEARED.json with this harness_sha256 are required before any R is shown"
         return rep
     tr = counted_trades(led)
-    k = kill_walk(tr)
-    tr_eval = tr[:k["kill_at_trade"]] if k["kill"] else tr[:N_DECISION]
+    ks = kill_sticky(tr, led.root)                              # F1: sticky; logged kill forces FAILS
+    k = {x: ks[x] for x in ("kill", "kill_at_trade", "min_cum", "sticky")}
+    tr_eval = ks["eval_trades"]
     rep["kill"] = k
+    if ks["sticky"]:
+        rep["kill_log"] = ks["log"]
+        rep["kill_keys_missing"] = ks["keys_missing"]
     fu = futility_frozen(tr_eval, led.root)
     rep["futility"] = fu
     if fu:
@@ -1358,10 +1400,10 @@ def cmd_report(root=None, foil_n: int = N_FOIL) -> dict:
         rep["h015b_overlap"] = h015b_overlap(tr_eval)
         cands = [dict(r) for r in lat.values() if r["status"] == "no_trade" and r.get("regate_candidate") == "True"
                  and not (susp["since"] and r["date"] >= susp["since"] and not (susp["resume_from"] and r["date"] >= susp["resume_from"]))]
-        rep["fill_fragility"] = fill_fragility(store, tr, cands, pm)
+        rep["fill_fragility"] = fill_fragility(store, tr, cands, pm, root=led.root)
     rep["verdict"] = verdict(rep, n, k, fu)
-    if k["kill"]:
-        rep["kill_log"] = kill_log_once(tr, k, led.root, now_utc())
+    if k["kill"] and "kill_log" not in rep:
+        rep["kill_log"] = ks["log"] or kill_log_once(tr, k, led.root, now_utc())
     p_ = rep.get("pooled", {}).get("binding_cluster_bound", {}).get("p_one_sided")
     rep["family_rule"] = dict(
         text=("PASS is 'PASSES (unadjusted)'; SURVIVES only if p_one_sided clears Holm across the active 3-test family "
