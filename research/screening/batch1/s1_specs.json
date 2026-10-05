@@ -1,0 +1,47 @@
+{
+ "GER40": {
+  "symbol": "GER40",
+  "pip": 1.0,
+  "asset": "index",
+  "range_scale": 4.944,
+  "median_daily_range_pips": 304.0,
+  "spread_assumed": 2.624,
+  "slip_stop": 0.884,
+  "slip_market": 0.884,
+  "slip_limit": 0.442,
+  "median_close": 24453.999,
+  "n_scale_days": 281,
+  "n_spread_bars": 101023,
+  "rule": "protocol v1 section 2"
+ },
+ "US30": {
+  "symbol": "US30",
+  "pip": 1.0,
+  "asset": "index",
+  "range_scale": 9.068,
+  "median_daily_range_pips": 557.7,
+  "spread_assumed": 2.17,
+  "slip_stop": 1.775,
+  "slip_market": 1.775,
+  "slip_limit": 0.887,
+  "median_close": 49075.999,
+  "n_scale_days": 272,
+  "n_spread_bars": 97781,
+  "rule": "protocol v1 section 2"
+ },
+ "XAUUSD": {
+  "symbol": "XAUUSD",
+  "pip": 0.1,
+  "asset": "metal",
+  "range_scale": 14.761,
+  "median_daily_range_pips": 907.8,
+  "spread_assumed": 0.84,
+  "slip_stop": 0.281,
+  "slip_market": 0.281,
+  "slip_limit": 0.141,
+  "median_close": 4345.535,
+  "n_scale_days": 273,
+  "n_spread_bars": 98261,
+  "rule": "protocol v1 section 2"
+ }
+}
