@@ -215,3 +215,168 @@ Holm family = all 68 revisit cells (inst × TF × dir × horizon); sweep cells a
 8. **H-NW8 Cost-aware "fade to the open" (only as a pre-declared rule).** Example rule declared before any R is computed: after a 15m TOL no-wick bull candle in NY AM, limit sell at close + 0.25 ATR, target = candle open, stop = 1 ATR beyond entry, exit at 15:59 NY, costs = pinned spread+slip on ASK/BID. Falsified if mean R ≤ 0 net of costs on held-out data. Baseline: the same rule on matched with-wick candles and random-time entries. (Given finding 2, the prior is negative.)
 9. **H-NW9 Sweep-and-reverse at the naked open (Turtle-soup).** When the naked open *is* swept, price closes back above it (bull) within 3 bars more often than at matched with-wick opens. Falsified if diff ≤ 0. This tests whether the open behaves as liquidity (stop-run) rather than a plain level.
 10. **H-NW10 Weekly analogue.** The Sunday-open (weekly) candle with open == low/high gets its open revisited within the week less often than distance predicts. Needs years of data; falsified if the rate is inside the (c) band.
+
+---
+# ADDENDUM 1 RESULTS (2026-10-12): in-sample burned exploration, prereg Addendum 1 (69597c4)
+
+Code `addendum1.py` (~60 s, seed 20261012). Outputs: `add1_timing.csv`, `add1_pd_did.csv`, `add1_opens.csv`, `add1_weekly.csv`, `survival_15m.png`, `survival_1H.png`.
+
+## A. Timing to revisit / sweep
+Controls are reweighted to the no-wick body×range bins. Bars are counted after the candle close. Minutes are at 1m resolution from the close; `>X` = not reached within the scan.
+Every N < 30 cell is **INSUFFICIENT**: all D cells, 4H bear US100.
+
+| inst | TF | dir | group | N | rev p25/p50/p75/p90 bars | ≤1 / 3 / 5 / 10 / 20 / 50 bars % | never % | rev p25/p50/p75/p90 min (1m) | sweep p50/p90 min (1m) |
+|---|---|---|---|---|---|---|---|---|---|
+| US100 | 15m | bull | no-wick | 964 | 2/5/23/132 | 20.3 / 40.6 / 50.6 / 63.3 / 72.5 / 83.8 | 7.9 | 20/77/364/>3000 | 83/>3000 |
+| US100 | 15m | bull | control(w) | 5114 | 1/4/16/89 | 25.6 / 48.2 / 59.0 / 69.7 / 77.2 / 86.2 | 7.1 | 15/51/276/2341 | 54/2736 |
+| US100 | 15m | bear | no-wick | 804 | 2/4/18/87 | 22.5 / 43.9 / 55.1 / 67.2 / 76.6 / 85.3 | 5.8 | 18/61/298/1982 | 68/2299 |
+| US100 | 15m | bear | control(w) | 4789 | 1/3/13/89 | 27.9 / 50.7 / 60.5 / 72.8 / 80.1 / 87.1 | 5.4 | 13/46/211/2301 | 51/2459 |
+| US100 | 1H | bull | no-wick | 169 | 2/5/18/>60 | 15.4 / 43.2 / 53.3 / 66.3 / 76.3 / 87.0 | 11.8 | 102/288/1513/>3600 | 302/>3600 |
+| US100 | 1H | bull | control(w) | 1125 | 2/4/14/>60 | 23.2 / 45.5 / 56.3 / 69.1 / 79.3 / 87.3 | 11.8 | 69/251/926/>3600 | 267/>3600 |
+| US100 | 1H | bear | no-wick | 122 | 1/4/18/>60 | 25.4 / 47.5 / 55.7 / 64.8 / 77.9 / 86.9 | 10.7 | 72/228/1363/>3600 | 252/>3600 |
+| US100 | 1H | bear | control(w) | 1020 | 1/3/12/48 | 32.9 / 53.6 / 62.4 / 73.4 / 82.3 / 90.6 | 7.8 | 42/162/904/>3600 | 167/>3600 |
+| US100 | 4H | bull | no-wick | 35 | 1/4/14/>20 | 25.7 / 48.6 / 60.0 / 74.3 / 80.0 / 80.0 | 20.0 | 205/845/3904/>4800 | 845/>4800 |
+| US100 | 4H | bull | control(w) | 338 | 2/3/>20/>20 | 19.1 / 52.5 / 58.9 / 64.8 / 71.1 / 71.1 | 28.9 | 251/572/>4800/>4800 | 572/>4800 |
+| US100 | 4H | bear | no-wick INSUFFICIENT | 13 | 3/5/>20/>20 | 15.4 / 38.5 / 53.8 / 69.2 / 69.2 / 69.2 | 30.8 | 513/1298/>4800/>4800 | 1312/>4800 |
+| US100 | 4H | bear | control(w) | 247 | 1/3/10/>20 | 31.4 / 52.2 / 65.0 / 75.8 / 84.8 / 84.8 | 15.2 | 176/606/3901/>4800 | 606/>4800 |
+| US100 | D | bull | no-wick INSUFFICIENT | 6 | 1/1/9/>20 | 50.0 / 66.7 / 66.7 / 83.3 / 83.3 / 83.3 | 16.7 | 1016/1120/18396/>28800 | 1128/>28800 |
+| US100 | D | bull | control(w) | 63 | 2/3/>20/>20 | 14.3 / 50.0 / 50.0 / 71.4 / 71.4 / 71.4 | 28.6 | 2715/3883/>28800/>28800 | 3883/>28800 |
+| US100 | D | bear | no-wick INSUFFICIENT | 1 | 4/4/4/4 | 0.0 / 0.0 / 100.0 / 100.0 / 100.0 / 100.0 | 0.0 | 7695/7695/7695/7695 | 7699/7699 |
+| US100 | D | bear | control(w) | 49 | 1/1/1/1 | — / — / — / — / — / — | — | 61/61/61/61 | 61/61 |
+| US500 | 15m | bull | no-wick | 1026 | 2/5/25/153 | 22.3 / 42.8 / 52.0 / 63.7 / 72.9 / 82.9 | 8.8 | 18/70/400/>3000 | 91/>3000 |
+| US500 | 15m | bull | control(w) | 5031 | 1/3/15/87 | 27.0 / 50.0 / 60.2 / 70.6 / 78.4 / 86.5 | 6.9 | 14/46/242/1935 | 64/2880 |
+| US500 | 15m | bear | no-wick | 909 | 1/4/14/72 | 26.6 / 49.0 / 59.1 / 71.1 / 78.8 / 87.8 | 5.2 | 14/49/230/1517 | 68/2019 |
+| US500 | 15m | bear | control(w) | 4713 | 1/3/12/73 | 31.0 / 54.3 / 63.5 / 73.6 / 80.4 / 87.8 | 4.4 | 11/38/200/1413 | 49/1583 |
+| US500 | 1H | bull | no-wick | 190 | 2/6/22/>60 | 17.4 / 36.8 / 47.9 / 61.1 / 74.2 / 84.2 | 15.3 | 116/401/2021/>3600 | 418/>3600 |
+| US500 | 1H | bull | control(w) | 1120 | 1/3/16/>60 | 26.9 / 50.4 / 60.4 / 70.9 / 77.1 / 86.8 | 12.7 | 58/195/1317/>3600 | 211/>3600 |
+| US500 | 1H | bear | no-wick | 161 | 2/6/17/>60 | 24.8 / 43.5 / 49.1 / 66.5 / 77.6 / 86.3 | 11.8 | 61/332/1156/>3600 | 345/>3600 |
+| US500 | 1H | bear | control(w) | 993 | 1/3/12/42 | 32.2 / 56.3 / 64.7 / 73.0 / 83.4 / 91.3 | 7.5 | 45/128/845/>3600 | 142/>3600 |
+| US500 | 4H | bull | no-wick | 40 | 2/4/10/>20 | 22.5 / 47.5 / 62.5 / 75.0 / 77.5 / 77.5 | 22.5 | 261/773/4166/>4800 | 773/>4800 |
+| US500 | 4H | bull | control(w) | 344 | 2/3/14/>20 | 23.9 / 52.1 / 61.2 / 71.2 / 79.8 / 79.8 | 20.2 | 271/769/4117/>4800 | 781/>4800 |
+| US500 | 4H | bear | no-wick | 36 | 2/4/19/>20 | 13.9 / 44.4 / 55.6 / 69.4 / 75.0 / 75.0 | 25.0 | 294/930/>4800/>4800 | 931/>4800 |
+| US500 | 4H | bear | control(w) | 247 | 2/4/12/>20 | 25.0 / 43.0 / 62.5 / 73.5 / 83.7 / 83.7 | 16.3 | 290/1089/4126/>4800 | 1119/>4800 |
+| US500 | D | bull | no-wick INSUFFICIENT | 4 | 8/>20/>20/>20 | 0.0 / 0.0 / 0.0 / 25.0 / 25.0 / 25.0 | 75.0 | 16022/>28800/>28800/>28800 | >28800/>28800 |
+| US500 | D | bull | control(w) | 72 | 3/3/10/12 | 11.1 / 72.2 / 72.2 / 83.3 / 100.0 / 100.0 | 0.0 | 4001/6051/19915/22992 | 6051/22992 |
+| US500 | D | bear | no-wick INSUFFICIENT | 4 | 1/3/18/>20 | 25.0 / 50.0 / 50.0 / 50.0 / 75.0 / 75.0 | 25.0 | 787/3880/>28800/>28800 | 3880/>28800 |
+| US500 | D | bear | control(w) | 45 | 1/2/2/3 | 41.7 / 100.0 / 100.0 / 100.0 / 100.0 / 100.0 | 0.0 | 929/2736/5314/6187 | 2736/6203 |
+
+**Read:**
+- On 15m and 1H the no-wick open is revisited **later** than the matched control: median 1m time 61–77 vs 46–51 min (US100 15m), 49–70 vs 38–46 min (US500 15m), 228–401 vs 128–251 min (1H). At 1 bar, 15–27% vs 23–33% have revisited.
+- By 20–50 bars the curves converge, and the never-revisited share in the scan is similar (5–15%).
+- Sweep times trail revisit times by only a few minutes.
+- Plots: `research/nowick/survival_15m.png`, `research/nowick/survival_1H.png`.
+
+## B. Premium / discount DiD (Q4)
+Zone A = aligned (bull in discount / bear in premium of the prior-20-session range); zone B = the opposite half. DiD = (no-wick − matched control)_A − (same)_B. Prediction: DiD < 0.
+
+| inst | TF | dir | horizon | N no-wick A / B | revisit % A / B | matched diff pp A / B | DiD pp [95% CI] | Holm p |
+|---|---|---|---|---|---|---|---|---|
+| US100 | 15m | bull | 20b | 268 / 626 | 73.9 / 72.0 | -4.6 / -5.3 | +0.8 [-6.4, +8.0] | 1.000 |
+| US100 | 15m | bull | sameday | 268 / 626 | 81.0 / 80.8 | -0.3 / -2.8 | +2.4 [-4.0, +8.6] | 1.000 |
+| US100 | 15m | bear | 20b | 537 / 217 | 75.2 / 80.6 | -2.7 / -1.0 | -1.6 [-10.3, +5.7] | 1.000 |
+| US100 | 15m | bear | sameday | 537 / 217 | 82.9 / 84.3 | +2.5 / -0.3 | +2.8 [-4.9, +8.6] | 1.000 |
+| US100 | 1H | bull | 20b | 50 / 107 | 76.0 / 75.7 | -4.7 / -3.1 | -1.6 [-19.1, +17.2] | 1.000 |
+| US100 | 1H | bull | sameday | 50 / 108 | 66.0 / 68.5 | -1.4 / +1.0 | -2.4 [-21.2, +17.3] | 1.000 |
+| US100 | 1H | bear | 20b INSUFFICIENT | 89 / 26 | 77.5 / 80.8 | -5.6 / +1.2 | -6.7 [-22.0, +10.3] | 1.000 |
+| US100 | 1H | bear | sameday INSUFFICIENT | 90 / 26 | 65.6 / 65.4 | -2.9 / +3.0 | -5.8 [-31.6, +21.5] | 1.000 |
+| US100 | 4H | bull | 20b INSUFFICIENT | 8 / 26 | 100.0 / 73.1 | +24.0 / +1.5 | +22.5 [-18.7, +62.0] | 1.000 |
+| US100 | 4H | bull | sameday INSUFFICIENT | 8 / 26 | 37.5 / 57.7 | -1.2 / +1.1 | -2.3 [-69.6, +53.7] | 1.000 |
+| US100 | 4H | bear | 20b INSUFFICIENT | 10 / 3 | 60.0 / 100.0 | -23.8 / +2.2 | -26.0 [-64.5, +12.9] | 1.000 |
+| US100 | 4H | bear | sameday INSUFFICIENT | 10 / 3 | 40.0 / 33.3 | -5.6 / -24.4 | +18.8 [-103.1, +105.8] | 1.000 |
+| US500 | 15m | bull | 20b | 246 / 679 | 71.5 / 72.6 | -3.5 / -7.7 | +4.2 [-3.6, +12.1] | 1.000 |
+| US500 | 15m | bull | sameday | 246 / 679 | 80.5 / 78.9 | -0.6 / -5.6 | +5.0 [-1.9, +11.7] | 1.000 |
+| US500 | 15m | bear | 20b | 664 / 200 | 77.3 / 81.0 | -3.3 / +1.5 | -4.8 [-12.9, +3.4] | 1.000 |
+| US500 | 15m | bear | sameday | 665 / 200 | 84.7 / 82.5 | +1.3 / -0.5 | +1.8 [-5.2, +9.4] | 1.000 |
+| US500 | 1H | bull | 20b | 54 / 123 | 70.4 / 74.0 | -7.7 / -3.2 | -4.6 [-25.0, +18.4] | 1.000 |
+| US500 | 1H | bull | sameday | 54 / 125 | 57.4 / 52.8 | -13.5 / -14.8 | +1.2 [-19.7, +25.2] | 1.000 |
+| US500 | 1H | bear | 20b | 124 / 33 | 76.6 / 81.8 | -4.1 / -5.9 | +1.7 [-12.8, +17.2] | 1.000 |
+| US500 | 1H | bear | sameday | 124 / 33 | 67.7 / 63.6 | +3.5 / -9.9 | +13.4 [-8.9, +34.6] | 1.000 |
+| US500 | 4H | bull | 20b INSUFFICIENT | 15 / 24 | 80.0 / 75.0 | -11.4 / +6.5 | -17.9 [-55.9, +20.4] | 1.000 |
+| US500 | 4H | bull | sameday INSUFFICIENT | 15 / 25 | 53.3 / 48.0 | +6.5 / +9.9 | -3.4 [-47.9, +38.5] | 1.000 |
+| US500 | 4H | bear | 20b INSUFFICIENT | 29 / 5 | 75.9 / 80.0 | -4.0 / -13.3 | +9.3 [-32.6, +60.6] | 1.000 |
+| US500 | 4H | bear | sameday INSUFFICIENT | 29 / 5 | 48.3 / 40.0 | +9.3 / +12.5 | -3.2 [-74.4, +67.9] | 1.000 |
+
+Family summary (revisit and sweep cells together):
+
+| family | cells | min raw p | min Holm p | share DiD < 0 |
+|---|---|---|---|---|
+| 20sess_OTE | 48.0 | 0.021 | 1.000 | 46% |
+| curday_aligned | 48.0 | 0.010 | 0.490 | 42% |
+| primary | 48.0 | 0.100 | 1.000 | 54% |
+
+**Read:** the Q4 hypothesis is **not supported**.
+- No cell survives Holm in any family; the minimum Holm p in the primary family is 1.0.
+- DiD signs split about 50/50, and the 15m CIs straddle 0 by ±6–8 pp.
+- Sweep cells and the alternative definitions (current-day range, OTE band) look the same; all are in `add1_pd_did.csv`.
+
+## C. Daily / weekly / true-day / 09:30 opens (Q5)
+
+### (i) Daily no-wick candles (17:00 roll)
+
+| inst | dir | group | horizon | N | revisit % | sweep % | status |
+|---|---|---|---|---|---|---|---|
+| US100 | bull | TOL | 1d | 6 | 50.0 | 50.0 | INSUFFICIENT |
+| US100 | bull | TOL | 5d | 6 | 66.7 | 66.7 | INSUFFICIENT |
+| US100 | bull | TOL | 20d | 6 | 83.3 | 83.3 | INSUFFICIENT |
+| US100 | bull | WICK | 1d | 66 | 34.8 | 34.8 | ok |
+| US100 | bull | WICK | 5d | 65 | 63.1 | 63.1 | ok |
+| US100 | bull | WICK | 20d | 62 | 83.9 | 83.9 | ok |
+| US100 | bear | TOL | 1d | 1 | 0.0 | 0.0 | INSUFFICIENT |
+| US100 | bear | TOL | 5d | 1 | 100.0 | 100.0 | INSUFFICIENT |
+| US100 | bear | TOL | 20d | 1 | 100.0 | 100.0 | INSUFFICIENT |
+| US100 | bear | WICK | 1d | 51 | 49.0 | 49.0 | ok |
+| US100 | bear | WICK | 5d | 50 | 84.0 | 84.0 | ok |
+| US100 | bear | WICK | 20d | 49 | 95.9 | 95.9 | ok |
+| US500 | bull | TOL | 1d | 4 | 0.0 | 0.0 | INSUFFICIENT |
+| US500 | bull | TOL | 5d | 4 | 0.0 | 0.0 | INSUFFICIENT |
+| US500 | bull | TOL | 20d | 4 | 25.0 | 25.0 | INSUFFICIENT |
+| US500 | bull | WICK | 1d | 73 | 42.5 | 42.5 | ok |
+| US500 | bull | WICK | 5d | 73 | 69.9 | 69.9 | ok |
+| US500 | bull | WICK | 20d | 70 | 85.7 | 85.7 | ok |
+| US500 | bear | TOL | 1d | 4 | 25.0 | 25.0 | INSUFFICIENT |
+| US500 | bear | TOL | 5d | 4 | 50.0 | 50.0 | INSUFFICIENT |
+| US500 | bear | TOL | 20d | 3 | 66.7 | 66.7 | INSUFFICIENT |
+| US500 | bear | WICK | 1d | 50 | 40.0 | 40.0 | ok |
+| US500 | bear | WICK | 5d | 49 | 75.5 | 75.5 | ok |
+| US500 | bear | WICK | 20d | 44 | 95.5 | 95.5 | ok |
+
+### (ii) Weekly no-wick candles
+
+- US100: 0 no-wick weeks; US500: 1 (it needs 14 prior weeks for ATR14, leaving about 42 usable weeks).
+- **INSUFFICIENT**. US500 detail: TOL N=1 (revisited within 4 weeks), WICK N=8.
+
+### (iii) 60-min candles opening at 00:00 and 09:30 NY vs 60 random clock times
+
+Revisit or sweep of the candle's open within 360 min after its close (1m BID). The rank is the percentile among the 60 baseline clock times.
+
+| inst | clock | subset | N | revisit % | sweep % | median min to touch | baseline revisit p5/p50/p95 % | rank of revisit | rank of median time |
+|---|---|---|---|---|---|---|---|---|---|
+| US100 | 00:00 | all | 281 | 74.7 | 73.3 | 31.5 | 65.2/77.8/86.8 | 20% | 38% |
+| US100 | 09:30 | all | 281 | 51.6 | 50.2 | 28 | 65.2/77.8/86.8 | 0% | 18% |
+| US100 | 00:00 | nowick INSUFFICIENT | 11 | 63.6 | 63.6 | 88 | 33.0/69.0/84.8 | 42% | 40% |
+| US100 | 09:30 | nowick INSUFFICIENT | 14 | 35.7 | 35.7 | 72 | 33.0/69.0/84.8 | 7% | 20% |
+| US500 | 00:00 | all | 278 | 83.5 | 78.4 | 31 | 64.2/80.9/88.6 | 75% | 57% |
+| US500 | 09:30 | all | 282 | 58.5 | 57.1 | 21 | 64.2/80.9/88.6 | 2% | 13% |
+| US500 | 00:00 | nowick INSUFFICIENT | 13 | 69.2 | 61.5 | 32 | 28.3/60.8/91.1 | 63% | 5% |
+| US500 | 09:30 | nowick INSUFFICIENT | 14 | 28.6 | 28.6 | 76.5 | 28.3/60.8/91.1 | 5% | 37% |
+
+**Read:**
+- The **09:30 open is revisited least of all clock times** (US100 51.6%, rank 0th; US500 58.5%, rank 2nd vs baseline median 78–81%). It is in absolute points, not ATR-normalized: the 09:30 hour is the largest-range hour, so its close sits farther from its open. This is a volatility effect, not evidence of a special 'unfilled' open.
+- The **00:00 true-day open** is unremarkable (rank 20th US100, 75th US500).
+- No-wick subsets are N = 11–14: **INSUFFICIENT**.
+
+### Power note
+- Detecting a 10 pp difference (75% vs 85%) at 80% power, two-sided α = 0.05, needs about **250 events per arm**.
+- Observed frequencies in this window:
+  - daily no-wick: about 1–6 per direction per instrument-year, so roughly **40–250 instrument-years**;
+  - weekly no-wick: about 0–1 per instrument-year, so effectively unreachable;
+  - no-wick 00:00 / 09:30 hours: about 11–14 per instrument-year, so roughly **18–23 instrument-years** per clock time.
+- Confirmation needs fresh multi-year data: new instruments DAX/Dow/gold 2023+ once DATA's screening remediation passes, or the forward test. No sealed data was opened.
+
+## Addendum 1 deviations (disclosed; no pre-registered definition changed)
+- (A) Cells whose control bins contain no no-wick candle return NaN control rates (US100 D bear, N = 1). Already INSUFFICIENT.
+- (A) Candles whose scan window runs past 2026-09-25 16:14 NY are excluded (censoring), so N is slightly below the main table.
+- (B) The daily TF is excluded, as pre-registered. Cells with a zone N < 30 (all 4H, some 1H) are flagged INSUFFICIENT but kept in the Holm family as declared.
+- (C-iii) A clock candle is used only if it has ≥ 30 of 60 1m bars and does not cross the 17:00 roll. Doji (close == open) are skipped (no direction).
+- (C-ii) The weekly bar ATR14 needs 14 prior weeks, which shrinks the usable sample.
+- `nowick.py` gained a weekly bar key (Sunday 17:00 NY roll, W-SUN periods on the +7h shift). Existing TF results are unchanged (re-verified: `results_cells.csv` is identical).

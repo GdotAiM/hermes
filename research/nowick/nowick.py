@@ -27,7 +27,8 @@ def bars(bid, ask, tf):
     m = TFS[tf]
     sp = (ask.Close.reindex(bid.index) - bid.Close)
     s = bid.index + SHIFT
-    if tf == "D": key = s.floor("D")
+    if tf == "W": key = s.to_period("W-SUN").start_time
+    elif tf == "D": key = s.floor("D")
     elif tf == "4H": key = s.floor("4h")
     else: key = s.floor(f"{m}min")
     g = bid.assign(sp=sp.values).groupby(key)
@@ -86,7 +87,7 @@ def features(b, tf):
     for H in BAR_H[tf]:
         valid = np.arange(n) + H < n
         hz[f"{H}b"] = (H, valid)
-    if tf != "D":
+    if tf not in ("D", "W"):
         days = b.day.values; ud = np.unique(days); pos = {x: k for k, x in enumerate(ud)}
         last = pd.Series(np.arange(n)).groupby(days).max(); lastidx = last.reindex(ud).values
         dk = np.array([pos[x] for x in days])
