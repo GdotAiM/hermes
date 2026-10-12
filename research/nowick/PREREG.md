@@ -1,0 +1,46 @@
+# NOWICK-1 — "No premium/discount wick" candle open revisit study (PREREG)
+
+Status: **descriptive, in-sample, burned-window exploration. Not confirmatory.** Written and committed before any statistic was computed.
+Date: 2026-10-12. Branch: `research/nowick-study` (from origin/main b5b27af).
+
+## Question (user)
+"Investigate candlesticks without a premium or discount wick: how often do we trade back to them and sweep that candle's low/open, and what other hypotheses can we test."
+
+## Interpretation
+- **Bullish no-discount-wick candle**: close > open and NO lower wick, i.e. open == low within tolerance.
+- **Bearish no-premium-wick candle**: close < open and NO upper wick, i.e. open == high within tolerance.
+- ICT folklore: such an "unfilled"/"naked" open tends to be revisited and swept. For these candles the open *is* the low (bull) / high (bear), so "sweep the low/open" is one level.
+
+## Data (hard limits)
+- US100, US500 Dukascopy 1m **BID + ASK**, canonical burned export `/workspace/ftn-demo-output/data/US{100,500}_1m_{bid,ask}.csv.gz`
+  (decompressed sha256 checked: US100 bid 6afa3130…, ask fcc3c877…; US500 bid 9d68787c…, ask ff63783f…).
+- Trading days 2025-08-25 .. 2026-09-25 only (NY 17:00 roll). Nothing dated 2026-09-26 or later is read; the loader asserts it.
+  No `/workspace/marketdata` certified ranges, no 2019-20 backfill, no forward/H016b/H017 material.
+- Candles are built from BID. Per-candle spread = median (ASK close − BID close) over the candle's matched minutes.
+
+## Timeframes
+15m, 1H (clock-aligned, NY time), 4H (bins starting 17:00, 21:00, 01:00, 05:00, 09:00, 13:00 NY), Daily (NY 17:00 → 17:00). Bars with fewer than 50% of expected 1m minutes are dropped.
+
+## Candle filters
+- ATR14 = 14-bar simple mean true range on the same timeframe (needs 14 prior bars).
+- Minimum: range ≥ 0.5 × ATR14 and body/range ≥ 0.30.
+- **No-wick (primary, "TOL")**: same-side wick ≤ 2% of range AND ≤ 1 × candle spread.
+- **No-wick (exact, "EXACT")**: same-side wick == 0 (BID prices to 0.001).
+- **Control ("WICK")**: same-side wick ≥ 10% of range (passes the same min filters).
+
+## Outcomes (measured on BID bars after the candle closes; the candle itself excluded)
+- **Revisit**: bull: some later bar low ≤ open; bear: some later bar high ≥ open.
+- **Sweep**: trades through the open by ≥ max(1 candle spread, 0.001): bull low ≤ open − spread; bear high ≥ open + spread.
+- Horizons: intraday TFs: next 5 / 20 / 50 bars, plus end of same trading day and end of next trading day (NY 17:00). Daily: next 5 / 20 days.
+- Bars-to-revisit (median, among revisits within the largest bar horizon).
+- Ordering vs opposite extreme (largest bar horizon): bull: did price first exceed the candle high or first revisit the open (same-bar = ambiguous). Bear mirrored.
+- Time-of-day: candle open hour mapped to killzones (NY): Asia 20:00–00:00, London 02:00–05:00, NY AM 07:00–10:00, NY PM 13:30–16:00, other.
+
+## Baselines
+- **(a) Matched controls (primary)**: WICK candles of the same instrument/TF/direction, matched by bins of body/ATR (quintiles) × range/ATR (quintiles), quintile edges from the pooled TOL+WICK set. Baseline rate = control rates reweighted to the no-wick bin distribution (bins with no control dropped and counted). Note: for a control the *open* is inside the candle (wick beyond it), the revisit target is still the open.
+- **(b) Block bootstrap of real paths**: for each no-wick candle, 20 future-path blocks drawn from random other bars of the same instrument/TF, path expressed in ATR units relative to that bar's close and rescaled by the candle's ATR; revisit if the path reaches the candle's (open − close). Preserves volatility and drift of the window, destroys any link to the candle.
+- **(c) Distance-conditioned**: rate of revisit for ALL same-direction candles passing the min filters, binned by body/ATR deciles, evaluated at the no-wick candles' distances.
+- **Effect** = no-wick rate − baseline (a). 95% CI by cluster bootstrap over trading days (2000 resamples; days resampled jointly for treatment and control). Two-sided p from the bootstrap SE (normal approx). **Holm** across all primary cells (instrument × TF × direction × horizon, TOL variant, revisit and sweep outcomes as separate families each Holm-adjusted). EXACT, baselines (b)/(c), killzones, ordering are descriptive only.
+
+## Not done
+No trade rule is evaluated here. Any "fade to the open" R would require a separate, pre-declared, cost-aware rule (listed as a follow-up hypothesis only).
