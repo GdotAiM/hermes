@@ -576,3 +576,33 @@ Every variant hit the 5% halt within the first two weeks.
 - 2R targets are slightly less negative than the open target (around −0.16 to −0.18 R vs −0.23 R), but still clearly negative.
 - Per instrument and TF, the only cell ≥ 0 is B_2R on US100 15m (+0.01 R); everything else is negative (see `add5_summary.csv`).
 - **Forward-test verdict (pre-declared bar):** none. Consistent with Addendum 4, in this window the edge, if any, is in continuation away from the no-wick open, not in a return to it.
+
+# Addendum 6: deliberate US100 fit, single US500 test (EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE)
+**Commits.** Design a0be4e2. Frozen winner + top 5 df20977 (`add6_frozen.json`), committed and pushed before any US500 R; `addendum6.py test` refuses to run otherwise. Test results are in this commit. Files: `addendum6.py`, `add6_fit_grid.csv.gz` (every config's N / mean R / win), `add6_results.csv` and `add6_equity.png`.
+
+**Grid.**
+- 7,680 configs tried: 6,912 have trades and 3,040 have ≥ 150 US100 trades.
+- Only 14.9% of the eligible configs have US100 mean R > 0.
+- Haircut multiplier sqrt(2 ln 7680) = 4.23 SE.
+
+| # | Config (dir / entry / stop / target / time stop / filters) | US100 FIT N, win, mean R [CI], p | Fit haircut R | US500 TEST N, win, mean R [CI], p (one-sided) | Halted final US100 / US500 | Unhalted final US100 / US500 | Unhalted max DD US100 / US500 |
+|---|---|---|---|---|---|---|---|
+| 1 (winner) | toward / FVG_CE / fvg / opp / 20 / PD on, 15m | 185, 14.6%, +0.411 [−0.206, +1.111], 0.093 | −1.008 | 227, 23.8%, +0.030 [−0.401, +0.572], 0.49 | $9,534 / $9,680 | $14,217 / $9,639 | 21.1% / 21.8% |
+| 2 | same, stop swing | 185, 14.6%, +0.410, 0.092 | −1.008 | 227, 23.8%, +0.030, 0.49 | $9,535 / $9,680 | $14,208 / $9,640 | 21.0% / 21.8% |
+| 3 | toward / immediate / fvg / opp / 10 / London+NY AM, PD on, both TF | 231, 13.0%, +0.399 [−0.181, +1.101], 0.11 | −0.984 | 238, 18.1%, −0.237 [−0.536, +0.111], 0.91 | $10,451 / $9,573 | $15,311 / $7,162 | 22.4% / 30.8% |
+| 4 | same, stop swing (identical trades: immediate has no FVG, so fvg falls back to swing) | identical to #3 | | | | | |
+| 5 | toward / FVG_CE / swing / opp / 20 / bias on, both TF | 191, 16.8%, +0.384 [−0.188, +1.053], 0.11 | −0.954 | 208, 27.4%, +0.129 [−0.199, +0.473], 0.25 | $9,472 / $9,483 | $13,887 / $10,870 | 18.0% / 10.1% |
+
+The halted books all hit the 5% halt early, with one exception: US100 #3 peaked above $10k before halting on 2025-10-20.
+
+**Reading.**
+- **What the fit found:** low hit-rate, fat-tail configs. They trade toward the open but target the previous day's low/high far beyond it: about 13–17% wins, a median trade of −1.07 R, and winners of up to +30 R.
+- **Three trades:** the winner's US100 mean R of +0.41 depends on 3 trades (+30.4, +26.7, +26.0 R). Without them it is −0.04 R.
+- **Significance:** none of the fit CIs excludes 0 even before multiple-testing correction. After the 4.23-SE haircut, every fit estimate is about −1 R.
+- **Test on US500:** the winner collapses to +0.03 R (p 0.49). #3 turns negative (−0.24 R). #5 is +0.13 R (p 0.25). None is significant; 3 of the 4 distinct configs keep a non-negative sign.
+- **Verdict:** no fitted config survives. Nothing here is worth a forward test as-is. The positive sign of #1/#5 on US500 is weak and expected: same window, highly correlated indices, and tail-dominated R.
+
+**Caveats.**
+- US100 and US500 are highly correlated over the same dates, so this is a weak independence test: a regime effect common to both would pass it.
+- Configs #2 and #4 duplicate #1 and #3. The top-5 rule was taken literally, as frozen.
+- No GER40/US30/XAU screening data was used. Bars after 2026-09-25 were not read.
