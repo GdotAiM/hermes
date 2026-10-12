@@ -1,0 +1,217 @@
+# NOWICK-1 REPORT: no-premium / no-discount wick candles, open revisit & sweep
+
+**Label: IN-SAMPLE, BURNED-WINDOW EXPLORATION. Descriptive, not confirmatory. No trade rule tested.**
+Data: Dukascopy BID+ASK 1m, US100 + US500, trading days 2025-08-25 .. 2026-09-25 (NY 17:00 roll), canonical burned export
+`/workspace/ftn-demo-output/data` (decompressed sha256 verified in code). Nothing dated ≥ 2026-09-26 read. Prereg: `PREREG.md` (committed before any statistic).
+Code: `nowick.py` (seeded, ~15 s). Raw outputs: `results_cells.csv`, `results_ordering.csv`, `results_killzones.csv`.
+
+## Interpretation (as stated by the user)
+Bullish candle with **no discount (lower) wick** = open == low (tolerance); bearish candle with **no premium (upper) wick** = open == high.
+Folklore: the "naked"/"unfilled" open gets revisited and swept. Primary definition TOL: wick ≤ 2% of range and ≤ 1 spread; EXACT: wick = 0.
+Filters: range ≥ 0.5 ATR14, body ≥ 30% of range. Control: same direction, wick ≥ 10% of range, matched on body/ATR × range/ATR quintiles.
+
+## Headline
+1. **Revisit rates are high, but that is just distance.** No-wick opens are revisited 50–60% within 5 bars, 70–80% within 20, 83–88% within 50, and 90%+ by end of next trading day (15m). Those rates sit at or **below** every baseline.
+2. **The effect runs against the folklore.** On 15m, no-wick opens are revisited **less** often than matched with-wick controls over short horizons: −5 to −8 pp at 5 bars in all four instrument × direction cells. US100 bull −8.4 pp [−12.4, −4.7] (Holm p 0.001), US500 bull −8.0 pp [−11.7, −4.0] (Holm p 0.003). US500 1H bear 5b: −16.0 pp (Holm p 0.047). By 50 bars / next day the gap goes to ~0. **No cell shows a positive effect after Holm.**
+3. The block-bootstrap null (b) and the distance null (c) roughly match the no-wick rates (within ~±3 pp on 15m). So the naked open behaves like any level at the same ATR distance. The matched with-wick candle is the one that is revisited a little *more* (likely mean reversion after a candle that already showed two-sided trade).
+4. **Sweep ≈ revisit.** Once the open is touched, it is almost always run by ≥ 1 spread (revisit − sweep gap 0–3 pp). "Revisit" and "sweep the open/low" are practically the same event at these spreads.
+5. **Order: the opposite extreme is usually taken first.** For no-wick candles, the candle's opposite extreme (bull high / bear low) goes first 64–75% of the time, versus the open first 20–26%. Controls: 53–63% vs 17–25%, with far more same-bar ambiguity. Continuation first, then the return to the open.
+6. **Killzones (15m, 20 bars, raw):** no-wick revisit is below the unmatched with-wick controls in every killzone. The highest no-wick revisit rates are NY AM (80–84%), the lowest NY PM (62–79%). The 1H killzone cells are too small (N 12–32) to read.
+7. **4H / Daily are underpowered.** 4H N = 13–41 per cell, Daily N = 1–6 (no CI). A no-wick daily candle on the 17:00 roll is rare in this window. Nothing can be said about daily/weekly folklore from this sample.
+
+## Headline table: 20-bar horizon (intraday) / 5-day (daily), TOL definition
+| inst | TF | dir | N | revisit % | sweep % | matched baseline % | diff pp [95% CI] | Holm p | med bars→revisit |
+|---|---|---|---|---|---|---|---|---|---|
+| US100 | 15m | bull | 968 | 72.5 | 71.9 | 77.2 | -4.7 [-8.0, -1.4] | 0.319 | 4 |
+| US100 | 15m | bear | 812 | 76.7 | 75.5 | 80.1 | -3.3 [-7.1, +0.4] | 1.000 | 4 |
+| US100 | 1H | bull | 169 | 76.3 | 76.3 | 79.3 | -3.1 [-11.6, +5.4] | 1.000 | 4 |
+| US100 | 1H | bear | 124 | 77.4 | 76.6 | 82.5 | -3.9 [-11.7, +3.6] | 1.000 | 3 |
+| US100 | 4H | bull | 35 | 80.0 | 80.0 | 73.8 | +6.9 [-14.6, +25.0] | 1.000 | 2.5 |
+| US100 | 4H | bear | 13 | 69.2 | 69.2 | 84.0 | -17.4 [-45.6, +10.2] | 1.000 | 3 |
+| US100 | D | bull | 6 | 66.7 | 66.7 | 46.7 | — | 1.000 | 1 |
+| US100 | D | bear | 1 | 100.0 | 100.0 | — | — | 1.000 | 4 |
+| US500 | 15m | bull | 1029 | 72.9 | 70.6 | 78.4 | -5.4 [-8.4, -1.8] | 0.080 | 4 |
+| US500 | 15m | bear | 914 | 78.6 | 75.9 | 80.5 | -2.0 [-4.9, +1.0] | 1.000 | 3 |
+| US500 | 1H | bull | 190 | 74.2 | 73.7 | 78.1 | -3.7 [-12.8, +5.1] | 1.000 | 4 |
+| US500 | 1H | bear | 165 | 76.4 | 73.9 | 83.4 | -7.0 [-14.0, -0.7] | 1.000 | 4 |
+| US500 | 4H | bull | 40 | 77.5 | 77.5 | 79.3 | -3.6 [-22.4, +14.2] | 1.000 | 2 |
+| US500 | 4H | bear | 36 | 75.0 | 75.0 | 84.4 | -10.1 [-27.6, +6.4] | 1.000 | 3 |
+| US500 | D | bull | 4 | 0.0 | 0.0 | 72.2 | — | 1.000 | 8 |
+| US500 | D | bear | 4 | 50.0 | 50.0 | 100.0 | — | 1.000 | 3 |
+
+Note: "revisit %" is the raw rate; diff uses the matched rate (no-wick candles in control-less bins dropped), so diff ≠ revisit − baseline exactly.
+Holm family = all 68 revisit cells (inst × TF × dir × horizon); sweep cells are a separate 68-cell family. Effect CI = cluster bootstrap by trading day (2000 resamples); p = normal approximation from the bootstrap SE.
+
+## Full table (all horizons; sweep, nulls (b)/(c), EXACT variant)
+| inst | TF | dir | horizon | N | revisit % | sweep % | baseline (a) % | diff pp [95% CI] | Holm p | null (b) % | null (c) % | med bars→revisit | N exact / rev % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| US100 | 15m | bull | 5b | 968 | 50.5 | 49.8 | 59.0 | -8.4 [-12.4, -4.7] | 0.001 | 53.1 | 55.8 | 4 | 430 / 49.5 |
+| US100 | 15m | bull | 20b | 968 | 72.5 | 71.9 | 77.2 | -4.7 [-8.0, -1.4] | 0.319 | 72.6 | 74.7 | 4 | 430 / 72.1 |
+| US100 | 15m | bull | 50b | 967 | 83.8 | 83.2 | 86.2 | -2.4 [-5.1, +0.3] | 1.000 | 83.4 | 84.1 | 4 | 429 / 83.4 |
+| US100 | 15m | bull | sameday | 968 | 80.6 | 80.0 | 82.5 | -1.9 [-4.8, +1.0] | 1.000 | — | 80.7 | 4 | 430 / 80.0 |
+| US100 | 15m | bull | nextday | 966 | 90.4 | 90.1 | 91.4 | -1.0 [-3.3, +1.2] | 1.000 | — | 90.1 | 4 | 429 / 90.7 |
+| US100 | 15m | bear | 5b | 812 | 55.2 | 52.8 | 60.5 | -5.4 [-9.2, -1.5] | 0.506 | 51.0 | 58.2 | 4 | 304 / 50.3 |
+| US100 | 15m | bear | 20b | 812 | 76.7 | 75.5 | 80.1 | -3.3 [-7.1, +0.4] | 1.000 | 73.7 | 77.5 | 4 | 304 / 73.7 |
+| US100 | 15m | bear | 50b | 809 | 85.4 | 84.8 | 87.1 | -1.7 [-4.7, +1.2] | 1.000 | 83.8 | 85.9 | 4 | 303 / 79.9 |
+| US100 | 15m | bear | sameday | 812 | 83.0 | 82.4 | 82.7 | +0.3 [-3.1, +3.7] | 1.000 | — | 81.7 | 4 | 304 / 78.0 |
+| US100 | 15m | bear | nextday | 809 | 93.0 | 92.5 | 92.8 | +0.2 [-1.5, +1.9] | 1.000 | — | 92.2 | 4 | 303 / 89.8 |
+| US100 | 1H | bull | 5b | 170 | 53.5 | 52.4 | 56.3 | -3.0 [-12.8, +6.4] | 1.000 | 56.4 | 57.5 | 4 | 71 / 57.7 |
+| US100 | 1H | bull | 20b | 169 | 76.3 | 76.3 | 79.3 | -3.1 [-11.6, +5.4] | 1.000 | 77.4 | 77.5 | 4 | 71 / 73.2 |
+| US100 | 1H | bull | 50b | 169 | 87.0 | 87.0 | 87.1 | +0.1 [-6.4, +6.2] | 1.000 | 84.7 | 85.2 | 4 | 71 / 83.1 |
+| US100 | 1H | bull | sameday | 170 | 67.6 | 67.1 | 67.4 | -0.2 [-9.6, +8.4] | 1.000 | — | 64.4 | 4 | 71 / 64.8 |
+| US100 | 1H | bull | nextday | 169 | 82.8 | 82.8 | 84.4 | -1.5 [-9.5, +5.1] | 1.000 | — | 81.7 | 4 | 71 / 81.7 |
+| US100 | 1H | bear | 5b | 125 | 56.0 | 54.4 | 62.3 | -5.7 [-15.5, +3.9] | 1.000 | 51.6 | 59.6 | 3 | 51 / 54.9 |
+| US100 | 1H | bear | 20b | 124 | 77.4 | 76.6 | 82.5 | -3.9 [-11.7, +3.6] | 1.000 | 74.6 | 78.7 | 3 | 51 / 72.5 |
+| US100 | 1H | bear | 50b | 123 | 86.2 | 85.4 | 90.2 | -2.7 [-9.6, +3.9] | 1.000 | 85.0 | 87.5 | 3 | 51 / 78.4 |
+| US100 | 1H | bear | sameday | 125 | 63.2 | 62.4 | 66.9 | -3.0 [-12.0, +5.9] | 1.000 | — | 63.7 | 3 | 51 / 58.8 |
+| US100 | 1H | bear | nextday | 124 | 83.9 | 83.1 | 86.7 | -1.6 [-9.0, +5.4] | 1.000 | — | 83.6 | 3 | 51 / 76.5 |
+| US100 | 4H | bull | 5b | 35 | 60.0 | 60.0 | 62.1 | -0.8 [-25.8, +19.9] | 1.000 | 64.7 | 58.0 | 2.5 | 16 / 62.5 |
+| US100 | 4H | bull | 20b | 35 | 80.0 | 80.0 | 73.8 | +6.9 [-14.6, +25.0] | 1.000 | 81.3 | 78.1 | 2.5 | 16 / 87.5 |
+| US100 | 4H | bull | 50b | 35 | 80.0 | 80.0 | 76.2 | +4.4 [-16.3, +21.4] | 1.000 | 88.6 | 79.8 | 2.5 | 16 / 87.5 |
+| US100 | 4H | bull | sameday | 35 | 51.4 | 51.4 | 50.7 | +0.9 [-24.6, +21.0] | 1.000 | — | 43.3 | 2.5 | 16 / 56.2 |
+| US100 | 4H | bull | nextday | 35 | 74.3 | 74.3 | 65.2 | +9.0 [-12.1, +28.1] | 1.000 | — | 65.6 | 2.5 | 16 / 81.2 |
+| US100 | 4H | bear | 5b | 13 | 53.8 | 53.8 | 65.7 | -15.7 [-46.8, +15.4] | 1.000 | 57.3 | 61.5 | 3 | 5 / 60.0 |
+| US100 | 4H | bear | 20b | 13 | 69.2 | 69.2 | 84.0 | -17.4 [-45.6, +10.2] | 1.000 | 76.9 | 82.2 | 3 | 5 / 60.0 |
+| US100 | 4H | bear | 50b | 13 | 69.2 | 69.2 | 84.9 | -18.3 [-48.1, +10.8] | 1.000 | 86.9 | 81.7 | 3 | 5 / 60.0 |
+| US100 | 4H | bear | sameday | 13 | 38.5 | 38.5 | 45.0 | -11.6 [-43.3, +21.1] | 1.000 | — | 37.3 | 3 | 5 / 40.0 |
+| US100 | 4H | bear | nextday | 13 | 69.2 | 69.2 | 73.6 | -6.9 [-38.3, +19.5] | 1.000 | — | 72.2 | 3 | 5 / 60.0 |
+| US100 | D | bull | 5b | 6 | 66.7 | 66.7 | 46.7 | — | 1.000 | 62.5 | 51.4 | 1 | 5 / 60.0 |
+| US100 | D | bull | 20b | 6 | 83.3 | 83.3 | 80.0 | — | 1.000 | 86.7 | 76.5 | 1 | 5 / 80.0 |
+| US100 | D | bear | 5b | 1 | 100.0 | 100.0 | — | — | 1.000 | 35.0 | 71.4 | 4 | 1 / 100.0 |
+| US100 | D | bear | 20b | 1 | 100.0 | 100.0 | — | — | 1.000 | 75.0 | 85.7 | 4 | 1 / 100.0 |
+| US500 | 15m | bull | 5b | 1029 | 52.1 | 47.4 | 60.2 | -8.0 [-11.7, -4.0] | 0.003 | 54.4 | 57.5 | 4 | 560 / 52.1 |
+| US500 | 15m | bull | 20b | 1029 | 72.9 | 70.6 | 78.4 | -5.4 [-8.4, -1.8] | 0.080 | 73.5 | 76.3 | 4 | 560 / 73.4 |
+| US500 | 15m | bull | 50b | 1029 | 82.9 | 81.5 | 86.4 | -3.5 [-6.3, -0.9] | 0.650 | 83.3 | 85.1 | 4 | 560 / 82.5 |
+| US500 | 15m | bull | sameday | 1029 | 79.9 | 78.4 | 83.5 | -3.6 [-6.6, -0.7] | 1.000 | — | 81.7 | 4 | 560 / 79.6 |
+| US500 | 15m | bull | nextday | 1029 | 89.6 | 88.8 | 91.5 | -1.9 [-4.2, +0.2] | 1.000 | — | 90.8 | 4 | 560 / 88.6 |
+| US500 | 15m | bear | 5b | 915 | 59.0 | 53.1 | 63.6 | -4.8 [-8.1, -0.6] | 0.853 | 53.0 | 61.3 | 3 | 503 / 59.2 |
+| US500 | 15m | bear | 20b | 914 | 78.6 | 75.9 | 80.5 | -2.0 [-4.9, +1.0] | 1.000 | 74.2 | 79.1 | 3 | 503 / 79.7 |
+| US500 | 15m | bear | 50b | 914 | 87.7 | 86.0 | 87.9 | -0.2 [-2.7, +2.4] | 1.000 | 84.5 | 87.1 | 3 | 503 / 88.9 |
+| US500 | 15m | bear | sameday | 915 | 84.3 | 82.5 | 83.8 | +0.5 [-2.5, +3.6] | 1.000 | — | 83.3 | 3 | 503 / 86.3 |
+| US500 | 15m | bear | nextday | 914 | 93.7 | 92.5 | 94.2 | -0.6 [-2.5, +1.2] | 1.000 | — | 93.3 | 3 | 503 / 94.0 |
+| US500 | 1H | bull | 5b | 192 | 47.4 | 46.4 | 61.4 | -13.8 [-23.0, -4.6] | 0.199 | 52.2 | 58.6 | 4 | 78 / 46.2 |
+| US500 | 1H | bull | 20b | 190 | 74.2 | 73.7 | 78.1 | -3.7 [-12.8, +5.1] | 1.000 | 77.1 | 76.6 | 4 | 78 / 64.1 |
+| US500 | 1H | bull | 50b | 190 | 84.2 | 83.7 | 86.8 | -2.3 [-9.2, +5.6] | 1.000 | 83.7 | 84.9 | 4 | 78 / 76.9 |
+| US500 | 1H | bull | sameday | 192 | 54.7 | 53.6 | 66.7 | -11.6 [-21.5, -1.8] | 1.000 | — | 63.9 | 4 | 78 / 53.8 |
+| US500 | 1H | bull | nextday | 190 | 80.5 | 80.0 | 83.8 | -3.1 [-10.1, +4.2] | 1.000 | — | 81.3 | 4 | 78 / 70.5 |
+| US500 | 1H | bear | 5b | 165 | 48.5 | 46.7 | 64.5 | -16.0 [-25.4, -6.8] | 0.047 | 49.5 | 58.5 | 4 | 54 / 44.4 |
+| US500 | 1H | bear | 20b | 165 | 76.4 | 73.9 | 83.4 | -7.0 [-14.0, -0.7] | 1.000 | 75.4 | 78.1 | 4 | 54 / 70.4 |
+| US500 | 1H | bear | 50b | 162 | 85.8 | 84.0 | 91.2 | -5.4 [-11.1, -0.0] | 1.000 | 85.6 | 88.0 | 4 | 52 / 76.9 |
+| US500 | 1H | bear | sameday | 165 | 66.1 | 63.6 | 67.3 | -1.2 [-9.2, +6.8] | 1.000 | — | 63.0 | 4 | 54 / 63.0 |
+| US500 | 1H | bear | nextday | 165 | 82.4 | 80.6 | 88.7 | -6.3 [-12.6, -0.1] | 1.000 | — | 84.1 | 4 | 54 / 75.9 |
+| US500 | 4H | bull | 5b | 40 | 62.5 | 62.5 | 60.1 | -0.6 [-18.9, +17.9] | 1.000 | 59.2 | 57.9 | 2 | 11 / 36.4 |
+| US500 | 4H | bull | 20b | 40 | 77.5 | 77.5 | 79.3 | -3.6 [-22.4, +14.2] | 1.000 | 78.2 | 77.5 | 2 | 11 / 54.5 |
+| US500 | 4H | bull | 50b | 39 | 76.9 | 76.9 | 79.9 | -4.9 [-23.9, +13.6] | 1.000 | 86.0 | 77.5 | 2 | 11 / 54.5 |
+| US500 | 4H | bull | sameday | 41 | 48.8 | 48.8 | 40.0 | +4.8 [-13.3, +22.1] | 1.000 | — | 39.7 | 2 | 11 / 36.4 |
+| US500 | 4H | bull | nextday | 40 | 72.5 | 72.5 | 68.6 | +1.7 [-16.1, +19.4] | 1.000 | — | 65.6 | 2 | 11 / 54.5 |
+| US500 | 4H | bear | 5b | 36 | 55.6 | 55.6 | 63.0 | -7.5 [-26.7, +11.1] | 1.000 | 53.5 | 58.1 | 3 | 6 / 50.0 |
+| US500 | 4H | bear | 20b | 36 | 75.0 | 75.0 | 84.4 | -10.1 [-27.6, +6.4] | 1.000 | 73.8 | 82.6 | 3 | 6 / 83.3 |
+| US500 | 4H | bear | 50b | 36 | 75.0 | 75.0 | 82.2 | -7.2 [-24.7, +10.3] | 1.000 | 85.1 | 82.5 | 3 | 6 / 83.3 |
+| US500 | 4H | bear | sameday | 36 | 47.2 | 47.2 | 35.8 | +11.5 [-6.4, +28.1] | 1.000 | — | 38.2 | 3 | 6 / 50.0 |
+| US500 | 4H | bear | nextday | 36 | 66.7 | 66.7 | 73.1 | -6.4 [-25.4, +10.5] | 1.000 | — | 70.7 | 3 | 6 / 83.3 |
+| US500 | D | bull | 5b | 4 | 0.0 | 0.0 | 72.2 | — | 1.000 | 75.0 | 52.5 | 8 | 1 / 0.0 |
+| US500 | D | bull | 20b | 4 | 25.0 | 25.0 | 100.0 | — | 1.000 | 87.5 | 68.3 | 8 | 1 / 0.0 |
+| US500 | D | bear | 5b | 4 | 50.0 | 50.0 | 100.0 | — | 1.000 | 67.5 | 87.5 | 3 | 3 / 33.3 |
+| US500 | D | bear | 20b | 3 | 66.7 | 66.7 | 100.0 | — | 1.000 | 78.3 | 90.5 | 9.5 | 3 / 66.7 |
+
+
+## Revisit vs opposite extreme (scan window: 200 bars 15m, 60 1H, 20 4H/D)
+| inst | TF | dir | group | N | open first % | opposite extreme first % | same bar % |
+|---|---|---|---|---|---|---|---|
+| US100 | 15m | bull | TOL | 968 | 24.8 | 69.1 | 6.1 |
+| US100 | 15m | bull | WICK | 5154 | 20.3 | 60.0 | 19.8 |
+| US100 | 15m | bear | TOL | 812 | 23.2 | 68.8 | 8.0 |
+| US100 | 15m | bear | WICK | 4821 | 20.8 | 56.1 | 23.1 |
+| US100 | 1H | bull | TOL | 170 | 20.6 | 74.7 | 4.1 |
+| US100 | 1H | bull | WICK | 1133 | 16.6 | 62.9 | 20.5 |
+| US100 | 1H | bear | TOL | 125 | 26.4 | 64.0 | 9.6 |
+| US100 | 1H | bear | WICK | 1035 | 21.6 | 55.7 | 22.6 |
+| US100 | 4H | bull | TOL | 35 | 22.9 | 74.3 | 2.9 |
+| US100 | 4H | bull | WICK | 342 | 19.6 | 62.0 | 18.4 |
+| US100 | 4H | bear | TOL | 13 | 15.4 | 76.9 | 7.7 |
+| US100 | 4H | bear | WICK | 253 | 20.6 | 54.2 | 25.3 |
+| US100 | D | bull | TOL | 6 | 16.7 | 50.0 | 33.3 |
+| US100 | D | bull | WICK | 67 | 19.4 | 59.7 | 19.4 |
+| US100 | D | bear | TOL | 1 | 0.0 | 100.0 | 0.0 |
+| US100 | D | bear | WICK | 51 | 37.3 | 47.1 | 15.7 |
+| US500 | 15m | bull | TOL | 1029 | 23.9 | 68.0 | 8.1 |
+| US500 | 15m | bull | WICK | 5073 | 21.1 | 59.4 | 19.5 |
+| US500 | 15m | bear | TOL | 915 | 26.4 | 65.0 | 8.5 |
+| US500 | 15m | bear | WICK | 4753 | 22.7 | 54.9 | 22.4 |
+| US500 | 1H | bull | TOL | 192 | 21.4 | 73.4 | 5.2 |
+| US500 | 1H | bull | WICK | 1129 | 20.2 | 59.5 | 20.3 |
+| US500 | 1H | bear | TOL | 165 | 25.5 | 66.1 | 8.5 |
+| US500 | 1H | bear | WICK | 1005 | 21.8 | 52.9 | 25.3 |
+| US500 | 4H | bull | TOL | 41 | 19.5 | 73.2 | 7.3 |
+| US500 | 4H | bull | WICK | 349 | 18.9 | 61.9 | 18.6 |
+| US500 | 4H | bear | TOL | 36 | 27.8 | 69.4 | 2.8 |
+| US500 | 4H | bear | WICK | 253 | 25.3 | 51.8 | 22.9 |
+| US500 | D | bull | TOL | 4 | 0.0 | 100.0 | 0.0 |
+| US500 | D | bull | WICK | 74 | 17.6 | 52.7 | 28.4 |
+| US500 | D | bear | TOL | 4 | 0.0 | 75.0 | 25.0 |
+| US500 | D | bear | WICK | 50 | 26.0 | 52.0 | 22.0 |
+
+
+## Killzones (15m / 1H, 20-bar revisit; control column is unmatched, descriptive)
+| inst | TF | dir | killzone | N no-wick | revisit 20b % | N wick ctrl | ctrl revisit 20b % (unmatched) |
+|---|---|---|---|---|---|---|---|
+| US100 | 15m | bull | Asia | 188 | 73.9 | 885 | 78.6 |
+| US100 | 15m | bull | London | 136 | 68.4 | 781 | 83.5 |
+| US100 | 15m | bull | NYAM | 136 | 82.4 | 771 | 86.9 |
+| US100 | 15m | bull | NYPM | 106 | 63.2 | 517 | 76.0 |
+| US100 | 15m | bull | other | 402 | 72.4 | 2196 | 80.1 |
+| US100 | 15m | bear | Asia | 152 | 69.1 | 838 | 84.2 |
+| US100 | 15m | bear | London | 110 | 78.2 | 690 | 86.1 |
+| US100 | 15m | bear | NYAM | 123 | 79.7 | 719 | 87.8 |
+| US100 | 15m | bear | NYPM | 68 | 79.4 | 590 | 84.2 |
+| US100 | 15m | bear | other | 359 | 78.0 | 1981 | 85.6 |
+| US100 | 1H | bull | Asia | 25 | 96.0 | 135 | 82.2 |
+| US100 | 1H | bull | London | 32 | 90.6 | 172 | 83.1 |
+| US100 | 1H | bull | NYAM | 17 | 52.9 | 195 | 77.9 |
+| US100 | 1H | bull | NYPM | 14 | 57.1 | 104 | 77.9 |
+| US100 | 1H | bull | other | 81 | 72.8 | 524 | 80.9 |
+| US100 | 1H | bear | Asia | 28 | 78.6 | 136 | 88.2 |
+| US100 | 1H | bear | London | 17 | 88.2 | 156 | 88.5 |
+| US100 | 1H | bear | NYAM | 15 | 66.7 | 157 | 82.8 |
+| US100 | 1H | bear | NYPM | 12 | 83.3 | 111 | 83.8 |
+| US100 | 1H | bear | other | 52 | 75.0 | 472 | 85.2 |
+| US500 | 15m | bull | Asia | 201 | 69.2 | 806 | 81.3 |
+| US500 | 15m | bull | London | 127 | 71.7 | 822 | 83.7 |
+| US500 | 15m | bull | NYAM | 144 | 81.2 | 759 | 86.0 |
+| US500 | 15m | bull | NYPM | 120 | 64.2 | 490 | 77.1 |
+| US500 | 15m | bull | other | 437 | 74.6 | 2192 | 81.7 |
+| US500 | 15m | bear | Asia | 186 | 82.3 | 764 | 83.1 |
+| US500 | 15m | bear | London | 125 | 80.0 | 705 | 85.7 |
+| US500 | 15m | bear | NYAM | 121 | 84.3 | 734 | 86.2 |
+| US500 | 15m | bear | NYPM | 69 | 62.3 | 593 | 82.3 |
+| US500 | 15m | bear | other | 413 | 77.5 | 1954 | 85.6 |
+| US500 | 1H | bull | Asia | 27 | 77.8 | 126 | 86.5 |
+| US500 | 1H | bull | London | 28 | 78.6 | 185 | 83.8 |
+| US500 | 1H | bull | NYAM | 22 | 68.2 | 210 | 82.4 |
+| US500 | 1H | bull | NYPM | 29 | 72.4 | 106 | 81.1 |
+| US500 | 1H | bull | other | 84 | 73.8 | 498 | 81.1 |
+| US500 | 1H | bear | Asia | 25 | 88.0 | 118 | 88.1 |
+| US500 | 1H | bear | London | 24 | 87.5 | 157 | 89.2 |
+| US500 | 1H | bear | NYAM | 21 | 71.4 | 174 | 79.9 |
+| US500 | 1H | bear | NYPM | 13 | 69.2 | 115 | 88.7 |
+| US500 | 1H | bear | other | 82 | 72.0 | 438 | 86.1 |
+
+
+## Deviations / caveats (disclosed)
+- Median bars-to-revisit is computed over revisits within the full scan window (200/60/20/20 bars), not only the 50-bar horizon. Nearly every cell gives 3–4 bars, so a revisit, when it happens, happens fast.
+- Null (b) is computed only for bar horizons (not same/next day). Daily-cell CIs are absent because N ≤ 6.
+- Matched baseline drops no-wick candles in bins without a control (count in `results_cells.csv: dropped`, ≤ 10 per cell).
+- Levels on BID; sweep threshold = candle median spread (ASK−BID). The same-bar case in the ordering table cannot be resolved without 1m sequencing (not done).
+- Same burned window as all prior HERMES-X work: any result here is hypothesis-generating only.
+
+## Follow-up hypotheses (ICT terms; each falsifiable, each with its baseline; all need fresh / held-out data to confirm)
+1. **H-NW1 Displacement + naked open as draw on liquidity.** A no-wick 15m candle with body ≥ 1.5 ATR (displacement) that leaves an FVG gets its open revisited within the same session *more* often than matched displacement candles with a wick. Falsified if diff ≤ 0 (cluster CI). Baseline: (a) matched on body/ATR, and (c). (The current result suggests the opposite for ordinary candles; this tests whether displacement changes the sign.)
+2. **H-NW2 FVG left by the no-wick candle.** When the no-wick candle creates an FVG, the FVG midpoint (CE) is reached before the open in ≥ 60% of revisits. Falsified if CE-first ≤ the rate for FVGs from with-wick candles of the same size.
+3. **H-NW3 Premium/discount of the dealing range.** A bullish no-wick candle forming in *discount* (below the 50% of the prior-day / Asia range) has a lower 20-bar open-revisit rate than one in premium. Falsified if discount − premium ≥ 0. Baseline: the same split for matched controls (difference-in-differences).
+4. **H-NW4 True-day opening price (00:00 NY) / NY open 09:30.** A daily candle (00:00-NY true day) whose open == low/high is revisited before 16:00 less often than the matched day open with a wick. Falsified by diff ≥ 0. Needs a longer *unburned* sample (daily N is tiny here).
+5. **H-NW5 Daily no-wick open: next day vs next week.** The open of a no-wick daily candle is revisited within the next week in ≥ X% (set from the (c) distance baseline + 5 pp). Falsified if within the distance baseline ± CI. Requires multi-year data outside the burned window.
+6. **H-NW6 Continuation-first structure.** After a no-wick candle, the opposite extreme is taken before the open revisit more often than for matched controls (here 64–75% vs 53–63%, but with same-bar ambiguity). Falsified if the gap vanishes once same-bar cases are resolved on 1m. Baseline: matched controls with 1m sequencing.
+7. **H-NW7 Killzone conditioning.** No-wick candles printed at the NY AM open (07:00–10:00) have a higher same-session open-revisit rate than London/Asia ones, beyond what their ATR distance predicts. Falsified if the killzone effect disappears in a logistic model with distance/ATR as covariate.
+8. **H-NW8 Cost-aware "fade to the open" (only as a pre-declared rule).** Example rule declared before any R is computed: after a 15m TOL no-wick bull candle in NY AM, limit sell at close + 0.25 ATR, target = candle open, stop = 1 ATR beyond entry, exit at 15:59 NY, costs = pinned spread+slip on ASK/BID. Falsified if mean R ≤ 0 net of costs on held-out data. Baseline: the same rule on matched with-wick candles and random-time entries. (Given finding 2, the prior is negative.)
+9. **H-NW9 Sweep-and-reverse at the naked open (Turtle-soup).** When the naked open *is* swept, price closes back above it (bull) within 3 bars more often than at matched with-wick opens. Falsified if diff ≤ 0. This tests whether the open behaves as liquidity (stop-run) rather than a plain level.
+10. **H-NW10 Weekly analogue.** The Sunday-open (weekly) candle with open == low/high gets its open revisited within the week less often than distance predicts. Needs years of data; falsified if the rate is inside the (c) band.
