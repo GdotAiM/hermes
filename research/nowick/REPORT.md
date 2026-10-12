@@ -380,3 +380,115 @@ Revisit or sweep of the candle's open within 360 min after its close (1m BID). T
 - (C-iii) A clock candle is used only if it has ≥ 30 of 60 1m bars and does not cross the 17:00 roll. Doji (close == open) are skipped (no direction).
 - (C-ii) The weekly bar ATR14 needs 14 prior weeks, which shrinks the usable sample.
 - `nowick.py` gained a weekly bar key (Sunday 17:00 NY roll, W-SUN periods on the +7h shift). Existing TF results are unchanged (re-verified: `results_cells.csv` is identical).
+
+---
+# ADDENDUM 2 RESULTS (2026-10-12): lower-timeframe path into the revisit (prereg Addendum 2, 3beea5b)
+
+In-sample burned exploration. Code `addendum2.py` (~25 s). Outputs: `add2_features.csv`, `add2_features_by_window.csv`, `add2_sequences.csv`, `add2_extras.csv`, `add2_killzones.csv`, `add2_events.csv.gz`, `example_{1,2,3}.png`.
+Pooled over US100/US500 and both directions. Bull wording: the open lies below; bear is mirrored.
+
+## Feature frequency (Holm within each comparison, 18 tests)
+
+| TF | feature | TOL revisited % | (a) matched WICK revisited % | (a) diff pp [CI], Holm p | (b) TOL not revisited % | (b) diff pp [CI], Holm p |
+|---|---|---|---|---|---|---|
+| 15m | OPP | 70.2 (N 3357) | 80.6 (N 18325) | -10.3 [-12.3, -8.2], 0.000 | 93.6 (N 346) | -23.4 [-26.8, -19.9], 0.000 |
+| 15m | MSS1 | 80.9 (N 3357) | 67.4 (N 18325) | +13.4 [+11.5, +15.5], 0.000 | 32.4 (N 346) | +48.5 [+43.6, +53.4], 0.000 |
+| 15m | MSS5 | 30.5 (N 3357) | 24.0 (N 18325) | +6.5 [+4.2, +8.7], 0.000 | 1.2 (N 346) | +29.3 [+27.2, +31.5], 0.000 |
+| 15m | DISP | 30.9 (N 3357) | 25.6 (N 18325) | +5.3 [+3.2, +7.4], 0.000 | 5.5 (N 346) | +25.4 [+21.9, +28.6], 0.000 |
+| 15m | FVG1 | 86.6 (N 3357) | 83.2 (N 18325) | +3.4 [+1.9, +5.0], 0.000 | 94.8 (N 346) | -8.2 [-11.0, -4.9], 0.000 |
+| 15m | FVG5 | 52.9 (N 3357) | 46.2 (N 18325) | +6.7 [+4.3, +9.1], 0.000 | 24.3 (N 346) | +28.6 [+23.9, +33.3], 0.000 |
+| 15m | SWP5 | 83.2 (N 3357) | 81.6 (N 18325) | +1.6 [+0.1, +3.1], 0.168 | 92.8 (N 346) | -9.6 [-12.8, -5.9], 0.000 |
+| 15m | SESS | 40.0 (N 3357) | 35.6 (N 18325) | +4.4 [+2.1, +6.6], 0.001 | 56.6 (N 346) | -16.6 [-24.6, -8.6], 0.000 |
+| 15m | DRIFT | 5.2 (N 3357) | 5.4 (N 18325) | -0.2 [-1.0, +0.7], 1.000 | 2.0 (N 346) | +3.2 [+1.0, +4.8], 0.006 |
+| 1H | OPP | 69.8 (N 533) | 79.8 (N 3735) | -10.0 [-14.9, -5.3], 0.000 | 90.8 (N 109) | -21.0 [-28.7, -12.4], 0.000 |
+| 1H | MSS1 | 97.6 (N 533) | 91.8 (N 3735) | +5.7 [+4.0, +7.5], 0.000 | 69.7 (N 109) | +27.8 [+18.5, +36.7], 0.000 |
+| 1H | MSS5 | 71.9 (N 533) | 54.2 (N 3735) | +17.7 [+12.4, +23.0], 0.000 | 19.3 (N 109) | +52.6 [+42.2, +61.5], 0.000 |
+| 1H | DISP | 62.7 (N 533) | 48.0 (N 3735) | +14.7 [+8.7, +20.7], 0.000 | 24.8 (N 109) | +37.9 [+27.6, +48.0], 0.000 |
+| 1H | FVG1 | 98.7 (N 533) | 96.0 (N 3735) | +2.7 [+1.6, +3.8], 0.000 | 100.0 (N 109) | -1.3 [-2.4, -0.5], 0.023 |
+| 1H | FVG5 | 83.5 (N 533) | 76.1 (N 3735) | +7.4 [+3.3, +11.6], 0.003 | 86.2 (N 109) | -2.7 [-10.6, +5.5], 0.640 |
+| 1H | SWP5 | 95.3 (N 533) | 96.2 (N 3735) | -0.9 [-3.1, +1.1], 1.000 | 99.1 (N 109) | -3.8 [-6.2, -0.9], 0.022 |
+| 1H | SESS | 56.5 (N 533) | 53.6 (N 3735) | +2.9 [-2.9, +8.8], 1.000 | 78.9 (N 109) | -22.4 [-33.3, -10.5], 0.001 |
+| 1H | DRIFT | 0.2 (N 533) | 0.8 (N 3735) | -0.6 [-1.1, -0.1], 0.062 | 0.0 (N 109) | +0.2 [+0.0, +0.6], 0.640 |
+
+### Same comparison (a) stratified by window-length tertile (TOL-revisit tertiles)
+
+| TF | tertile | group | N | OPP | MSS1 | MSS5 | DISP | FVG1 | FVG5 | SWP5 | SESS | DRIFT |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 15m | 0 | TOL | 1115 | 30.5 | 55.8 | 0.0 | 4.3 | 61.4 | 3.2 | 64.8 | 8.4 | 14.5 |
+| 15m | 0 | WICK | 9201 | 55.9 | 35.4 | 0.0 | 2.2 | 58.4 | 3.2 | 66.8 | 12.5 | 12.9 |
+| 15m | 1 | TOL | 1120 | 82.1 | 89.3 | 16.8 | 17.7 | 98.8 | 58.1 | 87.9 | 37.6 | 0.6 |
+| 15m | 1 | WICK | 5182 | 94.2 | 81.6 | 13.5 | 16.1 | 98.5 | 55.3 | 86.6 | 36.2 | 0.8 |
+| 15m | 2 | TOL | 1122 | 98.0 | 97.4 | 74.5 | 70.4 | 99.6 | 97.0 | 96.8 | 73.8 | 0.4 |
+| 15m | 2 | WICK | 3942 | 99.0 | 95.7 | 71.8 | 71.1 | 99.5 | 96.6 | 96.5 | 68.2 | 0.3 |
+| 1H | 0 | TOL | 177 | 31.1 | 94.9 | 44.1 | 27.7 | 96.0 | 53.7 | 90.4 | 20.9 | 0.6 |
+| 1H | 0 | WICK | 1985 | 62.3 | 86.3 | 24.8 | 17.1 | 91.4 | 51.4 | 92.8 | 31.7 | 1.5 |
+| 1H | 1 | TOL | 178 | 82.6 | 99.4 | 80.3 | 66.3 | 100.0 | 98.9 | 96.6 | 64.6 | 0.0 |
+| 1H | 1 | WICK | 994 | 91.8 | 95.0 | 68.2 | 56.3 | 99.7 | 95.7 | 99.0 | 64.2 | 0.3 |
+| 1H | 2 | TOL | 178 | 95.5 | 98.3 | 91.0 | 93.8 | 100.0 | 97.8 | 98.9 | 83.7 | 0.0 |
+| 1H | 2 | WICK | 756 | 97.7 | 98.2 | 91.5 | 95.1 | 99.9 | 98.0 | 99.1 | 81.3 | 0.0 |
+
+## Most common sequences (revisited events)
+
+| TF | group | sequence | n | share % |
+|---|---|---|---|---|
+| 15m | TOL | SWEEP > FVG > MSS > REV | 1122 | 33.4 |
+| 15m | TOL | SWEEP > FVG > MSS > DISP > REV | 514 | 15.3 |
+| 15m | TOL | SWEEP > FVG > DISP > MSS > REV | 409 | 12.2 |
+| 15m | TOL | SWEEP > MSS > FVG > REV | 290 | 8.6 |
+| 15m | TOL | SWEEP > FVG > REV | 247 | 7.4 |
+| 15m | WICK | SWEEP > FVG > MSS > REV | 4803 | 26.2 |
+| 15m | WICK | SWEEP > FVG > REV | 2884 | 15.7 |
+| 15m | WICK | SWEEP > REV | 2511 | 13.7 |
+| 15m | WICK | DRIFT > REV | 1902 | 10.4 |
+| 15m | WICK | SWEEP > FVG > MSS > DISP > REV | 1764 | 9.6 |
+| 1H | TOL | SWEEP > FVG > MSS > DISP > REV | 146 | 27.4 |
+| 1H | TOL | SWEEP > FVG > DISP > MSS > REV | 144 | 27.0 |
+| 1H | TOL | SWEEP > FVG > MSS > REV | 126 | 23.6 |
+| 1H | TOL | SWEEP > MSS > FVG > REV | 37 | 6.9 |
+| 1H | TOL | SWEEP > MSS > FVG > DISP > REV | 22 | 4.1 |
+| 1H | WICK | SWEEP > FVG > MSS > REV | 1209 | 32.4 |
+| 1H | WICK | SWEEP > FVG > MSS > DISP > REV | 682 | 18.3 |
+| 1H | WICK | SWEEP > FVG > DISP > MSS > REV | 628 | 16.8 |
+| 1H | WICK | SWEEP > MSS > FVG > REV | 442 | 11.8 |
+| 1H | WICK | SWEEP > FVG > REV | 224 | 6.0 |
+
+## Descriptive extras
+
+| TF | group | revisited | N | CE1 reached given FVG1 % | OB retest given DISP % | median window min |
+|---|---|---|---|---|---|---|
+| 15m | TOL | False | 346 | 96.0 | 52.6 | 52 |
+| 15m | TOL | True | 3357 | 77.6 | 50.8 | 49 |
+| 15m | WICK | True | 18325 | 71.8 | 52.0 | 21 |
+| 1H | TOL | False | 109 | 95.4 | 48.1 | 186 |
+| 1H | TOL | True | 533 | 88.4 | 53.3 | 197 |
+| 1H | WICK | True | 3735 | 79.6 | 54.1 | 86 |
+
+Killzone of the turn / revisit for TOL revisits: `add2_killzones.csv`. NY AM has the most revisits (15m: 716 of 3357; turns 610). The 'other' hours dominate overall (1244 / 1261).
+
+## Read (honest)
+1. **The common lower-timeframe path is the generic ICT reversal sequence.**
+   - Sequence: sweep of the far side (candle extreme / 5m swing / session) > 1m FVG toward the open > 1m MSS > (5m displacement) > revisit.
+   - `SWEEP > FVG > MSS > REV` is the modal sequence on 15m (33.4% of TOL revisits; 48.7% including the `> DISP` tail). On 1H, the three SWEEP > FVG > MSS/DISP variants cover 78%.
+   - Only 5.2% (15m) / 0.2% (1H) of revisits are a straight drift with none of the features.
+2. **But it is not specific to no-wick candles.** The matched wicked controls show the same modal sequence (15m 26.2%, 1H 32.4%) and the same feature mix.
+   - The (a) differences are mostly significant after Holm, but they are dominated by **window length**: no-wick revisits take about 2× longer (median 49 vs 21 min on 15m).
+   - Within window-length tertiles, most gaps shrink to ≤ 5 pp.
+   - What survives stratification: no-wick revisits in short windows take the candle's opposite extreme **less** often (15m tertile 0: 30% vs 56%; 1H: 31% vs 62%) and show a 1m MSS **more** often (56% vs 35%; 95% vs 86%). In other words, the quick no-wick revisits are 'fail to extend, shift structure, return', not 'sweep the high, then return'.
+3. **'Does the feature predict the revisit' (b) is largely mechanical.**
+   - MSS toward the open (+49 pp on 15m), MSS5, DISP and FVG5 are much more frequent before revisits. But a move toward the open *is* what produces those features, so this is close to tautological. It is not a usable ex-ante signal: the feature is defined inside the window that ends at the revisit.
+   - Not-revisited events show *more* far-side sweeps (OPP 94% vs 70%; SESS 57% vs 40%), i.e. continuation away from the open.
+   - An ex-ante test would have to fix a decision time (e.g. the first 1m MSS after the close) and measure the subsequent revisit. Proposed as a follow-up.
+4. **FVG CE retrace:** given a 1m FVG toward the open, its CE is reached before the revisit in 78% (15m) / 88% (1H) of no-wick revisits vs 72% / 80% for controls.
+   - OB mid-body retest after displacement is about a coin flip (48–54%) in every group.
+
+## Example charts (pre-declared selection: first 3 by date of 15m TOL revisits with the modal sequence `SWEEP > FVG > MSS > REV`, window 30–180 min)
+- `research/nowick/example_1.png`, `research/nowick/example_2.png`, `research/nowick/example_3.png`: 1m BID candles with the no-wick candle shaded, open (dashed), opposite extreme (dotted), revisit (purple); the features found are listed in the title.
+
+## Addendum 2 deviations (disclosed)
+- Charts annotate the candle, open, extreme and revisit, and list the detected features in the title; individual MSS/FVG levels are not drawn.
+- 5m bars are built with the main `bars()` (≥ 50% of 1m minutes present).
+- No pre-registered definition changed.
+
+## Follow-ups from Addendum 2
+- **H-NW11 (ex-ante):** after a 15m no-wick candle, if a 1m MSS toward the open prints *before* the candle's opposite extreme is taken, the open is revisited within 20 bars more often than without it. Decision time = the MSS bar; baseline = matched wicked candles with the same trigger. Falsified if diff ≤ 0 on fresh data.
+- **H-NW12:** for the 1m FVG toward the open, CE-first then revisit (78%) vs controls (72%), tested as a pre-declared entry at CE with the stop beyond the turn, cost-aware, on held-out data only.
