@@ -164,3 +164,33 @@ Same data, window and sealing as above. Exploration only.
 - Final equity, return %, trade count, win rate (R > 0), mean R with a 95% day-cluster bootstrap CI (2000 draws, seed 20261012), and max drawdown.
 - Splits by instrument and timeframe.
 - Equity PNG `research/nowick/hnw11_equity.png`.
+
+## Addendum 4: H-NW11 variant family. Rules written before any R is computed
+**Status: EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE.** The family is fixed at 7 variants, chosen from Addendum 3's diagnosis (winners about +0.6 R vs losers about −1.1 R because the open sits close relative to the structural stop) and not tuned. Everything not stated below is identical to Addendum 3: events, the MSS signal (bar k, swing s), costs and fills, stop-first on ambiguous bars, the time stop (20 TF bars / day roll), min_risk widening, the book ($10k, 0.5% risk, 2% daily cap, 5% DD halt plus an unhalted curve, one position per instrument), and the bootstrap.
+
+"Bull view" below means the short trade taken after a bull no-wick candle; bear is mirrored.
+
+**Variants.**
+- **V1 (H-NW12): FVG CE entry.**
+  - FVG: the latest 1m bearish FVG (L[g−2] > H[g]) with s < g ≤ k.
+  - Entry: a limit sell at its CE (L[g−2] + H[g])/2, filled when BID high ≥ CE on a bar after k, at CE − limit slip.
+  - Cancellation: the order is cancelled if the open is touched, the far extreme is taken, or the time stop arrives first.
+  - Stop and target: the Addendum 3 stop (min_risk widening measured from the CE) and the open as target.
+  - No FVG means no trade.
+- **V2: partial at the open plus 2R runner.** The Addendum 3 entry and stop. Half the size exits at the open (limit). The other half targets entry ∓ 2 × risk, with the stop unchanged. R is the average of the two halves. If the open is beyond 2R, both halves target 2R.
+- **V3: far-extreme stop with a 1.5R filter.** Stop = far extreme + Addendum 3 buffer, min_risk widened. Trade only if |signal close − open| ≥ 1.5 × risk. Target is the open.
+- **V4: killzone filter.** Addendum 3 trades with the MSS bar in London (02:00–05:00 NY) or NY AM (07:00–10:00 NY) only.
+- **V5: premium/discount filter.** Addendum 3 trades where the signal close is in the premium (short) or discount (long) half of the previous trading day's BID high–low range.
+- **V6: fade on a failed MSS.**
+  - Trigger: after an Addendum 3 signal, if the far extreme is taken (BID high > candle high) before the open is touched and before the time stop.
+  - Entry: long in the continuation direction at the close of that 1m bar (ASK close + market slip).
+  - Stop: the lowest BID low from k to that bar, − max(1, stop slip), min_risk widened.
+  - Target: entry + 2 × risk. Same time stop.
+- **V7: HTF bias alignment.** Addendum 3 trades where the previous trading day's BID candle closed in the trade's direction (short needs a bearish previous day).
+
+**Statistics.**
+- Per variant: trades, win rate, mean R with a 95% day-cluster CI (all signals, no book), and the halted and unhalted book.
+- One-sided bootstrap p for mean R > 0 (share of draws ≤ 0), Holm-adjusted across the 7.
+- Haircut: mean R − SE × E[max of 7 iid N(0,1)] (= 1.352 × SE), a deflated-Sharpe-style correction for picking the best of 7.
+- **Forward-test bar.** A variant is "worth a fresh-data forward test" only if Holm p < 0.05 AND the haircut mean R > 0 AND the unhalted book is not halted-worthy (max DD < 20%). Otherwise none.
+- Comparison PNG: `research/nowick/add4_equity.png`.
