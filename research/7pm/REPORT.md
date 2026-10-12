@@ -49,3 +49,51 @@ The 7PM range behaves like any 1-h range. A 1-h range is almost always taken wit
 - 1m bars can't order a stop and a target in the same bar, so stop-first (conservative).
 - Overnight ASK gaps are forward-filled.
 - The null compares follow windows that cross different sessions per hour.
+
+# Addendum 1: 6PM range (18:00–18:59 NY), trade window 19:00 → 08:00 (EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE)
+- **Prereg addendum:** 04dc482, committed before any R. Only the windows changed.
+- **Run:** `RANGE_HOUR=18 sweep7pm.py`.
+- **Outputs:** `*_6pm.csv`, `dataquality_6pm.csv`, `equity_6pm.png`.
+
+## Data quality of the 18:00 reopen hour
+
+| | US100 | US500 |
+|---|---|---|
+| 1m bars in 18:00–18:59, median / p5 | 60 / 60 | 60 / 53 |
+| nights excluded (< 45 bars) | 0 | 1 |
+| ASK minutes missing (18:00 / 19:00–07:59) | 0% / 0% | 0% / 0% |
+| ASK − BID spread 18:00 hour, median / p95 | 1.19 / 3.46 | 0.70 / 0.73 |
+| spread 18:00–18:04, median / p95 | 1.29 / 3.78 | 0.70 / 0.73 |
+| spread 19:00–07:59, median / p95 | 1.17 / 3.41 | 0.70 / 0.73 |
+
+Bars are complete, and there is no material spread spike beyond a slightly wider US100 first 5 minutes. The hour is clean on this feed.
+
+## Descriptive
+
+| | US100 | US500 |
+|---|---|---|
+| a side swept by 08:00 | 100% (0 ambiguous) | 100% |
+| first sweep = high | 57.3% | 51.8% |
+| opposite side reached after the first sweep | **61.2%** | **60.0%** |
+| midpoint reached after the sweep | 77.9% | 77.1% |
+| minutes sweep → opposite, median / p75 | 103 / 314 | 110 / 294 |
+| null: hour 18 vs other hours (same 12-h stat) | −4.9 pp [−10.9, +0.8] | **−7.7 pp [−14.0, −2.0]** |
+| rank of hour 18 among 24 | 14th | 14th |
+
+The 6PM range is if anything *less* likely than a typical hour's range to see the opposite side after a sweep (significant on US500).
+
+## Variants
+
+| Variant | N | Win | Avg win / avg loss R | Mean R [95% CI] | Haircut | US100 / US500 | Halted final (halt, NY) | Unhalted final | Unhalted max DD |
+|---|---|---|---|---|---|---|---|---|---|
+| a_opp | 535 | 33.1% | +2.20 / −1.14 | −0.033 [−0.212, +0.157] | −0.152 | +0.029 / −0.095 | $9,480 (2025-09-07) | $8,875 | 27.9% |
+| a_mid | 534 | 44.9% | +1.02 / −1.13 | −0.165 [−0.280, −0.044] | −0.242 | −0.184 / −0.146 | $9,399 (2025-09-07) | $6,344 | 42.7% |
+| b_opp | 561 | 24.8% | +3.14 / −1.16 | −0.093 [−0.304, +0.136] | −0.236 | +0.007 / −0.194 | $9,488 (2025-09-07) | $7,343 | 41.5% |
+| b_mid | 561 | 33.9% | +1.57 / −1.15 | −0.230 [−0.376, −0.071] | −0.329 | −0.236 / −0.224 | $9,484 (2025-09-02) | $5,124 | 53.6% |
+| c_opp | 505 | 47.1% | +1.15 / −1.07 | −0.022 [−0.151, +0.109] | −0.105 | +0.055 / −0.099 | $9,470 (2025-09-02) | $9,336 | 16.7% |
+| c_mid | 465 | 58.5% | +0.51 / −1.01 | −0.121 [−0.208, −0.032] | −0.178 | −0.111 / −0.127 | $9,486 (2025-09-04) | $7,504 | 28.5% |
+
+- Holm p = 1.0 for all 6, and every pooled mean R is negative.
+- Every halted book hit the 5% halt within the first 2 weeks (2025-09-02..07).
+- **Forward-test verdict (pre-declared bar):** none.
+- The closest is c_opp (MSS back inside → opposite extreme): −0.02 R pooled, the only unhalted max DD < 20%, with US100 +0.055 [−0.11, +0.23] but US500 −0.099. It fails on sign agreement, significance and haircut.

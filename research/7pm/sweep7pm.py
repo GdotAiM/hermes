@@ -6,6 +6,8 @@ DATA = "/workspace/ftn-demo-output/data"; OUT = "research/7pm/"
 SHA = {"US100_1m_bid": "6afa3130", "US100_1m_ask": "fcc3c877", "US500_1m_bid": "9d68787c", "US500_1m_ask": "ff63783f"}
 END = pd.Timestamp("2026-09-25 17:00"); START = pd.Timestamp("2025-08-24 18:00")
 COST = {"US100": dict(spr=1.55, stop=0.50, mkt=0.50, lim=0.25), "US500": dict(spr=0.72, stop=0.25, mkt=0.25, lim=0.10)}
+import os
+RHR = int(os.environ.get("RANGE_HOUR", "19")); SUF = "" if RHR == 19 else "_6pm"
 MIN = 60_000_000_000; NB = 2000; SEED = 20261012; V = ["a_opp", "a_mid", "b_opp", "b_mid", "c_opp", "c_mid"]
 
 def load(f):
@@ -27,7 +29,7 @@ def run(inst):
     trades, desc = [], []
     for D in pd.date_range("2025-08-24", "2026-09-24"):
         if D.weekday() in (4, 5): continue
-        t0 = D + pd.Timedelta(hours=19); i0, i1 = np.searchsorted(Tn, [t0.value, (t0 + pd.Timedelta(hours=1)).value])
+        t0 = D + pd.Timedelta(hours=RHR); i0, i1 = np.searchsorted(Tn, [t0.value, (t0 + pd.Timedelta(hours=1)).value])
         if i1 - i0 < 45: continue
         RH, RL = H[i0:i1].max(), L[i0:i1].min(); mid = (RH + RL) / 2
         e = np.searchsorted(Tn, (D + pd.Timedelta(hours=32)).value) - 1  # last bar < 08:00 D+1
@@ -127,7 +129,7 @@ def main():
     for inst in ["US100", "US500"]:
         t, d, n = run(inst); d["inst"] = inst; n["inst"] = inst; TR.append(t); DE.append(d); NU.append(n)
     TR, DE, NU = (pd.concat(x, ignore_index=True) for x in (TR, DE, NU))
-    TR.to_csv(OUT + "trades.csv", index=False)
+    TR.to_csv(OUT + "trades" + SUF + ".csv", index=False)
     drows = []
     for inst, d in DE.groupby("inst"):
         s = d[d.swept & (d.amb != True)]
@@ -139,12 +141,12 @@ def main():
     for inst, n in NU.groupby("inst"):
         sw = n[n.swept == 1]; per_h = sw.groupby("h").opp.mean(); n_h = n.groupby("h").swept.mean()
         days = pd.Index(sorted(sw.day.unique())); di = days.get_indexer(sw.day); D = len(days)
-        a = (sw.h == 19).values; v = sw.opp.values * 1.
+        a = (sw.h == RHR).values; v = sw.opp.values * 1.
         y1, n1 = np.bincount(di[a], v[a], D), np.bincount(di[a], minlength=D) * 1.; y2, n2 = np.bincount(di[~a], v[~a], D), np.bincount(di[~a], minlength=D) * 1.
         rng = np.random.default_rng(SEED); W = rng.multinomial(D, np.ones(D) / D, size=NB)
         bs = W @ y1 / (W @ n1) - W @ y2 / (W @ n2)
-        nrows.append(dict(inst=inst, P_opp_19h=per_h[19], P_opp_other_hours=v[~a].mean(), diff=per_h[19] - v[~a].mean(), lo=np.quantile(bs, .025), hi=np.quantile(bs, .975),
-                          rank_19h_of_24=int((per_h > per_h[19]).sum()) + 1, P_swept_19h=n_h[19], P_swept_other=n.swept[n.h != 19].mean()))
+        nrows.append(dict(inst=inst, P_opp_rangehour=per_h[RHR], P_opp_other_hours=v[~a].mean(), diff=per_h[RHR] - v[~a].mean(), lo=np.quantile(bs, .025), hi=np.quantile(bs, .975),
+                          rank_rangehour_of_24=int((per_h > per_h[RHR]).sum()) + 1, P_swept_rangehour=n_h[RHR], P_swept_other=n.swept[n.h != RHR].mean()))
         per_h.rename(f"P_opp_{inst}").to_csv(OUT + f"null_by_hour_{inst}.csv")
     nul = pd.DataFrame(nrows)
     res, curves = [], {}
@@ -167,19 +169,19 @@ def main():
         sub = R[(R.variant == v) & (R.scope != "pooled")]
         R.loc[(R.variant == v) & m, "same_sign"] = bool(len(sub) == 2 and np.sign(sub.meanR).nunique() == 1)
     R.loc[m, "forward_worthy"] = (R.p_holm[m] < .05) & (R.haircutR[m] > 0) & (R.same_sign[m] == True) & (R.maxDD_unhalted[m] < .2)
-    R.to_csv(OUT + "results.csv", index=False); desc.to_csv(OUT + "descriptive.csv", index=False); nul.to_csv(OUT + "null.csv", index=False)
+    R.to_csv(OUT + "results" + SUF + ".csv", index=False); desc.to_csv(OUT + "descriptive" + SUF + ".csv", index=False); nul.to_csv(OUT + "null" + SUF + ".csv", index=False)
     pd.set_option("display.width", 320)
     for x in (desc, nul, R): print(x.to_string(float_format=lambda z: f"{z:.4f}")); print()
     print(TR.groupby(["var", "why"]).size().unstack())
     fig, ax = plt.subplots(1, 2, figsize=(15, 5.5))
     for v, cv in curves.items(): ax[0].step(cv.t, cv["eq"], where="post", label=v, lw=1)
     ax[0].axhline(1e4, c="k", lw=.5); ax[0].legend(fontsize=8); ax[0].grid(alpha=.3); ax[0].set_ylabel("equity $ (unhalted, 0.5% risk, US100+US500)")
-    ax[0].set_title("7PM range sweep variants, $10k unhalted books")
+    ax[0].set_title(f"{RHR}:00 range sweep variants, $10k unhalted books")
     for inst in ["US100", "US500"]:
         ph = pd.read_csv(OUT + f"null_by_hour_{inst}.csv", index_col=0).iloc[:, 0]; ax[1].plot(ph.index, ph.values, "o-", label=inst)
-    ax[1].axvline(19, c="r", lw=.8); ax[1].set_xlabel("range start hour (NY)"); ax[1].set_ylabel("P(opposite side reached | first sweep, 12h)")
+    ax[1].axvline(RHR, c="r", lw=.8); ax[1].set_xlabel("range start hour (NY)"); ax[1].set_ylabel("P(opposite side reached | first sweep, 12h)")
     ax[1].legend(); ax[1].grid(alpha=.3); ax[1].set_title("Null: same stat for the 1h range at every hour")
-    fig.suptitle("IN-SAMPLE burned window 2025-08-25..2026-09-25, EXPLORATORY, NOT EVIDENCE", fontsize=9); fig.tight_layout(); fig.savefig(OUT + "equity.png", dpi=105)
+    fig.suptitle("IN-SAMPLE burned window 2025-08-25..2026-09-25, EXPLORATORY, NOT EVIDENCE", fontsize=9); fig.tight_layout(); fig.savefig(OUT + "equity" + SUF + ".png", dpi=105)
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,3 @@
+inst,nights,P_swept,ambiguous,N_first_sweep,P_opp_after_sweep,P_mid_after_sweep,median_min_to_opp,p75_min_to_opp,high_first
+US100,281,1.0,0,281,0.6120996441281139,0.7793594306049823,103.0,314.0,0.5729537366548043
+US500,280,1.0,0,280,0.6,0.7714285714285715,109.5,293.75,0.5178571428571429
