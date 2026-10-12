@@ -1,0 +1,56 @@
+{
+ "source": "Dukascopy public datafeed 1m BID+ASK candles, UTC days 2023-01-01..2026-09-25 (Saturdays skipped)",
+ "instruments": {
+  "GER40": "DEUIDXEUR",
+  "US30": "USA30IDXUSD",
+  "XAUUSD": "XAUUSD"
+ },
+ "csv_sha256": {
+  "GER40_1m_ask.csv.gz": "0fdfcdb34d9fcad4984b1febdddac9dcfc463976accd6f13b4a8f17b74d5e470",
+  "GER40_1m_bid.csv.gz": "3734e9e4543340f9c37cb2a7cd090e5800336bdcdfef6abf3f001aa6da775953",
+  "US30_1m_ask.csv.gz": "73e18ecee34e1808e0a2b4752f63e7816ea1a5a393946ed70ed57d75019a9ec2",
+  "US30_1m_bid.csv.gz": "199d5108cc0bedfbd1ae15dcc1e2cfdf559f706c0bf65b62316ac6b7d67f8839",
+  "XAUUSD_1m_ask.csv.gz": "73ffbf5c02865bf543a6e15d9624905750fc2ad574d577ca1789dd22151f1735",
+  "XAUUSD_1m_bid.csv.gz": "d7b006c0d964c2094d3a7bbfadd87b95affb966e180aa68a5082d42d78476196"
+ },
+ "build": {
+  "GER40_BID": {
+   "rows": 1252086,
+   "missing_day_files": 0,
+   "empty_weekday_files": 6,
+   "path": "/workspace/screening-data/GER40_1m_bid.csv.gz"
+  },
+  "GER40_ASK": {
+   "rows": 1252086,
+   "missing_day_files": 0,
+   "empty_weekday_files": 6,
+   "path": "/workspace/screening-data/GER40_1m_ask.csv.gz"
+  },
+  "US30_BID": {
+   "rows": 1276228,
+   "missing_day_files": 0,
+   "empty_weekday_files": 3,
+   "path": "/workspace/screening-data/US30_1m_bid.csv.gz"
+  },
+  "US30_ASK": {
+   "rows": 1276228,
+   "missing_day_files": 0,
+   "empty_weekday_files": 3,
+   "path": "/workspace/screening-data/US30_1m_ask.csv.gz"
+  },
+  "XAUUSD_BID": {
+   "rows": 1324380,
+   "missing_day_files": 0,
+   "empty_weekday_files": 4,
+   "path": "/workspace/screening-data/XAUUSD_1m_bid.csv.gz"
+  },
+  "XAUUSD_ASK": {
+   "rows": 1324380,
+   "missing_day_files": 0,
+   "empty_weekday_files": 4,
+   "path": "/workspace/screening-data/XAUUSD_1m_ask.csv.gz"
+  }
+ },
+ "raw_files": 7020,
+ "raw_404": 0
+}
