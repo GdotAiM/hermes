@@ -84,3 +84,41 @@ Same data, window and rules as above. All results remain in-sample burned explor
   - Reported: the percentile rank of 00:00 / 09:30 among the 60 baseline times for revisit rate and median first-touch minutes.
 - Any cell with N < 30 is marked **INSUFFICIENT**, with a power note: the N per arm needed to detect a 10 pp difference at 80% power / α = 0.05, and the implied years of data at the observed event frequency.
 - Confirmation requires fresh multi-year data (new instruments 2023+ after DATA's screening remediation, or the forward test). No sealed data is opened.
+
+---
+# ADDENDUM 2 (2026-10-12, committed before any new statistic): lower-timeframe path into the revisit
+Same data, window and sealing as above. Exploration only.
+
+**Events.** 15m and 1H, both instruments, both directions.
+- TOL no-wick and WICK control candles.
+- "Revisited" = 1m first touch of the open within the Addendum 1 scan (3000 / 3600 min).
+- Candles whose scan runs past the data end are excluded.
+
+**Window.**
+- Revisited events: [candle close, revisit minute), with the revisit bar excluded.
+- Not-revisited TOL events: [close, close + M), where M = the median revisit minutes of revisited TOL events in the same instrument × TF × direction cell.
+- Notation: s = +1 for bull (the open lies below; "toward the open" = down), mirrored for bear.
+- The *turn* is the minute of the window's extreme away from the open (bull: max high), first occurrence.
+
+**Feature definitions** (BID 1m; 5m bars are clock-aligned from 1m; 5m ATR14 = mean true range of the prior 14 5m bars). Fractal swing = a bar whose low (high) is strictly below (above) the 2 bars on each side; it is confirmed 2 bars later.
+- **F1 OPP**: the window takes the candle's opposite extreme (bull: high > candle high).
+- **F2a MSS1 / F2b MSS5**: the last confirmed 1m (5m) swing on the open side (bull: swing low) is confirmed at or before the turn, with its bar no earlier than 60 min before the candle close. MSS = a 1m (5m) close beyond it toward the open, after the turn and before the revisit (5m bar closed before the revisit).
+- **F3 DISP**: a 5m bar fully inside the window, with body ≥ 1.5 × 5m ATR14, closing toward the open.
+- **F4a FVG1 / F4b FVG5**: a 3-bar FVG pointing toward the open (bull: high[i] < low[i−2]), with all three bars inside the window.
+  - Descriptive add-on **CE1**: given FVG1, price retraces to the first FVG1's CE (midpoint) before the revisit.
+- **F5a SWP5**: in [close, turn], price exceeds a 5m swing on the far side (bull: swing high) that was confirmed before the candle close, within the prior 24 5m bars.
+- **F5b SESS**: in [close, turn], price exceeds the trading-session extreme on the far side up to the candle close (NY 17:00 roll).
+- **F6 OB** (descriptive, given DISP): OB = the last 5m bar of the opposite colour within the 12 bars before the first DISP bar. Retest = a 1m price reaching the OB mid-body after the DISP bar closes and before the revisit.
+- **F7 KZ** (descriptive): the killzone of the turn minute and of the revisit minute (Asia / London / NYAM / NYPM / other, as in the main PREREG).
+- **F8 DRIFT**: none of OPP, MSS1, MSS5, DISP, FVG1, FVG5, SWP5, SESS.
+
+**Comparisons.** Pooled over instrument and direction, per TF.
+- (a) TOL revisited vs WICK revisited, with controls reweighted to the TOL body×range quintile bins.
+- (b) TOL revisited vs TOL not revisited.
+- Effect = difference in feature frequency. 95% CI by date-cluster bootstrap (2000 resamples). p from the bootstrap SE.
+- **Holm** within each comparison over 9 binary features (OPP, MSS1, MSS5, DISP, FVG1, FVG5, SWP5, SESS, DRIFT) × 2 TF = 18 tests. CE1, OB, KZ are descriptive.
+- Known confounds, disclosed in advance: window length differs between groups (controls revisit faster; non-revisit windows are set to the median). Feature frequency rises with window length, so the report also gives window-length-stratified rates (tertiles) for comparison (a).
+
+**Sequence.** For TOL revisits, the tokens are ordered by first time: SWEEP (earliest of OPP / SWP5 / SESS), MSS (earliest of MSS1 / MSS5), DISP, FVG (earliest of FVG1 / FVG5), each once, then REV. Reported: the top sequences and their shares per TF.
+
+**Charts.** 3 example 15m TOL revisits carrying the modal non-empty sequence: the first 3 by date with window length 30–180 min (pre-declared selection, not cherry-picked). 1m candles with annotations.
