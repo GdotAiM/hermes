@@ -58,3 +58,13 @@
 - **Null:** the same statistics for the 1-h ranges starting at every other hour h (00:00–23:00, h ≠ 19). The follow window is 12 h from h+1, clipped at the weekend gap, and only windows inside the data are used.
 - **Effect:** P_opp(19:00) − the mean of P_opp(other hours), day-cluster bootstrap CI.
 - **Caveat, disclosed:** different hours have different volatility profiles. A per-hour figure is also given.
+
+## Addendum 1 (user correction): 6PM range. Written before any R is computed
+- **What changes:** only the windows. Range = 18:00–18:59 NY (needs ≥ 45 bars). Trade window = 19:00 D → 07:59 D+1 (cutoff 08:00 unchanged).
+- **Unchanged:** the 6 variants, sweep/entry/stop/target definitions, costs and fills, the book, the bootstrap, Holm, the haircut and the forward-test bar.
+- **Null:** the same other-hours null (1-h ranges at every hour, 12-h follow), now comparing hour 18 against the rest, plus the rank of hour 18.
+- **Data-quality check, reported:** 18:00 is the session reopen after the 17:00 roll. The report gives:
+  - 1m bar counts per 18:00 hour (share of nights < 45 bars, i.e. excluded);
+  - the minutes of ASK missing;
+  - the median and p95 ASK − BID close spread in the 18:00 hour vs 19:00–07:59.
+- **Outputs:** suffix `_6pm` (`results_6pm.csv`, `descriptive_6pm.csv`, `null_6pm.csv`, `trades_6pm.csv`) and `research/7pm/equity_6pm.png`.
