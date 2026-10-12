@@ -532,3 +532,26 @@ The halted-book split is in `add3_summary.csv`. Every halted cell has N ≤ 28.
 **Caveats.**
 - In-sample on the burned window; the idea was chosen after looking at this data. A different stop or target choice could look different, but tuning it here would be overfitting.
 - Bars after 2026-09-25 were not read.
+
+# Addendum 4: H-NW11 variant family (EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE)
+The rules are in PREREG.md Addendum 4 and were committed (ff9195c) before any R was computed. Code: `addendum4.py`. Outputs: `add4_signals.csv.gz`, `add4_summary.csv` (it also has the per-instrument/TF mean R) and `add4_equity.png`.
+- The R CI is a 95% day-cluster bootstrap on all signals.
+- p is one-sided for mean R > 0, Holm-adjusted across the 7 variants.
+- Haircut = mean R − 1.352 × SE.
+
+| Variant | N | Win | Mean R [CI] | Holm p | Haircut R | Halted final (halt date) | Unhalted final | Unhalted max DD |
+|---|---|---|---|---|---|---|---|---|
+| V1 FVG-CE entry (H-NW12) | 505 | 34.5% | −0.233 [−0.349, −0.099] | 1.0 | −0.319 | $9,768 (2025-09-17) | $5,706 | 47.0% |
+| V2 partial + 2R runner | 1557 | 32.8% | −0.191 [−0.252, −0.133] | 1.0 | −0.232 | $9,591 (2025-09-12) | $2,952 | 70.9% |
+| V3 far stop, open ≥ 1.5R | 214 | 28.0% | −0.241 [−0.428, −0.036] | 1.0 | −0.377 | $9,698 (2025-10-12) | $7,792 | 25.7% |
+| V4 London/NY AM only | 432 | 48.4% | −0.248 [−0.359, −0.138] | 1.0 | −0.323 | $9,507 (2025-11-05) | $5,956 | 40.7% |
+| V5 premium/discount | 850 | 46.2% | −0.211 [−0.284, −0.140] | 1.0 | −0.261 | $9,512 (2025-09-12) | $4,397 | 56.5% |
+| V6 fade failed MSS (2R) | 657 | 41.1% | +0.044 [−0.081, +0.167] | 1.0 (raw 0.25) | −0.040 | $9,479 (2025-09-01) | $11,628 | 19.8% |
+| V7 prior-day bias | 786 | 47.1% | −0.183 [−0.266, −0.096] | 1.0 | −0.243 | $9,631 (2025-09-16) | $4,887 | 52.0% |
+
+Every variant hit the 5% halt at some point in the window.
+
+**Reading.**
+- Every "trade toward the open" variant stays clearly negative. Moving the entry (CE), the target (2R runner), the stop (far extreme with an R:R filter), or filtering by session, premium/discount or bias does not fix the structural problem.
+- The only non-negative variant is V6, the opposite trade: continuation after the MSS fails. Its CI includes 0, its Holm p is 1.0 and its haircut R is negative. It is also positive on US100 (+0.06 / +0.14 R) and flat on US500 (+0.02 / −0.01 R).
+- **Forward-test verdict (pre-declared bar):** none qualifies. V6 is the only candidate worth writing up as a new forward-only hypothesis (continuation after a failed fade at a no-wick candle). It would need fresh data and its own prereg; nothing here supports it.
