@@ -122,3 +122,45 @@ Same data, window and sealing as above. Exploration only.
 **Sequence.** For TOL revisits, the tokens are ordered by first time: SWEEP (earliest of OPP / SWP5 / SESS), MSS (earliest of MSS1 / MSS5), DISP, FVG (earliest of FVG1 / FVG5), each once, then REV. Reported: the top sequences and their shares per TF.
 
 **Charts.** 3 example 15m TOL revisits carrying the modal non-empty sequence: the first 3 by date with window length 30–180 min (pre-declared selection, not cherry-picked). 1m candles with annotations.
+
+## Addendum 3: H-NW11 illustrative equity curve. Rules written before any R is computed
+**Status: EXPLORATORY, IN-SAMPLE on the burned window 2025-08-25..2026-09-25. NOT EVIDENCE.** The idea came from looking at this same data (Addendum 2), so any result here is optimistic by construction. Bars after 2026-09-25 are not read.
+
+**Events.** NOWICK-1 `TOL` no-wick candles (nowick.features, unchanged) on 15m and 1H, US100 and US500 (BID chart). Bull no-wick (open = low) means a SHORT toward the open; bear no-wick means a LONG. The **far extreme** is the candle's high for bull and its low for bear.
+
+**Signal (1m, scan from the first 1m bar after the candle closes).** Described in bull view (short); bear is mirrored.
+- The 1m swing low is the Addendum 2 `swings()` (2 bars each side). It counts at bar k only if it is confirmed (s + 2 ≤ k − 1) and formed at or after candle close − 60 min.
+- The **MSS** at bar k is the first 1m BID close below the most recent such swing low.
+- The far extreme must not be taken (BID high ≤ candle high on every 1m bar from the close through k), and the open must not yet be touched.
+- If the far extreme is taken or the open is touched before an MSS, the event is dead.
+- The MSS must occur within 20 TF bars of the candle close (300 min on 15m, 1200 min on 1H) and before the end of the trading day (17:00 NY roll). At most one trade per candle.
+
+**Entry.** At the close of the MSS bar. Short fills at BID close − market slip; long fills at ASK close + market slip.
+
+**Stop.**
+- Short: the highest BID high from the swing low through the MSS bar (the swing that made the MSS), plus a buffer of max(1 pt, assumed spread + stop slip).
+- Long: the lowest BID low − max(1 pt, stop slip). (This is the H016 buffer convention.)
+- If |signal close − stop| < min_risk = 4 × (assumed spread + 2 × slip), the stop is **widened** to min_risk (US100 10.2 pt, US500 4.88 pt).
+
+**Target.** The no-wick open (a limit).
+- Short: exits when ASK low < open, filled at open + limit slip.
+- Long: exits when BID high > open, filled at open − limit slip.
+- Stop fills: short when ASK high ≥ stop, at max(stop, ASK open) + stop slip; long when BID low ≤ stop, at min(stop, BID open) − stop slip.
+- If the stop and the target are both touched in the same 1m bar, the stop is assumed (conservative).
+
+**Time stop.** A fixed bar count: 20 TF bars after the candle close (15m: 300 min; 1H: 1200 min), or the 16:59 NY trading-day roll, whichever comes first. The exit is at that 1m bar's correct-side close ∓ market slip.
+
+**Costs.** Real correct-side BID/ASK prices (the measured spread) plus the DATA slippage floors from ftn/os/instruments.py: US100 0.50/0.50/0.25, US500 0.25/0.25/0.10 (stop/market/limit). Assumed spreads (for buffers and min stop): US100 1.55, US500 0.72. ASK minutes missing from the feed are forward-filled.
+
+**R.** (exit fill − entry fill) × side / |signal close − stop|.
+
+**Book.**
+- Starts at $10,000 and risks 0.5% of current realized equity per trade (size = risk$ / planned risk points).
+- No overlapping positions per instrument; 15m and 1H share the instrument slot, and the first in time wins.
+- Daily loss cap: no new entries for the rest of the trading day once realized P&L that day ≤ −2% of start-of-day equity.
+- 5% max drawdown from the realized-equity peak halts all trading. The date is reported, and the unhalted curve is reported too (same rules without the halt).
+
+**Reported.**
+- Final equity, return %, trade count, win rate (R > 0), mean R with a 95% day-cluster bootstrap CI (2000 draws, seed 20261012), and max drawdown.
+- Splits by instrument and timeframe.
+- Equity PNG `research/nowick/hnw11_equity.png`.
