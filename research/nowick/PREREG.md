@@ -226,3 +226,47 @@ Every stop is widened to min_risk from the reference price (CE for A, BID close 
 - Holm across the 6. Haircut = mean R − 1.267 × SE (E[max of 6 iid N(0,1)]).
 - Forward-test bar: Holm p < 0.05 AND haircut > 0 AND unhalted max DD < 20%.
 - PNG: `research/nowick/add5_equity.png`.
+
+## Addendum 6: deliberate fit on US100, single test on US500. Design written before any R is computed
+**Status: EXPLORATORY, IN-SAMPLE (burned window 2025-08-25..2026-09-25), NOT EVIDENCE.** US100 and US500 are highly correlated over the same window, so the US500 test is only a weak independence check. The GER40/US30/XAU screening data is not used.
+
+**Fit (US100 only).** A free grid search over TOL no-wick events on 15m and 1H. Costs, fills, stop-first, the 4× min-stop widening and the book are the same as in Addendum 3. The grid has 7,680 configs, all counted as tried.
+
+The main dimensions:
+- **Direction:** toward the open, or continuation (trade in the candle's direction).
+- **Entry (1m):**
+  - **immediate:** the close of the first 1m bar after the candle.
+  - **MSS:** a close through the latest confirmed 1m swing (formed ≥ close − 60 min) in the trade direction.
+  - **FVG_CE:** a limit at the CE of the first trade-direction 1m FVG formed after the close.
+  - **iFVG:** the first opposing 1m FVG, entered at the first close back through it.
+- **Entry validity:**
+  - **Toward:** the entry must come before the open is touched or the far extreme is taken.
+  - **Continuation:** the entry must come before the open is touched.
+  - **Both:** the entry must come before the time stop.
+- **Stop:**
+  - **swing:** the extreme from the setup start through the entry.
+  - **fvg:** the FVG candle-1 / iFVG range extreme (falls back to swing for immediate/MSS).
+  - **far:** toward → the far extreme; continuation → the open.
+  - **atr1:** 1.0 × the TF ATR14 from the reference.
+  - All stops carry the Addendum 3 buffers and min_risk widening.
+- **Target:**
+  - **open:** toward only.
+  - **1.5R, 2R, 3R:** from the reference.
+  - **opp:** the previous trading day's high (long) or low (short); no trade if it is behind the reference.
+- **Time stop:** 10 or 20 TF bars after the candle close, capped at the day roll.
+
+**Filters** (every combination):
+- **Killzone:** all sessions, or London + NY AM only.
+- **Premium/discount** (previous day's range): off or on.
+- **Prior-day bias:** off or on.
+- **TF:** both, 15m only, or 1H only.
+
+**Selection.**
+- The winner is the best US100 mean R among configs with ≥ 150 US100 trades (all signals). The top 5 are kept.
+- Haircut for the fit: mean R − SE × sqrt(2 ln 7680) (≈ 4.23 SE, the expected max of 7,680 iid normals; conservative given the correlated configs).
+- The winner and top 5 are frozen in `research/nowick/add6_frozen.json` and committed BEFORE any US500 R exists. `addendum6.py test` refuses to run unless that file is committed and unmodified.
+
+**Test (US500, run once).**
+- Per config: trades, win rate, mean R with a 95% day-cluster CI, and a one-sided bootstrap p for mean R > 0.
+- Also per config: the $10k book (0.5% / 2% / 5% halted and unhalted) and max DD.
+- PNG: `research/nowick/add6_equity.png` (fit US100 vs test US500).
