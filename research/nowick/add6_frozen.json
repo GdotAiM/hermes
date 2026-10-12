@@ -1,0 +1,125 @@
+{
+ "n_configs_grid": 7680,
+ "n_configs_with_trades": 6912,
+ "n_eligible_ge150": 3040,
+ "haircut_multiplier": 4.229982228364965,
+ "share_eligible_meanR_gt0": 0.1493421052631579,
+ "best_is_rank1": true,
+ "top5": [
+  {
+   "config": {
+    "dir": "toward",
+    "entry": "FVG_CE",
+    "stop": "fvg",
+    "target": "opp",
+    "tstop": 20,
+    "kz": "all",
+    "pd": "on",
+    "bias": "off",
+    "tf": "15m"
+   },
+   "fit_US100": {
+    "N": 185.0,
+    "win": 0.14594594594594595,
+    "meanR": 0.41103012282906326,
+    "lo": -0.20638765860625982,
+    "hi": 1.1112877092782216,
+    "se": 0.3353720165818945,
+    "p_one": 0.0925,
+    "haircutR": -1.0075875472032707
+   }
+  },
+  {
+   "config": {
+    "dir": "toward",
+    "entry": "FVG_CE",
+    "stop": "swing",
+    "target": "opp",
+    "tstop": 20,
+    "kz": "all",
+    "pd": "on",
+    "bias": "off",
+    "tf": "15m"
+   },
+   "fit_US100": {
+    "N": 185.0,
+    "win": 0.14594594594594595,
+    "meanR": 0.41032819352171584,
+    "lo": -0.2066974437813918,
+    "hi": 1.1112015577569998,
+    "se": 0.33528301534561433,
+    "p_one": 0.092,
+    "haircutR": -1.0079130028628507
+   }
+  },
+  {
+   "config": {
+    "dir": "toward",
+    "entry": "immediate",
+    "stop": "fvg",
+    "target": "opp",
+    "tstop": 10,
+    "kz": "LonNYAM",
+    "pd": "on",
+    "bias": "off",
+    "tf": "both"
+   },
+   "fit_US100": {
+    "N": 231.0,
+    "win": 0.12987012987012986,
+    "meanR": 0.3989980393226872,
+    "lo": -0.18127209771336264,
+    "hi": 1.1007660557260142,
+    "se": 0.3268394742828476,
+    "p_one": 0.1115,
+    "haircutR": -0.9835271284219061
+   }
+  },
+  {
+   "config": {
+    "dir": "toward",
+    "entry": "immediate",
+    "stop": "swing",
+    "target": "opp",
+    "tstop": 10,
+    "kz": "LonNYAM",
+    "pd": "on",
+    "bias": "off",
+    "tf": "both"
+   },
+   "fit_US100": {
+    "N": 231.0,
+    "win": 0.12987012987012986,
+    "meanR": 0.3989980393226872,
+    "lo": -0.18127209771336264,
+    "hi": 1.1007660557260142,
+    "se": 0.3268394742828476,
+    "p_one": 0.1115,
+    "haircutR": -0.9835271284219061
+   }
+  },
+  {
+   "config": {
+    "dir": "toward",
+    "entry": "FVG_CE",
+    "stop": "swing",
+    "target": "opp",
+    "tstop": 20,
+    "kz": "all",
+    "pd": "off",
+    "bias": "on",
+    "tf": "both"
+   },
+   "fit_US100": {
+    "N": 191.0,
+    "win": 0.16753926701570682,
+    "meanR": 0.38393905369825043,
+    "lo": -0.18761802750130527,
+    "hi": 1.0528772294417676,
+    "se": 0.3163740079189963,
+    "p_one": 0.1125,
+    "haircutR": -0.9543173773157004
+   }
+  }
+ ]
+}
