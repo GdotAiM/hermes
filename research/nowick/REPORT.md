@@ -492,3 +492,43 @@ Killzone of the turn / revisit for TOL revisits: `add2_killzones.csv`. NY AM has
 ## Follow-ups from Addendum 2
 - **H-NW11 (ex-ante):** after a 15m no-wick candle, if a 1m MSS toward the open prints *before* the candle's opposite extreme is taken, the open is revisited within 20 bars more often than without it. Decision time = the MSS bar; baseline = matched wicked candles with the same trigger. Falsified if diff ≤ 0 on fresh data.
 - **H-NW12:** for the 1m FVG toward the open, CE-first then revisit (78%) vs controls (72%), tested as a pre-declared entry at CE with the stop beyond the turn, cost-aware, on held-out data only.
+
+# Addendum 3: H-NW11 illustrative equity curve (EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE)
+The rules are in PREREG.md Addendum 3 and were committed (c64e842) before any R was computed. Code: `addendum3.py`. Outputs: `add3_signals.csv`, `add3_trades_{halted,unhalted}.csv`, `add3_summary.csv` and `hnw11_equity.png`. It was run with /workspace/cb-venv/bin/python, because the system python has no matplotlib.
+
+**Rules in short.**
+- Events: TOL no-wick candles on 15m and 1H, US100 and US500.
+- Entry: the first 1m BID close through the latest confirmed 1m swing, toward the open, before the far extreme is taken or the open is touched, within 20 TF bars.
+- Stop: beyond the MSS swing plus the H016 buffer. A stop closer than 4× friction is widened to 10.2 / 4.88 pt.
+- Target: the no-wick open.
+- Time stop: 20 TF bars or the 17:00 NY day roll.
+- Fills: correct-side BID/ASK with the DATA slippage floors.
+
+**Headline: the rule loses money on the data it was derived from.**
+
+| | trades | win rate | mean R [95% day-cluster CI] | final equity | return | max DD |
+|---|---|---|---|---|---|---|
+| All signals (no book) | 1557 | 47.5% | −0.196 [−0.254, −0.140] | – | – | – |
+| Book, 5% DD halt | 69 | 63.8% | −0.138 [−0.388, 0.061] | $9,529 | −4.7% | 5.17%; **halted 2025-09-10 14:47 NY** |
+| Book, unhalted | 1382 | 47.8% | −0.195 [−0.256, −0.137] | $2,548 | −74.5% | 74.7% |
+
+**Split by instrument and timeframe (unhalted book).**
+
+| | N | win | mean R [CI] |
+|---|---|---|---|
+| US100 15m | 545 | 51.6% | −0.134 [−0.211, −0.050] |
+| US100 1H | 135 | 31.9% | −0.237 [−0.475, 0.017] |
+| US500 15m | 544 | 51.1% | −0.218 [−0.288, −0.143] |
+| US500 1H | 158 | 37.3% | −0.285 [−0.466, −0.103] |
+
+The halted-book split is in `add3_summary.csv`. Every halted cell has N ≤ 28.
+
+**Why it loses.**
+- Average target hit +0.60 R (median +0.37 R), average stop −1.11 R. Time exits are 2%.
+- The open is usually close to the entry relative to a structural stop. 42% of stops had to be widened to the minimum, which makes it worse.
+- About a 50% hit rate cannot pay for a reward-to-risk ratio of about 0.5.
+- Addendum 2's "fail to extend, MSS, return" pattern is real as a description. Traded this way, the revisit is too close to cover the stop and costs.
+
+**Caveats.**
+- In-sample on the burned window; the idea was chosen after looking at this data. A different stop or target choice could look different, but tuning it here would be overfitting.
+- Bars after 2026-09-25 were not read.
