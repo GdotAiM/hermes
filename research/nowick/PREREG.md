@@ -194,3 +194,35 @@ Same data, window and sealing as above. Exploration only.
 - Haircut: mean R − SE × E[max of 7 iid N(0,1)] (= 1.352 × SE), a deflated-Sharpe-style correction for picking the best of 7.
 - **Forward-test bar.** A variant is "worth a fresh-data forward test" only if Holm p < 0.05 AND the haircut mean R > 0 AND the unhalted book is not halted-worthy (max DD < 20%). Otherwise none.
 - Comparison PNG: `research/nowick/add4_equity.png`.
+
+## Addendum 5: FVG / iFVG entries toward the open, no MSS. Rules written before any R is computed
+**Status: EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE.** The family is fixed at 6 variants (3 entries × 2 targets), not tuned. Everything not stated below is identical to Addendum 4: events (TOL, 15m + 1H, US100 + US500), the scan window (from the first 1m bar after the candle close to e = min(close + 20 TF bars, the day roll)), costs and fills, stop-first, min_risk widening, the book, the bootstrap and the forward-test bar.
+
+"Bull view" = the short toward an open below; bear is mirrored. An event is dead from the first bar whose BID low ≤ open or BID high > far extreme. No entry can occur on or after that bar.
+
+**Entries (no MSS needed).**
+- **A, FVG CE limit.**
+  - FVG: the first 1m bearish FVG (L[g−2] > H[g]) with g − 2 ≥ the first bar after the close, completed before the event dies.
+  - Entry: a limit sell at CE = (L[g−2] + H[g])/2, live from bar g+1. It fills on the first bar with BID high ≥ CE at CE − limit slip, provided that bar is before the event dies or the time stop.
+  - Stop: H[g−2] (candle 1 high) + max(1, assumed spread + stop slip).
+- **B, iFVG inversion.**
+  - Opposing FVG: the first 1m bullish FVG (H[g−2] < L[g]) with g − 2 ≥ the first bar after the close.
+  - Inversion: the first later bar q with BID close < H[g−2] (closed through the gap's bottom), before the event dies.
+  - Entry: market at BID close[q] − market slip.
+  - Stop: the highest BID high over g−2..q + buffer. Only the first opposing FVG is used.
+- **C, first of A or B.** Whichever entry fills first (A on a tie). Its own stop.
+
+Every stop is widened to min_risk from the reference price (CE for A, BID close for B) if it is closer. One trade per candle per variant.
+
+**Targets.**
+- **"open":** the no-wick open (limit).
+- **"2R":** reference ∓ 2 × risk (limit), ignoring the open.
+- Time stop as in Addendum 3. R = (exit fill − entry fill) × side / |reference − stop|.
+
+**Variants:** A_open, B_open, C_open, A_2R, B_2R, C_2R.
+
+**Statistics.**
+- As Addendum 4, plus avg win R and avg loss R.
+- Holm across the 6. Haircut = mean R − 1.267 × SE (E[max of 6 iid N(0,1)]).
+- Forward-test bar: Holm p < 0.05 AND haircut > 0 AND unhalted max DD < 20%.
+- PNG: `research/nowick/add5_equity.png`.
