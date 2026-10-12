@@ -44,3 +44,43 @@ Date: 2026-10-12. Branch: `research/nowick-study` (from origin/main b5b27af).
 
 ## Not done
 No trade rule is evaluated here. Any "fade to the open" R would require a separate, pre-declared, cost-aware rule (listed as a follow-up hypothesis only).
+
+---
+# ADDENDUM 1 (2026-10-12, committed before any new statistic)
+Same data, window and rules as above. All results remain in-sample burned exploration.
+
+## A. Timing
+- Groups: TOL no-wick vs WICK controls, per instrument × TF × direction (15m/1H/4H/D).
+- Controls are reweighted to the no-wick body/ATR × range/ATR quintile-bin distribution, exactly as in baseline (a).
+- Bar resolution: first later bar touching the open (revisit) / through it by ≥ 1 spread (sweep), within the scan window (200 / 60 / 20 / 20 bars).
+  - Reported: p25/p50/p75/p90 bars; % within 1/3/5/10/20/50 bars; % never revisited within the scan.
+  - A censored percentile is reported as ">scan".
+- 1m resolution: the first BID 1m bar after the candle close that touches / sweeps the open, scanned up to the same clock length (scan bars × TF minutes). Minutes are counted from the candle close to the end of that 1m bar.
+  - Same percentiles in minutes.
+- Survival curves (fraction not yet revisited vs minutes, 1m resolution), no-wick vs weighted control, for 15m and 1H: PNGs.
+- Descriptive; no tests.
+
+## B. Premium / discount (Q4)
+- Position of the candle open within a dealing range:
+  - **Primary**: prior 20 completed sessions' high–low (from daily bars; the current session is excluded).
+  - **Alternative**: the current session's high–low before the candle opens. Needs ≥ 60 min of session elapsed and range > 0, else unclassified.
+- Zone A ("aligned"): bull in discount (pos < 0.5) / bear in premium (pos > 0.5). Zone B: the opposite half.
+- **Secondary OTE band**: zone A restricted to the OTE band (bull pos in [0.21, 0.38], i.e. a 62–79% retracement from the high; bear pos in [0.62, 0.79]) vs zone B.
+- Outcomes: revisit and sweep at 20 bars and same session (intraday TFs only). The daily TF is excluded (N too small).
+- Effect = DiD = (no-wick − matched control)_A − (no-wick − matched control)_B.
+  - The matched control uses the quintile reweighting within each zone.
+  - 95% CI by day-cluster bootstrap (2000 resamples, the same day draw for both zones).
+  - p from the bootstrap SE.
+- **Holm** over the primary family (20-session range × inst × TF{15m, 1H, 4H} × dir × outcome × horizon = 48 cells). The alternative range and OTE band are Holm-adjusted as separate families and are descriptive.
+- Hypothesis direction: DiD < 0 (aligned no-wick opens revisited less).
+
+## C. Daily / weekly / true-day / 09:30 opens (Q5)
+- (i) **Daily no-wick** (17:00 roll): revisit / sweep rate within 1 / 5 / 20 days vs matched controls; this is the existing D cells, re-reported with N.
+- (ii) **Weekly** candles (Sunday 17:00 NY → Friday close): no-wick on that side, revisit within 1 / 4 weeks; controls = wicked weeks.
+- (iii) **Clock-time opens**:
+  - For each trading day, the 60-minute candle starting at 00:00 NY and at 09:30 NY.
+  - Measured from the candle close up to 360 minutes on 1m BID: first-touch time of its open, revisit rate, sweep rate. Reported for all candles, and for no-wick candles (same TOL rule, using the 1H ATR14 at that time).
+  - Baseline: 60 clock-time minutes drawn once (seed 20261012) uniformly from [18:00, 09:45) NY, excluding 00:00 and 09:30, treated identically.
+  - Reported: the percentile rank of 00:00 / 09:30 among the 60 baseline times for revisit rate and median first-touch minutes.
+- Any cell with N < 30 is marked **INSUFFICIENT**, with a power note: the N per arm needed to detect a 10 pp difference at 80% power / α = 0.05, and the implied years of data at the observed event frequency.
+- Confirmation requires fresh multi-year data (new instruments 2023+ after DATA's screening remediation, or the forward test). No sealed data is opened.
