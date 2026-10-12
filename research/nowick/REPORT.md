@@ -555,3 +555,24 @@ Every variant hit the 5% halt at some point in the window.
 - Every "trade toward the open" variant stays clearly negative. Moving the entry (CE), the target (2R runner), the stop (far extreme with an R:R filter), or filtering by session, premium/discount or bias does not fix the structural problem.
 - The only non-negative variant is V6, the opposite trade: continuation after the MSS fails. Its CI includes 0, its Holm p is 1.0 and its haircut R is negative. It is also positive on US100 (+0.06 / +0.14 R) and flat on US500 (+0.02 / −0.01 R).
 - **Forward-test verdict (pre-declared bar):** none qualifies. V6 is the only candidate worth writing up as a new forward-only hypothesis (continuation after a failed fade at a no-wick candle). It would need fresh data and its own prereg; nothing here supports it.
+
+# Addendum 5: 1m FVG / iFVG entries toward the open, no MSS (EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE)
+The rules are in PREREG.md Addendum 5 and were committed (ac2a9cb) before any R was computed. Code: `addendum5.py`. Outputs: `add5_signals.csv.gz`, `add5_summary.csv` and `add5_equity.png`. CI = 95% day-cluster bootstrap on all signals. p is one-sided, Holm-adjusted over 6. Haircut = mean R − 1.267 × SE.
+
+| Variant | N | Win | Avg win R | Avg loss R | Mean R [CI] | Holm p | Haircut | Halted final (halt date) | Unhalted final | Unhalted max DD |
+|---|---|---|---|---|---|---|---|---|---|---|
+| A_open (FVG CE) | 1023 | 35.0% | +1.32 | −1.06 | −0.228 [−0.314, −0.142] | 1.0 | −0.283 | $9,498 (2025-09-05) | $3,073 | 69.3% |
+| B_open (iFVG) | 798 | 45.7% | +0.78 | −1.07 | −0.224 [−0.310, −0.137] | 1.0 | −0.281 | $9,670 (2025-09-09) | $4,124 | 59.6% |
+| C_open (first of A/B) | 1213 | 38.7% | +1.11 | −1.07 | −0.226 [−0.300, −0.149] | 1.0 | −0.276 | $9,640 (2025-09-05) | $2,680 | 73.7% |
+| A_2R | 1023 | 30.8% | +1.82 | −1.06 | −0.175 [−0.259, −0.087] | 1.0 | −0.233 | $9,603 (2025-09-05) | $3,994 | 60.2% |
+| B_2R | 798 | 33.0% | +1.77 | −1.10 | −0.155 [−0.259, −0.052] | 1.0 | −0.222 | $9,653 (2025-09-07) | $5,124 | 49.8% |
+| C_2R | 1213 | 31.9% | +1.79 | −1.08 | −0.165 [−0.244, −0.082] | 1.0 | −0.219 | $9,729 (2025-09-05) | $3,554 | 65.1% |
+
+Every variant hit the 5% halt within the first two weeks.
+
+**Reading.**
+- Dropping the MSS does not help. Every FVG / iFVG entry toward the open is negative, with each CI entirely below 0.
+- The tighter FVG-candle stop raises the payoff: A_open wins average +1.32 R. But the hit rate falls to 35%: price runs through the candle-1 extreme before reaching the open about two times in three.
+- 2R targets are slightly less negative than the open target (around −0.16 to −0.18 R vs −0.23 R), but still clearly negative.
+- Per instrument and TF, the only cell ≥ 0 is B_2R on US100 15m (+0.01 R); everything else is negative (see `add5_summary.csv`).
+- **Forward-test verdict (pre-declared bar):** none. Consistent with Addendum 4, in this window the edge, if any, is in continuation away from the no-wick open, not in a return to it.
