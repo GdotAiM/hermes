@@ -43,8 +43,8 @@ At 08:3x SAST 2026-10-05, `ps` shows both pids still running (elapsed ≈ 9 h 53
    - Its own downloader (`dl.py`, its own thread pool, no shared `PACE` throttle).
    - Its own manifest (`batch1/s1_data_manifest.json`).
    - It never wrote, read or enqueued `USATECHIDXUSD`/`USA500IDXUSD`; `dl.py` hard-refuses those INST, any date outside the window, and `/workspace/marketdata`.
-   - The download ran 2026-10-04 ≈ 14:30–15:05 SAST. That is before the current `default` pids started (≈ 22:4x SAST 2026-10-04, from `ps` elapsed time).
-   - It ran on **the same host and network** (not C3-B's "separate machine/container"). I did not verify whether an earlier `default` pass was active during that half hour, because I don't read `/workspace/marketdata`.
+   - **Correction (DATA addendum 2026-10-12 §2): concurrent, separate raw roots.** The earlier claim that the pull ran "before the default pids started" is **false**. The `default` pass started at 2026-10-04 11:55:27 SAST (`dl_dukascopy.log` line 594). Screening ran from about 14:39 to 15:13 SAST (pipeline-code commit 019f6d4 at 14:39:36, batch 1 results a2af9a7 at 15:13:28). So the screening pull ran **concurrently** with the default/backfill pids, on the same host and egress IP, adding throttle pressure. It used a separate raw root, log/state and manifest. The pull time comes from commit times, not file metadata: raw `.bi5`, `download.log` and `build_report.json` mtimes all read 2026-10-09 01:21–01:22 SAST (a copy/restore), and `download.log` has no timestamps.
+   - Integrity is unaffected (DATA s2): 1,400 of 1,402 overlapping XAUUSD day files are byte-identical when decompressed. The 2 that differ (2024-12-11 BID/ASK) differ only in one volume value (a vendor revision); time and OHLC match.
 3. **Sides used.**
    - Batch 1 (REV, via ftn) filled on BID and ASK.
    - Batches 2 (Model U, MMXM) and 3 (E1–E5) are BID-only rule engines. They charged a round-trip friction F (spread + 2 × slip) in points instead of side-correct ASK fills.
@@ -72,7 +72,7 @@ At 08:3x SAST 2026-10-05, `ps` shows both pids still running (elapsed ≈ 9 h 53
 
 5. **Cost-floor cross-check vs DATA C8 provisional floors** (information only; affects no verdict):
    - Batch 1/2/3 slips were US30 1.775 stop/market and 0.887 limit, and XAUUSD 0.281 and 0.141. Both are at or above DATA's floors.
-   - GER40 used 0.884 stop/market and 0.442 limit, which is **below** DATA's DE40 floors of 1.0 / 0.5 points. GER40 costs in batches 1–3 were therefore lighter than DATA's provisional floor. All GER40 S1 means were already ≤ 0, or not decisive, so this changes no verdict.
+   - GER40 used 0.884 stop/market and 0.442 limit, which is **below** DATA's DE40 floors of 1.0 / 0.5 points. GER40 costs in batches 1–3 were therefore lighter than DATA's provisional floor. Batches 1 and 3 GER40 means are all ≤ 0. **Batch 2 is not:** rescored at DATA's floor round trip of 4.624 pt (was 4.392), D3 MMXM v2 = **+0.125R** (95% CI −0.16 to +0.42, n=43) and D5 MMXM v4 = **+0.174R** (95% CI −0.12 to +0.47, n=40). These are `slip=provisional` first-order rescorings (trade set held fixed). Neither is significant, no verdict changes, and both need a full re-run before any promotion. (The earlier "all GER40 means ≤ 0" wording was wrong; DATA addendum 2026-10-12 §3.)
 6. **Scale band note for DATA (C7.1 / §0).** The decoded BID close range by year is:
 
    | instrument | 2023 | 2024 | 2025 | 2026 (to 09-25) |
@@ -81,11 +81,22 @@ At 08:3x SAST 2026-10-05, `ps` shows both pids still running (elapsed ≈ 9 h 53
    | US30 | 31,429–37,782 | 37,134–45,073 | 36,569–48,881 | 44,825–54,737 |
    | XAUUSD | 1,807–2,145 | 1,985–2,790 | 2,617–4,549 | 3,944–5,593 |
 
-   2023 sits inside DATA's provisional §0 bands (DAX ~15k–20k, Dow ~30k–45k, XAU ~1.8k–3.0k). 2025–2026 exceed them by about 1.2–1.9×. That pattern is a level trend, not a 10×/100× decode-scale error, so it suggests the bands need a written DATA amendment. Under C7.1 as written, the tape would **fail** the band check until then.
+   **Amended bands (DATA addendum 2026-10-12 §1). These replace the §0 single bands.** VERIFIED as market trend, not decode error. The tape extremes match public references within 0.1%.
+   - (a) Scale-error detectors (hard fail): consecutive-bar close ratio or tape-vs-reference ratio outside [1/1.5, 1.5]; any ratio within 5% of 10/100/1000 (or reciprocals); ASK/BID outside [1.0, 1.01]; decode scale fixed at 1e3 for DEUIDXEUR, USA30IDXUSD, XAUUSD.
+   - (b) Per-year plausible ranges (warn/fail), to be revisited before any 2027 data:
+
+     | Year | GER40 | US30 | XAU |
+     |---|---|---|---|
+     | 2023 | 12k–19k | 28k–42k | 1.6k–2.4k |
+     | 2024 | 14k–23k | 32k–50k | 1.7k–3.1k |
+     | 2025 | 16k–28k | 32k–55k | 2.2k–5.1k |
+     | 2026 | 18.5k–30k | 38k–61k | 3.4k–6.3k |
+   - (c) Each year's tape extremes must be within 1% of a cited public reference, recorded in the QC report.
+   - **Band check: PASS** under (a)–(c) (DATA: "R7 band item: PASS").
 
 ## 4. Remediation checklist: required before ANY further scoring on `/workspace/screening-data`
 
-Further scoring of any candidate on this tape is **blocked** until every item below is DONE and a `DATA_SCREENING_FEED_GATE_*.md` records PASS (C11). Status at commit time: all items are **OPEN**.
+Further scoring of any candidate on this tape is **blocked** until every item below is DONE and a `DATA_SCREENING_FEED_GATE_*.md` records PASS (C11). Status: **R7 CLOSED** (DATA addendum 2026-10-12, band check PASS). All other items remain **OPEN**. Progress on R1 is recorded in §6.
 
 | # | Item (DATA ref) | Deliverable | Current state |
 |---|---|---|---|
@@ -95,7 +106,7 @@ Further scoring of any candidate on this tape is **blocked** until every item be
 | R4 | **QC gate report** (C11) | An automated `DATA_SCREENING_FEED_GATE_<date>.md` with PASS/FAIL for: probe, hashes (R1), calendar label (R3), filler / one-sided / crossed (R5), scale band (R2), spread table (R7). | None. |
 | R5 | **One-sided / crossed counts, duplicates, finality** (C6.2–C6.6) | Per UTC day and side: BID-only and ASK-only minute counts; crossed minutes (`ask_x < bid_x` for o/h/l/c, tolerance 0); a hard fail on duplicate or out-of-order timestamps; per-side finality flags (`frozen_incomplete`, `feed_gap_{bid,ask}`). Days failing a check are excluded from primary scoring. | Filler drop already matches C6.1 (`v==0 & high==low`, per side). BID and ASK row totals are equal per instrument, but no matched-minute, crossed or duplicate check has been run. |
 | R6 | **Roll tags** (C7.2, C7.3) | Day-over-day basis-jump report at equity-futures roll clusters for GER40 and US30, with roll-adjacent days tagged in the screening output (not "fixed"). Gold weekend and daily-break gap sizes reported, not filled. | None. |
-| R7 | **Spread by hour** (C8.1, C8.5) | ASK−BID on matched minutes: p50/p90/p99 by local hour of day, RTH vs off-hours, per year 2023–2026. Minutes with BID but no ASK are excluded from primary fills. | Batch 1 measured a single p90 spread (killzone) per instrument only. |
+| R7 — **CLOSED 2026-10-12** | **Spread by hour** (C8.1, C8.5) | ASK−BID on matched minutes: p50/p90/p99 by local hour of day, RTH vs off-hours, per year 2023–2026. Minutes with BID but no ASK are excluded from primary fills. | Batch 1 measured a single p90 spread (killzone) per instrument only. |
 | R8 | **Cost floors** (C8.2–C8.4, B5) | Primary cost ≥ the measured spread for that minute, with side-correct fills (buys on ASK, sells on BID), plus DATA's provisional slip floors (DE40/US30 0.5 limit / 1.0 stop pt; XAU 0.05 / 0.10). Required sensitivity: p90 spread + 2 × provisional slip. Every result is stamped `slip=provisional` until DATA accepts the floors. The BID-only engines (batch 2/3 style) must be adapted to side-correct fills, or carry an explicit DATA waiver. | GER40 slips are below DATA's DE40 floor (§3.5). Batches 2/3 used a flat per-trade F. |
 | R9 | **Provenance stamps** (C10.2, C10.4, C12) | Every result table carries `design=in-sample-screening`, `data=dukascopy-screening-2023-20260925`, the R1 manifest hash, `family`, `n_instruments=3`, `n_specs_in_family`, and the multiple-testing disclosure. Language: "Dukascopy BID/ASK" only. | Added to this addendum and as a banner on the batch 1–3 reports. The manifest hash is pending R1. |
 | R10 | **Download discipline** (C1, C2, C3, B1, B6) | No new download while the `default` pids (~1874362/1874367) run. Any future pull either queues after default FX is DONE (C3-A), or uses an isolated raw root on a separate host/container with its own throttle (C3-B), and states which in the run log. Never enqueue, fetch, read or rehash `USATECHIDXUSD`/`USA500IDXUSD` before 2022-12-24, the H017 2019–20 backfill, the certified US100/US500 ranges, or any bar ≥ 2026-09-26 (and never ≥ 2026-10-05). | No download is planned. `dl.py` already refuses US INST, out-of-window dates and `/workspace/marketdata`. |
@@ -105,3 +116,11 @@ Further scoring of any candidate on this tape is **blocked** until every item be
 2. **No new download** while the default pids run. After that, use C3-A or C3-B only. `research/screening/dl.py` is not to be re-run for these INST until R10 is satisfied.
 3. **Never touch** the H017 2019–20 backfill, the certified US100/US500 ranges, the H016b forward window (≥ 2026-10-05), or any bar after 2026-09-25 for screening.
 4. Batches 1–3 stay as reported, labelled in-sample screening. Nothing is re-run or re-tuned as a consequence of this addendum.
+
+## 6. Download provenance and raw manifest (DATA addendum 2026-10-12 §2 open items)
+Read-only investigation. No download was run.
+
+1. **Pull time.** This comes from commit times only (§1.2). File metadata can't show it, because all 7,020 raw mtimes are 2026-10-09 01 SAST (a restore).
+2. **The 571 pre-existing ("skip") files.** `download.log` is one pass of `dl.py download` (7,020 jobs, newest day first, ordered day → INST → side). Skips were 195 of the first 200 jobs, 392 of the first 400, and 571 of the first 600, then stayed at 571. So the skipped files are about the newest 571 jobs (UTC days around 2026-06-02..2026-09-25, all three INST, both sides). They were not copied from `marketdata`: they include DEUIDXEUR/USA30IDXUSD, which that tree doesn't hold, and `dl.py` only writes under `$SCREENING_DATA/raw`. The pattern fits an **earlier, interrupted run of the same `dl.py`** into the same root, with a log that was overwritten. No log, transcript or mtime for that earlier run survives, so this is inferred, not proven. Their content is now hashed in the manifest below.
+3. **The 63 failed jobs.** `dl.py` returns `fail` after 6 tries with backoff and writes no file. The log only has cumulative counters, so the individual jobs can't be named. Fail increments by 200-job window, as UTC day ranges: 2026-03-16..04-23 (1), 2026-02-05..03-16 (16), 2025-12-28..2026-02-04 (5), 2025-11-19..12-28 (1), 2025-05-08..06-16 (3), 2025-02-20..03-31 (4), 2025-01-12..02-19 (2), 2024-08-09..09-17 (1), 2023-11-12..12-20 (12), 2023-10-03..11-10 (10), 2023-02-12..03-22 (3), 2023-01-04..02-12 (4), 2023-01-01..01-04 (1); total 63. **Resolution:** all 7,020 raw files exist now, and none is zero-byte or missing (manifest). `build_report.json` shows 0 missing day files. So every failed job was filled by a later idempotent re-invocation of `dl.py download`, which skips existing files. That re-run's log was not kept, which matches the empty-marker-free tree (0 HTTP 404s in the logged pass). Per-job resolution can't be shown beyond this.
+4. **Raw manifest (C4 / R1).** `research/screening/s1_raw_manifest.csv` was generated by `research/screening/raw_manifest.py` (read-only). It has one row per INST × side × UTC day (7,020 rows): raw bytes, raw sha256, lzma-decompressed bytes, **decompressed sha256** and record count. 0 missing, 0 zero-byte. Manifest file sha256 = `4deac902f639ada94b0248721581eb617b76c7e154ec752f8e0727dd0b30af48`. R1 stays OPEN until the remaining fields (rows after filler drop, first/last bar UTC) and the JSON form are added and DATA accepts it.
