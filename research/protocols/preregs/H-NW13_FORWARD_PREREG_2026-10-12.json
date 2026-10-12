@@ -1,0 +1,109 @@
+{
+ "id": "H-NW13",
+ "title": "No-wick candle, failed 1m MSS toward the open: continuation fade to 2R (frozen from NOWICK-1 Addendum 4 V6); US100 + US500 CFD, 15m + 1H; correct-side BID/ASK fills; forward-only",
+ "status_at_registration": "DRAFT - NOT TAGGED, NOT WIRED. Awaiting the user's OK plus DATA and CASSANDRA review. No runner or routine reads this file. The registration time is the tag time, not the commit time.",
+ "registered_by": "FTN research bridge (agent-generated) on the human's approval of 2026-10-12 (ntloso ngubeni: write up V6 as a new forward-only hypothesis)",
+ "registered_at": "draft 2026-10-12; binding only from the prereg-H-NW13 tag (not yet created)",
+ "id_check": "NOWICK-1 numbers its follow-ups H-NW1..H-NW12 (research/nowick/REPORT.md), so H-NW13 is the next free id. It is distinct from the H0xx FTN series",
+ "lineage": "NOWICK-1 study (a202f49 prereg; fede752, ac67a4c, 8d0a82b) -> Addendum 3 H-NW11 (prereg c64e842, results 4655abc: toward-the-open mean R -0.196) -> Addendum 4 7-variant family (prereg ff9195c, results 535505d). V6 = fade of the failed MSS: N 657, win 41.1%, mean R +0.044 [-0.081, +0.167] (95% day-cluster CI), one-sided p 0.25 raw, Holm 1.0, haircut -0.040R, unhalted $10k -> $11,628, max DD 19.8%; the 5% halt was hit on 2025-09-01",
+ "disclosures": {
+  "motivation_only": "The Addendum 4 in-sample result is MOTIVATION ONLY, NOT EVIDENCE. V6 was picked as the best of 7 on the same burned window, it failed the pre-declared forward-test bar, and its CI includes 0. The burned window sets only the variance and the event rate used in the power calculation",
+  "burned": "the whole window 2025-08-25 -> 2026-09-25 (trading days, 17:00 NY roll) of /workspace/ftn-demo-output/data is BURNED for H-NW13 and is never evidence for or against it",
+  "data_read_before_registration": "no bar data after 2026-09-25 and no holdout or certified-untouched data was read to build, choose or power H-NW13"
+ },
+ "paper_only": true,
+ "rule": {
+  "code_reference": "research/nowick/addendum4.py run() V6 branch, with event detection from research/nowick/nowick.py features() (grp == 'TOL') and swings() from research/nowick/addendum2.py; frozen at commit 535505d. A forward harness must reproduce it bit-for-bit on the burned window (656-657 V6 signals; harness parity is a precondition of the first counted R)",
+  "events": "TOL no-wick candles on BID bars, 15m and 1H, built by nowick.bars() (trading day = NY time + 7h, bars need >= 50% of their 1m minutes). Base filter: range >= 0.5 ATR14 (ATR of the 14 previous bars), body >= 0.3 range, nonzero direction. TOL: open-side wick <= 2% of range AND <= the candle's median 1m spread. Bull: open ~ low; bear: open ~ high. The far extreme is the high (bull) or the low (bear)",
+  "mss_trigger": "described in bull view; bear is mirrored. Scan the 1m BID bars from the first bar after the candle close to the window end e = min(close + 20 TF bars (15m: 300 min, 1H: 1200 min), the last bar of that trading day). Swing lows use 2 bars each side. A swing s counts at bar k only if s + 2 <= k - 1 and s formed at or after candle close - 60 min. The MSS is the first bar k with BID close < L[s] of the latest such swing, while no bar from the close through k has high > far extreme or low <= open. If the far extreme or the open is hit first, the event is dead. At most one MSS per candle",
+  "failure_and_entry": "after the MSS at bar k: the first 1m bar m in (k, e] whose BID high > far extreme (bull) BEFORE any bar with BID low <= open. The fade trade is in the candle's direction: LONG after a bull no-wick, SHORT after a bear one. Long entry at ASK close[m] + market slip; short entry at BID close[m] - market slip. No trade if m == e or the open is touched first",
+  "stop": "long: the lowest BID low over bars k..m - max(1 pt, stop slip). Short: the highest BID high over k..m + max(1 pt, assumed spread + stop slip). If |BID close[m] - stop| < min_risk = 4 x (assumed spread + 2 x market slip) (US100 10.2 pt, US500 4.88 pt), the stop is widened to exactly min_risk",
+  "target": "BID close[m] +/- 2 x risk, with risk = |BID close[m] - stop|",
+  "time_stop": "the same window end e as the trigger. Exit at the close of bar e: long at BID close - market slip, short at ASK close + market slip",
+  "exit_fills": "long: stop when BID low <= stop, filled at min(stop, BID open) - stop slip; target when BID high > target, filled at target - limit slip. Short: stop when ASK high >= stop, filled at max(stop, ASK open) + stop slip; target when ASK low < target, filled at target + limit slip. Stop-first on any bar that touches both. Simulation starts at bar m + 1",
+  "R": "(exit fill - entry fill) x side / |BID close[m] - stop|"
+ },
+ "instruments": [
+  "US100 (USATECHIDXUSD)",
+  "US500 (USA500IDXUSD)"
+ ],
+ "timeframes": [
+  "15m",
+  "1H"
+ ],
+ "data_source": "Dukascopy 1m BID and ASK candles, the same feed and format as /workspace/ftn-demo-output/data, fetched only for sessions after the tag. Missing ASK minutes are forward-filled within the day. A day with < 300 BID 1m bars in 09:30-15:59 NY is not counted. Context bars (ATR warm-up, 60-min swing lookback, previous bars) may come from before the tag but can never contain a counted signal",
+ "costs": {
+  "binding": "correct-side BID/ASK fills (above) with the DATA slippage floors pinned in ftn/src/ftn/os/instruments.py",
+  "slippage_floors_per_side_pts": {
+   "US100": {
+    "stop": 0.5,
+    "market": 0.5,
+    "limit": 0.25
+   },
+   "US500": {
+    "stop": 0.25,
+    "market": 0.25,
+    "limit": 0.1
+   }
+  },
+  "assumed_spread_pts": {
+   "US100": 1.55,
+   "US500": 0.72
+  },
+  "co_reports": [
+   "2x slippage floors",
+   "measured spread at entry (median / p90 per instrument)"
+  ]
+ },
+ "book": {
+  "start_equity": 10000,
+  "risk_per_trade": "0.5% of current realized equity / planned risk points",
+  "concurrency": "one open position per instrument; 15m and 1H share the slot, and the first by entry time wins",
+  "daily_loss_cap": "no new entries for the rest of the trading day once realized P&L that day <= -2% of start-of-day equity",
+  "max_drawdown_halt": "5% from the realized-equity peak halts the paper book",
+  "role": "the book is a CO-REPORT. Its halts are outcome-dependent and would bias the test, so they do NOT stop rule-level counting: the binding sample is every rule signal (all signals, no book), as in Addendum 4"
+ },
+ "counting_rules": {
+  "first_eligible": "the first trading day that starts (17:00 NY roll) after the prereg-H-NW13 tag is pushed",
+  "excluded": "every bar on or before 2026-09-25, all burned and holdout ranges, and every trading day that starts before the tag",
+  "unit": "one row per triggered fade signal (instrument x TF x candle)"
+ },
+ "primary_metric": "mean R per signal, pooled over US100/US500 and 15m/1H, all signals (binding); book metrics are co-reports",
+ "statistical_test": "one-sided H1: mean R > 0. Day-cluster percentile bootstrap (cluster = trading day, pooled across instruments and TFs; 10,000 resamples, numpy default_rng(20261012), each draws D days with replacement and computes sum(R)/count). PASS needs the 5th percentile > 0 (alpha 0.05 one-sided). Evaluated once at binding N",
+ "power_calculation": {
+  "inputs_from_burned_window": "V6 R SD 1.372; day-cluster design effect 1.397 (bootstrap SE^2 / iid SE^2); rate 657 signals over 240 signal days (~2.74/day) in a ~13-month window, about 608 signals/year",
+  "effect_size": "delta = +0.04R (conservative, about the in-sample point estimate, which is itself best-of-7 inflated)",
+  "formula": "N = ((z_0.95 + z_0.80) x SD / delta)^2 x DE = ((1.645 + 0.842) x 1.372 / 0.04)^2 x 1.397",
+  "N_iid": 7279,
+  "N_required": 10170,
+  "duration_forward": "about 16.7 years at ~608 signals/year (US100 + US500, 15m + 1H)",
+  "sensitivity": {
+   "delta_0.10": "N ~ 1,630, ~2.7 years",
+   "delta_0.15": "N ~ 725, ~1.2 years"
+  },
+  "verdict": "INFEASIBLE at delta = +0.04: a test powered for the conservative effect takes longer than any sensible horizon. See open_issues"
+ },
+ "binding_N": 10170,
+ "binding_pass_at_N": "PASS if the bootstrap 5th percentile of mean R > 0 at N = 10,170",
+ "binding_fail": "FAIL if it is <= 0 at N",
+ "binding_kill": "KILL (stop, verdict FAIL) when the cumulative R over counted signals is <= -60R at any time, or the running mean R <= -0.10 after >= 500 signals. The thresholds are set before any forward R and are not re-tuned",
+ "binding_futility": "every 1,000 counted signals: FUTILE (stop, verdict INCONCLUSIVE-FUTILE) if the day-cluster 95th percentile of mean R < +0.04 (the upper bound is below the effect powered for)",
+ "verdict_wording": "PASS / FAIL / KILLED / INCONCLUSIVE-FUTILE. 'Edge' may be written only on a PASS. No in-sample number may be quoted as support",
+ "family_rule": "H-NW13 is a single hypothesis. NOWICK V1-V5 and V7 are NOT registered; adding any later is a new registration with its own N",
+ "changes_after_registration": "none allowed after the tag. Any change = new id",
+ "reviews_required_before_first_R": [
+  "user OK",
+  "DATA (feed, cost floors, data rule)",
+  "CASSANDRA (rules, power, stopping rules)",
+  "harness parity on the burned window"
+ ],
+ "not_done": "no git tag, no merge, no runner/routine/harness wiring",
+ "open_issues": [
+  "Power: N = 10,170 is ~16.7 years forward at delta = +0.04. The user and CASSANDRA must decide whether to (a) power for a larger minimum effect worth trading (+0.10R -> ~1,630 / ~2.7 yr; +0.15R -> ~725 / ~1.2 yr), accepting that a true +0.04 edge would be missed, (b) add instruments, or (c) shelve H-NW13",
+  "The binding unit is all signals, not the book. A book halted at 5% DD (it halted on day ~6 in-sample) would starve the test",
+  "Same-bar stop-first is conservative. 1m bars cannot order the stop vs the target inside a bar; a tick-level co-report is optional",
+  "Overlapping signals (15m and 1H on the same move; ~2.7 per day) are correlated. The day cluster handles this in the CI but not in the book",
+  "Feed: a forward Dukascopy fetch per session requires DATA's pipeline. No download was done for this draft",
+  "Regime: the burned window is one year of one regime"
+ ]
+}
