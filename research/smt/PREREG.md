@@ -105,3 +105,40 @@ The stop is widened to min_risk = 4 × (assumed spread + 2 × market slip).
 - Book $10k, 0.5% / 2% / 5%, halted + unhalted, max DD.
 - Forward-test bar as in the main study.
 - PNG: `research/smt/addendum1_equity.png`.
+
+## Addendum 2: ICT intraday standard-deviation (SD) projections as levels and exits. Written before any result is computed
+**Status: EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE.**
+- **Source:** the text of an X post, "Intraday Standard Deviations by ICT". The video was not seen, so **the anchor definitions below are our assumption**, not ICT's.
+
+**Projection.** In the trade's long view (expansion upward; the short case is mirrored): anchor range R = hi − lo. SD level(n) = hi + n × R for n ∈ {1, 2, 2.5, 4} (ICT's "−1, −2, −2.5, −4").
+
+**Anchors.**
+- **A1, the MSS leg:** for the first 1m MSS after the 5m SMT confirmation (Addendum 1's MSS rule: a close above the latest confirmed 1m swing high formed ≥ T0 − 45 min):
+  - lo = the lowest 1m low from that swing-high bar through the MSS bar;
+  - hi = the highest 1m high from the lo bar through the MSS bar.
+  - Anchor time = the MSS bar.
+- **A2, the SMT range:**
+  - lo = the instrument's SMT sweep extreme (Addendum 1: the min of its swing level and its 1m lows from the start of 5m bar t* to T0);
+  - hi = the highest 1m high from the lo bar to T0.
+  - Anchor time = T0.
+
+**Check 1, descriptive** (all 5m SMT events, both instruments, unfiltered; horizon as in the main study, anchor time → T0 + 8 h, capped at 16:14):
+- For the SD levels n = 2 and 2.5:
+  - P(reach): 1m high ≥ the level.
+  - P(reverse | reach): after the first touch, the low ≤ level − 0.5R before the high ≥ level + 0.5R (unresolved = not reversed).
+  - P(turn | reach): the max high over the rest of the horizon ≤ level + 0.25R.
+- **Control C1 (same event, random multiples):** 10 multiples per event from U(1.5, 3.0), at least 0.1 away from 2 and 2.5 (seeded).
+- **Control C2 (same distance, random time):** the same point distance (hi + n × R − close at the anchor) applied upward from the close of a random 1m bar in the same NY hour on a random other trading day, with the same R and the same horizon length.
+- **Effects:** SD − control for P(reverse | reach) and P(turn | reach), 95% day-cluster bootstrap. Reported per anchor and n, pooled, and by instrument.
+
+**Check 2, exits.**
+- **Entry:** Addendum 1's filtered MSS entry (NY AM 09:30–11:30 SMT, London range ≥ its trailing-20 median, 1m MSS).
+- **Stop:** same as Addendum 1's MSS stop; time stop, costs and fills unchanged.
+- **Targets:**
+  - SD1, SD2, SD2.5;
+  - P1_2.5: half the size exits at SD1, the runner at SD2.5, the stop unchanged; R = the average of the halves.
+- **Family:** 4 targets × 2 anchors = 8 variants. Skip any target at or below the entry reference.
+- **Statistics:**
+  - Holm over the 8; haircut = mean R − 1.424 × SE (E[max of 8 iid N(0,1)]).
+  - Book $10k, 0.5% / 2% / 5%, halted + unhalted; by-instrument split; forward-test bar as before.
+- PNG: `research/smt/addendum2_equity.png`.
