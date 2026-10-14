@@ -60,3 +60,48 @@
 **Charts.**
 - `smt_rates.png` (step rates vs nulls) and `equity.png`.
 - 3 examples: the first 3 by date of 5m bullish-or-bearish SMTs with a full 2i → R1 sequence on US100 (pre-declared selection): `example_1..3.png`.
+
+## Addendum 1: first leg after the SMT, toward the opposite liquidity, with a London-volatility filter. Written before any R is computed
+**Status: EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE.**
+- **Unchanged:** data, costs and fills, stop-first, the book, the bootstrap.
+- **SMT detection:** identical to the main study, 5m only. Every instrument is traded on its own levels (so one SMT event can give one trade per instrument), one position per instrument.
+
+**Direction.** Toward the opposite-side liquidity: long after a bullish SMT (at lows), short after a bearish SMT (at highs).
+
+**Entries.**
+- **SMT:** at the SMT confirmation close T0 (the close of 5m bar t*+2, i.e. the 1m bar ending at T0). Market at the correct-side close ± market slip.
+- **MSS:** the first 1m close at/after T0 beyond the latest confirmed 1m swing (2/2 fractal) in the trade direction, formed ≥ t*-start − 30 min, before the target is touched, before the stop level is traded, and before the horizon end. Market at that close.
+
+**Stop.** Beyond the instrument's SMT sweep extreme: the min (bullish) / max (bearish) of its swing level and its 1m lows/highs from the start of bar t* through the entry bar, plus the buffer:
+- long: max(1, stop slip);
+- short: max(1, assumed spread + stop slip).
+The stop is widened to min_risk = 4 × (assumed spread + 2 × market slip).
+
+**Targets.** Fixed at T0 by the main study's `measure()`:
+- **int:** the internal level (the nearest opposing confirmed 5m swing).
+- **ext:** the external level (the nearest of prior-day / day-so-far extreme beyond the T0 close).
+- Skip the trade if the target is missing or already at/behind the entry reference.
+
+**Horizon.** T0 + 8 h, capped at the 16:14 bar. Time exit at its close.
+
+**Volatility filter ("F").**
+- Only SMTs with T0 in 09:30–11:30 NY.
+- The instrument's London range (BID high − low, 02:00–04:59 NY, same calendar day) must be ≥ the median of its previous 20 London ranges (trading days with London bars).
+
+**Variants (6).**
+1. F_SMT_int
+2. F_SMT_ext
+3. F_MSS_int
+4. F_MSS_ext
+5. **U_SMT_int:** the unfiltered control, all 5m SMTs, any time.
+6. **F_SMT_scaled:** filtered, SMT entry, with the stop distance and target scaled to London:
+   - stop distance = max(0.25 × London range, min_risk) from the reference;
+   - target = reference + 2 × stop distance (2R);
+   - this replaces the sweep-extreme stop.
+
+**Statistics.**
+- Per variant (pooled, and by instrument): trades, win rate, avg win/loss R, mean R with a 95% day-cluster CI, one-sided p.
+- Holm over 6. Haircut = mean R − 1.267 × SE.
+- Book $10k, 0.5% / 2% / 5%, halted + unhalted, max DD.
+- Forward-test bar as in the main study.
+- PNG: `research/smt/addendum1_equity.png`.
