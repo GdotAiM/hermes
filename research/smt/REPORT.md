@@ -60,3 +60,39 @@ Each instrument separately has the same signs; the CIs exclude 0 except 15m US10
 - Trades on both instruments from the same SMT are correlated.
 - Stop-first on same-bar touches.
 - The examples are the first 3 by date (pre-declared), not curated.
+
+# Addendum 1: first leg toward the opposite liquidity, London-volatility filter (EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE)
+- **Prereg:** 2b82185, committed before any R.
+- **Code:** `addendum1.py`. **Outputs:** `addendum1_trades.csv`, `addendum1_results.csv`, `addendum1_equity.png`.
+- **Filter F:** 5m SMT confirmed 09:30–11:30 NY, and that instrument's London range ≥ its trailing-20 median.
+- **Columns:** CI = 95% day-cluster bootstrap; haircut = mean R − 1.267 × SE; Holm over 6.
+
+| Variant | N | Win | Avg win / loss R | Mean R [CI] | Haircut | US100 / US500 mean R (N) | Halted final (halt, NY) | Unhalted final | Unhalted max DD |
+|---|---|---|---|---|---|---|---|---|---|
+| F_SMT_int | 454 | 57.0% | +0.57 / −0.85 | −0.044 [−0.164, +0.095] | −0.129 | −0.072 (225) / −0.016 (229) | $9,544 (2025-11-03) | $9,371 | 13.3% |
+| F_SMT_ext | 513 | 43.5% | +1.22 / −0.99 | −0.030 [−0.190, +0.147] | −0.139 | +0.006 (258) / −0.066 (255) | $10,164 (2026-02-02) | $9,755 | 18.7% |
+| F_MSS_int | 157 | 69.4% | +0.52 / −0.97 | **+0.066 [−0.104, +0.233]** | −0.041 | −0.048 (82) / +0.191 (75) | $10,331 (never halted) | $10,331 | 3.3% |
+| F_MSS_ext | 308 | 53.6% | +0.94 / −0.98 | +0.046 [−0.123, +0.222] | −0.066 | +0.090 (152) / +0.002 (156) | $9,767 (2026-02-02) | $9,816 | 9.9% |
+| U_SMT_int (unfiltered control) | 9162 | 49.6% | +0.60 / −0.88 | −0.147 [−0.174, −0.120] | −0.165 | −0.124 / −0.170 | $9,456 (2025-08-26) | $280 | 97.2% |
+| F_SMT_scaled (London-scaled stop, 2R) | 513 | 35.7% | +1.91 / −1.06 | −0.001 [−0.171, +0.177] | −0.112 | +0.012 / −0.015 | $10,355 (2025-11-21) | $10,322 | 18.9% |
+
+**Notes.**
+- Holm p = 1.0 for all 6 (the best raw one-sided p is 0.22, F_MSS_int). Every haircut is negative.
+- **Forward-test verdict (pre-declared bar):** none.
+- The unhalted book takes fewer trades than the signal count: one position per instrument, plus the 2% daily cap.
+
+**Reading.**
+- Trading the first leg *toward* the opposite liquidity is unprofitable unfiltered: −0.147 R on 9,162 trades, with the CI well below 0.
+- Restricting to NY AM SMTs after an above-median London session moves every variant to around 0 R (−0.04 to +0.07).
+- That shift is about +0.1 to +0.2 R, but it was not a pre-registered test (filtered vs unfiltered overlap and differ in session), and no filtered variant is distinguishable from 0.
+- The only variant above 0 on both instruments is F_MSS_ext (+0.09 / +0.00), and only barely.
+- F_MSS_int is the best pooled variant (+0.066, never halted, max DD 3.3%), but it is positive only on US500 (N 75), so it fails sign agreement.
+
+**If the user wants to pursue it.**
+- The candidate would be "NY AM 5m SMT + above-median London range + 1m MSS entry, target external liquidity" (F_MSS_ext). It is the most balanced, but it is not a pre-registered winner.
+- A forward-only prereg would be needed, and with N ≈ 300/year, a +0.05 R effect (SD ≈ 1) needs years. An honest next step is a fresh-data descriptive check, not a trading test.
+
+**Caveats.**
+- In-sample, one year, a highly correlated pair, and both instruments traded from the same SMT.
+- The London filter uses the same-day 02:00–05:00 range, known before 09:30.
+- 1m stop-first.
