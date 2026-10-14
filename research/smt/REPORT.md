@@ -96,3 +96,54 @@ Each instrument separately has the same signs; the CIs exclude 0 except 15m US10
 - In-sample, one year, a highly correlated pair, and both instruments traded from the same SMT.
 - The London filter uses the same-day 02:00–05:00 range, known before 09:30.
 - 1m stop-first.
+
+# Addendum 2: ICT intraday SD projections (EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE)
+- **Prereg:** 5595349, committed before any result.
+- **Source and assumption:** the text of the X post "Intraday Standard Deviations by ICT" (video not seen). **Anchor definitions are our assumption.**
+  - A1 = the 1m leg that made the first post-SMT MSS.
+  - A2 = the SMT range (sweep extreme → high to T0).
+  - Levels = hi + n × R.
+- **Code:** `addendum2.py`. **Outputs:** `addendum2_levels.csv.gz`, `addendum2_descriptive.csv`, `addendum2_trades.csv`, `addendum2_results.csv`, `addendum2_equity.png`.
+
+## Check 1: are the −2 / −2.5 SD levels special? (all 5m SMTs, both instruments, pooled)
+
+| Anchor, n | Events | Reach: SD / C1 / C2 | P(reverse \| reach): SD / C1 / C2 | Δ vs C1 [CI] | Δ vs C2 [CI] | P(turn \| reach): SD / C1 / C2 |
+|---|---|---|---|---|---|---|
+| A1, 2 | 6,816 | 64.7 / 61.9 / 65.7% | 57.6 / 58.3 / 58.8% | −0.7 pp [−2.2, +0.9] | −1.2 pp [−3.5, +1.0] | 4.5 / 4.4 / 4.4% |
+| A1, 2.5 | 6,816 | 59.2 / 61.9 / 59.7% | 58.2 / 58.0 / 58.5% | +0.2 pp [−1.3, +1.6] | −0.3 pp [−2.8, +2.1] | 5.0 / 4.4 / 4.3% |
+| A2, 2 | 9,467 | 52.8 / 50.3 / 54.6% | 57.0 / 57.3 / 56.9% | −0.3 pp [−1.6, +1.0] | +0.2 pp [−2.1, +2.4] | 5.8 / 5.9 / 5.4% |
+| A2, 2.5 | 9,467 | 46.9 / 50.2 / 48.7% | 56.9 / 57.6 / 58.1% | −0.7 pp [−2.3, +0.9] | −1.2 pp [−3.5, +0.9] | 6.1 / 5.9 / 4.8% |
+
+- C1 = random multiples 1.5–3.0 of the same anchor. C2 = the same point distance from a random time in the same hour on another day.
+- **Reading:** the SD levels are reached and reversed at the same rates as random levels at the same distance; all reversal Δs are within ±1.2 pp and the CIs span 0.
+- The only nominal difference is A2 n = 2.5 "turn" vs C2: +1.3 pp [+0.2, +2.3], a 1-pp effect on a 5% base. With 48 descriptive comparisons, that is what chance produces.
+- By instrument: same picture (`addendum2_descriptive.csv`).
+
+## Check 2: SD exits on Addendum 1's filtered MSS entry (NY AM SMT, London ≥ median)
+
+| Variant | N | Win | Avg win / loss R | Mean R [CI] | Haircut | US100 / US500 | Halted final (halt, NY) | Unhalted final | Unhalted max DD |
+|---|---|---|---|---|---|---|---|---|---|
+| A1_SD1 | 371 | 62.0% | +0.65 / −1.01 | +0.020 [−0.105, +0.140] | −0.066 | +0.039 / +0.000 | $9,706 (2026-06-26) | $10,490 | 8.2% |
+| A1_SD2 | 371 | 51.5% | +1.12 / −1.00 | +0.091 [−0.078, +0.260] | −0.031 | +0.116 / +0.066 | $10,628 (2026-06-12) | $11,219 | 12.4% |
+| A1_SD2.5 | 371 | 49.1% | +1.26 / −0.99 | **+0.114 [−0.070, +0.303]** | −0.016 | +0.082 / +0.146 | $10,852 (2026-06-17) | $11,691 | 11.8% |
+| A1_P1_2.5 | 371 | 52.0% | +0.90 / −0.84 | +0.067 [−0.081, +0.211] | −0.037 | +0.060 / +0.073 | $10,318 (2026-06-18) | $11,158 | 10.1% |
+| A2_SD1 | 360 | 56.7% | +0.89 / −0.97 | +0.084 [−0.069, +0.235] | −0.025 | +0.087 / +0.081 | $9,819 (2026-02-02) | $11,242 | 6.7% |
+| A2_SD2 | 368 | 46.5% | +1.34 / −0.96 | +0.107 [−0.084, +0.317] | −0.039 | +0.118 / +0.096 | $10,627 (2026-02-02) | $11,670 | 13.2% |
+| A2_SD2.5 | 369 | 44.4% | +1.42 / −0.96 | +0.097 [−0.102, +0.311] | −0.054 | +0.113 / +0.081 | $10,331 (2026-01-15) | $11,074 | 13.3% |
+| A2_P1_2.5 | 360 | 47.8% | +1.09 / −0.84 | +0.084 [−0.082, +0.262] | −0.042 | +0.096 / +0.073 | $9,969 (2026-06-17) | $10,977 | 9.6% |
+
+- All 8 are positive pooled and on both instruments (≥ 0), but every CI spans 0.
+- Holm p ≥ 0.80 (best raw one-sided p 0.10, A1_SD2.5), every haircut is slightly negative, and every halted book hit the 5% halt at some point.
+- **Forward-test verdict (pre-declared bar):** none.
+- **Deviation, disclosed:** the MSS entry here is the first post-SMT MSS (it does not depend on the target), so N (371) differs from Addendum 1's F_MSS rows (157 / 308).
+
+**Reading.**
+- The SD levels are not special as price levels (check 1).
+- As exits, further targets do better than near ones on this filtered entry: SD2–2.5 at about +0.10 R vs SD1 at about +0.02 to +0.08 R.
+- That is more likely the filtered entry riding volatility-clustered NY AM expansion than ICT-specific levels, because random multiples at the same distance behave identically.
+- The consistent sign across 8 variants and both instruments is the most encouraging thing in this branch so far. But the variants share the same 360–371 entries, so they are not independent confirmations.
+
+## Caveats
+- In-sample, one year, correlated instruments, and the anchors are assumed.
+- The exit variants are nested on one entry set.
+- 1m stop-first.
