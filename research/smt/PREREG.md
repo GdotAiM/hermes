@@ -142,3 +142,32 @@ The stop is widened to min_risk = 4 × (assumed spread + 2 × market slip).
   - Holm over the 8; haircut = mean R − 1.424 × SE (E[max of 8 iid N(0,1)]).
   - Book $10k, 0.5% / 2% / 5%, halted + unhalted; by-instrument split; forward-test bar as before.
 - PNG: `research/smt/addendum2_equity.png`.
+
+## Addendum 3: four confluence filters on the Addendum 2 setup. Written before any R is computed
+**Status: EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE.**
+- **Multiple testing, stated plainly:** about 44 trading variants have already been tried on this burned window across NOWICK A3–A5, the 7PM/6PM sweeps and SMT main / A1 / A2, plus a 7,680-config grid (NOWICK A6) and 5 ICT descriptive studies. This addendum adds 7 (+7 secondary). Anything found here is heavily selected.
+
+**Base.**
+- Addendum 2 entry: 5m SMT, T0 in 09:30–11:30 NY, the instrument's London range ≥ its trailing-20 median, the first post-SMT 1m MSS, Addendum 2 stop.
+- **Exit fixed now:** A1 anchor, target SD −2.5 (hi + 2.5R). Disclosed: this was the best of the 8 Addendum 2 variants (+0.114 R), so the base is selected.
+- **Secondary (reported, separate Holm):** A2 anchor, target −2.
+
+**Filters** (thresholds fixed here):
+- **F1, strong London:** the London range (02:00–04:59) ≥ the 2/3 quantile of its previous 20 London ranges. This replaces the median rule.
+- **F2, time:** T0 in 09:30–11:00 NY.
+- **F3, divergence size:**
+  - The breaking instrument's extreme over 5m bars [t*, t*+2] goes beyond its swing by ≥ 0.10 × its 5m ATR14.
+  - The holding instrument's extreme over [t*, t*+2] stays ≥ 0.05 × its 5m ATR14 inside its swing.
+  - (The ATR is as in detection.)
+- **F4, HTF location:** the traded instrument's SMT sweep extreme (the Addendum 1 definition) is within 0.25 × daily ATR14 of the prior trading day's low (longs, SMT at lows) or high (shorts, SMT at highs). Daily ATR14 = the mean of the previous 14 trading-day high − low ranges (BID, 18:00–16:14).
+
+**Variants (7).** base; base+F1; base+F2; base+F3; base+F4; base+F1+F2+F3+F4; base+F1+F2+F3.
+
+**Statistics.**
+- Per variant (pooled, and by instrument): trades, win rate, avg win/loss R, mean R with a 95% day-cluster CI, one-sided p.
+- Holm over 7. Haircut = mean R − 1.352 × SE (E[max of 7]).
+- $10k book 0.5% / 2% / 5%, halted + unhalted, max DD.
+- **Underpowered** = fewer than 100 trades.
+- Forward-test bar as before.
+- **Candidate for a forward prereg:** the variant with the highest haircut R among those with N ≥ 100 and the same sign on both instruments. N is computed for 80% power at α = 0.05 one-sided: delta = half its in-sample mean R (shrinkage for selection), with its SD and day-cluster design effect, and the time from its trade rate.
+- PNG: `research/smt/addendum3_equity.png`.
