@@ -147,3 +147,52 @@ Each instrument separately has the same signs; the CIs exclude 0 except 15m US10
 - In-sample, one year, correlated instruments, and the anchors are assumed.
 - The exit variants are nested on one entry set.
 - 1m stop-first.
+
+# Addendum 3: four confluence filters (EXPLORATORY, IN-SAMPLE on the burned window, NOT EVIDENCE)
+- **Prereg:** 954f217, committed before any R.
+- **Code:** `addendum3.py`. **Outputs:** `addendum3_trades.csv`, `addendum3_results.csv`, `addendum3_equity.png`.
+- **Selection, disclosed:**
+  - The base exit (A1 −2.5) was the best of Addendum 2's 8.
+  - About **44 trading variants plus a 7,680-config grid** had been tried on this window before this addendum, and this adds 7 (+7 secondary).
+  - Anything here is heavily selected.
+- The base reproduces Addendum 2 exactly (371 trades, +0.114 R).
+
+**Primary, A1 −2.5** (Holm over 7; haircut = mean R − 1.352 × SE; underpowered = N < 100):
+
+| Variant | N (US100 / US500) | Win | Avg win / loss R | Mean R [95% CI] | Haircut | US100 / US500 mean R | Halted final (halt, NY) | Unhalted final | Unhalted max DD |
+|---|---|---|---|---|---|---|---|---|---|
+| base | 371 (187/184) | 49.1% | +1.26 / −0.99 | +0.114 [−0.070, +0.303] | **−0.009** | +0.082 / +0.146 | $10,852 (2026-06-17) | $11,691 | 11.8% |
+| +F1 strong London | 291 (151/140) | 48.8% | +1.25 / −0.99 | +0.106 [−0.080, +0.312] | −0.033 | +0.087 / +0.128 | $10,132 (2026-06-19) | $11,158 | 9.3% |
+| +F2 09:30–11:00 | 312 (158/154) | 47.8% | +1.25 / −0.98 | +0.081 [−0.114, +0.290] | −0.059 | +0.057 / +0.105 | $10,756 (2026-06-11) | $11,045 | 11.6% |
+| +F3 divergence size | 326 (163/163) | 49.4% | +1.24 / −0.99 | +0.110 [−0.075, +0.310] | −0.021 | +0.089 / +0.130 | $10,262 (2026-01-12) | $11,260 | 10.5% |
+| +F4 near prior-day H/L | 108 (50/58)* | 50.0% | +1.43 / −1.03 | +0.199 [−0.165, +0.569] | −0.050 | −0.014 / +0.384 | $10,611 (2026-06-19) | $10,925 | 9.3% |
+| +F1+F2+F3+F4 | **64 (33/31), underpowered** | 46.9% | +1.30 / −1.03 | +0.062 [−0.373, +0.576] | −0.263 | −0.091 / +0.225 | $10,071 (2026-06-19) | $10,210 | 6.5% |
+| +F1+F2+F3 | 222 (115/107) | 48.6% | +1.18 / −0.97 | +0.076 [−0.146, +0.319] | −0.086 | +0.060 / +0.092 | $9,935 (2026-01-30) | $10,687 | 7.8% |
+
+\* F4 passes 100 pooled, but each instrument has < 100 and the signs disagree.
+
+- Holm p = 0.70 for all 7. Every haircut is negative, and every halted book hit the 5% halt.
+- **Forward-test verdict:** none.
+
+**Secondary, A2 −2** (Holm over 7, separately):
+- base +0.107 (368), F1 +0.101, F2 +0.064, **F3 +0.141 [−0.066, +0.358], Holm 0.63, haircut −0.004**, F4 +0.148 (107), F1234 +0.141 (63, underpowered), F123 +0.100.
+- Same picture: positive point estimates, no CI excludes 0, Holm ≥ 0.63.
+
+**Reading.**
+- **None of the four confluences sharpens the setup.** F1, F2, F3 and their combination keep about +0.08 to +0.11 R and only cut N.
+- F4 has the highest point estimate, but on 108 trades driven by US500 (+0.38) with US100 negative.
+- All four together leaves 64 trades: uninformative.
+- The filters don't add signal over the base on this window.
+
+**Single best candidate for a forward-only prereg** (pre-declared rule: highest haircut, N ≥ 100, same sign on both instruments): **the base** = NY AM 5m SMT (09:30–11:30) + London range ≥ its 20-day median + first 1m MSS + A1 −2.5 exit + Addendum 2 stop.
+- **Power:** in-sample mean R +0.114, SD 1.25, day-cluster design effect 1.98 (both instruments trade the same SMT), about 343 trades/year.
+- With delta shrunk to half (+0.057 R, for selection after about 50 variants): **N ≈ 5,900 trades ≈ 17 years** at 80% power, α 0.05 one-sided.
+- Even at the full in-sample +0.114 R: N ≈ 1,470 ≈ 4.3 years.
+- Trading one instrument halves the design effect but also the rate, so it doesn't help much.
+- Adding instruments (with DATA sign-off) is the only real lever.
+- **Recommendation:** a fresh-data *descriptive* monitor (rate and mean R, no money), not a binding forward test, unless the user accepts a multi-year horizon.
+
+## Caveats
+- In-sample, one year, a highly correlated pair, and both instruments traded off the same SMT (DE ≈ 2).
+- Anchors assumed (Addendum 2).
+- 1m stop-first.
