@@ -535,6 +535,76 @@ def test_kill_log_written_once(tmp_path):
     assert b == a
 
 
+def _losers(n=40, start=5):
+    d0 = dt.date(2026, 10, start)
+    out = []
+    for i in range(n):
+        d = d0 + dt.timedelta(days=i)
+        out.append(dict(date=d.isoformat(), session="london", instrument="US100", R=-1.0, risk_pts=20.0))
+    return out
+
+
+def test_F1_sticky_kill_survives_late_earlier_positive_backfill(tmp_path):
+    """CASSANDRA F1 regression (harness-H016b-v2): 40 x -1R from 2026-10-05 -> kill logged at trade 40. A later-finalised,
+    EARLIER-dated +2R session would undo the crossing under recompute (min cum -38), but the logged kill is STICKY:
+    verdict stays FAILS (kill) and evaluation uses exactly the logged keys."""
+    tr = _losers()
+    ks = H.kill_sticky(tr, tmp_path, utc(2026, 12, 1))
+    assert ks["kill"] and ks["kill_at_trade"] == 40 and not ks["sticky"]
+    assert (tmp_path / "sealed" / "KILL_LOG.json").exists()
+    late = dict(date="2026-10-04", session="ny_am", instrument="US500", R=2.0, risk_pts=5.0)   # earlier-dated, finalised late
+    tr2 = [late] + tr
+    assert not H.kill_walk(tr2)["kill"]                       # the v1 bug: recompute alone undoes the kill
+    ks2 = H.kill_sticky(tr2, tmp_path, utc(2026, 12, 2))
+    assert ks2["kill"] and ks2["sticky"] and ks2["kill_at_trade"] == 40
+    assert [H.key(t) for t in ks2["eval_trades"]] == json.loads((tmp_path / "sealed" / "KILL_LOG.json").read_text())["keys"]
+    assert H.key(late) not in ks2["keys"]
+    v = H.verdict({}, len(tr2), {x: ks2[x] for x in ("kill", "kill_at_trade", "min_cum", "sticky")}, None)
+    assert v.startswith("FAILS (kill") and "sticky" in v
+
+
+def test_F1_write_state_uses_sticky_kill(tmp_path, monkeypatch):
+    """write_state: sealed/STATE.json reports kill True and cum_R over the logged keys even after a late positive backfill."""
+    tr = _losers()
+    class L:
+        root = tmp_path
+        def latest(self):
+            return {}
+    monkeypatch.setattr(H, "counted_trades", lambda led: list(state["tr"]))
+    monkeypatch.setattr(H, "pending_dates", lambda led, at: [])
+    state = dict(tr=tr)
+    H.write_state(L(), utc(2026, 12, 1), "r1")
+    s1 = json.loads((tmp_path / "sealed" / "STATE.json").read_text())
+    assert s1["kill"]["kill"] and s1["kill"]["kill_at_trade"] == 40 and s1["cum_R"] == -40.0
+    state["tr"] = [dict(date="2026-10-04", session="ny_am", instrument="US500", R=2.0, risk_pts=5.0)] + tr
+    H.write_state(L(), utc(2026, 12, 2), "r2")
+    s2 = json.loads((tmp_path / "sealed" / "STATE.json").read_text())
+    assert s2["kill"]["kill"] and s2["kill"]["sticky"] and s2["cum_R"] == -40.0
+
+
+def test_F1_F5_fragility_base_uses_sticky_kill(tmp_path):
+    """criteria(sticky=True) on the binding base honours KILL_LOG; perturbed legs (sticky=False) recompute on their own."""
+    tr = _losers()
+    H.kill_sticky(tr, tmp_path, utc(2026, 12, 1))
+    tr2 = [dict(date="2026-10-04", session="ny_am", instrument="US500", R=2.0, risk_pts=5.0)] + tr
+    base = H.criteria(tr2, None, root=tmp_path, sticky=True)
+    assert base["kill"] is True and base["n"] == 40
+    pert = H.criteria(tr2, None, sticky=False)
+    assert pert["kill"] is False and pert["n"] == 41
+
+
+def test_F3_tests_file_is_in_harness_manifest():
+    files = H.harness_manifest()["files"]
+    assert "research/forward/tests/test_h016b.py" in files and len(files) == 6
+    assert H.HARNESS_VERSION == "v2" and H.REG_NOTE_REL.endswith("H016b_HARNESS_REGISTRATION_V2_2026-10-05.json")
+
+
+def test_F5_fragility_reports_dropped_R_none_per_leg():
+    import inspect
+    src = inspect.getsource(H.fill_fragility)
+    assert "dropped_R_none=dropped" in src and "sticky=True" in src and "sticky=False" in src
+
+
 @needs_md
 def test_feed_gap_entry_no_fall_through_2026_03_23(tmp_path):
     """DATA K6(i): the first selection is the ticket; a missing t-1m bar -> feed_gap_entry, no later 15m signal is used."""
